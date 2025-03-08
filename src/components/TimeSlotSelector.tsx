@@ -17,13 +17,13 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime }: Time
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-orange-50 border border-orange-200 rounded-xl p-6 text-center"
+        className="bg-orange-50 border border-orange-200 rounded-xl p-4 text-center"
       >
-        <AlertCircle className="h-8 w-8 text-orange-500 mx-auto mb-3" />
-        <h3 className="text-lg font-medium text-orange-800 mb-2">
+        <AlertCircle className="h-6 w-6 text-orange-500 mx-auto mb-2" />
+        <h3 className="text-base font-medium text-orange-800 mb-1">
           No Time Slots Available
         </h3>
-        <p className="text-orange-600">
+        <p className="text-sm text-orange-600">
           {timeSlots.length === 0 
             ? "Please select a valid date to view available time slots."
             : "All time slots for this date are either full or no longer available. Please try selecting a different date."}
@@ -32,51 +32,71 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime }: Time
     );
   }
 
+  // Group time slots by period (Morning, Afternoon, Evening)
+  const groupedSlots = timeSlots.reduce((acc, slot) => {
+    const time = slot.time;
+    let period = 'Morning';
+    if (time.includes('PM')) {
+      const hour = parseInt(time.split(':')[0]);
+      period = hour < 5 ? 'Afternoon' : 'Evening';
+    }
+    if (!acc[period]) acc[period] = [];
+    acc[period].push(slot);
+    return acc;
+  }, {} as Record<string, TimeSlot[]>);
+
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-        {timeSlots.map((slot, index) => {
-          const isUnavailable = slot.currentBookings >= slot.maxBookings;
-          
-          return (
-            <motion.button
-              key={index}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.03 }}
-              type="button"
-              disabled={isUnavailable}
-              onClick={() => onSelectTime(slot.time)}
-              className={`
-                relative p-3 rounded-xl flex flex-col items-center justify-center text-sm
-                ${
-                  selectedTime === slot.time
-                    ? 'bg-blue-600 text-white border-blue-600 shadow-lg'
-                    : isUnavailable
-                    ? 'bg-gray-50 text-gray-400 cursor-not-allowed'
-                    : 'bg-gray-50 hover:bg-gray-100 text-gray-700 hover:shadow-md transition-all'
-                }
-              `}
-            >
-              <Clock className="h-4 w-4 mb-1" />
-              <span>{slot.time}</span>
-              {!isUnavailable && (
-                <span className="text-xs mt-1 font-medium">
-                  {slot.maxBookings - slot.currentBookings} slots left
-                </span>
-              )}
-              {isUnavailable && (
-                <span className="absolute top-0 right-0 -mt-1 -mr-1">
-                  <span className="flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                  </span>
-                </span>
-              )}
-            </motion.button>
-          );
-        })}
-      </div>
+      {Object.entries(groupedSlots).map(([period, slots]) => (
+        <div key={period} className="space-y-2">
+          <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider">{period}</h3>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-1.5">
+            {slots.map((slot, index) => {
+              const isUnavailable = slot.currentBookings >= slot.maxBookings;
+              
+              return (
+                <motion.button
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.03 }}
+                  type="button"
+                  disabled={isUnavailable}
+                  onClick={() => onSelectTime(slot.time)}
+                  className={`
+                    relative p-2 rounded-lg flex flex-col items-center justify-center border
+                    ${
+                      selectedTime === slot.time
+                        ? 'bg-blue-50 border-blue-600 text-blue-700'
+                        : isUnavailable
+                        ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed'
+                        : 'bg-white border-gray-200 hover:border-blue-400 hover:bg-blue-50/50 text-gray-700'
+                    }
+                  `}
+                >
+                  <span className="text-xs font-medium">{slot.time}</span>
+                  {!isUnavailable && (
+                    <span className={`text-[10px] ${
+                      selectedTime === slot.time 
+                        ? 'text-blue-600/80' 
+                        : 'text-gray-500'
+                    }`}>
+                      {slot.maxBookings - slot.currentBookings} left
+                    </span>
+                  )}
+                  {isUnavailable && (
+                    <span className="absolute top-0 right-0 -mt-1 -mr-1">
+                      <span className="flex h-2 w-2">
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-red-400"></span>
+                      </span>
+                    </span>
+                  )}
+                </motion.button>
+              );
+            })}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

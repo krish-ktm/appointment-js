@@ -36,20 +36,20 @@ export function AppointmentForm({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-8 px-3 sm:px-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl mx-auto"
+        className="max-w-3xl mx-auto"
       >
-        <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-8">
+        <div className="bg-white rounded-xl shadow p-4 sm:p-6">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-center mb-6 sm:mb-8"
+            className="text-center mb-4 sm:mb-6"
           >
-            <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
               {t.title}
             </h1>
           </motion.div>
@@ -58,23 +58,23 @@ export function AppointmentForm({
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl text-center font-medium"
+              className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded-lg text-center text-sm font-medium"
             >
               {t.success}
             </motion.div>
           )}
 
-          <form onSubmit={onSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 sm:gap-8">
+          <form onSubmit={onSubmit} className="space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 gap-4 sm:gap-6">
               <div>
-                <h2 className="text-lg font-medium text-gray-900 mb-4">{t.date}</h2>
-                <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6">
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="text-base sm:text-lg font-medium">
+                <h2 className="text-base font-medium text-gray-900 mb-3">{t.date}</h2>
+                <div className="bg-white border border-gray-200 rounded-lg p-3 sm:p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <div className="text-sm font-medium">
                       {t.selectTime}
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-2">
                     {[today, tomorrow].map((date) => (
                       <motion.button
                         key={date.toISOString()}
@@ -82,16 +82,16 @@ export function AppointmentForm({
                         whileTap={{ scale: 0.98 }}
                         type="button"
                         onClick={() => handleDateChange(date)}
-                        className={`p-4 rounded-xl text-center transition-all ${
+                        className={`p-3 rounded-lg text-center transition-all border ${
                           form.date === date.toISOString().split('T')[0]
-                            ? 'bg-blue-600 text-white shadow-lg'
-                            : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                            ? 'bg-blue-50 border-blue-600 text-blue-700'
+                            : 'bg-white border-gray-200 text-gray-700 hover:border-blue-400 hover:bg-blue-50/50'
                         }`}
                       >
-                        <div className="text-base sm:text-lg font-medium">
+                        <div className="text-sm font-medium">
                           {date.toLocaleDateString(undefined, { weekday: 'short' })}
                         </div>
-                        <div className="text-sm mt-1">
+                        <div className="text-xs mt-0.5">
                           {date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                         </div>
                       </motion.button>
@@ -101,7 +101,7 @@ export function AppointmentForm({
               </div>
 
               <div>
-                <h2 className="text-lg font-medium text-gray-900 mb-4">{t.timeSlot}</h2>
+                <h2 className="text-base font-medium text-gray-900 mb-3">{t.timeSlot}</h2>
                 <TimeSlotSelector
                   timeSlots={timeSlots}
                   selectedTime={form.timeSlot}
@@ -110,8 +110,8 @@ export function AppointmentForm({
                 />
               </div>
 
-              <div className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <FormField
                     label={t.name}
                     type="text"
@@ -119,7 +119,6 @@ export function AppointmentForm({
                     onChange={(value) => setForm({ ...form, name: value })}
                     icon={User}
                   />
-
                   <FormField
                     label={t.phone}
                     type="tel"
@@ -127,7 +126,6 @@ export function AppointmentForm({
                     onChange={(value) => setForm({ ...form, phone: value })}
                     icon={Phone}
                   />
-
                   <FormField
                     label={t.age}
                     type="number"
@@ -137,7 +135,6 @@ export function AppointmentForm({
                     min="0"
                     max="120"
                   />
-
                   <FormField
                     label={t.city}
                     type="text"
@@ -152,7 +149,7 @@ export function AppointmentForm({
                   whileTap={{ scale: 0.99 }}
                   type="submit"
                   disabled={loading}
-                  className={`w-full py-3 px-6 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors duration-200 text-base sm:text-lg font-medium ${
+                  className={`w-full py-2.5 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm sm:text-base font-medium ${
                     loading ? 'opacity-70 cursor-not-allowed' : ''
                   }`}
                 >
