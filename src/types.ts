@@ -48,3 +48,18 @@ export interface Translations {
   bookingTime: string;
   close: string;
 }
+
+export interface User {
+  id: string;
+  email: string;
+  role: 'superadmin' | 'receptionist';
+  name: string;
+  created_at: string;
+  last_login: string | null;
+  status: 'active' | 'inactive';
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
