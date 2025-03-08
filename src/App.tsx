@@ -1,14 +1,23 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { translations } from './translations';
 import { generateTimeSlots, validateBookingRequest } from './utils';
 import { Language, TimeSlot, AppointmentForm as AppointmentFormType, BookingDetails as BookingDetailsType } from './types';
 import { LanguageSelector } from './components/LanguageSelector';
 import { AppointmentForm } from './components/AppointmentForm';
 import { BookingDetails } from './components/BookingDetails';
+import { AdminLogin } from './components/AdminLogin';
+import { AdminDashboard } from './components/AdminDashboard';
+import { useAuthStore } from './store/authStore';
 import { supabase } from './lib/supabase';
 import { Toaster, toast } from 'react-hot-toast';
 
-function App() {
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const user = useAuthStore((state) => state.user);
+  return user ? <>{children}</> : <Navigate to="/admin/login" />;
+}
+
+function BookingApp() {
   const [language, setLanguage] = useState<Language | null>(null);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [success, setSuccess] = useState(false);
@@ -48,7 +57,6 @@ function App() {
     setLoading(true);
 
     try {
-      // Validate the booking request
       const validation = await validateBookingRequest(form.phone, form.date, form.timeSlot);
       if (!validation.isValid) {
         throw new Error(validation.error);
@@ -117,6 +125,25 @@ function App() {
       )}
       <Toaster position="top-right" />
     </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<BookingApp />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
