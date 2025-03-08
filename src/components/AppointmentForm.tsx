@@ -36,20 +36,20 @@ export function AppointmentForm({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl mx-auto"
       >
-        <div className="bg-white rounded-2xl shadow-lg p-8">
+        <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-8">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-center mb-8"
+            className="text-center mb-6 sm:mb-8"
           >
-            <h1 className="text-3xl font-semibold text-gray-900 mb-2">
+            <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">
               {t.title}
             </h1>
           </motion.div>
@@ -65,16 +65,16 @@ export function AppointmentForm({
           )}
 
           <form onSubmit={onSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 gap-8">
+            <div className="grid grid-cols-1 gap-6 sm:gap-8">
               <div>
                 <h2 className="text-lg font-medium text-gray-900 mb-4">{t.date}</h2>
-                <div className="bg-white border border-gray-200 rounded-xl p-6">
+                <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6">
                   <div className="flex justify-between items-center mb-4">
-                    <div className="text-lg font-medium">
+                    <div className="text-base sm:text-lg font-medium">
                       {t.selectTime}
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {[today, tomorrow].map((date) => (
                       <motion.button
                         key={date.toISOString()}
@@ -88,7 +88,7 @@ export function AppointmentForm({
                             : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
                         }`}
                       >
-                        <div className="text-lg font-medium">
+                        <div className="text-base sm:text-lg font-medium">
                           {date.toLocaleDateString(undefined, { weekday: 'short' })}
                         </div>
                         <div className="text-sm mt-1">
@@ -111,7 +111,7 @@ export function AppointmentForm({
               </div>
 
               <div className="space-y-5">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <FormField
                     label={t.name}
                     type="text"
@@ -152,7 +152,7 @@ export function AppointmentForm({
                   whileTap={{ scale: 0.99 }}
                   type="submit"
                   disabled={loading}
-                  className={`w-full py-3 px-6 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors duration-200 text-lg font-medium ${
+                  className={`w-full py-3 px-6 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors duration-200 text-base sm:text-lg font-medium ${
                     loading ? 'opacity-70 cursor-not-allowed' : ''
                   }`}
                 >
