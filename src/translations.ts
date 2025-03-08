@@ -16,7 +16,12 @@ export const translations: Record<string, Translations> = {
     success: 'Appointment booked successfully!',
     languageSelect: 'Select Language',
     english: 'English',
-    gujarati: 'ગુજરાતી'
+    gujarati: 'ગુજરાતી',
+    bookingDetails: 'Booking Details',
+    bookingId: 'Booking ID',
+    bookingDate: 'Date',
+    bookingTime: 'Time',
+    close: 'Close'
   },
   gu: {
     title: 'તમારી એપોઈન્ટમેન્ટ બુક કરો',
@@ -33,6 +38,11 @@ export const translations: Record<string, Translations> = {
     success: 'એપોઈન્ટમેન્ટ સફળતાપૂર્વક બુક થઈ ગઈ છે!',
     languageSelect: 'ભાષા પસંદ કરો',
     english: 'English',
-    gujarati: 'ગુજરાતી'
+    gujarati: 'ગુજરાતી',
+    bookingDetails: 'બુકિંગની વિગતો',
+    bookingId: 'બુકિંગ ID',
+    bookingDate: 'તારીખ',
+    bookingTime: 'સમય',
+    close: 'બંધ કરો'
   }
 };

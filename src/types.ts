@@ -13,6 +13,17 @@ export interface AppointmentForm {
   timeSlot: string;
 }
 
+export interface BookingDetails {
+  id: string;
+  name: string;
+  phone: string;
+  age: number;
+  city: string;
+  appointment_date: string;
+  appointment_time: string;
+  created_at: string;
+}
+
 export type Language = 'en' | 'gu';
 
 export interface Translations {
@@ -31,4 +42,9 @@ export interface Translations {
   languageSelect: string;
   english: string;
   gujarati: string;
+  bookingDetails: string;
+  bookingId: string;
+  bookingDate: string;
+  bookingTime: string;
+  close: string;
 }

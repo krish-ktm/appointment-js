@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { translations } from './translations';
 import { generateTimeSlots } from './utils';
-import { Language, TimeSlot, AppointmentForm as AppointmentFormType } from './types';
+import { Language, TimeSlot, AppointmentForm as AppointmentFormType, BookingDetails as BookingDetailsType } from './types';
 import { LanguageSelector } from './components/LanguageSelector';
 import { AppointmentForm } from './components/AppointmentForm';
+import { BookingDetails } from './components/BookingDetails';
 import { supabase } from './lib/supabase';
 import { Toaster, toast } from 'react-hot-toast';
 
@@ -12,13 +13,14 @@ function App() {
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [bookingDetails, setBookingDetails] = useState<BookingDetailsType | null>(null);
   
   const [form, setForm] = useState<AppointmentFormType>({
     name: '',
     phone: '',
     age: '',
     city: '',
-    date: new Date().toISOString().split('T')[0], // Set default date to today
+    date: new Date().toISOString().split('T')[0],
     timeSlot: ''
   });
 
@@ -30,7 +32,6 @@ function App() {
       };
       loadTimeSlots();
 
-      // Refresh time slots every minute to update availability
       const interval = setInterval(loadTimeSlots, 60000);
       return () => clearInterval(interval);
     }
@@ -47,25 +48,30 @@ function App() {
     setLoading(true);
 
     try {
-      // Check if slot is still available
       const slot = timeSlots.find(s => s.time === form.timeSlot);
       if (!slot || slot.currentBookings >= slot.maxBookings) {
         throw new Error('This time slot is no longer available');
       }
 
-      const { error } = await supabase.from('appointments').insert({
-        name: form.name,
-        phone: form.phone,
-        age: parseInt(form.age),
-        city: form.city,
-        appointment_date: form.date,
-        appointment_time: form.timeSlot
-      });
+      const { data, error } = await supabase
+        .from('appointments')
+        .insert({
+          name: form.name,
+          phone: form.phone,
+          age: parseInt(form.age),
+          city: form.city,
+          appointment_date: form.date,
+          appointment_time: form.timeSlot,
+          status: 'pending'
+        })
+        .select()
+        .single();
 
       if (error) throw error;
 
       setSuccess(true);
       toast.success(t.success);
+      setBookingDetails(data as BookingDetailsType);
       setForm({
         name: '',
         phone: '',
@@ -75,11 +81,8 @@ function App() {
         timeSlot: ''
       });
       
-      // Refresh time slots
-      if (form.date) {
-        const slots = await generateTimeSlots(form.date);
-        setTimeSlots(slots);
-      }
+      const slots = await generateTimeSlots(form.date);
+      setTimeSlots(slots);
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -99,6 +102,13 @@ function App() {
         success={success}
         loading={loading}
       />
+      {bookingDetails && (
+        <BookingDetails
+          booking={bookingDetails}
+          onClose={() => setBookingDetails(null)}
+          t={t}
+        />
+      )}
       <Toaster position="top-right" />
     </>
   );
