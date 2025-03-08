@@ -24,6 +24,18 @@ export interface BookingDetails {
   created_at: string;
 }
 
+export interface Appointment {
+  id: string;
+  name: string;
+  phone: string;
+  age: number;
+  city: string;
+  appointment_date: string;
+  appointment_time: string;
+  created_at: string;
+  status: 'pending' | 'completed' | 'cancelled';
+}
+
 export type Language = 'en' | 'gu';
 
 export interface Translations {
