@@ -24,17 +24,20 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
     // Get current bookings for each time slot
     const { data: bookings, error } = await supabase
       .from('appointments')
-      .select('appointment_time, count')
+      .select('appointment_time')
       .eq('appointment_date', date)
-      .eq('status', 'pending')
-      .group_by('appointment_time');
+      .eq('status', 'pending');
 
     if (!error && bookings) {
-      bookings.forEach(booking => {
-        const slot = slots.find(s => s.time === booking.appointment_time);
-        if (slot) {
-          slot.currentBookings = parseInt(booking.count);
-        }
+      // Count bookings for each time slot manually
+      const bookingCounts = bookings.reduce((acc, booking) => {
+        acc[booking.appointment_time] = (acc[booking.appointment_time] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+
+      // Update slots with booking counts
+      slots.forEach(slot => {
+        slot.currentBookings = bookingCounts[slot.time] || 0;
       });
     }
   }
