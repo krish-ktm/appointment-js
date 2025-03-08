@@ -1,57 +1,6 @@
 import { TimeSlot } from './types';
 import { supabase } from './lib/supabase';
 
-// Rate limiting cache
-const rateLimitCache: Record<string, { count: number; timestamp: number }> = {};
-const RATE_LIMIT_WINDOW = 3600000; // 1 hour in milliseconds
-const MAX_BOOKINGS_PER_HOUR = 5; // Increased to allow more bookings per hour
-
-// Phone number validation
-const isValidPhoneNumber = (phone: string): boolean => {
-  // Allow Indian phone numbers (10 digits, optionally starting with +91)
-  const phoneRegex = /^(?:\+91)?[6-9]\d{9}$/;
-  return phoneRegex.test(phone.replace(/\s+/g, ''));
-};
-
-// Check if user has exceeded rate limit
-const isRateLimited = (identifier: string): boolean => {
-  const now = Date.now();
-  const userLimit = rateLimitCache[identifier];
-
-  if (!userLimit || (now - userLimit.timestamp) > RATE_LIMIT_WINDOW) {
-    rateLimitCache[identifier] = { count: 1, timestamp: now };
-    return false;
-  }
-
-  if (userLimit.count >= MAX_BOOKINGS_PER_HOUR) {
-    return true;
-  }
-
-  userLimit.count++;
-  return false;
-};
-
-export const validateBookingRequest = async (
-  phone: string,
-  date: string,
-  time: string
-): Promise<{ isValid: boolean; error?: string }> => {
-  // 1. Validate phone number format
-  if (!isValidPhoneNumber(phone)) {
-    return { isValid: false, error: 'Invalid phone number format' };
-  }
-
-  // 2. Check rate limiting
-  if (isRateLimited(phone)) {
-    return { 
-      isValid: false, 
-      error: `Maximum ${MAX_BOOKINGS_PER_HOUR} bookings allowed per hour` 
-    };
-  }
-
-  return { isValid: true };
-};
-
 export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
   const baseSlots = [
     '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM',
@@ -188,4 +137,39 @@ export const isSlotAvailable = async (date: string, time: string): Promise<boole
   }
 
   return data.length < 4; // Max 4 appointments per slot
+};
+
+export const validateBookingRequest = async (
+  phone: string,
+  date: string,
+  timeSlot: string
+): Promise<{ isValid: boolean; error?: string }> => {
+  // Validate phone number (10 digits)
+  if (!/^\d{10}$/.test(phone)) {
+    return { isValid: false, error: 'Please enter a valid 10-digit phone number' };
+  }
+
+  // Check if the user already has a booking for the same day
+  const { data: existingBookings, error: bookingError } = await supabase
+    .from('appointments')
+    .select('id')
+    .eq('phone', phone)
+    .eq('appointment_date', date)
+    .eq('status', 'pending');
+
+  if (bookingError) {
+    return { isValid: false, error: 'Error checking existing bookings' };
+  }
+
+  if (existingBookings && existingBookings.length > 0) {
+    return { isValid: false, error: 'You already have a booking for this date' };
+  }
+
+  // Validate time slot availability
+  const isAvailable = await isSlotAvailable(date, timeSlot);
+  if (!isAvailable) {
+    return { isValid: false, error: 'This time slot is no longer available' };
+  }
+
+  return { isValid: true };
 };
