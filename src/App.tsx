@@ -18,7 +18,7 @@ function App() {
     phone: '',
     age: '',
     city: '',
-    date: '',
+    date: new Date().toISOString().split('T')[0], // Set default date to today
     timeSlot: ''
   });
 
@@ -29,6 +29,10 @@ function App() {
         setTimeSlots(slots);
       };
       loadTimeSlots();
+
+      // Refresh time slots every minute to update availability
+      const interval = setInterval(loadTimeSlots, 60000);
+      return () => clearInterval(interval);
     }
   }, [form.date]);
 
@@ -67,7 +71,7 @@ function App() {
         phone: '',
         age: '',
         city: '',
-        date: '',
+        date: new Date().toISOString().split('T')[0],
         timeSlot: ''
       });
       

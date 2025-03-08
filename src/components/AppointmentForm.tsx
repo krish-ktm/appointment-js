@@ -25,11 +25,15 @@ export function AppointmentForm({
   success,
   loading
 }: AppointmentFormProps) {
-  const nextThreeDays = Array.from({ length: 3 }, (_, i) => {
-    const date = new Date();
-    date.setDate(date.getDate() + i + 1);
-    return date;
-  });
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+
+  const handleDateChange = (date: Date | null) => {
+    if (date) {
+      setForm({ ...form, date: date.toISOString().split('T')[0] });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -63,43 +67,41 @@ export function AppointmentForm({
           <form onSubmit={onSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-8">
               <div>
-                <h2 className="text-lg font-medium text-gray-900 mb-4">Select Date (Next 3 Days Only)</h2>
+                <h2 className="text-lg font-medium text-gray-900 mb-4">{t.date}</h2>
                 <div className="bg-white border border-gray-200 rounded-xl p-6">
                   <div className="flex justify-between items-center mb-4">
-                    <button type="button" className="text-gray-500 hover:text-gray-700">
-                      <Calendar className="h-5 w-5" />
-                    </button>
-                    <div className="text-lg font-medium">March 2025</div>
-                    <button type="button" className="text-gray-500 hover:text-gray-700">
-                      <Calendar className="h-5 w-5" />
-                    </button>
+                    <div className="text-lg font-medium">
+                      {t.selectTime}
+                    </div>
                   </div>
-                  <div className="grid grid-cols-7 gap-2 text-center mb-2">
-                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                      <div key={day} className="text-sm text-gray-500">{day}</div>
-                    ))}
-                  </div>
-                  <div className="grid grid-cols-7 gap-2">
-                    {nextThreeDays.map((date, index) => (
-                      <button
+                  <div className="grid grid-cols-2 gap-4">
+                    {[today, tomorrow].map((date) => (
+                      <motion.button
                         key={date.toISOString()}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                         type="button"
-                        onClick={() => setForm({ ...form, date: date.toISOString().split('T')[0] })}
-                        className={`p-2 rounded-lg text-center ${
+                        onClick={() => handleDateChange(date)}
+                        className={`p-4 rounded-xl text-center transition-all ${
                           form.date === date.toISOString().split('T')[0]
-                            ? 'bg-blue-600 text-white'
-                            : 'hover:bg-gray-100'
+                            ? 'bg-blue-600 text-white shadow-lg'
+                            : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
                         }`}
                       >
-                        {date.getDate()}
-                      </button>
+                        <div className="text-lg font-medium">
+                          {date.toLocaleDateString(undefined, { weekday: 'short' })}
+                        </div>
+                        <div className="text-sm mt-1">
+                          {date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                        </div>
+                      </motion.button>
                     ))}
                   </div>
                 </div>
               </div>
 
               <div>
-                <h2 className="text-lg font-medium text-gray-900 mb-4">Select Time</h2>
+                <h2 className="text-lg font-medium text-gray-900 mb-4">{t.timeSlot}</h2>
                 <TimeSlotSelector
                   timeSlots={timeSlots}
                   selectedTime={form.timeSlot}

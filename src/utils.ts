@@ -20,6 +20,16 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
     currentBookings: 0
   }));
 
+  const now = new Date();
+  const selectedDate = new Date(date);
+  const isToday = selectedDate.toDateString() === now.toDateString();
+  const isTomorrow = new Date(now.setDate(now.getDate() + 1)).toDateString() === selectedDate.toDateString();
+  
+  // If the date is not today or tomorrow, return empty slots
+  if (!isToday && !isTomorrow) {
+    return [];
+  }
+
   if (date) {
     // Get current bookings for each time slot
     const { data: bookings, error } = await supabase
@@ -35,9 +45,38 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
         return acc;
       }, {} as Record<string, number>);
 
-      // Update slots with booking counts
+      // Update slots with booking counts and apply time restrictions
       slots.forEach(slot => {
         slot.currentBookings = bookingCounts[slot.time] || 0;
+        
+        if (isToday) {
+          const [slotHour, slotMinute, period] = slot.time.match(/(\d+):(\d+)\s+(AM|PM)/)?.slice(1) || [];
+          const slotTime = new Date();
+          slotTime.setHours(
+            (parseInt(slotHour) % 12) + (period === 'PM' ? 12 : 0),
+            parseInt(slotMinute)
+          );
+
+          const currentHour = now.getHours();
+          
+          // Block morning slots if current time is before 9 AM
+          if (currentHour < 9) {
+            const slotHourNum = (parseInt(slotHour) % 12) + (period === 'PM' ? 12 : 0);
+            if (slotHourNum < 13) { // Block all slots before 1 PM
+              slot.currentBookings = slot.maxBookings;
+            }
+          }
+          
+          // If current time is after 1 PM, block all remaining slots for today
+          if (currentHour >= 13) {
+            slot.currentBookings = slot.maxBookings;
+          }
+          
+          // Block past time slots
+          if (slotTime <= now) {
+            slot.currentBookings = slot.maxBookings;
+          }
+        }
       });
     }
   }
@@ -46,6 +85,45 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
 };
 
 export const isSlotAvailable = async (date: string, time: string): Promise<boolean> => {
+  const now = new Date();
+  const selectedDate = new Date(date);
+  const isToday = selectedDate.toDateString() === now.toDateString();
+  const isTomorrow = new Date(now.setDate(now.getDate() + 1)).toDateString() === selectedDate.toDateString();
+  
+  // Only allow bookings for today and tomorrow
+  if (!isToday && !isTomorrow) {
+    return false;
+  }
+
+  // Apply same time restrictions as in generateTimeSlots
+  if (isToday) {
+    const currentHour = now.getHours();
+    const [slotHour, slotMinute, period] = time.match(/(\d+):(\d+)\s+(AM|PM)/)?.slice(1) || [];
+    const slotTime = new Date();
+    slotTime.setHours(
+      (parseInt(slotHour) % 12) + (period === 'PM' ? 12 : 0),
+      parseInt(slotMinute)
+    );
+
+    // Block morning slots if current time is before 9 AM
+    if (currentHour < 9) {
+      const slotHourNum = (parseInt(slotHour) % 12) + (period === 'PM' ? 12 : 0);
+      if (slotHourNum < 13) {
+        return false;
+      }
+    }
+
+    // Block all slots if current time is after 1 PM
+    if (currentHour >= 13) {
+      return false;
+    }
+
+    // Block past time slots
+    if (slotTime <= now) {
+      return false;
+    }
+  }
+
   const { data, error } = await supabase
     .from('appointments')
     .select('id')
