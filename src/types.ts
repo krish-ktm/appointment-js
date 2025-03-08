@@ -48,20 +48,3 @@ export interface Translations {
   bookingTime: string;
   close: string;
 }
-
-export type AdminRole = 'superAdmin' | 'receptionist';
-
-export interface AdminUser {
-  id: string;
-  email: string;
-  role: AdminRole;
-  created_at: string;
-  last_login: string | null;
-}
-
-export interface AuthState {
-  user: AdminUser | null;
-  isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signOut: () => Promise<void>;
-}
