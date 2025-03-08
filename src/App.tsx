@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { translations } from './translations';
-import { generateTimeSlots } from './utils';
+import { generateTimeSlots, validateBookingRequest } from './utils';
 import { Language, TimeSlot, AppointmentForm as AppointmentFormType, BookingDetails as BookingDetailsType } from './types';
 import { LanguageSelector } from './components/LanguageSelector';
 import { AppointmentForm } from './components/AppointmentForm';
@@ -48,6 +48,12 @@ function App() {
     setLoading(true);
 
     try {
+      // Validate the booking request
+      const validation = await validateBookingRequest(form.phone, form.date, form.timeSlot);
+      if (!validation.isValid) {
+        throw new Error(validation.error);
+      }
+
       const slot = timeSlots.find(s => s.time === form.timeSlot);
       if (!slot || slot.currentBookings >= slot.maxBookings) {
         throw new Error('This time slot is no longer available');
