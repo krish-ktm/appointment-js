@@ -1,31 +1,45 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import { User } from '../types';
 import { toast } from 'react-hot-toast';
+import { LoadingSpinner } from './LoadingSpinner';
 
 export function AdminLayout() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const userStr = localStorage.getItem('user');
-    if (!userStr) {
-      toast.error('Please login to access admin panel');
-      navigate('/login');
-      return;
-    }
+    checkAuth();
+  }, []);
 
-    const user = JSON.parse(userStr) as User;
-    if (!['superadmin', 'receptionist'].includes(user.role)) {
-      toast.error('Unauthorized access');
+  const checkAuth = () => {
+    try {
+      const userStr = localStorage.getItem('user');
+      if (!userStr) {
+        throw new Error('Please login to access admin panel');
+      }
+
+      const user = JSON.parse(userStr) as User;
+      if (!['superadmin', 'receptionist'].includes(user.role)) {
+        throw new Error('Unauthorized access');
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      toast.error(error.message);
       navigate('/login');
     }
-  }, [navigate]);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('user');
     navigate('/login');
     toast.success('Logged out successfully');
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">

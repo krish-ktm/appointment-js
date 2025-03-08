@@ -18,10 +18,14 @@ export async function login({ email, password }: LoginCredentials): Promise<{ us
     if (!isValidPassword) throw new Error('Invalid credentials');
 
     // Update last login
-    await supabase
+    const { error: updateError } = await supabase
       .from('users')
       .update({ last_login: new Date().toISOString() })
       .eq('id', users.id);
+
+    if (updateError) {
+      console.error('Error updating last login:', updateError);
+    }
 
     const user: User = {
       id: users.id,
@@ -36,6 +40,31 @@ export async function login({ email, password }: LoginCredentials): Promise<{ us
     return { user, error: null };
   } catch (error) {
     return { user: null, error: error.message };
+  }
+}
+
+export async function getUsers(): Promise<{ users: User[]; error: string | null }> {
+  try {
+    const userStr = localStorage.getItem('user');
+    if (!userStr) {
+      throw new Error('Authentication required');
+    }
+
+    const currentUser = JSON.parse(userStr) as User;
+    if (currentUser.role !== 'superadmin') {
+      throw new Error('Unauthorized access');
+    }
+
+    const { data: users, error } = await supabase
+      .from('users')
+      .select('id, email, role, name, created_at, last_login, status')
+      .order('created_at', { ascending: false });
+
+    if (error) throw new Error(error.message);
+    return { users: users as User[], error: null };
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return { users: [], error: error.message };
   }
 }
 
@@ -81,19 +110,5 @@ export async function updateUser(id: string, userData: Partial<User>): Promise<{
     return { success: true, error: null };
   } catch (error) {
     return { success: false, error: error.message };
-  }
-}
-
-export async function getUsers(): Promise<{ users: User[]; error: string | null }> {
-  try {
-    const { data: users, error } = await supabase
-      .from('users')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) throw new Error(error.message);
-    return { users: users as User[], error: null };
-  } catch (error) {
-    return { users: [], error: error.message };
   }
 }
