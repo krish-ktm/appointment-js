@@ -1,19 +1,54 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../lib/supabase';
-import { Notice } from '../types';
+import { Notice, AppointmentForm as AppointmentFormType, BookingDetails as BookingDetailsType, TimeSlot, Language } from '../types';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { Star, Award, Users, Clock, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Star, Award, Users, Clock } from 'lucide-react';
+import { AppointmentForm } from './AppointmentForm';
+import { BookingDetails } from './BookingDetails';
+import { translations } from '../translations';
+import { generateTimeSlots, validateBookingRequest } from '../utils';
+import { toast } from 'react-hot-toast';
 
 export function LandingPage() {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+  const [bookingDetails, setBookingDetails] = useState<BookingDetailsType | null>(null);
+  
+  // Get today's date in IST
+  const today = new Date();
+  const istToday = new Date(today.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+  const istTodayStr = istToday.toISOString().split('T')[0];
+
+  const [form, setForm] = useState<AppointmentFormType>({
+    name: '',
+    phone: '',
+    age: '',
+    city: '',
+    date: istTodayStr,
+    timeSlot: ''
+  });
 
   useEffect(() => {
     loadNotices();
   }, []);
+
+  useEffect(() => {
+    const loadTimeSlots = async () => {
+      if (form.date) {
+        const slots = await generateTimeSlots(form.date);
+        setTimeSlots(slots);
+      } else {
+        setTimeSlots([]);
+      }
+    };
+
+    loadTimeSlots();
+  }, [form.date]);
 
   const loadNotices = async () => {
     try {
@@ -29,6 +64,58 @@ export function LandingPage() {
       console.error('Error loading notices:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFormChange = (newForm: AppointmentFormType) => {
+    setForm(newForm);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBookingLoading(true);
+
+    try {
+      const { isValid, error } = await validateBookingRequest(
+        form.phone,
+        form.date,
+        form.timeSlot
+      );
+
+      if (!isValid) {
+        throw new Error(error);
+      }
+
+      const { data: appointment, error: appointmentError } = await supabase
+        .from('appointments')
+        .insert({
+          name: form.name,
+          phone: form.phone,
+          age: parseInt(form.age),
+          city: form.city,
+          appointment_date: form.date,
+          appointment_time: form.timeSlot,
+          status: 'pending'
+        })
+        .select()
+        .single();
+
+      if (appointmentError) throw new Error(appointmentError.message);
+
+      setSuccess(true);
+      setBookingDetails(appointment);
+      setForm({
+        name: '',
+        phone: '',
+        age: '',
+        city: '',
+        date: istTodayStr,
+        timeSlot: ''
+      });
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setBookingLoading(false);
     }
   };
 
@@ -51,18 +138,25 @@ export function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <Header />
 
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-16 sm:py-24">
+      {/* Hero Section with Appointment Form */}
+      <div className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div className="text-center lg:text-left">
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="inline-block bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium mb-6"
+              >
+                ✨ Your Journey to Radiant Skin Starts Here
+              </motion.span>
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-4xl sm:text-5xl font-bold mb-6"
+                className="text-4xl sm:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-200"
               >
                 Expert Skin Care for Your Health & Beauty
               </motion.h1>
@@ -70,38 +164,20 @@ export function LandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-xl text-blue-100 mb-8"
+                className="text-xl text-purple-100 mb-8"
               >
                 Professional dermatological care with personalized treatment plans for all your skin concerns.
               </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-              >
-                <Link
-                  to="/book-appointment"
-                  className="bg-white text-blue-600 px-8 py-3 rounded-lg font-medium hover:bg-blue-50 transition-colors"
-                >
-                  Book Appointment
-                </Link>
-                <Link
-                  to="/services"
-                  className="border border-white text-white px-8 py-3 rounded-lg font-medium hover:bg-white/10 transition-colors"
-                >
-                  Our Services
-                </Link>
-              </motion.div>
             </div>
-            <div className="hidden lg:block">
-              <motion.img
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 }}
-                src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                alt="Dermatology Care"
-                className="rounded-lg shadow-xl"
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-white/20">
+              <AppointmentForm
+                form={form}
+                setForm={handleFormChange}
+                timeSlots={timeSlots}
+                t={translations.en}
+                onSubmit={handleSubmit}
+                success={success}
+                loading={bookingLoading}
               />
             </div>
           </div>
@@ -109,10 +185,12 @@ export function LandingPage() {
       </div>
 
       {/* Services Section */}
-      <div className="py-16 bg-white">
+      <div className="py-20 bg-gradient-to-b from-white to-purple-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Services</h2>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600">
+              Our Services
+            </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               We offer a comprehensive range of dermatological services to help you achieve and maintain healthy, beautiful skin.
             </p>
@@ -127,24 +205,17 @@ export function LandingPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.2 }}
-                  className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow"
+                  className="bg-white rounded-2xl p-8 hover:shadow-xl transition-all duration-300 border border-purple-100 hover:border-purple-200"
                 >
-                  <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                    <Icon className="h-6 w-6 text-blue-600" />
+                  <div className="bg-gradient-to-br from-violet-100 to-indigo-100 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
+                    <Icon className="h-7 w-7 text-violet-600" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">
                     {service.title}
                   </h3>
-                  <p className="text-gray-600 mb-4">
+                  <p className="text-gray-600">
                     {service.description}
                   </p>
-                  <Link
-                    to="/services"
-                    className="inline-flex items-center text-blue-600 hover:text-blue-700"
-                  >
-                    Learn More
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Link>
                 </motion.div>
               );
             })}
@@ -153,30 +224,32 @@ export function LandingPage() {
       </div>
 
       {/* Notice Board */}
-      <div className="py-16 bg-gray-50">
+      <div className="py-20 bg-gradient-to-b from-purple-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Latest Updates</h2>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600">
+              Latest Updates
+            </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Stay informed about our latest services, special offers, and important announcements.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {notices.map((notice, index) => (
               <motion.div
                 key={notice.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-xl shadow-md overflow-hidden"
+                className="bg-white rounded-2xl shadow-lg overflow-hidden border border-purple-100 hover:border-purple-200 transition-all duration-300"
               >
                 {notice.image_url && (
                   <div className="aspect-video w-full overflow-hidden">
                     <img
                       src={notice.image_url}
                       alt={notice.title}
-                      className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                 )}
@@ -201,28 +274,36 @@ export function LandingPage() {
       </div>
 
       {/* Statistics Section */}
-      <div className="bg-blue-600 text-white py-16">
+      <div className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold mb-2">10+</div>
-              <div className="text-blue-100">Years Experience</div>
+              <div className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-200">10+</div>
+              <div className="text-purple-100 text-lg">Years Experience</div>
             </div>
             <div>
-              <div className="text-4xl font-bold mb-2">15k+</div>
-              <div className="text-blue-100">Happy Patients</div>
+              <div className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-200">15k+</div>
+              <div className="text-purple-100 text-lg">Happy Patients</div>
             </div>
             <div>
-              <div className="text-4xl font-bold mb-2">50+</div>
-              <div className="text-blue-100">Treatments</div>
+              <div className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-200">50+</div>
+              <div className="text-purple-100 text-lg">Treatments</div>
             </div>
             <div>
-              <div className="text-4xl font-bold mb-2">99%</div>
-              <div className="text-blue-100">Satisfaction Rate</div>
+              <div className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-200">99%</div>
+              <div className="text-purple-100 text-lg">Satisfaction Rate</div>
             </div>
           </div>
         </div>
       </div>
+
+      {bookingDetails && (
+        <BookingDetails
+          booking={bookingDetails}
+          onClose={() => setBookingDetails(null)}
+          t={translations.en}
+        />
+      )}
 
       <Footer />
     </div>
