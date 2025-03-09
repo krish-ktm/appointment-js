@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getUsers } from '../lib/auth';
-import { getTodayAppointments } from '../lib/appointments';
+import { getTodayAndTomorrowAppointments } from '../lib/appointments';
 import { User, Appointment } from '../types';
 import { toast } from 'react-hot-toast';
 import { AppointmentsTable } from './AppointmentsTable';
@@ -18,7 +18,6 @@ export function AdminDashboard() {
 
   useEffect(() => {
     loadData();
-    // Set up an interval to refresh the data every minute
     const interval = setInterval(loadData, 60000);
     return () => clearInterval(interval);
   }, []);
@@ -36,7 +35,7 @@ export function AdminDashboard() {
       
       const [usersResult, appointmentsResult] = await Promise.all([
         currentUser.role === 'superadmin' ? getUsers() : { users: [], error: null },
-        getTodayAppointments()
+        getTodayAndTomorrowAppointments()
       ]);
 
       if (usersResult.error) {
@@ -74,36 +73,53 @@ export function AdminDashboard() {
     return null;
   }
 
+  // Group appointments by date
+  const today = new Date().toISOString().split('T')[0];
+  const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0];
+  
+  const appointmentsByDate = {
+    [today]: appointments.filter(app => app.appointment_date === today),
+    [tomorrow]: appointments.filter(app => app.appointment_date === tomorrow)
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {currentUser.role === 'superadmin' && (
         <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
       )}
       
       {(activeTab === 'appointments' || currentUser.role !== 'superadmin') ? (
-        <div className="bg-white shadow rounded-lg overflow-hidden">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-medium text-gray-900">Today's Appointments</h2>
-              <button
-                onClick={loadData}
-                className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Refresh
-              </button>
-            </div>
-            {appointments.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                No appointments scheduled for today
+        <div className="space-y-4 sm:space-y-6">
+          {[today, tomorrow].map(date => (
+            <div key={date} className="bg-white shadow rounded-lg overflow-hidden">
+              <div className="px-4 py-4 sm:px-6 sm:py-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                  <h2 className="text-lg font-medium text-gray-900">
+                    {date === today ? "Today's Appointments" : "Tomorrow's Appointments"}
+                  </h2>
+                  {date === today && (
+                    <button
+                      onClick={loadData}
+                      className="w-full sm:w-auto inline-flex items-center justify-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      Refresh
+                    </button>
+                  )}
+                </div>
+                {appointmentsByDate[date].length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    No appointments scheduled for {date === today ? 'today' : 'tomorrow'}
+                  </div>
+                ) : (
+                  <AppointmentsTable appointments={appointmentsByDate[date]} />
+                )}
               </div>
-            ) : (
-              <AppointmentsTable appointments={appointments} />
-            )}
-          </div>
+            </div>
+          ))}
         </div>
       ) : (
         <div className="bg-white shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
+          <div className="px-4 py-4 sm:px-6 sm:py-5">
             <h2 className="text-lg font-medium text-gray-900 mb-4">Users</h2>
             <UsersTable users={users} />
           </div>
