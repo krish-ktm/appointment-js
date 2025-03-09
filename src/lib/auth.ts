@@ -112,3 +112,17 @@ export async function updateUser(id: string, userData: Partial<User>): Promise<{
     return { success: false, error: error.message };
   }
 }
+
+export async function deleteUser(id: string): Promise<{ success: boolean; error: string | null }> {
+  try {
+    const { error } = await supabase
+      .from('users')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw new Error(error.message);
+    return { success: true, error: null };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}

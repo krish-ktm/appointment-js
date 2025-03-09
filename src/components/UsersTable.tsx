@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { User } from '../types';
-import { updateUser } from '../lib/auth';
+import { updateUser, deleteUser } from '../lib/auth';
 import { toast } from 'react-hot-toast';
 import { CreateUserModal } from './CreateUserModal';
+import { DeleteUserModal } from './DeleteUserModal';
+import { EditUserModal } from './EditUserModal';
 
 interface UsersTableProps {
   users: User[];
@@ -11,6 +13,9 @@ interface UsersTableProps {
 
 export function UsersTable({ users, onUserUpdated }: UsersTableProps) {
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const [userToEdit, setUserToEdit] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleStatusToggle = async (user: User) => {
     try {
@@ -23,6 +28,25 @@ export function UsersTable({ users, onUserUpdated }: UsersTableProps) {
       onUserUpdated();
     } catch (error) {
       toast.error(error.message);
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    if (!userToDelete) return;
+
+    setLoading(true);
+    try {
+      const { success, error } = await deleteUser(userToDelete.id);
+      
+      if (error) throw new Error(error);
+      
+      toast.success('User deleted successfully');
+      setUserToDelete(null);
+      onUserUpdated();
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -91,7 +115,13 @@ export function UsersTable({ users, onUserUpdated }: UsersTableProps) {
                         ? new Date(user.last_login).toLocaleString()
                         : 'Never'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
+                      <button
+                        onClick={() => setUserToEdit(user)}
+                        className="text-blue-600 hover:text-blue-700"
+                      >
+                        Edit
+                      </button>
                       <button
                         onClick={() => handleStatusToggle(user)}
                         className={`text-sm font-medium ${
@@ -101,6 +131,12 @@ export function UsersTable({ users, onUserUpdated }: UsersTableProps) {
                         }`}
                       >
                         {user.status === 'active' ? 'Deactivate' : 'Activate'}
+                      </button>
+                      <button
+                        onClick={() => setUserToDelete(user)}
+                        className="text-sm font-medium text-red-600 hover:text-red-700"
+                      >
+                        Delete
                       </button>
                     </td>
                   </tr>
@@ -115,6 +151,23 @@ export function UsersTable({ users, onUserUpdated }: UsersTableProps) {
         <CreateUserModal
           onClose={() => setShowCreateModal(false)}
           onUserCreated={onUserUpdated}
+        />
+      )}
+
+      {userToDelete && (
+        <DeleteUserModal
+          user={userToDelete}
+          onClose={() => setUserToDelete(null)}
+          onConfirm={handleDeleteUser}
+          loading={loading}
+        />
+      )}
+
+      {userToEdit && (
+        <EditUserModal
+          user={userToEdit}
+          onClose={() => setUserToEdit(null)}
+          onUserUpdated={onUserUpdated}
         />
       )}
     </>
