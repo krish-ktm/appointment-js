@@ -1,5 +1,5 @@
 import { Calendar, Clock, MapPin, Phone, User as UserIcon } from 'lucide-react';
-import { Appointment } from '../types';
+import { Appointment } from '../../types';
 
 interface AppointmentsTableProps {
   appointments: Appointment[];

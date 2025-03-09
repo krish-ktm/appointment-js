@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Outlet, Link, useLocation } from 'react-router-dom';
-import { User } from '../types';
+import { User } from '../../types';
 import { toast } from 'react-hot-toast';
-import { LoadingSpinner } from './LoadingSpinner';
+import { LoadingSpinner } from '../LoadingSpinner';
 import { Menu, Calendar, Bell } from 'lucide-react';
 
 export function AdminLayout() {

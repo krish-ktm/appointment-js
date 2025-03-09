@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { User } from '../types';
-import { updateUser, deleteUser } from '../lib/auth';
+import { User } from '../../types';
+import { updateUser, deleteUser } from '../../lib/auth';
 import { toast } from 'react-hot-toast';
-import { CreateUserModal } from './CreateUserModal';
-import { DeleteUserModal } from './DeleteUserModal';
-import { EditUserModal } from './EditUserModal';
+import { CreateUserModal } from './modals/CreateUserModal';
+import { DeleteUserModal } from './modals/DeleteUserModal';
+import { EditUserModal } from './modals/EditUserModal';
 import { MoreVertical, Edit2, Trash2, Power, UserPlus } from 'lucide-react';
 
 interface UsersTableProps {

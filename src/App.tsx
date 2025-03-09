@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { Login } from './components/Login';
-import { AdminLayout } from './components/AdminLayout';
-import { AdminDashboard } from './components/AdminDashboard';
-import { NoticeManager } from './components/NoticeManager';
+import { AdminLayout } from './components/admin/AdminLayout';
+import { AdminDashboard } from './components/admin/AdminDashboard';
+import { NoticeManager } from './components/admin/NoticeManager';
 import { LandingPage } from './components/LandingPage';
 
 function App() {

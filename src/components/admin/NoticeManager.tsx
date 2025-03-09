@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../../lib/supabase';
 import { Notice, User } from '../types';
 import { toast } from 'react-hot-toast';
 import { Plus, Image as ImageIcon, Edit2, Trash2, MoveUp, MoveDown } from 'lucide-react';

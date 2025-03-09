@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { getUsers } from '../lib/auth';
-import { getTodayAndTomorrowAppointments } from '../lib/appointments';
-import { User, Appointment } from '../types';
+import { getUsers } from '../../lib/auth';
+import { getTodayAndTomorrowAppointments } from '../../lib/appointments';
+import { User, Appointment } from '../../types';
 import { toast } from 'react-hot-toast';
 import { AppointmentsTable } from './AppointmentsTable';
 import { UsersTable } from './UsersTable';
 import { TabNavigation } from './TabNavigation';
-import { LoadingSpinner } from './LoadingSpinner';
+import { LoadingSpinner } from '../LoadingSpinner';
 import { useNavigate } from 'react-router-dom';
 
 export function AdminDashboard() {
