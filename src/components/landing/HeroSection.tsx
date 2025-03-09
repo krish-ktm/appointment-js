@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { AppointmentForm } from '../AppointmentForm';
-import { AppointmentFormType, TimeSlot, BookingDetailsType } from '../../types';
+import { AppointmentFormType, TimeSlot } from '../../types';
 import { translations } from '../../translations';
 
 interface HeroSectionProps {
@@ -14,10 +14,11 @@ interface HeroSectionProps {
 
 export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, loading }: HeroSectionProps) {
   return (
-    <div className="relative bg-gradient-to-r from-violet-600 to-indigo-600 text-white">
-      <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
+    <div className="relative bg-gradient-to-br from-violet-600 via-indigo-600 to-blue-600 text-white min-h-screen">
+      <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-5"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center py-12 lg:py-20">
+        <div className="flex flex-col items-center py-32 lg:py-40">
           {/* Hero Content */}
           <div className="text-center max-w-3xl mx-auto">
             <motion.span
@@ -30,7 +31,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-4xl sm:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-200 leading-tight"
+              className="text-4xl sm:text-5xl font-bold mb-6 leading-tight"
             >
               Expert Skin Care for Your Health & Beauty
             </motion.h1>
@@ -38,7 +39,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-xl text-purple-100 mb-8 leading-relaxed"
+              className="text-xl text-white/90 mb-8 leading-relaxed"
             >
               Professional dermatological care with personalized treatment plans for all your skin concerns.
             </motion.p>
@@ -49,15 +50,15 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               className="flex flex-wrap justify-center gap-4"
             >
               <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
-                <div className="h-2 w-2 rounded-full bg-green-400"></div>
+                <div className="h-2 w-2 rounded-full bg-emerald-400"></div>
                 <span className="text-sm font-medium">Expert Dermatologists</span>
               </div>
               <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
-                <div className="h-2 w-2 rounded-full bg-yellow-400"></div>
+                <div className="h-2 w-2 rounded-full bg-amber-400"></div>
                 <span className="text-sm font-medium">Advanced Treatments</span>
               </div>
               <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
-                <div className="h-2 w-2 rounded-full bg-pink-400"></div>
+                <div className="h-2 w-2 rounded-full bg-rose-400"></div>
                 <span className="text-sm font-medium">Personalized Care</span>
               </div>
             </motion.div>
