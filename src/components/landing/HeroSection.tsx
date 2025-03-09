@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { AppointmentForm } from '../AppointmentForm';
 import { AppointmentFormType, TimeSlot } from '../../types';
 import { translations } from '../../translations';
+import { gradients, background, text, button } from '../../theme/colors';
 
 interface HeroSectionProps {
   form: AppointmentFormType;
@@ -14,7 +15,7 @@ interface HeroSectionProps {
 
 export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, loading }: HeroSectionProps) {
   return (
-    <div className="relative bg-gradient-to-br from-violet-500/90 via-indigo-500/90 to-blue-500/90 text-white min-h-screen">
+    <div className={`relative bg-gradient-to-br ${gradients.primary.light} ${text.light} min-h-screen`}>
       <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,7 +40,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-xl text-white/90 mb-8 leading-relaxed"
+              className={`text-xl ${text.lightMuted} mb-8 leading-relaxed`}
             >
               Professional dermatological care with personalized treatment plans for all your skin concerns.
             </motion.p>
