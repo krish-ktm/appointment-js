@@ -7,7 +7,6 @@ import { Language, AppointmentForm as AppointmentFormType, BookingDetails as Boo
 import { generateTimeSlots, validateBookingRequest } from '../utils';
 import { supabase } from '../lib/supabase';
 import { toast } from 'react-hot-toast';
-import { Link } from 'react-router-dom';
 
 export function Home() {
   const [language, setLanguage] = useState<Language | null>(null);
@@ -104,15 +103,7 @@ export function Home() {
   }
 
   return (
-    <div className="relative">
-      <div className="absolute top-4 right-4">
-        <Link
-          to="/login"
-          className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
-        >
-          Admin Login
-        </Link>
-      </div>
+    <div>
       <AppointmentForm
         form={form}
         setForm={handleFormChange}

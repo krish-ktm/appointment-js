@@ -121,7 +121,7 @@ export function AdminDashboard() {
         <div className="bg-white shadow rounded-lg">
           <div className="px-4 py-4 sm:px-6 sm:py-5">
             <h2 className="text-lg font-medium text-gray-900 mb-4">Users</h2>
-            <UsersTable users={users} />
+            <UsersTable users={users} onUserUpdated={loadData} />
           </div>
         </div>
       )}
