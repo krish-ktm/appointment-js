@@ -15,12 +15,19 @@ export function Home() {
   const [success, setSuccess] = useState(false);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [bookingDetails, setBookingDetails] = useState<BookingDetailsType | null>(null);
+  
+  // Get today's date in IST
+  const today = new Date();
+  const istOffset = 5.5 * 60 * 60 * 1000; // IST offset (UTC+5:30)
+  const istToday = new Date(today.getTime() + istOffset);
+  const istTodayStr = istToday.toISOString().split('T')[0];
+
   const [form, setForm] = useState<AppointmentFormType>({
     name: '',
     phone: '',
     age: '',
     city: '',
-    date: '',
+    date: istTodayStr,
     timeSlot: ''
   });
 
@@ -29,13 +36,21 @@ export function Home() {
       if (form.date) {
         const slots = await generateTimeSlots(form.date);
         setTimeSlots(slots);
+
+        // If no slots available for today, switch to tomorrow
+        if (form.date === istTodayStr && slots.every(slot => slot.currentBookings >= slot.maxBookings)) {
+          const istTomorrow = new Date(istToday);
+          istTomorrow.setDate(istTomorrow.getDate() + 1);
+          const istTomorrowStr = istTomorrow.toISOString().split('T')[0];
+          setForm(prev => ({ ...prev, date: istTomorrowStr }));
+        }
       } else {
         setTimeSlots([]);
       }
     };
 
     loadTimeSlots();
-  }, [form.date]);
+  }, [form.date, istTodayStr]);
 
   const handleLanguageSelect = (lang: Language) => {
     setLanguage(lang);
@@ -87,7 +102,7 @@ export function Home() {
         phone: '',
         age: '',
         city: '',
-        date: '',
+        date: istTodayStr,
         timeSlot: ''
       });
     } catch (error) {

@@ -20,24 +20,24 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
     currentBookings: 0
   }));
 
+  // Get current date and time in IST
   const now = new Date();
+  const istOffset = 5.5 * 60 * 60 * 1000; // IST offset (UTC+5:30)
+  const istNow = new Date(now.getTime() + istOffset);
+  
+  // Get selected date in IST
   const selectedDate = new Date(date);
+  const istSelectedDate = new Date(selectedDate.getTime() + istOffset);
   
   // Reset hours to compare just the dates
-  now.setHours(0, 0, 0, 0);
-  selectedDate.setHours(0, 0, 0, 0);
+  const istToday = new Date(istNow);
+  istToday.setHours(0, 0, 0, 0);
   
-  const isToday = selectedDate.getTime() === now.getTime();
+  const selectedDateStart = new Date(istSelectedDate);
+  selectedDateStart.setHours(0, 0, 0, 0);
   
-  // Compare with tomorrow's date
-  const tomorrow = new Date(now);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const isTomorrow = selectedDate.getTime() === tomorrow.getTime();
-
-  // If the date is not today or tomorrow, return empty slots
-  if (!isToday && !isTomorrow) {
-    return [];
-  }
+  // Check if selected date is today
+  const isToday = selectedDateStart.getTime() === istToday.getTime();
 
   try {
     // Get current bookings for each time slot
@@ -59,15 +59,17 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
         slot.currentBookings = bookingCounts[slot.time] || 0;
         
         if (isToday) {
+          const istHour = istNow.getHours();
           const [slotHour, slotMinute, period] = slot.time.match(/(\d+):(\d+)\s+(AM|PM)/)?.slice(1) || [];
-          const slotTime = new Date();
-          slotTime.setHours(
-            (parseInt(slotHour) % 12) + (period === 'PM' ? 12 : 0),
-            parseInt(slotMinute)
-          );
+          const slotHour24 = (parseInt(slotHour) % 12) + (period === 'PM' ? 12 : 0);
 
-          // Block past time slots
-          if (slotTime <= new Date()) {
+          // Rule 1: At 9 AM IST, block all morning slots (9 AM to 12 PM)
+          if (istHour >= 9 && slotHour24 < 12) {
+            slot.currentBookings = slot.maxBookings;
+          }
+
+          // Rule 2: At 1 PM IST, block all remaining slots for today
+          if (istHour >= 13) {
             slot.currentBookings = slot.maxBookings;
           }
         }
@@ -82,36 +84,37 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
 };
 
 export const isSlotAvailable = async (date: string, time: string): Promise<boolean> => {
+  // Get current date and time in IST
   const now = new Date();
+  const istOffset = 5.5 * 60 * 60 * 1000; // IST offset (UTC+5:30)
+  const istNow = new Date(now.getTime() + istOffset);
+  
+  // Get selected date in IST
   const selectedDate = new Date(date);
+  const istSelectedDate = new Date(selectedDate.getTime() + istOffset);
   
   // Reset hours to compare just the dates
-  now.setHours(0, 0, 0, 0);
-  selectedDate.setHours(0, 0, 0, 0);
+  const istToday = new Date(istNow);
+  istToday.setHours(0, 0, 0, 0);
   
-  const isToday = selectedDate.getTime() === now.getTime();
+  const selectedDateStart = new Date(istSelectedDate);
+  selectedDateStart.setHours(0, 0, 0, 0);
   
-  // Compare with tomorrow's date
-  const tomorrow = new Date(now);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const isTomorrow = selectedDate.getTime() === tomorrow.getTime();
-  
-  // Only allow bookings for today and tomorrow
-  if (!isToday && !isTomorrow) {
-    return false;
-  }
+  // Check if selected date is today
+  const isToday = selectedDateStart.getTime() === istToday.getTime();
 
-  // Apply same time restrictions as in generateTimeSlots
   if (isToday) {
+    const istHour = istNow.getHours();
     const [slotHour, slotMinute, period] = time.match(/(\d+):(\d+)\s+(AM|PM)/)?.slice(1) || [];
-    const slotTime = new Date();
-    slotTime.setHours(
-      (parseInt(slotHour) % 12) + (period === 'PM' ? 12 : 0),
-      parseInt(slotMinute)
-    );
+    const slotHour24 = (parseInt(slotHour) % 12) + (period === 'PM' ? 12 : 0);
 
-    // Block past time slots
-    if (slotTime <= new Date()) {
+    // Rule 1: At 9 AM IST, block all morning slots (9 AM to 12 PM)
+    if (istHour >= 9 && slotHour24 < 12) {
+      return false;
+    }
+
+    // Rule 2: At 1 PM IST, block all remaining slots for today
+    if (istHour >= 13) {
       return false;
     }
   }
