@@ -22,13 +22,18 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
         <div className="flex flex-col items-center py-32 lg:py-40">
           {/* Hero Content */}
           <div className="text-center max-w-3xl mx-auto">
-            <motion.span
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium mb-6"
+              className="inline-block bg-white/95 backdrop-blur-sm px-6 py-3 rounded-xl text-sm font-medium mb-6 shadow-lg border border-white/20 hover:border-white/40 transition-all duration-300"
             >
-              ✨ Your Journey to Radiant Skin Starts Here
-            </motion.span>
+              <div className="flex items-center gap-3">
+                <span className="text-lg">✨</span>
+                <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                  Your Journey to Radiant Skin Starts Here
+                </span>
+              </div>
+            </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -50,18 +55,42 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               transition={{ delay: 0.3 }}
               className="flex flex-wrap justify-center gap-4"
             >
-              <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
-                <div className="h-2 w-2 rounded-full bg-emerald-300"></div>
-                <span className="text-sm font-medium">Expert Dermatologists</span>
-              </div>
-              <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
-                <div className="h-2 w-2 rounded-full bg-amber-300"></div>
-                <span className="text-sm font-medium">Advanced Treatments</span>
-              </div>
-              <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
-                <div className="h-2 w-2 rounded-full bg-rose-300"></div>
-                <span className="text-sm font-medium">Personalized Care</span>
-              </div>
+              {[
+                {
+                  icon: "h-2 w-2 rounded-full bg-emerald-400",
+                  text: "Expert Dermatologists",
+                  gradient: "from-emerald-500 to-emerald-600"
+                },
+                {
+                  icon: "h-2 w-2 rounded-full bg-amber-400",
+                  text: "Advanced Treatments",
+                  gradient: "from-amber-500 to-amber-600"
+                },
+                {
+                  icon: "h-2 w-2 rounded-full bg-rose-400",
+                  text: "Personalized Care",
+                  gradient: "from-rose-500 to-rose-600"
+                }
+              ].map((feature, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.4 + index * 0.1 }}
+                  className="relative group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/40 to-white/20 rounded-xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
+                  <div className="relative bg-white/95 backdrop-blur-sm px-4 py-2 rounded-xl shadow-lg border border-white/20 hover:border-white/40 transition-all duration-300">
+                    <div className="flex items-center gap-3">
+                      <div className={feature.icon}></div>
+                      <span className={`text-sm font-medium bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}>
+                        {feature.text}
+                      </span>
+                    </div>
+                    <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+                  </div>
+                </motion.div>
+              ))}
             </motion.div>
           </div>
 
