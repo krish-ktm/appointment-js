@@ -149,8 +149,8 @@ export function AppointmentForm({
                   whileTap={{ scale: 0.99 }}
                   type="submit"
                   disabled={loading || !form.timeSlot}
-                  className={`w-full py-2.5 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm sm:text-base font-medium ${
-                    (loading || !form.timeSlot) ? 'opacity-70 cursor-not-allowed' : ''
+                  className={`w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 hover:from-blue-700 hover:to-blue-800 transition-all duration-200 text-sm sm:text-base ${
+                    (loading || !form.timeSlot) ? 'opacity-70 cursor-not-allowed from-blue-400 to-blue-500' : ''
                   }`}
                 >
                   {loading ? 'Booking...' : t.submit}
