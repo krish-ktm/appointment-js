@@ -59,12 +59,6 @@ export function Header() {
               <Link to="/about" className="text-gray-700 hover:text-violet-600 transition-colors">About</Link>
               <Link to="/services" className="text-gray-700 hover:text-violet-600 transition-colors">Services</Link>
               <Link to="/contact" className="text-gray-700 hover:text-violet-600 transition-colors">Contact</Link>
-              <Link
-                to="/book-appointment"
-                className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-6 py-2.5 rounded-xl hover:shadow-lg hover:shadow-violet-600/20 transition-all duration-300"
-              >
-                Book Appointment
-              </Link>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -118,13 +112,6 @@ export function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contact
-              </Link>
-              <Link
-                to="/book-appointment"
-                className="block px-3 py-2 text-base font-medium text-white bg-gradient-to-r from-violet-600 to-indigo-600 rounded-xl"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Book Appointment
               </Link>
             </div>
           </motion.div>

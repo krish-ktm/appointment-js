@@ -3,6 +3,15 @@ import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Linkedin } fr
 import { motion } from 'framer-motion';
 
 export function Footer() {
+  const scrollToAppointmentForm = () => {
+    const element = document.querySelector('.appointment-form-section');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.location.href = '/#appointment-form';
+    }
+  };
+
   return (
     <footer className="bg-gradient-to-b from-gray-900 to-gray-950 text-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -30,20 +39,30 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-6 text-white">Quick Links</h3>
             <ul className="space-y-3">
               {[
-                { to: "/", label: "Home" },
-                { to: "/about", label: "About Us" },
-                { to: "/services", label: "Our Services" },
-                { to: "/contact", label: "Contact Us" },
-                { to: "/book-appointment", label: "Book Appointment" }
-              ].map((link) => (
-                <li key={link.to}>
-                  <Link
-                    to={link.to}
-                    className="text-gray-400 hover:text-violet-400 transition-colors duration-200 flex items-center gap-2"
-                  >
-                    <span className="h-1 w-1 rounded-full bg-violet-500"></span>
-                    {link.label}
-                  </Link>
+                { label: "Home", action: () => window.scrollTo(0, 0) },
+                { label: "About Us", to: "/about" },
+                { label: "Our Services", to: "/services" },
+                { label: "Contact Us", to: "/contact" },
+                { label: "Book Appointment", action: scrollToAppointmentForm }
+              ].map((link, index) => (
+                <li key={index}>
+                  {link.to ? (
+                    <Link
+                      to={link.to}
+                      className="text-gray-400 hover:text-violet-400 transition-colors duration-200 flex items-center gap-2"
+                    >
+                      <span className="h-1 w-1 rounded-full bg-violet-500"></span>
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={link.action}
+                      className="text-gray-400 hover:text-violet-400 transition-colors duration-200 flex items-center gap-2"
+                    >
+                      <span className="h-1 w-1 rounded-full bg-violet-500"></span>
+                      {link.label}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
