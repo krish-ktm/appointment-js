@@ -1,3 +1,5 @@
+import { Database } from './types_db';
+
 export interface TimeSlot {
   time: string;
   maxBookings: number;
@@ -34,6 +36,17 @@ export interface Appointment {
   appointment_time: string;
   created_at: string;
   status: 'pending' | 'completed' | 'cancelled';
+}
+
+export interface Notice {
+  id: string;
+  title: string;
+  content: string | null;
+  image_url: string | null;
+  active: boolean;
+  order: number;
+  created_at: string;
+  created_by: string;
 }
 
 export type Language = 'en' | 'gu';

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, Outlet } from 'react-router-dom';
+import { useNavigate, Outlet, Link, useLocation } from 'react-router-dom';
 import { User } from '../types';
 import { toast } from 'react-hot-toast';
 import { LoadingSpinner } from './LoadingSpinner';
-import { Menu } from 'lucide-react';
+import { Menu, Calendar, Bell } from 'lucide-react';
 
 export function AdminLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -39,9 +40,19 @@ export function AdminLayout() {
     toast.success('Logged out successfully');
   };
 
+  const userStr = localStorage.getItem('user');
+  const currentUser = userStr ? JSON.parse(userStr) as User : null;
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
+
+  const navigation = [
+    { name: 'Appointments', href: '/admin', icon: Calendar },
+    ...(currentUser?.role === 'superadmin' ? [
+      { name: 'Notice Board', href: '/admin/notices', icon: Bell }
+    ] : [])
+  ];
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -57,7 +68,25 @@ export function AdminLayout() {
               </button>
               <h1 className="text-xl font-bold text-gray-900 ml-2 sm:ml-0">Admin Panel</h1>
             </div>
-            <div className="hidden sm:flex items-center">
+
+            <div className="hidden sm:flex items-center space-x-4">
+              {navigation.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-md ${
+                      location.pathname === item.href
+                        ? 'text-blue-700 bg-blue-50'
+                        : 'text-gray-900 hover:bg-gray-50'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5 mr-2" />
+                    {item.name}
+                  </Link>
+                );
+              })}
               <button
                 onClick={handleLogout}
                 className="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
@@ -72,10 +101,28 @@ export function AdminLayout() {
       {/* Mobile menu */}
       {isMobileMenuOpen && (
         <div className="sm:hidden bg-white border-b border-gray-200">
-          <div className="px-4 py-3">
+          <div className="px-2 pt-2 pb-3 space-y-1">
+            {navigation.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`flex items-center px-3 py-2 text-base font-medium rounded-md ${
+                    location.pathname === item.href
+                      ? 'text-blue-700 bg-blue-50'
+                      : 'text-gray-900 hover:bg-gray-50'
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Icon className="h-5 w-5 mr-2" />
+                  {item.name}
+                </Link>
+              );
+            })}
             <button
               onClick={handleLogout}
-              className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="w-full text-left px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50 rounded-md"
             >
               Logout
             </button>
@@ -83,8 +130,10 @@ export function AdminLayout() {
         </div>
       )}
 
-      <main className="max-w-7xl mx-auto py-4 sm:py-6 px-4 sm:px-6 lg:px-8">
-        <Outlet />
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-0">
+          <Outlet />
+        </div>
       </main>
     </div>
   );
