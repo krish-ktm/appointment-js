@@ -14,9 +14,9 @@ interface HeroSectionProps {
 
 export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, loading }: HeroSectionProps) {
   return (
-    <div className="relative bg-gradient-to-br from-violet-600 via-indigo-600 to-blue-600 text-white min-h-screen">
-      <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-5"></div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent"></div>
+    <div className="relative bg-gradient-to-br from-violet-500/90 via-indigo-500/90 to-blue-500/90 text-white min-h-screen">
+      <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center py-32 lg:py-40">
           {/* Hero Content */}
@@ -24,7 +24,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-block bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium mb-6"
+              className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium mb-6"
             >
               ✨ Your Journey to Radiant Skin Starts Here
             </motion.span>
@@ -49,16 +49,16 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               transition={{ delay: 0.3 }}
               className="flex flex-wrap justify-center gap-4"
             >
-              <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
-                <div className="h-2 w-2 rounded-full bg-emerald-400"></div>
+              <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
+                <div className="h-2 w-2 rounded-full bg-emerald-300"></div>
                 <span className="text-sm font-medium">Expert Dermatologists</span>
               </div>
-              <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
-                <div className="h-2 w-2 rounded-full bg-amber-400"></div>
+              <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
+                <div className="h-2 w-2 rounded-full bg-amber-300"></div>
                 <span className="text-sm font-medium">Advanced Treatments</span>
               </div>
-              <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
-                <div className="h-2 w-2 rounded-full bg-rose-400"></div>
+              <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
+                <div className="h-2 w-2 rounded-full bg-rose-300"></div>
                 <span className="text-sm font-medium">Personalized Care</span>
               </div>
             </motion.div>
@@ -72,8 +72,8 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
             className="w-full max-w-5xl mt-12 appointment-form-section"
             id="appointment-form"
           >
-            <div className="bg-white/10 backdrop-blur-md p-1 rounded-2xl">
-              <div className="bg-white rounded-xl shadow-2xl">
+            <div className="bg-white/20 backdrop-blur-md p-1 rounded-2xl">
+              <div className="bg-white rounded-xl shadow-xl">
                 <AppointmentForm
                   form={form}
                   setForm={setForm}

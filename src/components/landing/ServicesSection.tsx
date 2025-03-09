@@ -21,10 +21,10 @@ const services = [
 
 export function ServicesSection() {
   return (
-    <div className="py-20 bg-gradient-to-b from-white to-purple-50">
+    <div className="py-20 bg-gradient-to-b from-white to-violet-50/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500">
             Our Services
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -41,12 +41,12 @@ export function ServicesSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.2 }}
-                className="bg-white rounded-2xl p-8 hover:shadow-xl transition-all duration-300 border border-purple-100 hover:border-purple-200"
+                className="bg-white/80 rounded-2xl p-8 hover:shadow-lg transition-all duration-300 border border-violet-100/50 hover:border-violet-200/50 backdrop-blur-sm"
               >
-                <div className="bg-gradient-to-br from-violet-100 to-indigo-100 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
-                  <Icon className="h-7 w-7 text-violet-600" />
+                <div className="bg-gradient-to-br from-violet-50 to-indigo-50/50 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
+                  <Icon className="h-7 w-7 text-violet-500" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                <h3 className="text-xl font-semibold text-gray-800 mb-3">
                   {service.title}
                 </h3>
                 <p className="text-gray-600">

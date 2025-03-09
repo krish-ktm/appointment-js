@@ -57,7 +57,7 @@ export function Header() {
       <div 
         className={`fixed w-full top-0 z-50 transition-all duration-500 ${
           isScrolled 
-            ? 'bg-white/70 backdrop-blur-xl border-b border-white/20 supports-[backdrop-filter]:bg-white/60'
+            ? 'bg-white/60 backdrop-blur-xl shadow-[0_1px_0_0_rgba(255,255,255,0.02)] supports-[backdrop-filter]:bg-white/50'
             : 'bg-gradient-to-b from-black/20 to-transparent pt-12'
         }`}
       >

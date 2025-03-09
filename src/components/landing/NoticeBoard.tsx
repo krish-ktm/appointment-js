@@ -8,10 +8,10 @@ interface NoticeBoardProps {
 
 export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
   return (
-    <div className="py-20 bg-gradient-to-b from-purple-50 to-white">
+    <div className="py-20 bg-gradient-to-b from-violet-50/50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600">
+          <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500">
             Latest Updates
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -26,7 +26,7 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden border border-purple-100 hover:border-purple-200 transition-all duration-300"
+              className="bg-white/80 rounded-2xl shadow-md overflow-hidden border border-violet-100/50 hover:border-violet-200/50 transition-all duration-300 backdrop-blur-sm"
             >
               {notice.image_url && (
                 <div className="aspect-video w-full overflow-hidden">
@@ -38,7 +38,7 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
                 </div>
               )}
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">
                   {notice.title}
                 </h3>
                 {notice.content && (
