@@ -36,13 +36,13 @@ export function AppointmentForm({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 sm:py-8 px-3 sm:px-6">
+    <div className="py-4 sm:py-8 px-3 sm:px-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-3xl mx-auto"
       >
-        <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
