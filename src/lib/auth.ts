@@ -99,11 +99,26 @@ export async function createUser(userData: Partial<User> & { password: string })
   }
 }
 
-export async function updateUser(id: string, userData: Partial<User>): Promise<{ success: boolean; error: string | null }> {
+export async function updateUser(
+  id: string, 
+  userData: Partial<User> & { password?: string }
+): Promise<{ success: boolean; error: string | null }> {
   try {
+    const updateData: Record<string, any> = { ...userData };
+    
+    // If password is provided, hash it
+    if (userData.password) {
+      updateData.password = await bcrypt.hash(userData.password, 10);
+    }
+    
+    // Remove password from userData if it's empty
+    if (updateData.password === '') {
+      delete updateData.password;
+    }
+
     const { error } = await supabase
       .from('users')
-      .update(userData)
+      .update(updateData)
       .eq('id', id);
 
     if (error) throw new Error(error.message);

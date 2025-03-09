@@ -18,8 +18,6 @@ export function AdminDashboard() {
 
   useEffect(() => {
     loadData();
-    const interval = setInterval(loadData, 60000);
-    return () => clearInterval(interval);
   }, []);
 
   const loadData = async () => {

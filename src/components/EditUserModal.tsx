@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, User, Mail, UserCog, Edit } from 'lucide-react';
+import { X, User, Mail, UserCog, Edit, Lock } from 'lucide-react';
 import { updateUser } from '../lib/auth';
 import { toast } from 'react-hot-toast';
 import { User as UserType } from '../types';
@@ -16,8 +16,13 @@ export function EditUserModal({ user, onClose, onUserUpdated }: EditUserModalPro
   const [form, setForm] = useState({
     name: user.name,
     email: user.email,
-    role: user.role as 'receptionist' | 'superadmin'
+    role: user.role as 'receptionist' | 'superadmin',
+    password: '' // New password field
   });
+
+  // Get current user from localStorage to check if they're a superadmin
+  const currentUser = JSON.parse(localStorage.getItem('user') || '{}') as UserType;
+  const isSuperAdmin = currentUser.role === 'superadmin';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,6 +137,28 @@ export function EditUserModal({ user, onClose, onUserUpdated }: EditUserModalPro
                   </select>
                 </div>
               </div>
+
+              {/* Password field - only shown for superadmins */}
+              {isSuperAdmin && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    New Password (leave empty to keep current)
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Lock className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      type="password"
+                      className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      value={form.password}
+                      onChange={(e) => setForm({ ...form, password: e.target.value })}
+                      placeholder="Enter new password"
+                      minLength={6}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end gap-3 pt-4">
