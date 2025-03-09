@@ -31,7 +31,7 @@ export function AppointmentForm({
 
   const handleDateChange = (date: Date | null) => {
     if (date) {
-      setForm({ ...form, date: date.toISOString().split('T')[0] });
+      setForm({ ...form, date: date.toISOString().split('T')[0], timeSlot: '' });
     }
   };
 
@@ -148,9 +148,9 @@ export function AppointmentForm({
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !form.timeSlot}
                   className={`w-full py-2.5 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm sm:text-base font-medium ${
-                    loading ? 'opacity-70 cursor-not-allowed' : ''
+                    (loading || !form.timeSlot) ? 'opacity-70 cursor-not-allowed' : ''
                   }`}
                 >
                   {loading ? 'Booking...' : t.submit}

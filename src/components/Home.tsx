@@ -18,8 +18,7 @@ export function Home() {
   
   // Get today's date in IST
   const today = new Date();
-  const istOffset = 5.5 * 60 * 60 * 1000; // IST offset (UTC+5:30)
-  const istToday = new Date(today.getTime() + istOffset);
+  const istToday = new Date(today.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
   const istTodayStr = istToday.toISOString().split('T')[0];
 
   const [form, setForm] = useState<AppointmentFormType>({
@@ -36,31 +35,19 @@ export function Home() {
       if (form.date) {
         const slots = await generateTimeSlots(form.date);
         setTimeSlots(slots);
-
-        // If no slots available for today, switch to tomorrow
-        if (form.date === istTodayStr && slots.every(slot => slot.currentBookings >= slot.maxBookings)) {
-          const istTomorrow = new Date(istToday);
-          istTomorrow.setDate(istTomorrow.getDate() + 1);
-          const istTomorrowStr = istTomorrow.toISOString().split('T')[0];
-          setForm(prev => ({ ...prev, date: istTomorrowStr }));
-        }
       } else {
         setTimeSlots([]);
       }
     };
 
     loadTimeSlots();
-  }, [form.date, istTodayStr]);
+  }, [form.date]);
 
   const handleLanguageSelect = (lang: Language) => {
     setLanguage(lang);
   };
 
   const handleFormChange = (newForm: AppointmentFormType) => {
-    // If date changes, reset the time slot
-    if (newForm.date !== form.date) {
-      newForm.timeSlot = '';
-    }
     setForm(newForm);
   };
 

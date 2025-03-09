@@ -20,14 +20,12 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
     currentBookings: 0
   }));
 
-  // Get current date and time in IST
-  const now = new Date();
-  const istOffset = 5.5 * 60 * 60 * 1000; // IST offset (UTC+5:30)
-  const istNow = new Date(now.getTime() + istOffset);
+  // Get current date and time in IST using proper timezone conversion
+  const istNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
   
   // Get selected date in IST
   const selectedDate = new Date(date);
-  const istSelectedDate = new Date(selectedDate.getTime() + istOffset);
+  const istSelectedDate = new Date(selectedDate.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
   
   // Reset hours to compare just the dates
   const istToday = new Date(istNow);
@@ -84,14 +82,12 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
 };
 
 export const isSlotAvailable = async (date: string, time: string): Promise<boolean> => {
-  // Get current date and time in IST
-  const now = new Date();
-  const istOffset = 5.5 * 60 * 60 * 1000; // IST offset (UTC+5:30)
-  const istNow = new Date(now.getTime() + istOffset);
+  // Get current date and time in IST using proper timezone conversion
+  const istNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
   
   // Get selected date in IST
   const selectedDate = new Date(date);
-  const istSelectedDate = new Date(selectedDate.getTime() + istOffset);
+  const istSelectedDate = new Date(selectedDate.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
   
   // Reset hours to compare just the dates
   const istToday = new Date(istNow);
