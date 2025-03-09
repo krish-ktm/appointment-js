@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { AppointmentForm } from '../AppointmentForm';
 import { AppointmentFormType, TimeSlot } from '../../types';
 import { translations } from '../../translations';
-import { gradients, background, text, button } from '../../theme/colors';
+import { text } from '../../theme/colors';
 
 interface HeroSectionProps {
   form: AppointmentFormType;
@@ -15,9 +15,8 @@ interface HeroSectionProps {
 
 export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, loading }: HeroSectionProps) {
   return (
-    <div className="relative bg-gradient-to-br from-blue-50 via-blue-100/30 to-sky-50 min-h-screen">
+    <div className="relative min-h-screen bg-white/30">
       <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
-      <div className="absolute inset-0 bg-gradient-to-t from-blue-100/30 via-blue-50/20 to-transparent"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center py-32 lg:py-40">
           {/* Hero Content */}
@@ -27,16 +26,13 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               animate={{ opacity: 1, y: 0 }}
               className="relative group mb-6 inline-block"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-200/60 to-blue-100/20 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
-              <div className="relative bg-gradient-to-r from-blue-100/50 to-blue-50/30 backdrop-blur-md px-6 py-3 rounded-xl text-sm font-medium shadow-lg border border-blue-200/40 group-hover:border-blue-300/60 transition-all duration-300 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-200/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-x-[-100%] group-hover:translate-x-[100%]"></div>
+              <div className="relative bg-white/40 backdrop-blur-lg px-6 py-3 rounded-xl text-sm font-medium shadow-lg border border-white/40 hover:border-white/60 transition-all duration-300 overflow-hidden">
                 <div className="flex items-center gap-3 relative z-10">
                   <span className="text-lg">✨</span>
-                  <span className="bg-gradient-to-r from-blue-900 to-blue-700 bg-clip-text text-transparent">
+                  <span className="text-blue-900">
                     Your Journey to Radiant Skin Starts Here
                   </span>
                 </div>
-                <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
               </div>
             </motion.div>
 
@@ -65,20 +61,17 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
                 {
                   icon: "h-2 w-2 rounded-full bg-emerald-400",
                   text: "Expert Dermatologists",
-                  gradient: "from-emerald-500 to-emerald-600",
-                  glow: "emerald"
+                  color: "text-emerald-600"
                 },
                 {
                   icon: "h-2 w-2 rounded-full bg-amber-400",
                   text: "Advanced Treatments",
-                  gradient: "from-amber-500 to-amber-600",
-                  glow: "amber"
+                  color: "text-amber-600"
                 },
                 {
                   icon: "h-2 w-2 rounded-full bg-rose-400",
                   text: "Personalized Care",
-                  gradient: "from-rose-500 to-rose-600",
-                  glow: "rose"
+                  color: "text-rose-600"
                 }
               ].map((feature, index) => (
                 <motion.div
@@ -88,16 +81,13 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
                   transition={{ delay: 0.4 + index * 0.1 }}
                   className="relative group"
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-r from-${feature.glow}-200/60 to-${feature.glow}-100/20 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300`}></div>
-                  <div className={`relative bg-gradient-to-r from-${feature.glow}-100/50 to-${feature.glow}-50/30 backdrop-blur-md px-4 py-2 rounded-xl shadow-lg border border-${feature.glow}-200/40 group-hover:border-${feature.glow}-300/60 transition-all duration-300 overflow-hidden hover:scale-105`}>
-                    <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-${feature.glow}-200/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-x-[-100%] group-hover:translate-x-[100%]`}></div>
+                  <div className="relative bg-white/40 backdrop-blur-lg px-4 py-2 rounded-xl shadow-lg border border-white/40 hover:border-white/60 transition-all duration-300 hover:scale-105">
                     <div className="flex items-center gap-3 relative z-10">
-                      <div className={`${feature.icon} shadow-lg shadow-${feature.glow}-400/20`}></div>
-                      <span className={`text-sm font-medium bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}>
+                      <div className={`${feature.icon}`}></div>
+                      <span className={`text-sm font-medium ${feature.color}`}>
                         {feature.text}
                       </span>
                     </div>
-                    <div className={`absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-${feature.glow}-500/50 to-transparent`}></div>
                   </div>
                 </motion.div>
               ))}
@@ -112,7 +102,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
             className="w-full max-w-5xl mt-12 appointment-form-section"
             id="appointment-form"
           >
-            <div className="bg-blue-100/20 backdrop-blur-md p-1 rounded-2xl">
+            <div className="bg-white/40 backdrop-blur-lg p-1 rounded-2xl border border-white/40">
               <div className="bg-white rounded-xl shadow-xl">
                 <AppointmentForm
                   form={form}
