@@ -25,15 +25,21 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-block bg-white/95 backdrop-blur-sm px-6 py-3 rounded-xl text-sm font-medium mb-6 shadow-lg border border-white/20 hover:border-white/40 transition-all duration-300"
+              className="relative group mb-6 inline-block"
             >
-              <div className="flex items-center gap-3">
-                <span className="text-lg">✨</span>
-                <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-                  Your Journey to Radiant Skin Starts Here
-                </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/60 to-white/20 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
+              <div className="relative bg-gradient-to-r from-white/50 to-white/30 backdrop-blur-md px-6 py-3 rounded-xl text-sm font-medium shadow-lg border border-white/40 group-hover:border-white/60 transition-all duration-300 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-x-[-100%] group-hover:translate-x-[100%]"></div>
+                <div className="flex items-center gap-3 relative z-10">
+                  <span className="text-lg">✨</span>
+                  <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                    Your Journey to Radiant Skin Starts Here
+                  </span>
+                </div>
+                <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
               </div>
             </motion.div>
+
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -79,9 +85,10 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
                   transition={{ delay: 0.4 + index * 0.1 }}
                   className="relative group"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/40 to-white/20 rounded-xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
-                  <div className="relative bg-white/95 backdrop-blur-sm px-4 py-2 rounded-xl shadow-lg border border-white/20 hover:border-white/40 transition-all duration-300">
-                    <div className="flex items-center gap-3">
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/60 to-white/20 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
+                  <div className="relative bg-gradient-to-r from-white/50 to-white/30 backdrop-blur-md px-4 py-2 rounded-xl shadow-lg border border-white/40 group-hover:border-white/60 transition-all duration-300 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-x-[-100%] group-hover:translate-x-[100%]"></div>
+                    <div className="flex items-center gap-3 relative z-10">
                       <div className={feature.icon}></div>
                       <span className={`text-sm font-medium bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}>
                         {feature.text}
