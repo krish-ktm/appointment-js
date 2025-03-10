@@ -49,7 +49,7 @@ export function Header() {
           opacity: isScrolled && scrollDirection === 'down' ? 0 : 1
         }}
         transition={{ duration: 0.3 }}
-        className="fixed w-full z-40 bg-white/95 backdrop-blur-sm border-b border-gray-100"
+        className="fixed w-full z-40 bg-white border-b border-gray-100"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between gap-2 py-2">
@@ -82,7 +82,7 @@ export function Header() {
           boxShadow: isScrolled ? '0 1px 3px 0 rgb(0 0 0 / 0.1)' : 'none',
         }}
         transition={{ duration: 0.3 }}
-        className="fixed w-full z-50 bg-white/95 backdrop-blur-sm"
+        className="fixed w-full z-50 bg-white sm:bg-white/95 sm:backdrop-blur-sm"
       >
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
