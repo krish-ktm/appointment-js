@@ -3,20 +3,21 @@ import { supabase } from './lib/supabase';
 
 export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
   const baseSlots = [
-    '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM',
-    '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM',
-    '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM',
-    '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM',
-    '5:00 PM', '5:30 PM', '6:00 PM', '6:30 PM',
-    '7:00 PM', '7:30 PM', '8:00 PM', '8:30 PM',
-    '9:00 PM', '9:30 PM', '10:00 PM', '10:30 PM',
-    '11:00 PM'
+    // Morning slots (9:30 AM to 12:00 PM)
+    '9:30 AM', '9:45 AM',
+    '10:00 AM', '10:15 AM', '10:30 AM', '10:45 AM',
+    '11:00 AM', '11:15 AM', '11:30 AM', '11:45 AM',
+    '12:00 PM',
+    // Evening slots (4:00 PM to 6:30 PM)
+    '4:00 PM', '4:15 PM', '4:30 PM', '4:45 PM',
+    '5:00 PM', '5:15 PM', '5:30 PM', '5:45 PM',
+    '6:00 PM', '6:15 PM', '6:30 PM'
   ];
 
-  // Initialize slots with max 4 bookings
+  // Initialize slots with max 3 bookings
   const slots: TimeSlot[] = baseSlots.map(time => ({
     time,
-    maxBookings: 4,
+    maxBookings: 3,
     currentBookings: 0
   }));
 
@@ -61,12 +62,12 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
           const [slotHour, slotMinute, period] = slot.time.match(/(\d+):(\d+)\s+(AM|PM)/)?.slice(1) || [];
           const slotHour24 = (parseInt(slotHour) % 12) + (period === 'PM' ? 12 : 0);
 
-          // Rule 1: At 9 AM IST, block all morning slots (9 AM to 12 PM)
+          // Rule 1: At 9 AM IST, block all morning slots (9:30 AM to 12 PM)
           if (istHour >= 9 && slotHour24 < 12) {
             slot.currentBookings = slot.maxBookings;
           }
 
-          // Rule 2: At 1 PM IST, block all remaining slots for today
+          // Rule 2: At 1 PM IST, block all evening slots (4 PM to 6:30 PM)
           if (istHour >= 13) {
             slot.currentBookings = slot.maxBookings;
           }
@@ -104,12 +105,12 @@ export const isSlotAvailable = async (date: string, time: string): Promise<boole
     const [slotHour, slotMinute, period] = time.match(/(\d+):(\d+)\s+(AM|PM)/)?.slice(1) || [];
     const slotHour24 = (parseInt(slotHour) % 12) + (period === 'PM' ? 12 : 0);
 
-    // Rule 1: At 9 AM IST, block all morning slots (9 AM to 12 PM)
+    // Rule 1: At 9 AM IST, block all morning slots (9:30 AM to 12 PM)
     if (istHour >= 9 && slotHour24 < 12) {
       return false;
     }
 
-    // Rule 2: At 1 PM IST, block all remaining slots for today
+    // Rule 2: At 1 PM IST, block all evening slots (4 PM to 6:30 PM)
     if (istHour >= 13) {
       return false;
     }
@@ -127,7 +128,7 @@ export const isSlotAvailable = async (date: string, time: string): Promise<boole
     return false;
   }
 
-  return data.length < 4; // Max 4 appointments per slot
+  return data.length < 3; // Max 3 appointments per slot
 };
 
 export const validateBookingRequest = async (
