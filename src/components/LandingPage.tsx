@@ -108,6 +108,8 @@ export function LandingPage() {
 
       setSuccess(true);
       setBookingDetails(appointment);
+      // Reset form immediately after successful booking
+      setForm(initialForm);
     } catch (error) {
       toast.error(error.message);
     } finally {
