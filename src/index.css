@@ -2,6 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base optimizations */
+html {
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optimize scrolling container */
+.scroll-container {
+  contain: content;
+  content-visibility: auto;
+}
+
+/* Optimize fixed elements */
+.fixed-element {
+  contain: layout style paint;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Reduce motion when requested */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 .react-datepicker {
   @apply font-sans border border-gray-200 shadow-lg rounded-xl overflow-hidden w-full;
 }

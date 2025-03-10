@@ -7,88 +7,89 @@ import { gradients, text, background } from '../theme/colors';
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
-    let lastScrollY = window.scrollY;
-    let ticking = false;
+    const controlNavbar = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY) {
+        setScrollDirection('down');
+      } else {
+        setScrollDirection('up');
+      }
 
-    const updateScrollState = () => {
-      setIsScrolled(window.scrollY > 50);
-      ticking = false;
+      setIsScrolled(currentScrollY > 50);
+      setLastScrollY(currentScrollY);
     };
 
+    let ticking = false;
     const onScroll = () => {
       if (!ticking) {
-        window.requestAnimationFrame(updateScrollState);
+        window.requestAnimationFrame(() => {
+          controlNavbar();
+          ticking = false;
+        });
         ticking = true;
       }
     };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [lastScrollY]);
 
   return (
     <header className="relative">
       {/* Top Bar */}
-      <div 
-        className={`fixed w-full z-40 transform transition-transform duration-300 ease-in-out will-change-transform ${
-          isScrolled ? '-translate-y-full' : 'translate-y-0'
-        }`}
+      <motion.div 
+        initial={{ y: 0 }}
+        animate={{ 
+          y: isScrolled && scrollDirection === 'down' ? -100 : 0,
+          opacity: isScrolled && scrollDirection === 'down' ? 0 : 1
+        }}
+        transition={{ duration: 0.3 }}
+        className="fixed w-full z-40 bg-white/95 backdrop-blur-sm border-b border-gray-100"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between gap-2 py-2">
             <div className="flex items-center gap-4 sm:gap-6">
-              <motion.a
+              <a
                 href="tel:+15551234567"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex items-center gap-2 text-xs sm:text-sm bg-white/10 backdrop-blur-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-full hover:bg-white/20 transition-colors text-gray-700"
+                className="flex items-center gap-2 text-xs sm:text-sm bg-gray-50/80 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-gray-700 hover:bg-gray-100 transition-colors"
               >
                 <Phone className="h-3 w-3 sm:h-4 sm:w-4 text-blue-500" />
                 <span className="whitespace-nowrap">+1 (555) 123-4567</span>
-              </motion.a>
-              <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 }}
-                className="hidden sm:flex items-center gap-2 text-sm bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full text-gray-700"
-              >
+              </a>
+              <div className="hidden sm:flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700">
                 <Clock className="h-4 w-4 text-blue-500" />
                 <span>Mon - Sat: 9:00 AM - 7:00 PM</span>
-              </motion.div>
+              </div>
             </div>
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="hidden sm:flex items-center gap-2 text-sm bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full text-gray-700"
-            >
+            <div className="hidden sm:flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700">
               <MapPin className="h-4 w-4 text-blue-500" />
               <span>123 Medical Center, Healthcare City</span>
-            </motion.div>
+            </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Main Navigation */}
-      <div 
-        className={`fixed w-full z-50 transform transition-all duration-300 ease-in-out will-change-transform ${
-          isScrolled 
-            ? 'translate-y-0 bg-white/80 backdrop-blur-md shadow-sm'
-            : 'translate-y-10 bg-transparent'
-        }`}
+      <motion.div 
+        initial={{ y: 40 }}
+        animate={{ 
+          y: isScrolled ? 0 : 40,
+          boxShadow: isScrolled ? '0 1px 3px 0 rgb(0 0 0 / 0.1)' : 'none',
+        }}
+        transition={{ duration: 0.3 }}
+        className="fixed w-full z-50 bg-white/95 backdrop-blur-sm"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/10 via-transparent to-blue-50/10"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Link 
                 to="/" 
-                className={`text-xl sm:text-2xl font-bold transition-colors duration-300 ${
-                  isScrolled
-                    ? 'bg-clip-text text-transparent bg-gradient-to-r from-gray-700 to-gray-900'
-                    : 'text-gray-900'
-                }`}
+                className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700"
               >
                 Dr. Skin Care
               </Link>
@@ -100,14 +101,14 @@ export function Header() {
                 <Link
                   key={item}
                   to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                  className={`relative group py-2 ${text.primary}`}
+                  className="relative py-2 text-gray-600 hover:text-gray-900 transition-colors group"
                 >
                   <span className="relative z-10">{item}</span>
-                  <span className="absolute inset-x-0 bottom-0 h-0.5 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full bg-blue-500"></span>
+                  <span className="absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
                 </Link>
               ))}
               <button 
-                className="px-6 py-2.5 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-sm hover:shadow"
+                className="px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-sm hover:shadow"
               >
                 Book Now
               </button>
@@ -117,7 +118,7 @@ export function Header() {
             <div className="flex items-center sm:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className={`p-2 rounded-lg transition-colors ${text.primary} hover:bg-gray-100`}
+                className="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 transition-colors"
               >
                 {isMenuOpen ? (
                   <X className="h-6 w-6" />
@@ -132,32 +133,35 @@ export function Header() {
         {/* Mobile Navigation */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div 
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="sm:hidden bg-white/95 backdrop-blur-sm border-t border-gray-100 overflow-hidden"
+              className="sm:hidden bg-white border-t border-gray-100 overflow-hidden"
             >
-              <div className="px-4 pt-2 pb-3 space-y-1">
+              <div className="px-4 py-3 space-y-1">
                 {['Home', 'About', 'Services', 'Contact'].map((item) => (
                   <Link
                     key={item}
                     to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                    className={`block px-3 py-2 text-base font-medium ${text.primary} hover:bg-gray-50 rounded-lg transition-colors`}
+                    className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50/80 rounded-lg transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item}
                   </Link>
                 ))}
-                <button className="w-full mt-2 px-3 py-2.5 bg-blue-600 text-white rounded-lg font-medium shadow-sm hover:bg-blue-700 transition-colors">
+                <button 
+                  className="w-full mt-2 px-3 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   Book Now
                 </button>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
+      </motion.div>
     </header>
   );
 }
