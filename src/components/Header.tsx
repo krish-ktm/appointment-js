@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, Phone, Clock, MapPin } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { gradients, text, background } from '../theme/colors';
 
 export function Header() {
@@ -9,19 +9,33 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const updateScrollState = () => {
       setIsScrolled(window.scrollY > 50);
+      ticking = false;
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateScrollState);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   return (
     <header className="relative">
       {/* Top Bar */}
-      <div className={`fixed w-full z-40 transition-all duration-300 ${
-        isScrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'
-      }`}>
+      <div 
+        className={`fixed w-full z-40 transform transition-transform duration-300 ease-in-out will-change-transform ${
+          isScrolled ? '-translate-y-full' : 'translate-y-0'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between gap-2 py-2">
             <div className="flex items-center gap-4 sm:gap-6">
@@ -58,15 +72,11 @@ export function Header() {
 
       {/* Main Navigation */}
       <div 
-        className={`fixed w-full z-50 transition-all duration-500 ${
+        className={`fixed w-full z-50 transform transition-all duration-300 ease-in-out will-change-transform ${
           isScrolled 
-            ? 'bg-white/80 backdrop-blur-md shadow-sm'
-            : 'bg-transparent'
+            ? 'translate-y-0 bg-white/80 backdrop-blur-md shadow-sm'
+            : 'translate-y-10 bg-transparent'
         }`}
-        style={{
-          top: isScrolled ? 0 : 'auto',
-          marginTop: !isScrolled ? '2.5rem' : 0
-        }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-blue-50/10 via-transparent to-blue-50/10"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,7 +84,7 @@ export function Header() {
             <div className="flex items-center">
               <Link 
                 to="/" 
-                className={`text-xl sm:text-2xl font-bold transition-all duration-300 ${
+                className={`text-xl sm:text-2xl font-bold transition-colors duration-300 ${
                   isScrolled
                     ? 'bg-clip-text text-transparent bg-gradient-to-r from-gray-700 to-gray-900'
                     : 'text-gray-900'
@@ -120,29 +130,33 @@ export function Header() {
         </div>
 
         {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="sm:hidden bg-white/95 backdrop-blur-sm border-t border-gray-100"
-          >
-            <div className="px-4 pt-2 pb-3 space-y-1">
-              {['Home', 'About', 'Services', 'Contact'].map((item) => (
-                <Link
-                  key={item}
-                  to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                  className={`block px-3 py-2 text-base font-medium ${text.primary} hover:bg-gray-50 rounded-lg transition-colors`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item}
-                </Link>
-              ))}
-              <button className="w-full mt-2 px-3 py-2.5 bg-blue-600 text-white rounded-lg font-medium shadow-sm hover:bg-blue-700 transition-colors">
-                Book Now
-              </button>
-            </div>
-          </motion.div>
-        )}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="sm:hidden bg-white/95 backdrop-blur-sm border-t border-gray-100 overflow-hidden"
+            >
+              <div className="px-4 pt-2 pb-3 space-y-1">
+                {['Home', 'About', 'Services', 'Contact'].map((item) => (
+                  <Link
+                    key={item}
+                    to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                    className={`block px-3 py-2 text-base font-medium ${text.primary} hover:bg-gray-50 rounded-lg transition-colors`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item}
+                  </Link>
+                ))}
+                <button className="w-full mt-2 px-3 py-2.5 bg-blue-600 text-white rounded-lg font-medium shadow-sm hover:bg-blue-700 transition-colors">
+                  Book Now
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   );
