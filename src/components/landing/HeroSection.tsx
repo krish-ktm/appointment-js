@@ -97,17 +97,15 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               contain: 'content'
             }}
           >
-            <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl m-1">
-              <AppointmentForm
-                form={form}
-                setForm={setForm}
-                timeSlots={timeSlots}
-                t={translations.en}
-                onSubmit={handleSubmit}
-                success={success}
-                loading={loading}
-              />
-            </div>
+            <AppointmentForm
+              form={form}
+              setForm={setForm}
+              timeSlots={timeSlots}
+              t={translations.en}
+              onSubmit={handleSubmit}
+              success={success}
+              loading={loading}
+            />
           </div>
         </div>
       </div>

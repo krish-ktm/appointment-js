@@ -36,7 +36,7 @@ export function AppointmentForm({
   };
 
   return (
-    <div className="p-4 sm:p-6 md:p-8 bg-white rounded-xl sm:rounded-2xl shadow-xl">
+    <div className="relative p-4 sm:p-6 md:p-8 bg-gradient-to-b from-white to-blue-50/30 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-blue-100/50 before:absolute before:inset-0 before:rounded-xl before:sm:rounded-2xl before:p-[1px] before:bg-gradient-to-b before:from-white before:to-blue-200/30 before:-z-10">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -76,9 +76,9 @@ export function AppointmentForm({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             {/* Date and Time Selection */}
             <div className="space-y-4 sm:space-y-6">
-              <div className="bg-gray-50 p-3 sm:p-4 rounded-xl">
+              <div className="bg-white/80 backdrop-blur-sm p-3 sm:p-4 rounded-xl border border-blue-100/50">
                 <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                  <div className="p-2 bg-white rounded-lg">
+                  <div className="p-2 bg-blue-50 rounded-lg">
                     <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                   </div>
                   <h3 className="font-medium text-gray-900">{t.date}</h3>
@@ -93,8 +93,8 @@ export function AppointmentForm({
                       onClick={() => handleDateChange(date)}
                       className={`p-3 sm:p-4 rounded-xl text-center transition-all ${
                         form.date === date.toISOString().split('T')[0]
-                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                          : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-400 hover:bg-blue-50'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white border border-blue-100 text-gray-700 hover:border-blue-300 hover:bg-blue-50'
                       }`}
                     >
                       <div className="text-xs sm:text-sm font-medium mb-1">
@@ -108,9 +108,9 @@ export function AppointmentForm({
                 </div>
               </div>
 
-              <div className="bg-gray-50 p-3 sm:p-4 rounded-xl">
+              <div className="bg-white/80 backdrop-blur-sm p-3 sm:p-4 rounded-xl border border-blue-100/50">
                 <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                  <div className="p-2 bg-white rounded-lg">
+                  <div className="p-2 bg-blue-50 rounded-lg">
                     <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                   </div>
                   <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
@@ -126,9 +126,9 @@ export function AppointmentForm({
 
             {/* Personal Information */}
             <div className="space-y-4 sm:space-y-6">
-              <div className="bg-gray-50 p-3 sm:p-4 rounded-xl">
+              <div className="bg-white/80 backdrop-blur-sm p-3 sm:p-4 rounded-xl border border-blue-100/50">
                 <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                  <div className="p-2 bg-white rounded-lg">
+                  <div className="p-2 bg-blue-50 rounded-lg">
                     <User className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                   </div>
                   <h3 className="font-medium text-gray-900">Personal Information</h3>
@@ -172,7 +172,7 @@ export function AppointmentForm({
                 whileTap={{ scale: 0.99 }}
                 type="submit"
                 disabled={loading || !form.timeSlot}
-                className={`w-full py-3 sm:py-4 px-4 sm:px-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 hover:from-blue-700 hover:to-blue-800 transition-all duration-200 text-sm sm:text-base ${
+                className={`w-full py-3 sm:py-4 px-4 sm:px-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 text-sm sm:text-base ${
                   (loading || !form.timeSlot) ? 'opacity-70 cursor-not-allowed from-blue-400 to-blue-500' : ''
                 }`}
               >
