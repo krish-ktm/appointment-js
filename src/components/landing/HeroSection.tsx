@@ -14,7 +14,7 @@ interface HeroSectionProps {
 
 export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, loading }: HeroSectionProps) {
   return (
-    <div className="relative min-h-screen bg-white/30 will-change-transform">
+    <div className="relative min-h-screen bg-gradient-to-b from-blue-50/50 to-white will-change-transform">
       <div 
         className="absolute inset-0 bg-[url('/pattern.svg')] opacity-5 pointer-events-none"
         style={{ 
@@ -34,7 +34,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
             }}
           >
             <div className="relative group mb-4 sm:mb-6 inline-block">
-              <div className="relative bg-white/80 px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-xs sm:text-sm font-medium shadow-lg border border-white/40">
+              <div className="relative bg-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-xs sm:text-sm font-medium shadow-md border border-gray-100">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <span className="text-base sm:text-lg">✨</span>
                   <span className="text-blue-900">
@@ -52,33 +52,33 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               Professional dermatological care with personalized treatment plans for all your skin concerns.
             </p>
 
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-4">
+            <div className="flex flex-wrap justify-center gap-3">
               {[
                 {
-                  icon: "h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-emerald-400",
+                  icon: "h-2 w-2 rounded-full bg-emerald-400",
                   text: "Expert Dermatologists",
                   color: "text-emerald-600"
                 },
                 {
-                  icon: "h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-amber-400",
+                  icon: "h-2 w-2 rounded-full bg-amber-400",
                   text: "Advanced Treatments",
                   color: "text-amber-600"
                 },
                 {
-                  icon: "h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-rose-400",
+                  icon: "h-2 w-2 rounded-full bg-rose-400",
                   text: "Personalized Care",
                   color: "text-rose-600"
                 }
               ].map((feature, index) => (
                 <div 
                   key={index} 
-                  className="relative group"
+                  className="relative"
                   style={{ contain: 'content' }}
                 >
-                  <div className="relative bg-white/80 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl shadow-lg border border-white/40">
-                    <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="relative bg-white px-4 py-2 rounded-xl shadow-md border border-gray-100">
+                    <div className="flex items-center gap-3">
                       <div className={`${feature.icon}`} />
-                      <span className={`text-xs sm:text-sm font-medium ${feature.color}`}>
+                      <span className={`text-sm font-medium ${feature.color}`}>
                         {feature.text}
                       </span>
                     </div>
@@ -97,18 +97,16 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               contain: 'content'
             }}
           >
-            <div className="bg-white/80 p-1 rounded-xl sm:rounded-2xl border border-white/40">
-              <div className="bg-white rounded-lg sm:rounded-xl shadow-xl">
-                <AppointmentForm
-                  form={form}
-                  setForm={setForm}
-                  timeSlots={timeSlots}
-                  t={translations.en}
-                  onSubmit={handleSubmit}
-                  success={success}
-                  loading={loading}
-                />
-              </div>
+            <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl">
+              <AppointmentForm
+                form={form}
+                setForm={setForm}
+                timeSlots={timeSlots}
+                t={translations.en}
+                onSubmit={handleSubmit}
+                success={success}
+                loading={loading}
+              />
             </div>
           </div>
         </div>
