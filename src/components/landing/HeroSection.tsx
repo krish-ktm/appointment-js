@@ -34,7 +34,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
             }}
           >
             <div className="relative group mb-4 sm:mb-6 inline-block">
-              <div className="relative bg-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-xs sm:text-sm font-medium shadow-md border border-gray-100">
+              <div className="relative bg-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-xs sm:text-sm font-medium shadow-md border border-gray-100 m-1">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <span className="text-base sm:text-lg">✨</span>
                   <span className="text-blue-900">
@@ -75,7 +75,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
                   className="relative"
                   style={{ contain: 'content' }}
                 >
-                  <div className="relative bg-white px-4 py-2 rounded-xl shadow-md border border-gray-100">
+                  <div className="relative bg-white px-4 py-2 rounded-xl shadow-md border border-gray-100 m-1">
                     <div className="flex items-center gap-3">
                       <div className={`${feature.icon}`} />
                       <span className={`text-sm font-medium ${feature.color}`}>
@@ -97,7 +97,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               contain: 'content'
             }}
           >
-            <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl">
+            <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl m-1">
               <AppointmentForm
                 form={form}
                 setForm={setForm}
