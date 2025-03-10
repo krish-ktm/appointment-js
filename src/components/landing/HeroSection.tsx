@@ -18,7 +18,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
     <div className="relative min-h-screen bg-white/30">
       <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center pt-20 pb-12 sm:py-32 lg:py-40">
+        <div className="flex flex-col items-center pt-32 sm:pt-40 pb-12 sm:pb-32 lg:pb-40">
           {/* Hero Content */}
           <div className="text-center max-w-3xl mx-auto">
             <motion.div
