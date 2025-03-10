@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 import { Notice, AppointmentForm as AppointmentFormType, BookingDetails as BookingDetailsType, TimeSlot } from '../types';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { BookingDetails } from './BookingDetails';
+import { BookingConfirmation } from './BookingConfirmation';
 import { translations } from '../translations';
 import { generateTimeSlots, validateBookingRequest } from '../utils';
 import { toast } from 'react-hot-toast';
@@ -24,14 +24,16 @@ export function LandingPage() {
   const istToday = new Date(today.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
   const istTodayStr = istToday.toISOString().split('T')[0];
 
-  const [form, setForm] = useState<AppointmentFormType>({
+  const initialForm = {
     name: '',
     phone: '',
     age: '',
     city: '',
     date: istTodayStr,
     timeSlot: ''
-  });
+  };
+
+  const [form, setForm] = useState<AppointmentFormType>(initialForm);
 
   useEffect(() => {
     loadNotices();
@@ -67,6 +69,12 @@ export function LandingPage() {
     }
   };
 
+  const resetForm = () => {
+    setForm(initialForm);
+    setSuccess(false);
+    setBookingDetails(null);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBookingLoading(true);
@@ -100,14 +108,6 @@ export function LandingPage() {
 
       setSuccess(true);
       setBookingDetails(appointment);
-      setForm({
-        name: '',
-        phone: '',
-        age: '',
-        city: '',
-        date: istTodayStr,
-        timeSlot: ''
-      });
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -133,9 +133,10 @@ export function LandingPage() {
       <StatsSection />
 
       {bookingDetails && (
-        <BookingDetails
+        <BookingConfirmation
           booking={bookingDetails}
           onClose={() => setBookingDetails(null)}
+          onScheduleAnother={resetForm}
           t={translations.en}
         />
       )}
