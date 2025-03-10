@@ -19,7 +19,6 @@ export function MobileHeader() {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -35,7 +34,6 @@ export function MobileHeader() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div

@@ -29,17 +29,7 @@ body {
   transform: translateZ(0);
 }
 
-/* Reduce motion when requested */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* Optimize mobile scrolling */
+/* Mobile optimizations */
 @media (max-width: 768px) {
   * {
     -webkit-tap-highlight-color: transparent;
@@ -48,6 +38,36 @@ body {
   .scroll-smooth {
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
+  }
+
+  /* Optimize backdrop filters for mobile */
+  .backdrop-blur-sm {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    transform: translateZ(0);
+  }
+
+  /* Reduce animation complexity on mobile */
+  .animate-all {
+    transition-property: opacity;
+    transition-duration: 200ms;
+  }
+
+  /* Optimize fixed position elements */
+  .fixed {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000;
+  }
+}
+
+/* Reduce motion when requested */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

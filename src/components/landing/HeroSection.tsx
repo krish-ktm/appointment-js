@@ -14,15 +14,27 @@ interface HeroSectionProps {
 
 export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, loading }: HeroSectionProps) {
   return (
-    <div className="relative min-h-screen bg-white/30">
-      <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-5" />
+    <div className="relative min-h-screen bg-white/30 will-change-transform">
+      <div 
+        className="absolute inset-0 bg-[url('/pattern.svg')] opacity-5 pointer-events-none"
+        style={{ 
+          willChange: 'transform',
+          transform: 'translateZ(0)',
+          backfaceVisibility: 'hidden'
+        }} 
+      />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center pt-32 sm:pt-40 pb-12 sm:pb-32 lg:pb-40">
-          {/* Hero Content */}
-          <div className="text-center max-w-3xl mx-auto">
+          <div 
+            className="text-center max-w-3xl mx-auto"
+            style={{ 
+              willChange: 'transform',
+              transform: 'translateZ(0)'
+            }}
+          >
             <div className="relative group mb-4 sm:mb-6 inline-block">
-              <div className="relative bg-white/40 backdrop-blur-[8px] px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-xs sm:text-sm font-medium shadow-lg border border-white/40">
+              <div className="relative bg-white/80 px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-xs sm:text-sm font-medium shadow-lg border border-white/40">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <span className="text-base sm:text-lg">✨</span>
                   <span className="text-blue-900">
@@ -58,8 +70,12 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
                   color: "text-rose-600"
                 }
               ].map((feature, index) => (
-                <div key={index} className="relative group">
-                  <div className="relative bg-white/40 backdrop-blur-[8px] px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl shadow-lg border border-white/40">
+                <div 
+                  key={index} 
+                  className="relative group"
+                  style={{ contain: 'content' }}
+                >
+                  <div className="relative bg-white/80 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl shadow-lg border border-white/40">
                     <div className="flex items-center gap-2 sm:gap-3">
                       <div className={`${feature.icon}`} />
                       <span className={`text-xs sm:text-sm font-medium ${feature.color}`}>
@@ -72,9 +88,16 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
             </div>
           </div>
 
-          {/* Appointment Form */}
-          <div className="w-full max-w-5xl mt-8 sm:mt-12 appointment-form-section" id="appointment-form">
-            <div className="bg-white/40 backdrop-blur-[8px] p-1 rounded-xl sm:rounded-2xl border border-white/40">
+          <div 
+            className="w-full max-w-5xl mt-8 sm:mt-12 appointment-form-section" 
+            id="appointment-form"
+            style={{ 
+              willChange: 'transform',
+              transform: 'translateZ(0)',
+              contain: 'content'
+            }}
+          >
+            <div className="bg-white/80 p-1 rounded-xl sm:rounded-2xl border border-white/40">
               <div className="bg-white rounded-lg sm:rounded-xl shadow-xl">
                 <AppointmentForm
                   form={form}
