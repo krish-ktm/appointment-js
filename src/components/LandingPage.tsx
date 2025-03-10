@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { Notice, AppointmentForm as AppointmentFormType, BookingDetails as BookingDetailsType, TimeSlot } from '../types';
-import { Header } from './Header';
+import { ResponsiveHeader } from './headers/ResponsiveHeader';
 import { Footer } from './Footer';
 import { BookingConfirmation } from './BookingConfirmation';
 import { translations } from '../translations';
@@ -117,7 +117,7 @@ export function LandingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
-      <Header />
+      <ResponsiveHeader />
       
       <HeroSection
         form={form}
