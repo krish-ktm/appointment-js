@@ -12,6 +12,7 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: none;
 }
 
 /* Optimize scrolling container */
@@ -25,6 +26,7 @@ body {
   contain: layout style paint;
   will-change: transform;
   backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 /* Reduce motion when requested */
@@ -37,6 +39,19 @@ body {
   }
 }
 
+/* Optimize mobile scrolling */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .scroll-smooth {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* DatePicker Styles */
 .react-datepicker {
   @apply font-sans border border-gray-200 shadow-lg rounded-xl overflow-hidden w-full;
 }
