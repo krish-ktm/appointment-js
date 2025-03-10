@@ -22,7 +22,7 @@ const services = [
 
 export function ServicesSection() {
   return (
-    <div className={`py-20 bg-gradient-to-b ${background.light}`}>
+    <div className={`py-20 bg-gradient-to-b ${background.light} will-change-transform`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className={`text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
@@ -42,7 +42,8 @@ export function ServicesSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.2 }}
-                className={`bg-white/80 rounded-2xl p-8 hover:shadow-lg transition-all duration-300 ${border.accent} ${border.accentHover} backdrop-blur-sm`}
+                className={`bg-white/80 rounded-2xl p-8 hover:shadow-lg transition-all duration-300 ${border.accent} ${border.accentHover} backdrop-blur-sm will-change-transform`}
+                style={{ contain: 'content' }}
               >
                 <div className="bg-gradient-to-br from-violet-50 to-indigo-50/50 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                   <Icon className="h-7 w-7 text-violet-500" />

@@ -9,7 +9,7 @@ interface NoticeBoardProps {
 
 export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
   return (
-    <div className={`py-20 bg-gradient-to-b ${background.light}`}>
+    <div className={`py-20 bg-gradient-to-b ${background.light} will-change-transform`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className={`text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
@@ -27,14 +27,16 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className={`bg-white/80 rounded-2xl shadow-md overflow-hidden ${border.accent} ${border.accentHover} transition-all duration-300 backdrop-blur-sm`}
+              className={`bg-white/80 rounded-2xl shadow-md overflow-hidden ${border.accent} ${border.accentHover} transition-all duration-300 backdrop-blur-sm will-change-transform`}
+              style={{ contain: 'content' }}
             >
               {notice.image_url && (
                 <div className="aspect-video w-full overflow-hidden">
                   <img
                     src={notice.image_url}
                     alt={notice.title}
-                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 will-change-transform"
+                    loading="lazy"
                   />
                 </div>
               )}

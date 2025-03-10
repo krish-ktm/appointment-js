@@ -15,8 +15,8 @@ interface HeroSectionProps {
 
 export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, loading }: HeroSectionProps) {
   return (
-    <div className="relative min-h-screen bg-white/30">
-      <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
+    <div className="relative min-h-screen bg-white/30 will-change-transform">
+      <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10 will-change-transform"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center pt-32 sm:pt-40 pb-12 sm:pb-32 lg:pb-40">
           {/* Hero Content */}
@@ -25,8 +25,9 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="relative group mb-4 sm:mb-6 inline-block"
+              style={{ willChange: 'transform' }}
             >
-              <div className="relative bg-white/40 backdrop-blur-lg px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-xs sm:text-sm font-medium shadow-lg border border-white/40 hover:border-white/60 transition-all duration-300 overflow-hidden">
+              <div className="relative bg-white/40 backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-xs sm:text-sm font-medium shadow-lg border border-white/40 hover:border-white/60 transition-all duration-300 overflow-hidden">
                 <div className="flex items-center gap-2 sm:gap-3 relative z-10">
                   <span className="text-base sm:text-lg">✨</span>
                   <span className="text-blue-900">
@@ -40,6 +41,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight text-blue-950"
+              style={{ willChange: 'transform' }}
             >
               Expert Skin Care for Your Health & Beauty
             </motion.h1>
@@ -48,6 +50,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               className="text-lg sm:text-xl text-blue-800 mb-6 sm:mb-8 leading-relaxed px-4 sm:px-0"
+              style={{ willChange: 'transform' }}
             >
               Professional dermatological care with personalized treatment plans for all your skin concerns.
             </motion.p>
@@ -56,6 +59,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
               className="flex flex-wrap justify-center gap-2 sm:gap-4"
+              style={{ willChange: 'transform' }}
             >
               {[
                 {
@@ -80,8 +84,9 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.4 + index * 0.1 }}
                   className="relative group"
+                  style={{ willChange: 'transform' }}
                 >
-                  <div className="relative bg-white/40 backdrop-blur-lg px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl shadow-lg border border-white/40 hover:border-white/60 transition-all duration-300 hover:scale-105">
+                  <div className="relative bg-white/40 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl shadow-lg border border-white/40 hover:border-white/60 transition-all duration-300">
                     <div className="flex items-center gap-2 sm:gap-3 relative z-10">
                       <div className={`${feature.icon}`}></div>
                       <span className={`text-xs sm:text-sm font-medium ${feature.color}`}>
@@ -101,8 +106,9 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
             transition={{ delay: 0.4 }}
             className="w-full max-w-5xl mt-8 sm:mt-12 appointment-form-section"
             id="appointment-form"
+            style={{ willChange: 'transform' }}
           >
-            <div className="bg-white/40 backdrop-blur-lg p-1 rounded-xl sm:rounded-2xl border border-white/40">
+            <div className="bg-white/40 backdrop-blur-sm p-1 rounded-xl sm:rounded-2xl border border-white/40">
               <div className="bg-white rounded-lg sm:rounded-xl shadow-xl">
                 <AppointmentForm
                   form={form}
