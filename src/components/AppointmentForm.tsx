@@ -36,7 +36,7 @@ export function AppointmentForm({
   };
 
   return (
-    <div className="relative p-4 sm:p-6 md:p-8 bg-gradient-to-b from-white to-blue-50/30 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-blue-100/50 before:absolute before:inset-0 before:rounded-xl before:sm:rounded-2xl before:p-[1px] before:bg-gradient-to-b before:from-white before:to-blue-200/30 before:-z-10">
+    <div className="relative p-4 sm:p-6 md:p-8 bg-white rounded-xl sm:rounded-2xl border border-gray-200">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -76,7 +76,7 @@ export function AppointmentForm({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             {/* Date and Time Selection */}
             <div className="space-y-4 sm:space-y-6">
-              <div className="bg-white/80 backdrop-blur-sm p-3 sm:p-4 rounded-xl border border-blue-100/50">
+              <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
                 <div className="flex items-center gap-3 mb-3 sm:mb-4">
                   <div className="p-2 bg-blue-50 rounded-lg">
                     <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
@@ -94,7 +94,7 @@ export function AppointmentForm({
                       className={`p-3 sm:p-4 rounded-xl text-center transition-all ${
                         form.date === date.toISOString().split('T')[0]
                           ? 'bg-blue-600 text-white'
-                          : 'bg-white border border-blue-100 text-gray-700 hover:border-blue-300 hover:bg-blue-50'
+                          : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-300 hover:bg-blue-50'
                       }`}
                     >
                       <div className="text-xs sm:text-sm font-medium mb-1">
@@ -108,7 +108,7 @@ export function AppointmentForm({
                 </div>
               </div>
 
-              <div className="bg-white/80 backdrop-blur-sm p-3 sm:p-4 rounded-xl border border-blue-100/50">
+              <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
                 <div className="flex items-center gap-3 mb-3 sm:mb-4">
                   <div className="p-2 bg-blue-50 rounded-lg">
                     <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
@@ -126,7 +126,7 @@ export function AppointmentForm({
 
             {/* Personal Information */}
             <div className="space-y-4 sm:space-y-6">
-              <div className="bg-white/80 backdrop-blur-sm p-3 sm:p-4 rounded-xl border border-blue-100/50">
+              <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
                 <div className="flex items-center gap-3 mb-3 sm:mb-4">
                   <div className="p-2 bg-blue-50 rounded-lg">
                     <User className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
@@ -172,8 +172,8 @@ export function AppointmentForm({
                 whileTap={{ scale: 0.99 }}
                 type="submit"
                 disabled={loading || !form.timeSlot}
-                className={`w-full py-3 sm:py-4 px-4 sm:px-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 text-sm sm:text-base ${
-                  (loading || !form.timeSlot) ? 'opacity-70 cursor-not-allowed from-blue-400 to-blue-500' : ''
+                className={`w-full py-3 sm:py-4 px-4 sm:px-6 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all duration-200 text-sm sm:text-base ${
+                  (loading || !form.timeSlot) ? 'opacity-70 cursor-not-allowed bg-blue-400' : ''
                 }`}
               >
                 {loading ? (

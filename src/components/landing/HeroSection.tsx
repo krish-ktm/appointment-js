@@ -52,7 +52,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               Professional dermatological care with personalized treatment plans for all your skin concerns.
             </p>
 
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-wrap justify-center gap-4">
               {[
                 {
                   icon: "h-2 w-2 rounded-full bg-emerald-400",
@@ -72,10 +72,10 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               ].map((feature, index) => (
                 <div 
                   key={index} 
-                  className="relative"
+                  className="relative p-1"
                   style={{ contain: 'content' }}
                 >
-                  <div className="relative bg-white px-4 py-2 rounded-xl shadow-md border border-gray-100 m-1">
+                  <div className="relative bg-white px-4 py-2 rounded-xl shadow-md border border-gray-100">
                     <div className="flex items-center gap-3">
                       <div className={`${feature.icon}`} />
                       <span className={`text-sm font-medium ${feature.color}`}>
