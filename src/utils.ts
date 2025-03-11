@@ -1,5 +1,9 @@
 import { TimeSlot } from './types';
 import { supabase } from './lib/supabase';
+import { startOfToday, addDays, format, parse, isToday, isTomorrow, isAfter, isBefore } from 'date-fns';
+import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
+
+const TIMEZONE = 'Asia/Kolkata';
 
 export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
   const baseSlots = [
@@ -21,22 +25,15 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
     currentBookings: 0
   }));
 
-  // Get current date and time in IST using proper timezone conversion
-  const istNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+  // Get current time in IST
+  const istNow = utcToZonedTime(new Date(), TIMEZONE);
   
-  // Get selected date in IST
-  const selectedDate = new Date(date);
-  const istSelectedDate = new Date(selectedDate.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+  // Convert selected date to IST
+  const selectedDate = utcToZonedTime(new Date(date), TIMEZONE);
   
-  // Reset hours to compare just the dates
-  const istToday = new Date(istNow);
-  istToday.setHours(0, 0, 0, 0);
-  
-  const selectedDateStart = new Date(istSelectedDate);
-  selectedDateStart.setHours(0, 0, 0, 0);
-  
-  // Check if selected date is today
-  const isToday = selectedDateStart.getTime() === istToday.getTime();
+  // Check if selected date is today or tomorrow
+  const isSelectedToday = isToday(selectedDate);
+  const isSelectedTomorrow = isTomorrow(selectedDate);
 
   try {
     // Get current bookings for each time slot
@@ -57,18 +54,22 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
       slots.forEach(slot => {
         slot.currentBookings = bookingCounts[slot.time] || 0;
         
-        if (isToday) {
-          const istHour = istNow.getHours();
-          const [slotHour, slotMinute, period] = slot.time.match(/(\d+):(\d+)\s+(AM|PM)/)?.slice(1) || [];
-          const slotHour24 = (parseInt(slotHour) % 12) + (period === 'PM' ? 12 : 0);
+        if (isSelectedToday) {
+          const slotTime = parse(slot.time, 'h:mm a', new Date());
+          const slotTimeInIST = utcToZonedTime(slotTime, TIMEZONE);
+          
+          // Block past time slots
+          if (isBefore(slotTimeInIST, istNow)) {
+            slot.currentBookings = slot.maxBookings;
+          }
 
           // Rule 1: At 9 AM IST, block all morning slots (9:30 AM to 12 PM)
-          if (istHour >= 9 && slotHour24 < 12) {
+          if (istNow.getHours() >= 9 && slotTimeInIST.getHours() < 12) {
             slot.currentBookings = slot.maxBookings;
           }
 
           // Rule 2: At 1 PM IST, block all evening slots (4 PM to 6:30 PM)
-          if (istHour >= 13) {
+          if (istNow.getHours() >= 13) {
             slot.currentBookings = slot.maxBookings;
           }
         }
@@ -83,35 +84,29 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
 };
 
 export const isSlotAvailable = async (date: string, time: string): Promise<boolean> => {
-  // Get current date and time in IST using proper timezone conversion
-  const istNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
-  
-  // Get selected date in IST
-  const selectedDate = new Date(date);
-  const istSelectedDate = new Date(selectedDate.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
-  
-  // Reset hours to compare just the dates
-  const istToday = new Date(istNow);
-  istToday.setHours(0, 0, 0, 0);
-  
-  const selectedDateStart = new Date(istSelectedDate);
-  selectedDateStart.setHours(0, 0, 0, 0);
+  // Convert to IST
+  const istNow = utcToZonedTime(new Date(), TIMEZONE);
+  const selectedDate = utcToZonedTime(new Date(date), TIMEZONE);
   
   // Check if selected date is today
-  const isToday = selectedDateStart.getTime() === istToday.getTime();
+  const isSelectedToday = isToday(selectedDate);
 
-  if (isToday) {
-    const istHour = istNow.getHours();
-    const [slotHour, slotMinute, period] = time.match(/(\d+):(\d+)\s+(AM|PM)/)?.slice(1) || [];
-    const slotHour24 = (parseInt(slotHour) % 12) + (period === 'PM' ? 12 : 0);
+  if (isSelectedToday) {
+    const slotTime = parse(time, 'h:mm a', new Date());
+    const slotTimeInIST = utcToZonedTime(slotTime, TIMEZONE);
+
+    // Block past time slots
+    if (isBefore(slotTimeInIST, istNow)) {
+      return false;
+    }
 
     // Rule 1: At 9 AM IST, block all morning slots (9:30 AM to 12 PM)
-    if (istHour >= 9 && slotHour24 < 12) {
+    if (istNow.getHours() >= 9 && slotTimeInIST.getHours() < 12) {
       return false;
     }
 
     // Rule 2: At 1 PM IST, block all evening slots (4 PM to 6:30 PM)
-    if (istHour >= 13) {
+    if (istNow.getHours() >= 13) {
       return false;
     }
   }
