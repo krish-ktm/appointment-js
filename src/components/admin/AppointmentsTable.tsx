@@ -1,15 +1,24 @@
 import { Calendar, Clock, MapPin, Phone, User as UserIcon } from 'lucide-react';
 import { Appointment } from '../../types';
+import { format } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 interface AppointmentsTableProps {
   appointments: Appointment[];
 }
+
+const TIMEZONE = 'Asia/Kolkata';
 
 export function AppointmentsTable({ appointments }: AppointmentsTableProps) {
   const formatTime = (timeStr: string) => {
     return timeStr.replace(/^(\d{1,2}):(\d{2})/, (_, hour, minute) => {
       return `${hour}:${minute}`;
     });
+  };
+
+  const formatDate = (dateStr: string) => {
+    const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
+    return format(date, 'EEEE, MMMM d, yyyy');
   };
 
   return (
@@ -25,12 +34,7 @@ export function AppointmentsTable({ appointments }: AppointmentsTableProps) {
               <div>
                 <h2 className="text-xl font-semibold text-gray-900">Today's Schedule</h2>
                 <p className="text-gray-500 text-sm mt-0.5">
-                  {new Date().toLocaleDateString('en-US', { 
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
+                  {formatDate(new Date().toISOString())}
                 </p>
               </div>
             </div>

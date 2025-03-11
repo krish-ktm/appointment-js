@@ -8,7 +8,7 @@ import { UsersTable } from './UsersTable';
 import { TabNavigation } from './TabNavigation';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { useNavigate } from 'react-router-dom';
-import { isToday, isTomorrow } from 'date-fns';
+import { isToday, isTomorrow, format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 
 const TIMEZONE = 'Asia/Kolkata';

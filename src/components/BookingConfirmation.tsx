@@ -1,6 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Calendar, Clock, User, Phone, MapPin, X } from 'lucide-react';
 import { BookingDetails, Translations } from '../types';
+import { format } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
+
+const TIMEZONE = 'Asia/Kolkata';
 
 interface BookingConfirmationProps {
   booking: BookingDetails;
@@ -10,6 +14,11 @@ interface BookingConfirmationProps {
 }
 
 export function BookingConfirmation({ booking, onClose, onScheduleAnother, t }: BookingConfirmationProps) {
+  const formatDate = (dateStr: string) => {
+    const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
+    return format(date, 'EEEE, MMMM d, yyyy');
+  };
+
   return (
     <AnimatePresence>
       <motion.div
@@ -61,12 +70,7 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother, t }: 
                     <div>
                       <p className="text-xs text-gray-500">{t.bookingDate}</p>
                       <p className="text-sm font-medium text-gray-900">
-                        {new Date(booking.appointment_date).toLocaleDateString('en-US', {
-                          weekday: 'long',
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
+                        {formatDate(booking.appointment_date)}
                       </p>
                     </div>
                   </div>

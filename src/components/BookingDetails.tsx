@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion';
 import { X, User, Phone, MapPin, Calendar, Clock } from 'lucide-react';
 import { BookingDetails as BookingDetailsType, Translations } from '../types';
+import { format } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
+
+const TIMEZONE = 'Asia/Kolkata';
 
 interface BookingDetailsProps {
   booking: BookingDetailsType;
@@ -9,6 +13,11 @@ interface BookingDetailsProps {
 }
 
 export function BookingDetails({ booking, onClose, t }: BookingDetailsProps) {
+  const formatDate = (dateStr: string) => {
+    const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
+    return format(date, 'EEEE, MMMM d, yyyy');
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -45,7 +54,7 @@ export function BookingDetails({ booking, onClose, t }: BookingDetailsProps) {
               { icon: Phone, label: t.phone, value: booking.phone },
               { icon: User, label: t.age, value: booking.age },
               { icon: MapPin, label: t.city, value: booking.city },
-              { icon: Calendar, label: t.bookingDate, value: new Date(booking.appointment_date).toLocaleDateString() },
+              { icon: Calendar, label: t.bookingDate, value: formatDate(booking.appointment_date) },
               { icon: Clock, label: t.bookingTime, value: booking.appointment_time }
             ].map((item, index) => (
               <div
