@@ -5,6 +5,8 @@ import { FormField } from './FormField';
 import { TimeSlotSelector } from './TimeSlotSelector';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { format } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 interface AppointmentFormProps {
   form: AppointmentFormType;
@@ -33,6 +35,12 @@ export function AppointmentForm({
     if (date) {
       setForm({ ...form, date: date.toISOString().split('T')[0], timeSlot: '' });
     }
+  };
+
+  // Format the selected date for display
+  const formatSelectedDate = (dateStr: string) => {
+    const date = utcToZonedTime(new Date(dateStr), 'Asia/Kolkata');
+    return format(date, 'EEEE, MMMM d, yyyy');
   };
 
   return (
@@ -113,7 +121,12 @@ export function AppointmentForm({
                   <div className="p-2 bg-blue-50 rounded-lg">
                     <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                   </div>
-                  <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
+                  <div>
+                    <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      Showing slots for: {formatSelectedDate(form.date)}
+                    </p>
+                  </div>
                 </div>
                 <TimeSlotSelector
                   timeSlots={timeSlots}
