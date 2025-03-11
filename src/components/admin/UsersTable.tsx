@@ -6,6 +6,10 @@ import { CreateUserModal } from './modals/CreateUserModal';
 import { DeleteUserModal } from './modals/DeleteUserModal';
 import { EditUserModal } from './modals/EditUserModal';
 import { MoreVertical, Edit2, Trash2, Power, UserPlus } from 'lucide-react';
+import { format } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
+
+const TIMEZONE = 'Asia/Kolkata';
 
 interface UsersTableProps {
   users: User[];
@@ -18,6 +22,12 @@ export function UsersTable({ users, onUserUpdated }: UsersTableProps) {
   const [userToEdit, setUserToEdit] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
   const [openActionMenu, setOpenActionMenu] = useState<string | null>(null);
+
+  const formatDateTime = (dateStr: string | null) => {
+    if (!dateStr) return 'Never';
+    const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
+    return format(date, 'MMM d, yyyy h:mm a');
+  };
 
   const handleStatusToggle = async (user: User) => {
     try {
@@ -125,9 +135,7 @@ export function UsersTable({ users, onUserUpdated }: UsersTableProps) {
                       </span>
                     </td>
                     <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {user.last_login
-                        ? new Date(user.last_login).toLocaleString()
-                        : 'Never'}
+                      {formatDateTime(user.last_login)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="relative">
