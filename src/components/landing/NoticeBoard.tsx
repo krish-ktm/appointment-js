@@ -58,14 +58,29 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
                   transition={{ delay: index * 0.1 }}
                   className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300"
                 >
-                  {notice.image_url && (
-                    <div className="w-full aspect-[2/1] overflow-hidden">
-                      <img
-                        src={notice.image_url}
-                        alt={notice.title}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
+                  {notice.images && notice.images.length > 0 && (
+                    <div className="relative w-full aspect-[2/1] overflow-hidden">
+                      <div className="flex transition-transform duration-500 ease-in-out">
+                        {notice.images.map((image, imgIndex) => (
+                          <img
+                            key={imgIndex}
+                            src={image}
+                            alt={`${notice.title} - ${imgIndex + 1}`}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        ))}
+                      </div>
+                      {notice.images.length > 1 && (
+                        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                          {notice.images.map((_, imgIndex) => (
+                            <div
+                              key={imgIndex}
+                              className="w-2 h-2 rounded-full bg-white/50"
+                            />
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
                   

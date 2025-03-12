@@ -43,6 +43,7 @@ export interface Notice {
   title: string;
   content: string | null;
   image_url: string | null;
+  images: string[] | null;
   active: boolean;
   order: number;
   created_at: string;

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
-import { Notice, User } from '../types';
+import { Notice, User } from '../../types';
 import { toast } from 'react-hot-toast';
-import { Plus, Image as ImageIcon, Edit2, Trash2, MoveUp, MoveDown } from 'lucide-react';
+import { Plus, Image as ImageIcon, Edit2, Trash2, MoveUp, MoveDown, X } from 'lucide-react';
 
 export function NoticeManager() {
   const [notices, setNotices] = useState<Notice[]>([]);
@@ -14,6 +14,7 @@ export function NoticeManager() {
     title: '',
     content: '',
     image_url: '',
+    images: [] as string[],
     active: true
   });
 
@@ -49,7 +50,8 @@ export function NoticeManager() {
       const noticeData = {
         ...form,
         created_by: user.id,
-        order: notices.length
+        order: notices.length,
+        images: [...form.images, form.image_url].filter(Boolean)
       };
 
       if (editingNotice) {
@@ -69,7 +71,7 @@ export function NoticeManager() {
         toast.success('Notice created successfully');
       }
 
-      setForm({ title: '', content: '', image_url: '', active: true });
+      setForm({ title: '', content: '', image_url: '', images: [], active: true });
       setShowForm(false);
       setEditingNotice(null);
       loadNotices();
@@ -126,6 +128,23 @@ export function NoticeManager() {
       console.error('Error reordering notices:', error);
       toast.error('Failed to reorder notices');
     }
+  };
+
+  const handleAddImage = () => {
+    if (form.image_url && !form.images.includes(form.image_url)) {
+      setForm(prev => ({
+        ...prev,
+        images: [...prev.images, prev.image_url],
+        image_url: ''
+      }));
+    }
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setForm(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+    }));
   };
 
   if (loading) {
@@ -192,15 +211,47 @@ export function NoticeManager() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Image URL
+                    Add Images
                   </label>
-                  <input
-                    type="url"
-                    value={form.image_url}
-                    onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="url"
+                      value={form.image_url}
+                      onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      placeholder="Enter image URL"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddImage}
+                      className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    >
+                      Add
+                    </button>
+                  </div>
                 </div>
+
+                {/* Image Preview Section */}
+                {form.images.length > 0 && (
+                  <div className="grid grid-cols-2 gap-2">
+                    {form.images.map((url, index) => (
+                      <div key={index} className="relative group">
+                        <img
+                          src={url}
+                          alt={`Preview ${index + 1}`}
+                          className="w-full h-32 object-cover rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(index)}
+                          className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 <div className="flex items-center">
                   <input
@@ -221,7 +272,7 @@ export function NoticeManager() {
                     onClick={() => {
                       setShowForm(false);
                       setEditingNotice(null);
-                      setForm({ title: '', content: '', image_url: '', active: true });
+                      setForm({ title: '', content: '', image_url: '', images: [], active: true });
                     }}
                     className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg"
                   >
@@ -246,13 +297,22 @@ export function NoticeManager() {
             <li key={notice.id} className="p-4 hover:bg-gray-50">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  {notice.image_url && (
-                    <div className="h-12 w-12 rounded-lg overflow-hidden bg-gray-100">
-                      <img
-                        src={notice.image_url}
-                        alt={notice.title}
-                        className="h-full w-full object-cover"
-                      />
+                  {notice.images && notice.images.length > 0 && (
+                    <div className="flex -space-x-2">
+                      {notice.images.slice(0, 3).map((image, imgIndex) => (
+                        <div key={imgIndex} className="h-12 w-12 rounded-lg overflow-hidden bg-gray-100 border-2 border-white">
+                          <img
+                            src={image}
+                            alt={`${notice.title} - ${imgIndex + 1}`}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                      ))}
+                      {notice.images.length > 3 && (
+                        <div className="h-12 w-12 rounded-lg bg-gray-100 border-2 border-white flex items-center justify-center">
+                          <span className="text-sm text-gray-600">+{notice.images.length - 3}</span>
+                        </div>
+                      )}
                     </div>
                   )}
                   <div>
@@ -291,7 +351,8 @@ export function NoticeManager() {
                       setForm({
                         title: notice.title,
                         content: notice.content || '',
-                        image_url: notice.image_url || '',
+                        image_url: '',
+                        images: notice.images || [],
                         active: notice.active
                       });
                       setShowForm(true);
