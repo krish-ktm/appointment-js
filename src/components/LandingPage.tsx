@@ -11,6 +11,8 @@ import { HeroSection } from './landing/HeroSection';
 import { ServicesSection } from './landing/ServicesSection';
 import { NoticeBoard } from './landing/NoticeBoard';
 import { StatsSection } from './landing/StatsSection';
+import { format } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 export function LandingPage() {
   const [notices, setNotices] = useState<Notice[]>([]);
@@ -20,10 +22,11 @@ export function LandingPage() {
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [bookingDetails, setBookingDetails] = useState<BookingDetailsType | null>(null);
   
+  // Get today's date in IST
   const today = new Date();
-  const istToday = new Date(today.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
-  const istTodayStr = istToday.toISOString().split('T')[0];
-
+  const istToday = utcToZonedTime(today, 'Asia/Kolkata');
+  const istTodayStr = format(istToday, 'yyyy-MM-dd');
+  console.log("landing page " + istTodayStr);
   const initialForm = {
     name: '',
     phone: '',

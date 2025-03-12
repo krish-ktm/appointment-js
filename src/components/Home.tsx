@@ -7,6 +7,8 @@ import { Language, AppointmentForm as AppointmentFormType, BookingDetails as Boo
 import { generateTimeSlots, validateBookingRequest } from '../utils';
 import { supabase } from '../lib/supabase';
 import { toast } from 'react-hot-toast';
+import { format } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 export function Home() {
   const [language, setLanguage] = useState<Language | null>(null);
@@ -17,8 +19,8 @@ export function Home() {
   
   // Get today's date in IST
   const today = new Date();
-  const istToday = new Date(today.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
-  const istTodayStr = istToday.toISOString().split('T')[0];
+  const istToday = utcToZonedTime(today, 'Asia/Kolkata');
+  const istTodayStr = format(istToday, 'yyyy-MM-dd');
 
   const initialForm = {
     name: '',

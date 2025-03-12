@@ -18,6 +18,8 @@ interface AppointmentFormProps {
   loading: boolean;
 }
 
+const TIMEZONE = 'Asia/Kolkata';
+
 export function AppointmentForm({
   form,
   setForm,
@@ -33,13 +35,15 @@ export function AppointmentForm({
 
   const handleDateChange = (date: Date | null) => {
     if (date) {
-      setForm({ ...form, date: date.toISOString().split('T')[0], timeSlot: '' });
+      const istDate = utcToZonedTime(date, TIMEZONE);
+      const formattedDate = format(istDate, 'yyyy-MM-dd');
+      setForm({ ...form, date: formattedDate, timeSlot: '' });
     }
   };
 
   // Format the selected date for display
   const formatSelectedDate = (dateStr: string) => {
-    const date = utcToZonedTime(new Date(dateStr), 'Asia/Kolkata');
+    const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
     return format(date, 'EEEE, MMMM d, yyyy');
   };
 
@@ -92,27 +96,31 @@ export function AppointmentForm({
                   <h3 className="font-medium text-gray-900">{t.date}</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                  {[today, tomorrow].map((date) => (
-                    <motion.button
-                      key={date.toISOString()}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      type="button"
-                      onClick={() => handleDateChange(date)}
-                      className={`p-3 sm:p-4 rounded-xl text-center transition-all ${
-                        form.date === date.toISOString().split('T')[0]
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-300 hover:bg-blue-50'
-                      }`}
-                    >
-                      <div className="text-xs sm:text-sm font-medium mb-1">
-                        {date.toLocaleDateString(undefined, { weekday: 'short' })}
-                      </div>
-                      <div className={`text-[10px] sm:text-xs ${form.date === date.toISOString().split('T')[0] ? 'text-blue-100' : 'text-gray-500'}`}>
-                        {date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                      </div>
-                    </motion.button>
-                  ))}
+                  {[today, tomorrow].map((date) => {
+                    const istDate = utcToZonedTime(date, TIMEZONE);
+                    const dateStr = format(istDate, 'yyyy-MM-dd');
+                    return (
+                      <motion.button
+                        key={dateStr}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        type="button"
+                        onClick={() => handleDateChange(date)}
+                        className={`p-3 sm:p-4 rounded-xl text-center transition-all ${
+                          form.date === dateStr
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-300 hover:bg-blue-50'
+                        }`}
+                      >
+                        <div className="text-xs sm:text-sm font-medium mb-1">
+                          {format(istDate, 'EEE')}
+                        </div>
+                        <div className={`text-[10px] sm:text-xs ${form.date === dateStr ? 'text-blue-100' : 'text-gray-500'}`}>
+                          {format(istDate, 'MMM d')}
+                        </div>
+                      </motion.button>
+                    );
+                  })}
                 </div>
               </div>
 
