@@ -1,6 +1,6 @@
 import { Calendar, Clock, MapPin, Phone, User as UserIcon } from 'lucide-react';
 import { Appointment } from '../../types';
-import { format } from 'date-fns';
+import { format, isToday } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 
 interface AppointmentsTableProps {
@@ -21,6 +21,12 @@ export function AppointmentsTable({ appointments }: AppointmentsTableProps) {
     return format(date, 'EEEE, MMMM d, yyyy');
   };
 
+  // Get the date from the first appointment, or use current date if no appointments
+  const getDisplayDate = () => {
+    if (appointments.length === 0) return new Date();
+    return utcToZonedTime(new Date(appointments[0].appointment_date), TIMEZONE);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -32,9 +38,11 @@ export function AppointmentsTable({ appointments }: AppointmentsTableProps) {
                 <Calendar className="h-6 w-6 text-blue-600" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900">Today's Schedule</h2>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  {isToday(getDisplayDate()) ? "Today's Schedule" : "Tomorrow's Schedule"}
+                </h2>
                 <p className="text-gray-500 text-sm mt-0.5">
-                  {formatDate(new Date().toISOString())}
+                  {formatDate(getDisplayDate().toISOString())}
                 </p>
               </div>
             </div>
@@ -102,7 +110,7 @@ export function AppointmentsTable({ appointments }: AppointmentsTableProps) {
                 <Calendar className="h-8 w-8 text-gray-400" />
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-1">No Appointments</h3>
-              <p className="text-gray-500">There are no appointments scheduled for today.</p>
+              <p className="text-gray-500">There are no appointments scheduled for {isToday(getDisplayDate()) ? 'today' : 'tomorrow'}.</p>
             </div>
           </div>
         )}
