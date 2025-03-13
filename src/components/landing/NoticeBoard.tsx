@@ -1,9 +1,10 @@
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import { Notice } from '../../types';
 import { background, text, gradients } from '../../theme/colors';
 import { Bell, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
+import { useState, useEffect, useRef } from 'react';
 
 interface NoticeBoardProps {
   notices: Notice[];
@@ -14,6 +15,59 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
   const formatDate = (dateStr: string) => {
     const date = utcToZonedTime(new Date(dateStr), 'Asia/Kolkata');
     return format(date, 'MMM d, yyyy');
+  };
+
+  // Image carousel state for each notice
+  const [activeImages, setActiveImages] = useState<Record<string, number>>({});
+  const intervalRefs = useRef<Record<string, NodeJS.Timeout>>({});
+  const carouselRefs = useRef<Record<string, HTMLDivElement>>({});
+
+  useEffect(() => {
+    // Initialize active image index for each notice
+    const initialActiveImages: Record<string, number> = {};
+    notices.forEach(notice => {
+      if (notice.images && notice.images.length > 0) {
+        initialActiveImages[notice.id] = 0;
+      }
+    });
+    setActiveImages(initialActiveImages);
+
+    // Set up auto-scroll for each notice with multiple images
+    notices.forEach(notice => {
+      if (notice.images && notice.images.length > 1) {
+        intervalRefs.current[notice.id] = setInterval(() => {
+          setActiveImages(prev => ({
+            ...prev,
+            [notice.id]: (prev[notice.id] + 1) % notice.images!.length
+          }));
+        }, 5000); // Change image every 5 seconds
+      }
+    });
+
+    // Cleanup intervals on unmount
+    return () => {
+      Object.values(intervalRefs.current).forEach(interval => clearInterval(interval));
+    };
+  }, [notices]);
+
+  const handleImageTransition = (noticeId: string, index: number) => {
+    // Clear existing interval
+    if (intervalRefs.current[noticeId]) {
+      clearInterval(intervalRefs.current[noticeId]);
+    }
+
+    // Update active image
+    setActiveImages(prev => ({ ...prev, [noticeId]: index }));
+
+    // Reset interval
+    if (notices.find(n => n.id === noticeId)?.images?.length! > 1) {
+      intervalRefs.current[noticeId] = setInterval(() => {
+        setActiveImages(prev => ({
+          ...prev,
+          [noticeId]: (prev[noticeId] + 1) % notices.find(n => n.id === noticeId)?.images?.length!
+        }));
+      }, 5000);
+    }
   };
 
   return (
@@ -54,29 +108,47 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
                   key={notice.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: true, margin: "-100px" }}
                   transition={{ delay: index * 0.1 }}
                   className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300"
                 >
                   {notice.images && notice.images.length > 0 && (
-                    <div className="relative w-full aspect-[2/1] overflow-hidden">
-                      <div className="flex transition-transform duration-500 ease-in-out">
+                    <div className="relative w-full aspect-[2/1] overflow-hidden bg-gray-100">
+                      <div
+                        ref={el => {
+                          if (el) carouselRefs.current[notice.id] = el;
+                        }}
+                        className="absolute inset-0 flex transition-transform duration-500 ease-in-out"
+                        style={{
+                          transform: `translateX(-${activeImages[notice.id] * 100}%)`,
+                        }}
+                      >
                         {notice.images.map((image, imgIndex) => (
-                          <img
+                          <div
                             key={imgIndex}
-                            src={image}
-                            alt={`${notice.title} - ${imgIndex + 1}`}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
+                            className="w-full h-full flex-shrink-0"
+                          >
+                            <img
+                              src={image}
+                              alt={`${notice.title} - ${imgIndex + 1}`}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                          </div>
                         ))}
                       </div>
                       {notice.images.length > 1 && (
                         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
                           {notice.images.map((_, imgIndex) => (
-                            <div
+                            <button
                               key={imgIndex}
-                              className="w-2 h-2 rounded-full bg-white/50"
+                              onClick={() => handleImageTransition(notice.id, imgIndex)}
+                              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                activeImages[notice.id] === imgIndex
+                                  ? 'bg-white scale-125'
+                                  : 'bg-white/50 hover:bg-white/75'
+                              }`}
+                              aria-label={`Go to image ${imgIndex + 1}`}
                             />
                           ))}
                         </div>
@@ -100,24 +172,39 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
                       </div>
                     </div>
 
-                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                    <motion.h3 
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      className="text-xl font-semibold text-gray-900 mb-3"
+                    >
                       {notice.title}
-                    </h3>
+                    </motion.h3>
 
                     {notice.content && (
-                      <div className="prose prose-blue max-w-none">
+                      <motion.div 
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        className="prose prose-blue max-w-none"
+                      >
                         <p className="text-gray-600 leading-relaxed">
                           {notice.content}
                         </p>
-                      </div>
+                      </motion.div>
                     )}
 
-                    <div className="mt-6 pt-6 border-t border-gray-100">
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      className="mt-6 pt-6 border-t border-gray-100"
+                    >
                       <div className="flex items-center text-sm text-gray-500">
                         <span className="font-medium text-blue-600 mr-2">Note:</span>
                         This update is effective immediately
                       </div>
-                    </div>
+                    </motion.div>
                   </div>
                 </motion.div>
               ))}
