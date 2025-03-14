@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../lib/supabase';
 import { toast } from 'react-hot-toast';
-import { Calendar, Building2, Users, Phone, Briefcase } from 'lucide-react';
+import { Building2, Users, Phone, Briefcase } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { format, isWeekend, isSameDay, startOfToday, addDays } from 'date-fns';
@@ -103,97 +103,93 @@ export function MRAppointment() {
           </div>
 
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
-            <div className="space-y-4">
-              {/* MR Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  MR Name *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Users className="h-5 w-5 text-gray-400" />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Form Fields */}
+              <div className="space-y-4 lg:order-2">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    MR Name *
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Users className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      type="text"
+                      required
+                      value={form.mr_name}
+                      onChange={(e) => setForm({ ...form, mr_name: e.target.value })}
+                      className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      placeholder="Enter MR name"
+                    />
                   </div>
-                  <input
-                    type="text"
-                    required
-                    value={form.mr_name}
-                    onChange={(e) => setForm({ ...form, mr_name: e.target.value })}
-                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                    placeholder="Enter MR name"
-                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Company Name *
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Building2 className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      type="text"
+                      required
+                      value={form.company_name}
+                      onChange={(e) => setForm({ ...form, company_name: e.target.value })}
+                      className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      placeholder="Enter company name"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Division Name *
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Briefcase className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      type="text"
+                      required
+                      value={form.division_name}
+                      onChange={(e) => setForm({ ...form, division_name: e.target.value })}
+                      className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      placeholder="Enter division name"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Contact Number *
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Phone className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      type="tel"
+                      required
+                      pattern="[0-9]{10}"
+                      value={form.contact_no}
+                      onChange={(e) => setForm({ ...form, contact_no: e.target.value })}
+                      className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      placeholder="Enter 10-digit contact number"
+                    />
+                  </div>
                 </div>
               </div>
 
-              {/* Company Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Company Name *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Building2 className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    required
-                    value={form.company_name}
-                    onChange={(e) => setForm({ ...form, company_name: e.target.value })}
-                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                    placeholder="Enter company name"
-                  />
-                </div>
-              </div>
-
-              {/* Division Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Division Name *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Briefcase className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    required
-                    value={form.division_name}
-                    onChange={(e) => setForm({ ...form, division_name: e.target.value })}
-                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                    placeholder="Enter division name"
-                  />
-                </div>
-              </div>
-
-              {/* Contact Number */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Contact Number *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Phone className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="tel"
-                    required
-                    pattern="[0-9]{10}"
-                    value={form.contact_no}
-                    onChange={(e) => setForm({ ...form, contact_no: e.target.value })}
-                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                    placeholder="Enter 10-digit contact number"
-                  />
-                </div>
-              </div>
-
-              {/* Appointment Date */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+              {/* Date Picker */}
+              <div className="lg:order-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Appointment Date *
                 </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Calendar className="h-5 w-5 text-gray-400" />
-                  </div>
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                   <DatePicker
                     selected={form.appointment_date}
                     onChange={(date) => setForm({ ...form, appointment_date: date })}
@@ -201,13 +197,21 @@ export function MRAppointment() {
                     filterDate={(date) => !isDateDisabled(date)}
                     dateFormat="MMMM d, yyyy"
                     placeholderText="Select appointment date"
-                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                     required
+                    inline
+                    calendarClassName="!bg-transparent !border-0 !shadow-none"
+                    dayClassName={(date) => 
+                      `!rounded-lg hover:!bg-blue-50 ${
+                        isSameDay(date, form.appointment_date || new Date()) 
+                          ? '!bg-blue-600 !text-white hover:!bg-blue-700'
+                          : ''
+                      }`
+                    }
                   />
+                  <p className="mt-2 text-sm text-gray-500">
+                    Note: Appointments are not available on weekends
+                  </p>
                 </div>
-                <p className="mt-1 text-sm text-gray-500">
-                  Note: Appointments are not available on weekends
-                </p>
               </div>
             </div>
 
