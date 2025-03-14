@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'react-hot-toast';
-import { Building2, Users, Briefcase, Calendar } from 'lucide-react';
-import { format } from 'date-fns';
+import { Building2, Users, Phone, Briefcase, Calendar } from 'lucide-react';
+import { format, isToday, isTomorrow } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 
 interface MRAppointment {
@@ -27,9 +27,15 @@ export function MRAppointmentManager() {
 
   const loadAppointments = async () => {
     try {
+      // Get today's and tomorrow's date in IST
+      const istNow = utcToZonedTime(new Date(), TIMEZONE);
+      const todayStr = format(istNow, 'yyyy-MM-dd');
+      const tomorrowStr = format(utcToZonedTime(new Date(istNow.setDate(istNow.getDate() + 1)), TIMEZONE), 'yyyy-MM-dd');
+
       const { data, error } = await supabase
         .from('mr_appointments')
         .select('*')
+        .in('appointment_date', [todayStr, tomorrowStr])
         .order('appointment_date', { ascending: true });
 
       if (error) throw error;
@@ -57,11 +63,12 @@ export function MRAppointmentManager() {
 
   // Group appointments by date
   const appointmentsByDate = appointments.reduce((acc, app) => {
-    const date = app.appointment_date;
-    if (!acc[date]) acc[date] = [];
-    acc[date].push(app);
+    const date = utcToZonedTime(new Date(app.appointment_date), TIMEZONE);
+    const key = isToday(date) ? 'today' : isTomorrow(date) ? 'tomorrow' : 'other';
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(app);
     return acc;
-  }, {} as Record<string, MRAppointment[]>);
+  }, { today: [], tomorrow: [] } as Record<string, MRAppointment[]>);
 
   return (
     <div className="space-y-6">
@@ -70,7 +77,7 @@ export function MRAppointmentManager() {
       </div>
 
       <div className="space-y-6">
-        {Object.entries(appointmentsByDate).map(([date, dateAppointments]) => (
+        {['today', 'tomorrow'].map(date => (
           <div key={date} className="bg-white rounded-xl shadow-sm border border-gray-200">
             <div className="px-6 py-5">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -80,10 +87,12 @@ export function MRAppointmentManager() {
                   </div>
                   <div>
                     <h2 className="text-xl font-semibold text-gray-900">
-                      Schedule
+                      {date === 'today' ? "Today's Schedule" : "Tomorrow's Schedule"}
                     </h2>
                     <p className="text-gray-500 text-sm mt-0.5">
-                      {formatDate(date)}
+                      {appointmentsByDate[date].length > 0 
+                        ? formatDate(appointmentsByDate[date][0].appointment_date)
+                        : formatDate(new Date().toISOString())}
                     </p>
                   </div>
                 </div>
@@ -91,7 +100,7 @@ export function MRAppointmentManager() {
                   <Users className="h-5 w-5 text-blue-600" />
                   <div>
                     <p className="text-sm text-gray-600">Total Appointments</p>
-                    <p className="text-2xl font-semibold text-blue-600">{dateAppointments.length}</p>
+                    <p className="text-2xl font-semibold text-blue-600">{appointmentsByDate[date].length}</p>
                   </div>
                 </div>
               </div>
@@ -99,7 +108,7 @@ export function MRAppointmentManager() {
 
             <div className="px-6 pb-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {dateAppointments.map((appointment) => (
+                {appointmentsByDate[date].map((appointment) => (
                   <div
                     key={appointment.id}
                     className="bg-white rounded-xl shadow-sm border border-gray-200 hover:border-blue-200 hover:shadow transition-all duration-200"
@@ -138,20 +147,22 @@ export function MRAppointmentManager() {
                     </div>
                   </div>
                 ))}
+
+                {appointmentsByDate[date].length === 0 && (
+                  <div className="col-span-full">
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+                      <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Calendar className="h-8 w-8 text-gray-400" />
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-900 mb-1">No Appointments</h3>
+                      <p className="text-gray-500">There are no MR appointments scheduled for {date === 'today' ? 'today' : 'tomorrow'}.</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         ))}
-
-        {appointments.length === 0 && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
-            <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Calendar className="h-8 w-8 text-gray-400" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-1">No Appointments</h3>
-            <p className="text-gray-500">There are no MR appointments scheduled.</p>
-          </div>
-        )}
       </div>
     </div>
   );
