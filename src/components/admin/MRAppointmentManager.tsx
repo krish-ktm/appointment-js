@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'react-hot-toast';
-import { Building2, Users, Phone, Briefcase, Calendar, Check, X } from 'lucide-react';
+import { Building2, Users, Briefcase, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 
@@ -12,7 +12,6 @@ interface MRAppointment {
   division_name: string;
   contact_no: string;
   appointment_date: string;
-  status: 'pending' | 'completed' | 'cancelled';
   created_at: string;
 }
 
@@ -43,23 +42,6 @@ export function MRAppointmentManager() {
     }
   };
 
-  const handleStatusChange = async (id: string, newStatus: 'completed' | 'cancelled') => {
-    try {
-      const { error } = await supabase
-        .from('mr_appointments')
-        .update({ status: newStatus })
-        .eq('id', id);
-
-      if (error) throw error;
-      
-      toast.success(`Appointment marked as ${newStatus}`);
-      loadAppointments();
-    } catch (error) {
-      console.error('Error updating appointment status:', error);
-      toast.error('Failed to update appointment status');
-    }
-  };
-
   const formatDate = (dateStr: string) => {
     const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
     return format(date, 'EEEE, MMMM d, yyyy');
@@ -73,117 +55,103 @@ export function MRAppointmentManager() {
     );
   }
 
+  // Group appointments by date
+  const appointmentsByDate = appointments.reduce((acc, app) => {
+    const date = app.appointment_date;
+    if (!acc[date]) acc[date] = [];
+    acc[date].push(app);
+    return acc;
+  }, {} as Record<string, MRAppointment[]>);
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-semibold text-gray-900">MR Appointments</h2>
       </div>
 
-      <div className="bg-white shadow rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  MR Details
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Company Info
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Appointment Date
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {appointments.map((appointment) => (
-                <tr key={appointment.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div className="flex items-start gap-3">
-                      <div className="bg-blue-50 p-2 rounded-lg flex-shrink-0">
-                        <Users className="h-5 w-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">{appointment.mr_name}</div>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Phone className="h-4 w-4 text-gray-400" />
-                          <span className="text-sm text-gray-500">{appointment.contact_no}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-start gap-3">
-                      <div className="bg-purple-50 p-2 rounded-lg flex-shrink-0">
-                        <Building2 className="h-5 w-5 text-purple-600" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">{appointment.company_name}</div>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Briefcase className="h-4 w-4 text-gray-400" />
-                          <span className="text-sm text-gray-500">{appointment.division_name}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-gray-400" />
-                      <span className="text-sm text-gray-900">
-                        {formatDate(appointment.appointment_date)}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      appointment.status === 'completed'
-                        ? 'bg-green-100 text-green-800'
-                        : appointment.status === 'cancelled'
-                        ? 'bg-red-100 text-red-800'
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {appointment.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    {appointment.status === 'pending' && (
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => handleStatusChange(appointment.id, 'completed')}
-                          className="p-1 rounded-lg hover:bg-green-50 text-green-600"
-                          title="Mark as completed"
-                        >
-                          <Check className="h-5 w-5" />
-                        </button>
-                        <button
-                          onClick={() => handleStatusChange(appointment.id, 'cancelled')}
-                          className="p-1 rounded-lg hover:bg-red-50 text-red-600"
-                          title="Cancel appointment"
-                        >
-                          <X className="h-5 w-5" />
-                        </button>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
+      <div className="space-y-6">
+        {Object.entries(appointmentsByDate).map(([date, dateAppointments]) => (
+          <div key={date} className="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div className="px-6 py-5">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="bg-blue-50 p-3 rounded-lg">
+                    <Calendar className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-semibold text-gray-900">
+                      Schedule
+                    </h2>
+                    <p className="text-gray-500 text-sm mt-0.5">
+                      {formatDate(date)}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-lg">
+                  <Users className="h-5 w-5 text-blue-600" />
+                  <div>
+                    <p className="text-sm text-gray-600">Total Appointments</p>
+                    <p className="text-2xl font-semibold text-blue-600">{dateAppointments.length}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-              {appointments.length === 0 && (
-                <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
-                    No MR appointments found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+            <div className="px-6 pb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {dateAppointments.map((appointment) => (
+                  <div
+                    key={appointment.id}
+                    className="bg-white rounded-xl shadow-sm border border-gray-200 hover:border-blue-200 hover:shadow transition-all duration-200"
+                  >
+                    <div className="p-5">
+                      {/* ID */}
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-sm text-gray-400">#{appointment.id.slice(-4)}</span>
+                      </div>
+
+                      {/* MR Info */}
+                      <div className="flex items-start gap-3 mb-4">
+                        <div className="bg-gray-50 p-2 rounded-lg flex-shrink-0">
+                          <Users className="h-5 w-5 text-gray-600" />
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-gray-900">{appointment.mr_name}</h3>
+                          <p className="text-sm text-gray-500">
+                            {appointment.contact_no}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Company Details */}
+                      <div className="space-y-3 pt-3 border-t border-gray-100">
+                        <div className="flex items-center gap-3">
+                          <Building2 className="h-4 w-4 text-gray-400" />
+                          <span className="text-sm text-gray-600">{appointment.company_name}</span>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <Briefcase className="h-4 w-4 text-gray-400" />
+                          <span className="text-sm text-gray-600">{appointment.division_name}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {appointments.length === 0 && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+            <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Calendar className="h-8 w-8 text-gray-400" />
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 mb-1">No Appointments</h3>
+            <p className="text-gray-500">There are no MR appointments scheduled.</p>
+          </div>
+        )}
       </div>
     </div>
   );
