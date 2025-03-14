@@ -3,7 +3,7 @@ import { useNavigate, Outlet, Link, useLocation } from 'react-router-dom';
 import { User } from '../../types';
 import { toast } from 'react-hot-toast';
 import { LoadingSpinner } from '../LoadingSpinner';
-import { Menu, Calendar, Bell, MessageCircle, X } from 'lucide-react';
+import { Menu, Calendar, Bell, MessageCircle, Building2, X } from 'lucide-react';
 
 export function AdminLayout() {
   const navigate = useNavigate();
@@ -49,6 +49,7 @@ export function AdminLayout() {
 
   const navigation = [
     { name: 'Appointments', href: '/admin', icon: Calendar },
+    { name: 'MR Appointments', href: '/admin/mr-appointments', icon: Building2 },
     ...(currentUser?.role === 'superadmin' ? [
       { name: 'Notice Board', href: '/admin/notices', icon: Bell },
       { name: 'Doctor Messages', href: '/admin/messages', icon: MessageCircle }

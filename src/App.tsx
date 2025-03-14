@@ -5,6 +5,7 @@ import { AdminLayout } from './components/admin/AdminLayout';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { NoticeManager } from './components/admin/NoticeManager';
 import { MessageManager } from './components/admin/MessageManager';
+import { MRAppointmentManager } from './components/admin/MRAppointmentManager';
 import { LandingPage } from './components/LandingPage';
 import { MRAppointment } from './components/MRAppointment';
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/mr-appointment" element={<MRAppointment />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
+          <Route path="mr-appointments" element={<MRAppointmentManager />} />
           <Route path="notices" element={<NoticeManager />} />
           <Route path="messages" element={<MessageManager />} />
         </Route>
