@@ -11,6 +11,7 @@ import { HeroSection } from './landing/HeroSection';
 import { ServicesSection } from './landing/ServicesSection';
 import { NoticeBoard } from './landing/NoticeBoard';
 import { StatsSection } from './landing/StatsSection';
+import { DoctorMessage } from './DoctorMessage';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 
@@ -26,7 +27,7 @@ export function LandingPage() {
   const today = new Date();
   const istToday = utcToZonedTime(today, 'Asia/Kolkata');
   const istTodayStr = format(istToday, 'yyyy-MM-dd');
-  console.log("landing page " + istTodayStr);
+
   const initialForm = {
     name: '',
     phone: '',
@@ -144,6 +145,7 @@ export function LandingPage() {
         />
       )}
 
+      <DoctorMessage />
       <Footer />
     </div>
   );

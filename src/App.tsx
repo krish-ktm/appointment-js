@@ -4,6 +4,7 @@ import { Login } from './components/Login';
 import { AdminLayout } from './components/admin/AdminLayout';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { NoticeManager } from './components/admin/NoticeManager';
+import { MessageManager } from './components/admin/MessageManager';
 import { LandingPage } from './components/LandingPage';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="notices" element={<NoticeManager />} />
+          <Route path="messages" element={<MessageManager />} />
         </Route>
       </Routes>
       <Toaster position="top-right" />
