@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 import { Building2, Users, Phone, Briefcase, Calendar as CalendarIcon } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { format, isWeekend, isSameDay, startOfToday, addDays } from 'date-fns';
+import { format, isWeekend, isSameDay, startOfToday, addDays, isBefore } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { ResponsiveHeader } from './headers/ResponsiveHeader';
 import { Footer } from './Footer';
@@ -31,9 +31,8 @@ export function MRAppointment() {
   });
 
   const isDateDisabled = (date: Date) => {
-    const day = date.getDay();
-    // Disable weekends (0 = Sunday, 6 = Saturday)
-    return day === 0 || day === 6;
+    const today = startOfToday();
+    return isWeekend(date) || isBefore(date, today);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -223,20 +222,68 @@ export function MRAppointment() {
                       <DatePicker
                         selected={form.appointment_date}
                         onChange={(date) => setForm({ ...form, appointment_date: date })}
-                        minDate={new Date()}
+                        minDate={startOfToday()}
                         filterDate={(date) => !isDateDisabled(date)}
                         dateFormat="MMMM d, yyyy"
                         placeholderText="Select appointment date"
                         required
                         inline
                         calendarClassName="!bg-transparent !border-0 !shadow-none w-full"
-                        dayClassName={date => 
-                          form.appointment_date && isSameDay(date, form.appointment_date)
-                            ? "!bg-blue-600 !text-white hover:!bg-blue-700"
-                            : isDateDisabled(date)
-                            ? "!text-gray-300 hover:!bg-transparent cursor-not-allowed"
-                            : "!text-gray-700 hover:!bg-blue-50 hover:!text-blue-600"
-                        }
+                        dayClassName={date => {
+                          const isSelected = form.appointment_date && isSameDay(date, form.appointment_date);
+                          const isDisabled = isDateDisabled(date);
+                          const isToday = isSameDay(date, new Date());
+                          
+                          if (isDisabled) {
+                            return "!text-gray-300 hover:!bg-transparent cursor-not-allowed opacity-50";
+                          }
+                          if (isSelected) {
+                            return "!bg-blue-600 !text-white hover:!bg-blue-700 ring-4 ring-blue-100";
+                          }
+                          if (isToday) {
+                            return "!bg-blue-50/50 !text-blue-600 font-medium hover:!bg-blue-100";
+                          }
+                          return "!text-gray-700 hover:!bg-blue-50 hover:!text-blue-600 transition-all duration-200";
+                        }}
+                        renderCustomHeader={({
+                          date,
+                          decreaseMonth,
+                          increaseMonth,
+                          prevMonthButtonDisabled,
+                          nextMonthButtonDisabled
+                        }) => (
+                          <div className="flex items-center justify-between px-2 py-2">
+                            <span className="text-lg font-semibold text-gray-900">
+                              {format(date, 'MMMM yyyy')}
+                            </span>
+                            <div className="space-x-2">
+                              <button
+                                onClick={decreaseMonth}
+                                disabled={prevMonthButtonDisabled}
+                                type="button"
+                                className={`p-2 rounded-lg transition-colors ${
+                                  prevMonthButtonDisabled
+                                    ? 'text-gray-300 cursor-not-allowed'
+                                    : 'text-gray-600 hover:bg-gray-100'
+                                }`}
+                              >
+                                ←
+                              </button>
+                              <button
+                                onClick={increaseMonth}
+                                disabled={nextMonthButtonDisabled}
+                                type="button"
+                                className={`p-2 rounded-lg transition-colors ${
+                                  nextMonthButtonDisabled
+                                    ? 'text-gray-300 cursor-not-allowed'
+                                    : 'text-gray-600 hover:bg-gray-100'
+                                }`}
+                              >
+                                →
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       />
                     </div>
                     
@@ -247,7 +294,7 @@ export function MRAppointment() {
                       </div>
                       <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
                         <span className="w-2 h-2 rounded-full bg-gray-300"></span>
-                        Weekends (not available)
+                        Weekends & past dates (not available)
                       </div>
                     </div>
                   </div>

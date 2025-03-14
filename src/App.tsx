@@ -7,7 +7,7 @@ import { NoticeManager } from './components/admin/NoticeManager';
 import { MessageManager } from './components/admin/MessageManager';
 import { MRAppointmentManager } from './components/admin/MRAppointmentManager';
 import { LandingPage } from './components/LandingPage';
-import { MRAppointment } from './components/MRAppointment';
+import { MRAppointment } from './components/mr-appointment/MRAppointment';
 
 function App() {
   return (
