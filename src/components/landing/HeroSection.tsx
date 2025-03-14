@@ -2,6 +2,8 @@ import { AppointmentForm } from '../AppointmentForm';
 import { AppointmentFormType, TimeSlot } from '../../types';
 import { translations } from '../../translations';
 import { text } from '../../theme/colors';
+import { Link } from 'react-router-dom';
+import { Building2, ArrowRight } from 'lucide-react';
 
 interface HeroSectionProps {
   form: AppointmentFormType;
@@ -85,6 +87,23 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* MR Appointment Link */}
+            <div className="mt-12 sm:mt-16">
+              <Link
+                to="/mr-appointment"
+                className="group inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-sm hover:shadow transform hover:scale-[1.02]"
+              >
+                <div className="bg-white/10 p-2 rounded-lg">
+                  <Building2 className="h-5 w-5" />
+                </div>
+                <span className="font-medium">Medical Representative Appointment</span>
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+              <p className="mt-3 text-sm text-gray-500">
+                For pharmaceutical and medical device representatives
+              </p>
             </div>
           </div>
 
