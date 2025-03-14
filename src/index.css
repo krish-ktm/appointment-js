@@ -109,7 +109,7 @@ body {
 }
 
 .react-datepicker__day--selected {
-  @apply bg-blue-600 text-white hover:bg-blue-700 hover:text-white;
+  @apply bg-blue-600 text-white hover:bg-blue-700 hover:text-white ring-4 ring-blue-100;
 }
 
 .react-datepicker__day--keyboard-selected {
@@ -176,4 +176,24 @@ body {
 
 .react-datepicker__navigation-icon--next::before {
   @apply left-[-3px];
+}
+
+/* Custom date selection styles */
+.react-datepicker__day--selected::before {
+  content: '';
+  @apply absolute inset-0 rounded-lg ring-4 ring-blue-100 pointer-events-none;
+}
+
+.react-datepicker__day--selected:hover::before {
+  @apply ring-blue-200;
+}
+
+/* Hover effect for available dates */
+.react-datepicker__day:not(.react-datepicker__day--disabled):not(.react-datepicker__day--selected):hover {
+  @apply bg-blue-50 text-blue-600 transform scale-110 transition-transform;
+}
+
+/* Smooth transitions */
+.react-datepicker__day {
+  @apply transition-all duration-200;
 }

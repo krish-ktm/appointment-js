@@ -20,6 +20,7 @@ function App() {
           <Route path="notices" element={<NoticeManager />} />
           <Route path="messages" element={<MessageManager />} />
         </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Toaster position="top-right" />
     </Router>
