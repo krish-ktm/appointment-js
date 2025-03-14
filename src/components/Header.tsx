@@ -107,11 +107,19 @@ export function Header() {
                   <span className="absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
                 </Link>
               ))}
-              <button 
-                className="px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-sm hover:shadow"
-              >
-                Book Now
-              </button>
+              <div className="flex items-center gap-3">
+                <Link 
+                  to="/mr-appointment"
+                  className="px-4 py-2 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"
+                >
+                  MR Appointment
+                </Link>
+                <button 
+                  className="px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-sm hover:shadow"
+                >
+                  Book Now
+                </button>
+              </div>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -151,6 +159,13 @@ export function Header() {
                     {item}
                   </Link>
                 ))}
+                <Link
+                  to="/mr-appointment"
+                  className="block px-3 py-2 text-base font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50/80 rounded-lg transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  MR Appointment
+                </Link>
                 <button 
                   className="w-full mt-2 px-3 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300"
                   onClick={() => setIsMenuOpen(false)}
