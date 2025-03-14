@@ -8,9 +8,11 @@ import { Footer } from '../Footer';
 import { MRForm } from './types';
 import { MRAppointmentForm } from './MRAppointmentForm';
 import { MRAppointmentCalendar } from './MRAppointmentCalendar';
+import { MRAppointmentConfirmation } from './MRAppointmentConfirmation';
 
 export function MRAppointment() {
   const [loading, setLoading] = useState(false);
+  const [appointmentDetails, setAppointmentDetails] = useState<any>(null);
   const [form, setForm] = useState<MRForm>({
     mr_name: '',
     company_name: '',
@@ -18,6 +20,17 @@ export function MRAppointment() {
     contact_no: '',
     appointment_date: null
   });
+
+  const resetForm = () => {
+    setForm({
+      mr_name: '',
+      company_name: '',
+      division_name: '',
+      contact_no: '',
+      appointment_date: null
+    });
+    setAppointmentDetails(null);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +60,7 @@ export function MRAppointment() {
       }
 
       // Create the appointment
-      const { error } = await supabase
+      const { data: appointment, error } = await supabase
         .from('mr_appointments')
         .insert({
           mr_name: form.mr_name,
@@ -55,23 +68,23 @@ export function MRAppointment() {
           division_name: form.division_name,
           contact_no: form.contact_no,
           appointment_date: format(form.appointment_date, 'yyyy-MM-dd')
-        });
+        })
+        .select()
+        .single();
 
       if (error) throw error;
 
+      setAppointmentDetails(appointment);
       toast.success('Appointment booked successfully');
-      setForm({
-        mr_name: '',
-        company_name: '',
-        division_name: '',
-        contact_no: '',
-        appointment_date: null
-      });
     } catch (error) {
       toast.error(error.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleClose = () => {
+    resetForm();
   };
 
   return (
@@ -120,6 +133,14 @@ export function MRAppointment() {
           </motion.div>
         </div>
       </main>
+
+      {appointmentDetails && (
+        <MRAppointmentConfirmation
+          appointment={appointmentDetails}
+          onClose={handleClose}
+          onScheduleAnother={resetForm}
+        />
+      )}
 
       <Footer />
     </div>
