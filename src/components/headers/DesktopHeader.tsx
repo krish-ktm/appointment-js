@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Clock, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslation } from '../../i18n/useTranslation';
 
 export function DesktopHeader() {
+  const { t, language, setLanguage } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -73,9 +75,19 @@ export function DesktopHeader() {
                 <span>Mon - Fri: 9:00 AM - 6:30 PM</span>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700">
-              <MapPin className="h-4 w-4 text-blue-500" />
-              <span>Mehsana Industrial Estate, Mehsana</span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700">
+                <MapPin className="h-4 w-4 text-blue-500" />
+                <span>Mehsana Industrial Estate, Mehsana</span>
+              </div>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value as 'en' | 'gu')}
+                className="appearance-none bg-white px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              >
+                <option value="en">English</option>
+                <option value="gu">ગુજરાતી</option>
+              </select>
             </div>
           </div>
         </div>
@@ -108,35 +120,35 @@ export function DesktopHeader() {
                 to="/"
                 className="relative py-2 text-gray-600 hover:text-gray-900 transition-colors group"
               >
-                <span className="relative z-10">Home</span>
+                <span className="relative z-10">{t.navigation.home}</span>
                 <span className="absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
               </Link>
               <Link
                 to="/about"
                 className="relative py-2 text-gray-600 hover:text-gray-900 transition-colors group"
               >
-                <span className="relative z-10">About</span>
+                <span className="relative z-10">{t.navigation.about}</span>
                 <span className="absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
               </Link>
               <Link
                 to="/services"
                 className="relative py-2 text-gray-600 hover:text-gray-900 transition-colors group"
               >
-                <span className="relative z-10">Services</span>
+                <span className="relative z-10">{t.navigation.services}</span>
                 <span className="absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
               </Link>
               <Link
                 to="/mr-appointment"
                 className="relative py-2 text-gray-600 hover:text-gray-900 transition-colors group"
               >
-                <span className="relative z-10">MR Appointment</span>
+                <span className="relative z-10">{t.navigation.mrAppointment}</span>
                 <span className="absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
               </Link>
               <button 
                 onClick={handleBookNowClick}
                 className="px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-sm hover:shadow"
               >
-                Book Appointment
+                {t.common.bookAppointment}
               </button>
             </nav>
           </div>
