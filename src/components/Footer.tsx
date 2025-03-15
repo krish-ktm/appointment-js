@@ -23,11 +23,10 @@ export function Footer() {
             animate={{ opacity: 1, y: 0 }}
           >
             <h3 className="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-700 to-gray-900">
-              Dr. Skin Care
+              Shubham Skin & Laser Clinic
             </h3>
             <p className={`${text.secondary} leading-relaxed`}>
-              Expert dermatological care for all your skin health needs. We provide comprehensive
-              skin treatments with the latest technology and personalized care.
+              Expert dermatological care with Dr. Jemish A. Patel, providing comprehensive skin treatments using the latest technology and personalized care plans.
             </p>
           </motion.div>
 
@@ -40,11 +39,11 @@ export function Footer() {
             <h3 className={`text-lg font-semibold mb-6 ${text.primary}`}>Quick Links</h3>
             <ul className="space-y-3">
               {[
-                { label: "Home", action: () => window.scrollTo(0, 0) },
+                { label: "Home", to: "/" },
                 { label: "About Us", to: "/about" },
                 { label: "Our Services", to: "/services" },
-                { label: "Contact Us", to: "/contact" },
-                { label: "Book Appointment", action: scrollToAppointmentForm }
+                { label: "Book Appointment", action: scrollToAppointmentForm },
+                { label: "MR Appointment", to: "/mr-appointment" }
               ].map((link, index) => (
                 <li key={index}>
                   {link.to ? (
@@ -81,25 +80,25 @@ export function Footer() {
                 <div className="bg-blue-50 p-2 rounded-lg">
                   <Phone className="h-4 w-4 text-blue-500" />
                 </div>
-                <span>+1 (555) 123-4567</span>
+                <span>+91 79471 31573</span>
               </li>
               <li className={`flex items-center gap-3 ${text.secondary} hover:text-blue-600 transition-colors duration-200`}>
                 <div className="bg-blue-50 p-2 rounded-lg">
                   <Mail className="h-4 w-4 text-blue-500" />
                 </div>
-                <span>contact@drskincare.com</span>
+                <span>contact@shubhamskinlaser.com</span>
               </li>
               <li className={`flex items-center gap-3 ${text.secondary} hover:text-blue-600 transition-colors duration-200`}>
                 <div className="bg-blue-50 p-2 rounded-lg">
                   <MapPin className="h-4 w-4 text-blue-500" />
                 </div>
-                <span>123 Medical Center, Healthcare City</span>
+                <span>Mehsana Industrial Estate, Mehsana, Gujarat</span>
               </li>
               <li className={`flex items-center gap-3 ${text.secondary} hover:text-blue-600 transition-colors duration-200`}>
                 <div className="bg-blue-50 p-2 rounded-lg">
                   <Clock className="h-4 w-4 text-blue-500" />
                 </div>
-                <span>Mon - Sat: 9:00 AM - 7:00 PM</span>
+                <span>Mon - Fri: 9:00 AM - 1:00 PM | 4:00 PM - 6:30 PM</span>
               </li>
             </ul>
           </motion.div>
@@ -142,7 +141,7 @@ export function Footer() {
           className="border-t border-gray-100 mt-16 pt-8 text-center"
         >
           <p className={text.secondary}>
-            © {new Date().getFullYear()} Dr. Skin Care. All rights reserved.
+            © {new Date().getFullYear()} Shubham Skin & Laser Clinic. All rights reserved.
           </p>
         </motion.div>
       </div>
