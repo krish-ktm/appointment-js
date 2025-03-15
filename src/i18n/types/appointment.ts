@@ -20,6 +20,15 @@ export interface AppointmentTranslations {
     personalInfo: string;
     showingSlots: string;
     slotsLeft: string;
+    days: {
+      sunday: string;
+      monday: string;
+      tuesday: string;
+      wednesday: string;
+      thursday: string;
+      friday: string;
+      saturday: string;
+    };
   };
   confirmation: {
     title: string;

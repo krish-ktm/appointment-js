@@ -22,7 +22,16 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
       successNote: "We'll see you at your scheduled time!",
       personalInfo: "Personal Information",
       showingSlots: "Showing slots for",
-      slotsLeft: "left"
+      slotsLeft: "left",
+      days: {
+        sunday: "Sunday",
+        monday: "Monday",
+        tuesday: "Tuesday",
+        wednesday: "Wednesday",
+        thursday: "Thursday",
+        friday: "Friday",
+        saturday: "Saturday"
+      }
     },
     confirmation: {
       title: "Appointment Confirmation",
@@ -61,7 +70,16 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
       successNote: "અમે તમને નિર્ધારિત સમયે મળીશું!",
       personalInfo: "વ્યક્તિગત માહિતી",
       showingSlots: "આ તારીખ માટે ઉપલબ્ધ સમય",
-      slotsLeft: "બાકી"
+      slotsLeft: "બાકી",
+      days: {
+        sunday: "રવિવાર",
+        monday: "સોમવાર",
+        tuesday: "મંગળવાર",
+        wednesday: "બુધવાર",
+        thursday: "ગુરુવાર",
+        friday: "શુક્રવાર",
+        saturday: "શનિવાર"
+      }
     },
     confirmation: {
       title: "એપોઈન્ટમેન્ટ પુષ્ટિ",

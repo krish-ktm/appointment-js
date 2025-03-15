@@ -44,7 +44,8 @@ export function AppointmentForm({
   // Format the selected date for display
   const formatSelectedDate = (dateStr: string) => {
     const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
-    return format(date, 'EEEE, MMMM d, yyyy');
+    const dayName = t.appointment.form.days[format(date, 'EEEE').toLowerCase() as keyof typeof t.appointment.form.days];
+    return `${dayName}, ${format(date, 'MMMM d, yyyy')}`;
   };
 
   return (
@@ -99,6 +100,7 @@ export function AppointmentForm({
                   {[today, tomorrow].map((date) => {
                     const istDate = utcToZonedTime(date, TIMEZONE);
                     const dateStr = format(istDate, 'yyyy-MM-dd');
+                    const dayName = t.appointment.form.days[format(istDate, 'EEEE').toLowerCase() as keyof typeof t.appointment.form.days];
                     return (
                       <motion.button
                         key={dateStr}
@@ -113,7 +115,7 @@ export function AppointmentForm({
                         }`}
                       >
                         <div className="text-xs sm:text-sm font-medium mb-1">
-                          {format(istDate, 'EEE')}
+                          {dayName}
                         </div>
                         <div className={`text-[10px] sm:text-xs ${form.date === dateStr ? 'text-blue-100' : 'text-gray-500'}`}>
                           {format(istDate, 'MMM d')}
