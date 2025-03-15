@@ -1,6 +1,7 @@
 export interface AppointmentTranslations {
   title: string;
   form: {
+    subtitle: string;
     name: string;
     phone: string;
     age: string;
@@ -8,11 +9,15 @@ export interface AppointmentTranslations {
     date: string;
     timeSlot: string;
     submit: string;
+    booking: string;
     selectTime: string;
     bookingFull: string;
     noSlots: string;
     selectDate: string;
     success: string;
+    successNote: string;
+    personalInfo: string;
+    showingSlots: string;
   };
   confirmation: {
     title: string;

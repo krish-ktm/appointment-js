@@ -4,6 +4,7 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
   en: {
     title: "Book Your Appointment",
     form: {
+      subtitle: "Select your preferred date and time for the appointment",
       name: "Full Name",
       phone: "Phone Number",
       age: "Age",
@@ -11,11 +12,15 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
       date: "Appointment Date",
       timeSlot: "Time Slot",
       submit: "Book Appointment",
+      booking: "Booking...",
       selectTime: "Select Time",
       bookingFull: "Booking Full",
       noSlots: "No Time Slots Available",
       selectDate: "Please select a date",
-      success: "Appointment booked successfully!"
+      success: "Appointment booked successfully!",
+      successNote: "We'll see you at your scheduled time!",
+      personalInfo: "Personal Information",
+      showingSlots: "Showing slots for"
     },
     confirmation: {
       title: "Appointment Confirmation",
@@ -36,6 +41,7 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
   gu: {
     title: "તમારી એપોઈન્ટમેન્ટ બુક કરો",
     form: {
+      subtitle: "એપોઈન્ટમેન્ટ માટે તમારી પસંદગીની તારીખ અને સમય પસંદ કરો",
       name: "પૂરું નામ",
       phone: "ફોન નંબર",
       age: "ઉંમર",
@@ -43,11 +49,15 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
       date: "એપોઈન્ટમેન્ટની તારીખ",
       timeSlot: "સમય",
       submit: "એપોઈન્ટમેન્ટ બુક કરો",
+      booking: "બુક થઈ રહ્યું છે...",
       selectTime: "સમય પસંદ કરો",
       bookingFull: "બુકિંગ ભરાઈ ગયું છે",
       noSlots: "કોઈ સમય ઉપલબ્ધ નથી",
       selectDate: "કૃપા કરી તારીખ પસંદ કરો",
-      success: "એપોઈન્ટમેન્ટ સફળતાપૂર્વક બુક થઈ ગઈ છે!"
+      success: "એપોઈન્ટમેન્ટ સફળતાપૂર્વક બુક થઈ ગઈ છે!",
+      successNote: "અમે તમને નિર્ધારિત સમયે મળીશું!",
+      personalInfo: "વ્યક્તિગત માહિતી",
+      showingSlots: "આ તારીખ માટે ઉપલબ્ધ સમય"
     },
     confirmation: {
       title: "એપોઈન્ટમેન્ટ પુષ્ટિ",

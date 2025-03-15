@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, Phone, User, Clock } from 'lucide-react';
-import { AppointmentForm as AppointmentFormType, TimeSlot, Translations } from '../types';
+import { AppointmentForm as AppointmentFormType, TimeSlot } from '../types';
 import { FormField } from './FormField';
 import { TimeSlotSelector } from './TimeSlotSelector';
+import { useTranslation } from '../i18n/useTranslation';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns';
@@ -12,7 +13,6 @@ interface AppointmentFormProps {
   form: AppointmentFormType;
   setForm: (form: AppointmentFormType) => void;
   timeSlots: TimeSlot[];
-  t: Translations;
   onSubmit: (e: React.FormEvent) => void;
   success: boolean;
   loading: boolean;
@@ -24,11 +24,11 @@ export function AppointmentForm({
   form,
   setForm,
   timeSlots,
-  t,
   onSubmit,
   success,
   loading
 }: AppointmentFormProps) {
+  const { t } = useTranslation();
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
@@ -63,10 +63,10 @@ export function AppointmentForm({
             <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
           </div>
           <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-2">
-            {t.title}
+            {t.appointment.title}
           </h2>
           <p className="text-sm text-gray-500">
-            Select your preferred date and time for the appointment
+            {t.appointment.form.subtitle}
           </p>
         </motion.div>
 
@@ -78,9 +78,9 @@ export function AppointmentForm({
           >
             <div className="flex items-center justify-center gap-2 mb-1">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <p className="font-medium">{t.success}</p>
+              <p className="font-medium">{t.appointment.form.success}</p>
             </div>
-            <p className="text-sm text-green-600">We'll see you at your scheduled time!</p>
+            <p className="text-sm text-green-600">{t.appointment.form.successNote}</p>
           </motion.div>
         )}
 
@@ -93,7 +93,7 @@ export function AppointmentForm({
                   <div className="p-2 bg-blue-50 rounded-lg">
                     <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                   </div>
-                  <h3 className="font-medium text-gray-900">{t.date}</h3>
+                  <h3 className="font-medium text-gray-900">{t.appointment.form.date}</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   {[today, tomorrow].map((date) => {
@@ -130,9 +130,9 @@ export function AppointmentForm({
                     <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
+                    <h3 className="font-medium text-gray-900">{t.appointment.form.timeSlot}</h3>
                     <p className="text-xs text-gray-500 mt-0.5">
-                      Showing slots for: {formatSelectedDate(form.date)}
+                      {t.appointment.form.showingSlots}: {formatSelectedDate(form.date)}
                     </p>
                   </div>
                 </div>
@@ -140,7 +140,7 @@ export function AppointmentForm({
                   timeSlots={timeSlots}
                   selectedTime={form.timeSlot}
                   onSelectTime={(time) => setForm({ ...form, timeSlot: time })}
-                  label={t.timeSlot}
+                  label={t.appointment.form.timeSlot}
                 />
               </div>
             </div>
@@ -152,25 +152,25 @@ export function AppointmentForm({
                   <div className="p-2 bg-blue-50 rounded-lg">
                     <User className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                   </div>
-                  <h3 className="font-medium text-gray-900">Personal Information</h3>
+                  <h3 className="font-medium text-gray-900">{t.appointment.form.personalInfo}</h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <FormField
-                    label={t.name}
+                    label={t.appointment.form.name}
                     type="text"
                     value={form.name}
                     onChange={(value) => setForm({ ...form, name: value })}
                     icon={User}
                   />
                   <FormField
-                    label={t.phone}
+                    label={t.appointment.form.phone}
                     type="tel"
                     value={form.phone}
                     onChange={(value) => setForm({ ...form, phone: value })}
                     icon={Phone}
                   />
                   <FormField
-                    label={t.age}
+                    label={t.appointment.form.age}
                     type="number"
                     value={form.age}
                     onChange={(value) => setForm({ ...form, age: value })}
@@ -179,7 +179,7 @@ export function AppointmentForm({
                     max="120"
                   />
                   <FormField
-                    label={t.city}
+                    label={t.appointment.form.city}
                     type="text"
                     value={form.city}
                     onChange={(value) => setForm({ ...form, city: value })}
@@ -200,10 +200,10 @@ export function AppointmentForm({
                 {loading ? (
                   <div className="flex items-center justify-center gap-2">
                     <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Booking...</span>
+                    <span>{t.appointment.form.booking}</span>
                   </div>
                 ) : (
-                  t.submit
+                  t.appointment.form.submit
                 )}
               </motion.button>
             </div>

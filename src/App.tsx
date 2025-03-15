@@ -10,26 +10,31 @@ import { LandingPage } from './components/LandingPage';
 import { AboutPage } from './components/AboutPage';
 import { MRAppointment } from './components/mr-appointment/MRAppointment';
 import { ServicesPage } from './components/ServicesPage';
+import { LanguageProvider } from './i18n/LanguageContext';
+import { LanguageSelector } from './components/LanguageSelector';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/mr-appointment" element={<MRAppointment />} />
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="mr-appointments" element={<MRAppointmentManager />} />
-          <Route path="notices" element={<NoticeManager />} />
-          <Route path="messages" element={<MessageManager />} />
-        </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-      <Toaster position="top-right" />
-    </Router>
+    <LanguageProvider>
+      <Router>
+        <LanguageSelector />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/mr-appointment" element={<MRAppointment />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="mr-appointments" element={<MRAppointmentManager />} />
+            <Route path="notices" element={<NoticeManager />} />
+            <Route path="messages" element={<MessageManager />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+        <Toaster position="top-right" />
+      </Router>
+    </LanguageProvider>
   );
 }
 
