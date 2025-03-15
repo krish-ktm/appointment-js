@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../../i18n/useTranslation';
 
 export function MobileHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { t } = useTranslation();
+  const { t, language, setLanguage } = useTranslation();
 
   const handleBookNowClick = () => {
     const element = document.querySelector('.appointment-form-section');
@@ -15,6 +15,11 @@ export function MobileHeader() {
     } else {
       window.location.href = '/#appointment-form';
     }
+    setIsMenuOpen(false);
+  };
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'gu' : 'en');
     setIsMenuOpen(false);
   };
 
@@ -32,6 +37,12 @@ export function MobileHeader() {
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={toggleLanguage}
+              className="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 transition-colors"
+            >
+              <Globe className="h-5 w-5" />
+            </button>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 transition-colors"

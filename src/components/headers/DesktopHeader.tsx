@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, Clock, MapPin } from 'lucide-react';
+import { Phone, Clock, MapPin, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../i18n/useTranslation';
 
 export function DesktopHeader() {
-  const { t } = useTranslation();
+  const { t, language, setLanguage } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
 
   useEffect(() => {
     const controlNavbar = () => {
@@ -46,6 +47,11 @@ export function DesktopHeader() {
     } else {
       window.location.href = '/#appointment-form';
     }
+  };
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'gu' : 'en');
+    setShowLanguageMenu(false);
   };
 
   return (
@@ -136,6 +142,28 @@ export function DesktopHeader() {
                 <span className="relative z-10">{t.navigation.mrAppointment}</span>
                 <span className="absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
               </Link>
+
+              <div className="relative">
+                <button
+                  onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+                  className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  <Globe className="h-4 w-4" />
+                  <span>{language === 'en' ? 'English' : 'ગુજરાતી'}</span>
+                </button>
+
+                {showLanguageMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1">
+                    <button
+                      onClick={toggleLanguage}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                    >
+                      {language === 'en' ? 'ગુજરાતી' : 'English'}
+                    </button>
+                  </div>
+                )}
+              </div>
+
               <button 
                 onClick={handleBookNowClick}
                 className="px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-sm hover:shadow"

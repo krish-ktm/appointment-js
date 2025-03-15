@@ -15,5 +15,9 @@ export function ResponsiveHeader() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  return isMobile ? <MobileHeader /> : <DesktopHeader />;
+  return (
+    <div className="z-40">
+      {isMobile ? <MobileHeader /> : <DesktopHeader />}
+    </div>
+  );
 }
