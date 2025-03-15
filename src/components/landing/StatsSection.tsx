@@ -7,34 +7,38 @@ export function StatsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className={`text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
-            Our Impact
+            Why Choose Us
           </h2>
           <p className={`text-lg ${text.secondary} max-w-2xl mx-auto`}>
-            Delivering exceptional dermatological care and transforming lives through expertise and dedication.
+            With over 14 years of experience, we provide expert dermatological care using the latest technology and personalized treatment plans.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {[
             { 
-              value: '10+', 
+              value: '14+', 
               label: 'Years Experience',
-              gradient: 'from-blue-600 to-blue-400'
+              gradient: 'from-blue-600 to-blue-400',
+              description: 'Trusted expertise in dermatology'
             },
             { 
               value: '15k+', 
               label: 'Happy Patients',
-              gradient: 'from-emerald-600 to-emerald-400'
+              gradient: 'from-emerald-600 to-emerald-400',
+              description: 'Satisfied with our care'
             },
             { 
               value: '50+', 
               label: 'Treatments',
-              gradient: 'from-violet-600 to-violet-400'
+              gradient: 'from-violet-600 to-violet-400',
+              description: 'Advanced procedures available'
             },
             { 
               value: '99%', 
-              label: 'Satisfaction Rate',
-              gradient: 'from-amber-600 to-amber-400'
+              label: 'Success Rate',
+              gradient: 'from-amber-600 to-amber-400',
+              description: 'Proven treatment outcomes'
             }
           ].map((stat, index) => (
             <motion.div
@@ -52,9 +56,12 @@ export function StatsSection() {
                   <div className={`text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`}>
                     {stat.value}
                   </div>
-                  <div className={`${text.secondary} font-medium text-sm sm:text-base`}>
+                  <div className={`${text.secondary} font-medium text-sm sm:text-base mb-2`}>
                     {stat.label}
                   </div>
+                  <p className="text-xs text-gray-500">
+                    {stat.description}
+                  </p>
                 </div>
                 <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
               </div>

@@ -1,22 +1,74 @@
 import { motion } from 'framer-motion';
-import { Star, Award, Users } from 'lucide-react';
+import { Star, Award, Users, Zap, FlaskRound as Flask, Microscope, ArrowRight } from 'lucide-react';
 import { background, text, border, gradients } from '../../theme/colors';
+import { Link } from 'react-router-dom';
 
 const services = [
   {
-    title: 'General Dermatology',
-    description: 'Comprehensive skin health examinations and treatment for various conditions.',
-    icon: Star
+    title: "General Dermatology",
+    icon: Star,
+    description: "Comprehensive skin health examinations and treatment for various skin conditions.",
+    features: [
+      "Skin Disease Treatment",
+      "Allergy Management",
+      "Bacterial Infections",
+      "Nail Disorders"
+    ]
   },
   {
-    title: 'Cosmetic Procedures',
+    title: "Cosmetic Procedures",
+    icon: Award,
     description: "Advanced treatments to enhance your skin's appearance and health.",
-    icon: Award
+    features: [
+      "Laser Treatments",
+      "Chemical Peels",
+      "Skin Rejuvenation",
+      "Anti-aging Solutions"
+    ]
   },
   {
-    title: 'Skin Cancer Screening',
-    description: 'Early detection and prevention of skin cancer through thorough screenings.',
-    icon: Users
+    title: "Specialized Care",
+    icon: Users,
+    description: "Expert care for specific skin conditions and concerns.",
+    features: [
+      "Vitiligo Treatment",
+      "Hair Loss Solutions",
+      "Scar Management",
+      "Pigmentation Treatment"
+    ]
+  },
+  {
+    title: "Advanced Treatments",
+    icon: Zap,
+    description: "State-of-the-art procedures using the latest technology.",
+    features: [
+      "Fractional CO2 Laser",
+      "Permanent Hair Removal",
+      "Photofacial",
+      "Micro Needling"
+    ]
+  },
+  {
+    title: "Hair Services",
+    icon: Flask,
+    description: "Comprehensive solutions for all types of hair concerns.",
+    features: [
+      "Hair Loss Treatment",
+      "Scalp Conditions",
+      "Hair Growth Therapy",
+      "Laser Hair Removal"
+    ]
+  },
+  {
+    title: "Diagnostic Services",
+    icon: Microscope,
+    description: "Advanced diagnostic tools for accurate treatment planning.",
+    features: [
+      "Dermoscopy",
+      "Skin Analysis",
+      "Allergy Testing",
+      "Treatment Planning"
+    ]
   }
 ];
 
@@ -29,11 +81,11 @@ export function ServicesSection() {
             Our Services
           </h2>
           <p className={`text-lg ${text.secondary} max-w-2xl mx-auto`}>
-            We offer a comprehensive range of dermatological services to help you achieve and maintain healthy, beautiful skin.
+            Comprehensive dermatological care with advanced treatments and personalized solutions for all your skin health needs.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => {
             const Icon = service.icon;
             return (
@@ -51,12 +103,30 @@ export function ServicesSection() {
                 <h3 className={`text-xl font-semibold ${text.primary} mb-3`}>
                   {service.title}
                 </h3>
-                <p className={text.secondary}>
+                <p className={`${text.secondary} mb-4`}>
                   {service.description}
                 </p>
+                <ul className="space-y-2">
+                  {service.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-violet-500"></span>
+                      <span className="text-sm text-gray-600">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
               </motion.div>
             );
           })}
+        </div>
+
+        <div className="text-center mt-12">
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 transition-all duration-300 shadow-sm hover:shadow"
+          >
+            <span className="font-medium">View All Services</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </div>
     </div>

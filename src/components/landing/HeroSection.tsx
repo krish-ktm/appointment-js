@@ -3,7 +3,7 @@ import { AppointmentFormType, TimeSlot } from '../../types';
 import { translations } from '../../translations';
 import { text } from '../../theme/colors';
 import { Link } from 'react-router-dom';
-import { Building2, ArrowRight } from 'lucide-react';
+import { Building2, ArrowRight, Star, Award, Shield } from 'lucide-react';
 
 interface HeroSectionProps {
   form: AppointmentFormType;
@@ -40,35 +40,35 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
                 <div className="flex items-center gap-2 sm:gap-3">
                   <span className="text-base sm:text-lg">✨</span>
                   <span className="text-blue-900">
-                    Your Journey to Radiant Skin Starts Here
+                    Dr. Jemish A. Patel - MBBS, MD
                   </span>
                 </div>
               </div>
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight text-blue-950">
-              Expert Skin Care for Your Health & Beauty
+              Expert Dermatological Care for Your Skin Health
             </h1>
 
             <p className="text-lg sm:text-xl text-blue-800 mb-6 sm:mb-8 leading-relaxed px-4 sm:px-0">
-              Professional dermatological care with personalized treatment plans for all your skin concerns.
+              Comprehensive skin treatments with advanced technology and personalized care plans
             </p>
 
             <div className="flex flex-wrap justify-center gap-4">
               {[
                 {
-                  icon: "h-2 w-2 rounded-full bg-emerald-400",
-                  text: "Expert Dermatologists",
+                  icon: Star,
+                  text: "14+ Years Experience",
                   color: "text-emerald-600"
                 },
                 {
-                  icon: "h-2 w-2 rounded-full bg-amber-400",
+                  icon: Award,
                   text: "Advanced Treatments",
                   color: "text-amber-600"
                 },
                 {
-                  icon: "h-2 w-2 rounded-full bg-rose-400",
-                  text: "Personalized Care",
+                  icon: Shield,
+                  text: "Expert Care",
                   color: "text-rose-600"
                 }
               ].map((feature, index) => (
@@ -79,7 +79,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
                 >
                   <div className="relative bg-white px-4 py-2 rounded-xl shadow-md border border-gray-100">
                     <div className="flex items-center gap-3">
-                      <div className={`${feature.icon}`} />
+                      <feature.icon className={`h-4 w-4 ${feature.color}`} />
                       <span className={`text-sm font-medium ${feature.color}`}>
                         {feature.text}
                       </span>
