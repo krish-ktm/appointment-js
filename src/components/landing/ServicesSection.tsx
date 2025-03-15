@@ -12,68 +12,38 @@ export function ServicesSection({ t }: ServicesSectionProps) {
     {
       title: t.categories.treatments,
       icon: Star,
-      description: "Comprehensive skin health examinations and treatment for various skin conditions.",
-      features: [
-        "Skin Disease Treatment",
-        "Allergy Management",
-        "Bacterial Infections",
-        "Nail Disorders"
-      ]
+      description: t.lists.treatments[0],
+      features: t.lists.treatments.slice(1, 5)
     },
     {
       title: t.categories.facial,
       icon: Award,
-      description: "Advanced treatments to enhance your skin's appearance and health.",
-      features: [
-        "Laser Treatments",
-        "Chemical Peels",
-        "Skin Rejuvenation",
-        "Anti-aging Solutions"
-      ]
+      description: t.lists.facial[0],
+      features: t.lists.facial.slice(1, 5)
     },
     {
       title: t.categories.aesthetic,
       icon: Users,
-      description: "Expert care for specific skin conditions and concerns.",
-      features: [
-        "Vitiligo Treatment",
-        "Hair Loss Solutions",
-        "Scar Management",
-        "Pigmentation Treatment"
-      ]
+      description: t.lists.aesthetic[0],
+      features: t.lists.aesthetic.slice(1, 5)
     },
     {
       title: t.categories.surgical,
       icon: Zap,
-      description: "State-of-the-art procedures using the latest technology.",
-      features: [
-        "Fractional CO2 Laser",
-        "Permanent Hair Removal",
-        "Photofacial",
-        "Micro Needling"
-      ]
+      description: t.lists.surgical[0],
+      features: t.lists.surgical.slice(1)
     },
     {
       title: t.categories.hair,
       icon: Flask,
-      description: "Comprehensive solutions for all types of hair concerns.",
-      features: [
-        "Hair Loss Treatment",
-        "Scalp Conditions",
-        "Hair Growth Therapy",
-        "Laser Hair Removal"
-      ]
+      description: t.lists.hair[0],
+      features: t.lists.hair.slice(1)
     },
     {
       title: t.categories.diagnostic,
       icon: Microscope,
-      description: "Advanced diagnostic tools for accurate treatment planning.",
-      features: [
-        "Dermoscopy",
-        "Skin Analysis",
-        "Allergy Testing",
-        "Treatment Planning"
-      ]
+      description: t.lists.diagnostic[0],
+      features: t.lists.diagnostic.slice(1)
     }
   ];
 

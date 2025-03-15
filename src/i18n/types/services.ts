@@ -1,6 +1,7 @@
 export interface ServicesTranslations {
   title: string;
   subtitle: string;
+  expertCare: string;
   categories: {
     treatments: string;
     facial: string;
@@ -8,6 +9,14 @@ export interface ServicesTranslations {
     surgical: string;
     hair: string;
     diagnostic: string;
+  };
+  lists: {
+    treatments: string[];
+    facial: string[];
+    aesthetic: string[];
+    surgical: string[];
+    hair: string[];
+    diagnostic: string[];
   };
   cta: {
     title: string;

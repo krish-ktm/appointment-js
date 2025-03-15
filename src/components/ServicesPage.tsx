@@ -17,75 +17,32 @@ export function ServicesPage() {
     {
       title: t.services.categories.treatments,
       icon: Heart,
-      services: [
-        "Permanent Hair Removal",
-        "Fractional Skin Rejuvenation",
-        "Bacterial Skin Infection",
-        "Keloid And Scar",
-        "Allergy",
-        "Androgenetic Alopecia",
-        "Contact Dermatitis",
-        "Nail Disorder",
-        "Freckles",
-        "Fractional CO2 Laser Skin Resurfacing",
-        "Melasma",
-        "Alopecia Areata (Patchy Hair Loss)",
-        "Permanent Hair Removal Diode Laser",
-        "Vitiligo"
-      ]
+      services: t.services.lists.treatments
     },
     {
       title: t.services.categories.facial,
       icon: Stethoscope,
-      services: [
-        "Retinol Peel",
-        "Skin Care",
-        "Chemical Peel Treatment",
-        "Pigmentation",
-        "Photofacial",
-        "Facial Rejuvenation",
-        "Glycolic Peel Facial",
-        "Facial",
-        "Radiance Rejuvenating Cocoa Facial",
-        "Facial Wrinkles"
-      ]
+      services: t.services.lists.facial
     },
     {
       title: t.services.categories.aesthetic,
       icon: Zap,
-      services: [
-        "Line and Wrinkle Smoothing",
-        "Aesthetic Dermatology Consultation",
-        "Dark Spots",
-        "Skin hair and Nail disorder",
-        "Micro Needling"
-      ]
+      services: t.services.lists.aesthetic
     },
     {
       title: t.services.categories.surgical,
       icon: Scissors,
-      services: [
-        "Subcision",
-        "Skin Grafting for Vitiligo",
-        "Laser Resurfacing"
-      ]
+      services: t.services.lists.surgical
     },
     {
       title: t.services.categories.hair,
       icon: Flask,
-      services: [
-        "Hair Care",
-        "Laser Hair Treatment - Face",
-        "Laser Hair Removal"
-      ]
+      services: t.services.lists.hair
     },
     {
       title: t.services.categories.diagnostic,
       icon: Microscope,
-      services: [
-        "Dermoscopy",
-        "Radiocautery"
-      ]
+      services: t.services.lists.diagnostic
     }
   ];
 
@@ -103,7 +60,7 @@ export function ServicesPage() {
               className="inline-flex items-center bg-blue-50 px-4 py-2 rounded-full mb-4"
             >
               <Heart className="h-4 w-4 text-blue-600 mr-2" />
-              <span className="text-sm font-medium text-blue-600">Expert Care</span>
+              <span className="text-sm font-medium text-blue-600">{t.services.expertCare}</span>
             </motion.div>
             
             <motion.h1
