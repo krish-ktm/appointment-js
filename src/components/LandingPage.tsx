@@ -4,7 +4,6 @@ import { Notice, AppointmentForm as AppointmentFormType, BookingDetails as Booki
 import { ResponsiveHeader } from './headers/ResponsiveHeader';
 import { Footer } from './Footer';
 import { BookingConfirmation } from './BookingConfirmation';
-import { translations } from '../translations';
 import { generateTimeSlots, validateBookingRequest } from '../utils';
 import { toast } from 'react-hot-toast';
 import { HeroSection } from './landing/HeroSection';
@@ -17,7 +16,7 @@ import { utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../i18n/useTranslation';
 
 export function LandingPage() {
-  const { t, language } = useTranslation();
+  const { t } = useTranslation();
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
@@ -144,7 +143,7 @@ export function LandingPage() {
           booking={bookingDetails}
           onClose={() => setBookingDetails(null)}
           onScheduleAnother={resetForm}
-          t={translations[language]}
+          t={t.appointment}
         />
       )}
 

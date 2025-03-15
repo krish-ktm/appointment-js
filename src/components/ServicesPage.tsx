@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ResponsiveHeader } from './headers/ResponsiveHeader';
 import { Footer } from './Footer';
 import { Stethoscope, Zap, FlaskRound as Flask, Microscope, Scissors, Heart } from 'lucide-react';
+import { useTranslation } from '../i18n/useTranslation';
 
 interface ServiceCategory {
   title: string;
@@ -9,83 +10,85 @@ interface ServiceCategory {
   services: string[];
 }
 
-const serviceCategories: ServiceCategory[] = [
-  {
-    title: "Treatments",
-    icon: Heart,
-    services: [
-      "Permanent Hair Removal",
-      "Fractional Skin Rejuvenation",
-      "Bacterial Skin Infection",
-      "Keloid And Scar",
-      "Allergy",
-      "Androgenetic Alopecia",
-      "Contact Dermatitis",
-      "Nail Disorder",
-      "Freckles",
-      "Fractional CO2 Laser Skin Resurfacing",
-      "Melasma",
-      "Alopecia Areata (Patchy Hair Loss)",
-      "Permanent Hair Removal Diode Laser",
-      "Vitiligo"
-    ]
-  },
-  {
-    title: "Facial Services",
-    icon: Stethoscope,
-    services: [
-      "Retinol Peel",
-      "Skin Care",
-      "Chemical Peel Treatment",
-      "Pigmentation",
-      "Photofacial",
-      "Facial Rejuvenation",
-      "Glycolic Peel Facial",
-      "Facial",
-      "Radiance Rejuvenating Cocoa Facial",
-      "Facial Wrinkles"
-    ]
-  },
-  {
-    title: "Aesthetic Services",
-    icon: Zap,
-    services: [
-      "Line and Wrinkle Smoothing",
-      "Aesthetic Dermatology Consultation",
-      "Dark Spots",
-      "Skin hair and Nail disorder",
-      "Micro Needling"
-    ]
-  },
-  {
-    title: "Surgical Procedures",
-    icon: Scissors,
-    services: [
-      "Subcision",
-      "Skin Grafting for Vitiligo",
-      "Laser Resurfacing"
-    ]
-  },
-  {
-    title: "Hair Services",
-    icon: Flask,
-    services: [
-      "Hair Care",
-      "Laser Hair Treatment - Face",
-      "Laser Hair Removal"
-    ]
-  },
-  {
-    title: "Diagnostic Services",
-    icon: Microscope,
-    services: [
-      "Dermoscopy",
-      "Radiocautery"
-    ]
-  }
-];
-
 export function ServicesPage() {
+  const { t } = useTranslation();
+
+  const serviceCategories: ServiceCategory[] = [
+    {
+      title: t.services.categories.treatments,
+      icon: Heart,
+      services: [
+        "Permanent Hair Removal",
+        "Fractional Skin Rejuvenation",
+        "Bacterial Skin Infection",
+        "Keloid And Scar",
+        "Allergy",
+        "Androgenetic Alopecia",
+        "Contact Dermatitis",
+        "Nail Disorder",
+        "Freckles",
+        "Fractional CO2 Laser Skin Resurfacing",
+        "Melasma",
+        "Alopecia Areata (Patchy Hair Loss)",
+        "Permanent Hair Removal Diode Laser",
+        "Vitiligo"
+      ]
+    },
+    {
+      title: t.services.categories.facial,
+      icon: Stethoscope,
+      services: [
+        "Retinol Peel",
+        "Skin Care",
+        "Chemical Peel Treatment",
+        "Pigmentation",
+        "Photofacial",
+        "Facial Rejuvenation",
+        "Glycolic Peel Facial",
+        "Facial",
+        "Radiance Rejuvenating Cocoa Facial",
+        "Facial Wrinkles"
+      ]
+    },
+    {
+      title: t.services.categories.aesthetic,
+      icon: Zap,
+      services: [
+        "Line and Wrinkle Smoothing",
+        "Aesthetic Dermatology Consultation",
+        "Dark Spots",
+        "Skin hair and Nail disorder",
+        "Micro Needling"
+      ]
+    },
+    {
+      title: t.services.categories.surgical,
+      icon: Scissors,
+      services: [
+        "Subcision",
+        "Skin Grafting for Vitiligo",
+        "Laser Resurfacing"
+      ]
+    },
+    {
+      title: t.services.categories.hair,
+      icon: Flask,
+      services: [
+        "Hair Care",
+        "Laser Hair Treatment - Face",
+        "Laser Hair Removal"
+      ]
+    },
+    {
+      title: t.services.categories.diagnostic,
+      icon: Microscope,
+      services: [
+        "Dermoscopy",
+        "Radiocautery"
+      ]
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50/50 to-white">
       <ResponsiveHeader />
@@ -108,7 +111,7 @@ export function ServicesPage() {
               animate={{ opacity: 1, y: 0 }}
               className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6"
             >
-              Our Services
+              {t.services.title}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -116,7 +119,7 @@ export function ServicesPage() {
               transition={{ delay: 0.1 }}
               className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4 sm:px-0"
             >
-              Comprehensive dermatological care with advanced treatments and personalized solutions for all your skin, hair, and nail concerns.
+              {t.services.subtitle}
             </motion.p>
           </div>
 
@@ -171,10 +174,10 @@ export function ServicesPage() {
           >
             <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-2xl p-6 sm:p-8">
               <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3">
-                Ready to Get Started?
+                {t.services.cta.title}
               </h3>
               <p className="text-base sm:text-lg text-gray-600 mb-6">
-                Experience our expert dermatological care today
+                {t.services.cta.subtitle}
               </p>
               <button
                 onClick={() => {
@@ -187,7 +190,7 @@ export function ServicesPage() {
                 }}
                 className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-sm hover:shadow text-base sm:text-lg font-medium"
               >
-                Book an Appointment
+                {t.services.cta.button}
               </button>
             </div>
           </motion.div>

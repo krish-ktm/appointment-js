@@ -2,8 +2,11 @@ import { motion } from 'framer-motion';
 import { ResponsiveHeader } from './headers/ResponsiveHeader';
 import { Footer } from './Footer';
 import { Clock, MapPin, Phone, Award, Star, Shield, Calendar, CheckCircle2 } from 'lucide-react';
+import { useTranslation } from '../i18n/useTranslation';
 
 export function AboutPage() {
+  const { t } = useTranslation();
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50/50 to-white">
       <ResponsiveHeader />
