@@ -12,7 +12,7 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overscroll-behavior-y: none;
+  /* Remove overscroll-behavior to allow pull-to-refresh */
 }
 
 /* Optimize scrolling container */
