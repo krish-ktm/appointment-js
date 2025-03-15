@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { useTranslation } from '../../i18n/useTranslation';
 
 export function DesktopHeader() {
-  const { t, language, setLanguage } = useTranslation();
+  const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -80,14 +80,6 @@ export function DesktopHeader() {
                 <MapPin className="h-4 w-4 text-blue-500" />
                 <span>Mehsana Industrial Estate, Mehsana</span>
               </div>
-              <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value as 'en' | 'gu')}
-                className="appearance-none bg-white px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-              >
-                <option value="en">English</option>
-                <option value="gu">ગુજરાતી</option>
-              </select>
             </div>
           </div>
         </div>

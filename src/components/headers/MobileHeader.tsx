@@ -6,7 +6,7 @@ import { useTranslation } from '../../i18n/useTranslation';
 
 export function MobileHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { t, language, setLanguage } = useTranslation();
+  const { t } = useTranslation();
 
   const handleBookNowClick = () => {
     const element = document.querySelector('.appointment-form-section');
@@ -16,10 +16,6 @@ export function MobileHeader() {
       window.location.href = '/#appointment-form';
     }
     setIsMenuOpen(false);
-  };
-
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setLanguage(e.target.value as 'en' | 'gu');
   };
 
   return (
@@ -36,14 +32,6 @@ export function MobileHeader() {
           </div>
 
           <div className="flex items-center gap-2">
-            <select
-              value={language}
-              onChange={handleLanguageChange}
-              className="appearance-none bg-white px-2 py-1 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-            >
-              <option value="en">English</option>
-              <option value="gu">ગુજરાતી</option>
-            </select>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 transition-colors"

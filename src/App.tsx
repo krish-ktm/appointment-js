@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { Login } from './components/Login';
@@ -11,13 +12,25 @@ import { AboutPage } from './components/AboutPage';
 import { MRAppointment } from './components/mr-appointment/MRAppointment';
 import { ServicesPage } from './components/ServicesPage';
 import { LanguageProvider } from './i18n/LanguageContext';
-import { LanguageSelector } from './components/LanguageSelector';
+import { LanguageSelectionModal } from './components/LanguageSelectionModal';
 
 function App() {
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
+
+  useEffect(() => {
+    const hasSelectedLanguage = localStorage.getItem('hasSelectedLanguage');
+    if (!hasSelectedLanguage) {
+      setShowLanguageModal(true);
+    }
+  }, []);
+
   return (
     <LanguageProvider>
       <Router>
-        <LanguageSelector />
+        <LanguageSelectionModal 
+          isOpen={showLanguageModal} 
+          onClose={() => setShowLanguageModal(false)} 
+        />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/about" element={<AboutPage />} />
