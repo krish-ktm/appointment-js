@@ -14,8 +14,10 @@ import { StatsSection } from './landing/StatsSection';
 import { DoctorMessage } from './DoctorMessage';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
+import { useTranslation } from '../i18n/useTranslation';
 
 export function LandingPage() {
+  const { t, language } = useTranslation();
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
@@ -130,18 +132,19 @@ export function LandingPage() {
         handleSubmit={handleSubmit}
         success={success}
         loading={bookingLoading}
+        t={t.home.hero}
       />
       
-      <ServicesSection />
+      <ServicesSection t={t.services} />
       <NoticeBoard notices={notices} loading={loading} />
-      <StatsSection />
+      <StatsSection t={t.home.stats} />
 
       {bookingDetails && (
         <BookingConfirmation
           booking={bookingDetails}
           onClose={() => setBookingDetails(null)}
           onScheduleAnother={resetForm}
-          t={translations.en}
+          t={translations[language]}
         />
       )}
 

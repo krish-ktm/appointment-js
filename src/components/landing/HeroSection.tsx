@@ -12,9 +12,10 @@ interface HeroSectionProps {
   handleSubmit: (e: React.FormEvent) => void;
   success: boolean;
   loading: boolean;
+  t: any; // Using any for now, but we should define proper type
 }
 
-export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, loading }: HeroSectionProps) {
+export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, loading, t }: HeroSectionProps) {
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-blue-50/50 to-white will-change-transform">
       <div 
@@ -39,36 +40,34 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               <div className="relative bg-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-xs sm:text-sm font-medium shadow-md border border-gray-100 m-1">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <span className="text-base sm:text-lg">✨</span>
-                  <span className="text-blue-900">
-                    Dr. Jemish A. Patel - MBBS, MD
-                  </span>
+                  <span className="text-blue-900">{t.doctorTitle}</span>
                 </div>
               </div>
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight text-blue-950">
-              Expert Dermatological Care for Your Skin Health
+              {t.title}
             </h1>
 
             <p className="text-lg sm:text-xl text-blue-800 mb-6 sm:mb-8 leading-relaxed px-4 sm:px-0">
-              Comprehensive skin treatments with advanced technology and personalized care plans
+              {t.subtitle}
             </p>
 
             <div className="flex flex-wrap justify-center gap-4">
               {[
                 {
                   icon: Star,
-                  text: "14+ Years Experience",
+                  text: t.experience,
                   color: "text-emerald-600"
                 },
                 {
                   icon: Award,
-                  text: "Advanced Treatments",
+                  text: t.advancedTreatments,
                   color: "text-amber-600"
                 },
                 {
                   icon: Shield,
-                  text: "Expert Care",
+                  text: t.expertCare,
                   color: "text-rose-600"
                 }
               ].map((feature, index) => (
@@ -98,11 +97,11 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
                 <div className="bg-white/10 p-2 rounded-lg">
                   <Building2 className="h-5 w-5" />
                 </div>
-                <span className="font-medium">Medical Representative Appointment</span>
+                <span className="font-medium">{t.mrAppointmentCta}</span>
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
               <p className="mt-3 text-sm text-gray-500">
-                For pharmaceutical and medical device representatives
+                {t.mrAppointmentNote}
               </p>
             </div>
           </div>

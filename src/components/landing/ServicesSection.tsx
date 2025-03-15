@@ -3,85 +3,89 @@ import { Star, Award, Users, Zap, FlaskRound as Flask, Microscope, ArrowRight } 
 import { background, text, border, gradients } from '../../theme/colors';
 import { Link } from 'react-router-dom';
 
-const services = [
-  {
-    title: "General Dermatology",
-    icon: Star,
-    description: "Comprehensive skin health examinations and treatment for various skin conditions.",
-    features: [
-      "Skin Disease Treatment",
-      "Allergy Management",
-      "Bacterial Infections",
-      "Nail Disorders"
-    ]
-  },
-  {
-    title: "Cosmetic Procedures",
-    icon: Award,
-    description: "Advanced treatments to enhance your skin's appearance and health.",
-    features: [
-      "Laser Treatments",
-      "Chemical Peels",
-      "Skin Rejuvenation",
-      "Anti-aging Solutions"
-    ]
-  },
-  {
-    title: "Specialized Care",
-    icon: Users,
-    description: "Expert care for specific skin conditions and concerns.",
-    features: [
-      "Vitiligo Treatment",
-      "Hair Loss Solutions",
-      "Scar Management",
-      "Pigmentation Treatment"
-    ]
-  },
-  {
-    title: "Advanced Treatments",
-    icon: Zap,
-    description: "State-of-the-art procedures using the latest technology.",
-    features: [
-      "Fractional CO2 Laser",
-      "Permanent Hair Removal",
-      "Photofacial",
-      "Micro Needling"
-    ]
-  },
-  {
-    title: "Hair Services",
-    icon: Flask,
-    description: "Comprehensive solutions for all types of hair concerns.",
-    features: [
-      "Hair Loss Treatment",
-      "Scalp Conditions",
-      "Hair Growth Therapy",
-      "Laser Hair Removal"
-    ]
-  },
-  {
-    title: "Diagnostic Services",
-    icon: Microscope,
-    description: "Advanced diagnostic tools for accurate treatment planning.",
-    features: [
-      "Dermoscopy",
-      "Skin Analysis",
-      "Allergy Testing",
-      "Treatment Planning"
-    ]
-  }
-];
+interface ServicesSectionProps {
+  t: any; // Using any for now, but we should define proper type
+}
 
-export function ServicesSection() {
+export function ServicesSection({ t }: ServicesSectionProps) {
+  const services = [
+    {
+      title: t.categories.treatments,
+      icon: Star,
+      description: "Comprehensive skin health examinations and treatment for various skin conditions.",
+      features: [
+        "Skin Disease Treatment",
+        "Allergy Management",
+        "Bacterial Infections",
+        "Nail Disorders"
+      ]
+    },
+    {
+      title: t.categories.facial,
+      icon: Award,
+      description: "Advanced treatments to enhance your skin's appearance and health.",
+      features: [
+        "Laser Treatments",
+        "Chemical Peels",
+        "Skin Rejuvenation",
+        "Anti-aging Solutions"
+      ]
+    },
+    {
+      title: t.categories.aesthetic,
+      icon: Users,
+      description: "Expert care for specific skin conditions and concerns.",
+      features: [
+        "Vitiligo Treatment",
+        "Hair Loss Solutions",
+        "Scar Management",
+        "Pigmentation Treatment"
+      ]
+    },
+    {
+      title: t.categories.surgical,
+      icon: Zap,
+      description: "State-of-the-art procedures using the latest technology.",
+      features: [
+        "Fractional CO2 Laser",
+        "Permanent Hair Removal",
+        "Photofacial",
+        "Micro Needling"
+      ]
+    },
+    {
+      title: t.categories.hair,
+      icon: Flask,
+      description: "Comprehensive solutions for all types of hair concerns.",
+      features: [
+        "Hair Loss Treatment",
+        "Scalp Conditions",
+        "Hair Growth Therapy",
+        "Laser Hair Removal"
+      ]
+    },
+    {
+      title: t.categories.diagnostic,
+      icon: Microscope,
+      description: "Advanced diagnostic tools for accurate treatment planning.",
+      features: [
+        "Dermoscopy",
+        "Skin Analysis",
+        "Allergy Testing",
+        "Treatment Planning"
+      ]
+    }
+  ];
+
   return (
     <div className={`py-20 bg-gradient-to-b ${background.light} will-change-transform`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className={`text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
-            Our Services
+            {t.title}
           </h2>
           <p className={`text-lg ${text.secondary} max-w-2xl mx-auto`}>
-            Comprehensive dermatological care with advanced treatments and personalized solutions for all your skin health needs.
+            {t.subtitle}
           </p>
         </div>
 
@@ -124,7 +128,7 @@ export function ServicesSection() {
             to="/services"
             className="inline-flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 transition-all duration-300 shadow-sm hover:shadow"
           >
-            <span className="font-medium">View All Services</span>
+            <span className="font-medium">{t.cta.button}</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

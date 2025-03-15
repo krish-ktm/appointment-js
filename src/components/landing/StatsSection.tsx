@@ -1,44 +1,39 @@
 import { motion } from 'framer-motion';
 import { gradients, text } from '../../theme/colors';
 
-export function StatsSection() {
+interface StatsSectionProps {
+  t: any; // Using any for now, but we should define proper type
+}
+
+export function StatsSection({ t }: StatsSectionProps) {
   return (
     <div className={`py-20 bg-gradient-to-b ${gradients.primary.light} will-change-transform`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className={`text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
-            Why Choose Us
-          </h2>
-          <p className={`text-lg ${text.secondary} max-w-2xl mx-auto`}>
-            With over 14 years of experience, we provide expert dermatological care using the latest technology and personalized treatment plans.
-          </p>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {[
             { 
               value: '14+', 
-              label: 'Years Experience',
+              label: t.yearsExperience,
               gradient: 'from-blue-600 to-blue-400',
-              description: 'Trusted expertise in dermatology'
+              description: t.experienceDesc
             },
             { 
               value: '15k+', 
-              label: 'Happy Patients',
+              label: t.happyPatients,
               gradient: 'from-emerald-600 to-emerald-400',
-              description: 'Satisfied with our care'
+              description: t.patientsDesc
             },
             { 
               value: '50+', 
-              label: 'Treatments',
+              label: t.treatments,
               gradient: 'from-violet-600 to-violet-400',
-              description: 'Advanced procedures available'
+              description: t.treatmentsDesc
             },
             { 
               value: '99%', 
-              label: 'Success Rate',
+              label: t.successRate,
               gradient: 'from-amber-600 to-amber-400',
-              description: 'Proven treatment outcomes'
+              description: t.successDesc
             }
           ].map((stat, index) => (
             <motion.div
