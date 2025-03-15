@@ -1,6 +1,6 @@
 import { TimeSlot } from './types';
 import { supabase } from './lib/supabase';
-import { startOfToday, addDays, format, parse, isToday, isTomorrow, isAfter, isBefore } from 'date-fns';
+import { startOfToday, addDays, format, parse, isToday, isTomorrow, isAfter, isBefore, isSunday } from 'date-fns';
 import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 
 const TIMEZONE = 'Asia/Kolkata';
@@ -35,6 +35,15 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
   // Check if selected date is today or tomorrow
   const isSelectedToday = isToday(selectedDate);
   const isSelectedTomorrow = isTomorrow(selectedDate);
+  const isSelectedSunday = isSunday(selectedDate);
+
+  // If it's Sunday, mark all slots as fully booked
+  if (isSelectedSunday) {
+    return slots.map(slot => ({
+      ...slot,
+      currentBookings: slot.maxBookings
+    }));
+  }
 
   try {
     // Get current bookings for each time slot
@@ -97,8 +106,14 @@ export const isSlotAvailable = async (date: string, time: string): Promise<boole
     const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
     const selectedDate = utcToZonedTime(parsedDate, TIMEZONE);
     
-    // Check if selected date is today
+    // Check if selected date is today or Sunday
     const isSelectedToday = isToday(selectedDate);
+    const isSelectedSunday = isSunday(selectedDate);
+
+    // Return false if it's Sunday
+    if (isSelectedSunday) {
+      return false;
+    }
 
     if (isSelectedToday) {
       // Combine date and time for accurate comparison
@@ -146,6 +161,15 @@ export const validateBookingRequest = async (
   timeSlot: string
 ): Promise<{ isValid: boolean; error?: string }> => {
   try {
+    // Parse and convert to IST
+    const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
+    const selectedDate = utcToZonedTime(parsedDate, TIMEZONE);
+
+    // Check if it's Sunday
+    if (isSunday(selectedDate)) {
+      return { isValid: false, error: 'Appointments are not available on Sundays' };
+    }
+
     // Validate phone number (10 digits)
     if (!/^\d{10}$/.test(phone)) {
       return { isValid: false, error: 'Please enter a valid 10-digit phone number' };
