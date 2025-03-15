@@ -5,6 +5,7 @@ import { appointmentTranslations } from './appointment';
 import { servicesTranslations } from './services';
 import { mrAppointmentTranslations } from './mr-appointment';
 import { aboutTranslations } from './about';
+import { footerTranslations } from './footer';
 import { LanguageContent } from '../types';
 
 export const translations: Record<string, LanguageContent> = {
@@ -15,7 +16,8 @@ export const translations: Record<string, LanguageContent> = {
     appointment: appointmentTranslations.en,
     services: servicesTranslations.en,
     mrAppointment: mrAppointmentTranslations.en,
-    about: aboutTranslations.en
+    about: aboutTranslations.en,
+    footer: footerTranslations.en
   },
   gu: {
     common: commonTranslations.gu,
@@ -24,6 +26,7 @@ export const translations: Record<string, LanguageContent> = {
     appointment: appointmentTranslations.gu,
     services: servicesTranslations.gu,
     mrAppointment: mrAppointmentTranslations.gu,
-    about: aboutTranslations.gu
+    about: aboutTranslations.gu,
+    footer: footerTranslations.gu
   }
 };

@@ -2,8 +2,11 @@ import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { text, background } from '../theme/colors';
+import { useTranslation } from '../i18n/useTranslation';
 
 export function Footer() {
+  const { t } = useTranslation();
+
   const scrollToAppointmentForm = () => {
     const element = document.querySelector('.appointment-form-section');
     if (element) {
@@ -23,10 +26,10 @@ export function Footer() {
             animate={{ opacity: 1, y: 0 }}
           >
             <h3 className="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-700 to-gray-900">
-              Shubham Skin & Laser Clinic
+              {t.footer.clinicName}
             </h3>
             <p className={`${text.secondary} leading-relaxed`}>
-              Expert dermatological care with Dr. Jemish A. Patel, providing comprehensive skin treatments using the latest technology and personalized care plans.
+              {t.footer.description}
             </p>
           </motion.div>
 
@@ -36,14 +39,14 @@ export function Footer() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <h3 className={`text-lg font-semibold mb-6 ${text.primary}`}>Quick Links</h3>
+            <h3 className={`text-lg font-semibold mb-6 ${text.primary}`}>{t.footer.quickLinks.title}</h3>
             <ul className="space-y-3">
               {[
-                { label: "Home", to: "/" },
-                { label: "About Us", to: "/about" },
-                { label: "Our Services", to: "/services" },
-                { label: "Book Appointment", action: scrollToAppointmentForm },
-                { label: "MR Appointment", to: "/mr-appointment" }
+                { label: t.footer.quickLinks.home, to: "/" },
+                { label: t.footer.quickLinks.about, to: "/about" },
+                { label: t.footer.quickLinks.services, to: "/services" },
+                { label: t.footer.quickLinks.bookAppointment, action: scrollToAppointmentForm },
+                { label: t.footer.quickLinks.mrAppointment, to: "/mr-appointment" }
               ].map((link, index) => (
                 <li key={index}>
                   {link.to ? (
@@ -74,31 +77,31 @@ export function Footer() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <h3 className={`text-lg font-semibold mb-6 ${text.primary}`}>Contact Info</h3>
+            <h3 className={`text-lg font-semibold mb-6 ${text.primary}`}>{t.footer.contactInfo.title}</h3>
             <ul className="space-y-4">
               <li className={`flex items-center gap-3 ${text.secondary} hover:text-blue-600 transition-colors duration-200`}>
                 <div className="bg-blue-50 p-2 rounded-lg">
                   <Phone className="h-4 w-4 text-blue-500" />
                 </div>
-                <span>+91 79471 31573</span>
+                <span>{t.footer.contactInfo.phone}</span>
               </li>
               <li className={`flex items-center gap-3 ${text.secondary} hover:text-blue-600 transition-colors duration-200`}>
                 <div className="bg-blue-50 p-2 rounded-lg">
                   <Mail className="h-4 w-4 text-blue-500" />
                 </div>
-                <span>contact@shubhamskinlaser.com</span>
+                <span>{t.footer.contactInfo.email}</span>
               </li>
               <li className={`flex items-center gap-3 ${text.secondary} hover:text-blue-600 transition-colors duration-200`}>
                 <div className="bg-blue-50 p-2 rounded-lg">
                   <MapPin className="h-4 w-4 text-blue-500" />
                 </div>
-                <span>Mehsana Industrial Estate, Mehsana, Gujarat</span>
+                <span>{t.footer.contactInfo.address}</span>
               </li>
               <li className={`flex items-center gap-3 ${text.secondary} hover:text-blue-600 transition-colors duration-200`}>
                 <div className="bg-blue-50 p-2 rounded-lg">
                   <Clock className="h-4 w-4 text-blue-500" />
                 </div>
-                <span>Mon - Fri: 9:00 AM - 1:00 PM | 4:00 PM - 6:30 PM</span>
+                <span>{t.footer.contactInfo.hours}</span>
               </li>
             </ul>
           </motion.div>
@@ -109,7 +112,7 @@ export function Footer() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <h3 className={`text-lg font-semibold mb-6 ${text.primary}`}>Follow Us</h3>
+            <h3 className={`text-lg font-semibold mb-6 ${text.primary}`}>{t.footer.social.title}</h3>
             <div className="flex gap-4">
               {[
                 { icon: Facebook, color: "hover:bg-blue-600", href: "#" },
@@ -141,7 +144,7 @@ export function Footer() {
           className="border-t border-gray-100 mt-16 pt-8 text-center"
         >
           <p className={text.secondary}>
-            © {new Date().getFullYear()} Shubham Skin & Laser Clinic. All rights reserved.
+            {t.footer.copyright}
           </p>
         </motion.div>
       </div>
