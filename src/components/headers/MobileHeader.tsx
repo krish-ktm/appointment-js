@@ -8,16 +8,6 @@ export function MobileHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t, language, setLanguage } = useTranslation();
 
-  const handleBookNowClick = () => {
-    const element = document.querySelector('.appointment-form-section');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.location.href = '/#appointment-form';
-    }
-    setIsMenuOpen(false);
-  };
-
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'gu' : 'en');
     setIsMenuOpen(false);
@@ -95,12 +85,6 @@ export function MobileHeader() {
               >
                 {t.navigation.mrAppointment}
               </Link>
-              <button 
-                onClick={handleBookNowClick}
-                className="w-full mt-2 px-3 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300"
-              >
-                {t.common.bookAppointment}
-              </button>
             </div>
           </motion.div>
         )}

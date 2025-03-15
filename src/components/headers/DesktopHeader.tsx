@@ -40,15 +40,6 @@ export function DesktopHeader() {
     return () => window.removeEventListener('scroll', onScroll);
   }, [lastScrollY]);
 
-  const handleBookNowClick = () => {
-    const element = document.querySelector('.appointment-form-section');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.location.href = '/#appointment-form';
-    }
-  };
-
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'gu' : 'en');
     setShowLanguageMenu(false);
@@ -163,13 +154,6 @@ export function DesktopHeader() {
                   </div>
                 )}
               </div>
-
-              <button 
-                onClick={handleBookNowClick}
-                className="px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-sm hover:shadow"
-              >
-                {t.common.bookAppointment}
-              </button>
             </nav>
           </div>
         </div>
