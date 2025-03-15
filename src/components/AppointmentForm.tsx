@@ -45,7 +45,10 @@ export function AppointmentForm({
   const formatSelectedDate = (dateStr: string) => {
     const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
     const dayName = t.appointment.form.days[format(date, 'EEEE').toLowerCase() as keyof typeof t.appointment.form.days];
-    return `${dayName}, ${format(date, 'MMMM d, yyyy')}`;
+    const monthName = t.appointment.form.months[format(date, 'MMMM').toLowerCase() as keyof typeof t.appointment.form.months];
+    const day = format(date, 'd');
+    const year = format(date, 'yyyy');
+    return `${dayName}, ${monthName} ${day}, ${year}`;
   };
 
   return (
@@ -101,6 +104,8 @@ export function AppointmentForm({
                     const istDate = utcToZonedTime(date, TIMEZONE);
                     const dateStr = format(istDate, 'yyyy-MM-dd');
                     const dayName = t.appointment.form.days[format(istDate, 'EEEE').toLowerCase() as keyof typeof t.appointment.form.days];
+                    const monthName = t.appointment.form.months[format(istDate, 'MMMM').toLowerCase() as keyof typeof t.appointment.form.months];
+                    const day = format(istDate, 'd');
                     return (
                       <motion.button
                         key={dateStr}
@@ -118,7 +123,7 @@ export function AppointmentForm({
                           {dayName}
                         </div>
                         <div className={`text-[10px] sm:text-xs ${form.date === dateStr ? 'text-blue-100' : 'text-gray-500'}`}>
-                          {format(istDate, 'MMM d')}
+                          {`${monthName} ${day}`}
                         </div>
                       </motion.button>
                     );

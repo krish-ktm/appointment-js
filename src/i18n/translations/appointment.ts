@@ -31,6 +31,20 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
         thursday: "Thursday",
         friday: "Friday",
         saturday: "Saturday"
+      },
+      months: {
+        january: "January",
+        february: "February",
+        march: "March",
+        april: "April",
+        may: "May",
+        june: "June",
+        july: "July",
+        august: "August",
+        september: "September",
+        october: "October",
+        november: "November",
+        december: "December"
       }
     },
     confirmation: {
@@ -79,6 +93,20 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
         thursday: "ગુરુવાર",
         friday: "શુક્રવાર",
         saturday: "શનિવાર"
+      },
+      months: {
+        january: "જાન્યુઆરી",
+        february: "ફેબ્રુઆરી",
+        march: "માર્ચ",
+        april: "એપ્રિલ",
+        may: "મે",
+        june: "જૂન",
+        july: "જુલાઈ",
+        august: "ઓગસ્ટ",
+        september: "સપ્ટેમ્બર",
+        october: "ઓક્ટોબર",
+        november: "નવેમ્બર",
+        december: "ડિસેમ્બર"
       }
     },
     confirmation: {
