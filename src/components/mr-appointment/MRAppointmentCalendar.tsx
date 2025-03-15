@@ -5,9 +5,10 @@ import { format, isWeekend, isSameDay, startOfToday, isBefore } from 'date-fns';
 interface MRAppointmentCalendarProps {
   selectedDate: Date | null;
   onDateChange: (date: Date | null) => void;
+  t: any;
 }
 
-export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointmentCalendarProps) {
+export function MRAppointmentCalendar({ selectedDate, onDateChange, t }: MRAppointmentCalendarProps) {
   const isDateDisabled = (date: Date) => {
     const today = startOfToday();
     return isWeekend(date) || isBefore(date, today);
@@ -16,7 +17,7 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointm
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-2">
-        Appointment Date *
+        {t.appointmentDate} *
       </label>
       <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
         <div className="flex items-center gap-3 mb-4 pb-3 border-b border-gray-100">
@@ -35,10 +36,10 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointm
             }`}>
               {selectedDate
                 ? format(selectedDate, 'EEEE, MMMM d, yyyy')
-                : 'Select a date'}
+                : t.selectDate}
             </p>
             <p className="text-xs text-gray-500 mt-0.5">
-              Appointments available on weekdays only
+              {t.availableWeekdays}
             </p>
           </div>
         </div>
@@ -50,7 +51,7 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointm
             minDate={startOfToday()}
             filterDate={(date) => !isDateDisabled(date)}
             dateFormat="MMMM d, yyyy"
-            placeholderText="Select appointment date"
+            placeholderText={t.selectDate}
             required
             inline
             calendarClassName="!bg-transparent !border-0 !shadow-none w-full"
@@ -115,11 +116,11 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointm
         <div className="mt-4 pt-3 border-t border-gray-100">
           <div className="flex items-center gap-2 text-xs text-gray-500">
             <span className="w-2 h-2 rounded-full bg-blue-600"></span>
-            Available dates
+            {t.availableDates}
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
             <span className="w-2 h-2 rounded-full bg-gray-300"></span>
-            Weekends & past dates (not available)
+            {t.unavailableDates}
           </div>
         </div>
       </div>

@@ -9,8 +9,10 @@ import { MRForm } from './types';
 import { MRAppointmentForm } from './MRAppointmentForm';
 import { MRAppointmentCalendar } from './MRAppointmentCalendar';
 import { MRAppointmentConfirmation } from './MRAppointmentConfirmation';
+import { useTranslation } from '../../i18n/useTranslation';
 
 export function MRAppointment() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [appointmentDetails, setAppointmentDetails] = useState<any>(null);
   const [form, setForm] = useState<MRForm>({
@@ -38,12 +40,12 @@ export function MRAppointment() {
 
     try {
       if (!form.appointment_date) {
-        throw new Error('Please select an appointment date');
+        throw new Error(t.mrAppointment.form.dateRequired);
       }
 
       // Validate phone number (10 digits)
       if (!/^\d{10}$/.test(form.contact_no)) {
-        throw new Error('Please enter a valid 10-digit contact number');
+        throw new Error(t.mrAppointment.form.invalidPhone);
       }
 
       // Check if the selected date already has 5 appointments
@@ -56,7 +58,7 @@ export function MRAppointment() {
       if (countError) throw countError;
 
       if (existingAppointments && existingAppointments.length >= 5) {
-        throw new Error('Maximum appointments reached for this date');
+        throw new Error(t.mrAppointment.form.maxAppointments);
       }
 
       // Create the appointment
@@ -75,7 +77,7 @@ export function MRAppointment() {
       if (error) throw error;
 
       setAppointmentDetails(appointment);
-      toast.success('Appointment booked successfully');
+      toast.success(t.mrAppointment.success);
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -99,8 +101,8 @@ export function MRAppointment() {
             className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
           >
             <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700">
-              <h1 className="text-xl sm:text-2xl font-semibold text-white">MR Appointment Booking</h1>
-              <p className="text-blue-100 mt-1 text-sm sm:text-base">Schedule your meeting with the doctor</p>
+              <h1 className="text-xl sm:text-2xl font-semibold text-white">{t.mrAppointment.title}</h1>
+              <p className="text-blue-100 mt-1 text-sm sm:text-base">{t.mrAppointment.subtitle}</p>
             </div>
 
             <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-6">
@@ -109,6 +111,7 @@ export function MRAppointment() {
                   <MRAppointmentForm 
                     form={form}
                     onChange={setForm}
+                    t={t.mrAppointment.form}
                   />
                 </div>
 
@@ -116,6 +119,7 @@ export function MRAppointment() {
                   <MRAppointmentCalendar
                     selectedDate={form.appointment_date}
                     onDateChange={(date) => setForm({ ...form, appointment_date: date })}
+                    t={t.mrAppointment.form}
                   />
                 </div>
               </div>
@@ -127,7 +131,7 @@ export function MRAppointment() {
                   loading ? 'opacity-70 cursor-not-allowed' : ''
                 }`}
               >
-                {loading ? 'Booking...' : 'Book Appointment'}
+                {loading ? t.mrAppointment.form.submitting : t.mrAppointment.form.submit}
               </button>
             </form>
           </motion.div>
@@ -139,6 +143,7 @@ export function MRAppointment() {
           appointment={appointmentDetails}
           onClose={handleClose}
           onScheduleAnother={resetForm}
+          t={t.mrAppointment}
         />
       )}
 

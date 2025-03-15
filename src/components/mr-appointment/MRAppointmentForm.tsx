@@ -4,14 +4,15 @@ import { MRForm } from './types';
 interface MRAppointmentFormProps {
   form: MRForm;
   onChange: (form: MRForm) => void;
+  t: any;
 }
 
-export function MRAppointmentForm({ form, onChange }: MRAppointmentFormProps) {
+export function MRAppointmentForm({ form, onChange, t }: MRAppointmentFormProps) {
   return (
     <div className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          MR Name *
+          {t.mrName} *
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -23,14 +24,14 @@ export function MRAppointmentForm({ form, onChange }: MRAppointmentFormProps) {
             value={form.mr_name}
             onChange={(e) => onChange({ ...form, mr_name: e.target.value })}
             className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-            placeholder="Enter MR name"
+            placeholder={t.mrName}
           />
         </div>
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Company Name *
+          {t.companyName} *
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -42,14 +43,14 @@ export function MRAppointmentForm({ form, onChange }: MRAppointmentFormProps) {
             value={form.company_name}
             onChange={(e) => onChange({ ...form, company_name: e.target.value })}
             className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-            placeholder="Enter company name"
+            placeholder={t.companyName}
           />
         </div>
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Division Name *
+          {t.divisionName} *
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -61,14 +62,14 @@ export function MRAppointmentForm({ form, onChange }: MRAppointmentFormProps) {
             value={form.division_name}
             onChange={(e) => onChange({ ...form, division_name: e.target.value })}
             className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-            placeholder="Enter division name"
+            placeholder={t.divisionName}
           />
         </div>
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Contact Number *
+          {t.contactNo} *
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -81,7 +82,7 @@ export function MRAppointmentForm({ form, onChange }: MRAppointmentFormProps) {
             value={form.contact_no}
             onChange={(e) => onChange({ ...form, contact_no: e.target.value })}
             className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-            placeholder="Enter 10-digit contact number"
+            placeholder={t.contactNo}
           />
         </div>
       </div>
