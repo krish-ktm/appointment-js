@@ -73,6 +73,45 @@ export interface Translations {
   bookingDate: string;
   bookingTime: string;
   close: string;
+  landing: {
+    hero: {
+      title: string;
+      subtitle: string;
+      doctorTitle: string;
+      experience: string;
+      advancedTreatments: string;
+      expertCare: string;
+      mrAppointmentCta: string;
+      mrAppointmentNote: string;
+    };
+    stats: {
+      yearsExperience: string;
+      experienceDesc: string;
+      happyPatients: string;
+      patientsDesc: string;
+      treatments: string;
+      treatmentsDesc: string;
+      successRate: string;
+      successDesc: string;
+    };
+    services: {
+      title: string;
+      subtitle: string;
+      categories: {
+        treatments: string;
+        facial: string;
+        aesthetic: string;
+        surgical: string;
+        hair: string;
+        diagnostic: string;
+      };
+      cta: {
+        title: string;
+        subtitle: string;
+        button: string;
+      };
+    };
+  };
 }
 
 export interface User {
