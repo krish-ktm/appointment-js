@@ -7,9 +7,10 @@ interface TimeSlotSelectorProps {
   selectedTime: string;
   onSelectTime: (time: string) => void;
   label: string;
+  t: any; // Add translations prop
 }
 
-export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime }: TimeSlotSelectorProps) {
+export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t }: TimeSlotSelectorProps) {
   const availableSlots = timeSlots.filter(slot => slot.currentBookings < slot.maxBookings);
   
   if (timeSlots.length === 0 || availableSlots.length === 0) {
@@ -21,12 +22,12 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime }: Time
       >
         <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-orange-500 mx-auto mb-2" />
         <h3 className="text-sm sm:text-base font-medium text-orange-800 mb-1">
-          No Time Slots Available
+          {t.noSlots}
         </h3>
         <p className="text-xs sm:text-sm text-orange-600">
           {timeSlots.length === 0 
-            ? "Please select a valid date to view available time slots."
-            : "All time slots for this date are either full or no longer available. Please try selecting a different date."}
+            ? t.selectDate
+            : t.noSlotsAvailable}
         </p>
       </motion.div>
     );
@@ -64,7 +65,7 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime }: Time
                   ? 'text-blue-600/80' 
                   : 'text-gray-500'
               }`}>
-                {slot.maxBookings - slot.currentBookings} left
+                {slot.maxBookings - slot.currentBookings} {t.slotsLeft}
               </span>
             )}
             {isUnavailable && (

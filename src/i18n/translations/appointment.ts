@@ -16,11 +16,13 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
       selectTime: "Select Time",
       bookingFull: "Booking Full",
       noSlots: "No Time Slots Available",
-      selectDate: "Please select a date",
+      noSlotsAvailable: "All time slots for this date are either full or no longer available. Please try selecting a different date.",
+      selectDate: "Please select a valid date to view available time slots.",
       success: "Appointment booked successfully!",
       successNote: "We'll see you at your scheduled time!",
       personalInfo: "Personal Information",
-      showingSlots: "Showing slots for"
+      showingSlots: "Showing slots for",
+      slotsLeft: "left"
     },
     confirmation: {
       title: "Appointment Confirmation",
@@ -53,11 +55,13 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
       selectTime: "સમય પસંદ કરો",
       bookingFull: "બુકિંગ ભરાઈ ગયું છે",
       noSlots: "કોઈ સમય ઉપલબ્ધ નથી",
-      selectDate: "કૃપા કરી તારીખ પસંદ કરો",
+      noSlotsAvailable: "આ તારીખ માટે બધા સમય સ્લોટ્સ ભરાઈ ગયા છે અથવા હવે ઉપલબ્ધ નથી. કૃપા કરી અલગ તારીખ પસંદ કરો.",
+      selectDate: "ઉપલબ્ધ સમય જોવા માટે કૃપા કરી માન્ય તારીખ પસંદ કરો.",
       success: "એપોઈન્ટમેન્ટ સફળતાપૂર્વક બુક થઈ ગઈ છે!",
       successNote: "અમે તમને નિર્ધારિત સમયે મળીશું!",
       personalInfo: "વ્યક્તિગત માહિતી",
-      showingSlots: "આ તારીખ માટે ઉપલબ્ધ સમય"
+      showingSlots: "આ તારીખ માટે ઉપલબ્ધ સમય",
+      slotsLeft: "બાકી"
     },
     confirmation: {
       title: "એપોઈન્ટમેન્ટ પુષ્ટિ",

@@ -141,6 +141,7 @@ export function AppointmentForm({
                   selectedTime={form.timeSlot}
                   onSelectTime={(time) => setForm({ ...form, timeSlot: time })}
                   label={t.appointment.form.timeSlot}
+                  t={t.appointment.form}
                 />
               </div>
             </div>

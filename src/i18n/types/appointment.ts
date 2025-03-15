@@ -13,11 +13,13 @@ export interface AppointmentTranslations {
     selectTime: string;
     bookingFull: string;
     noSlots: string;
+    noSlotsAvailable: string;
     selectDate: string;
     success: string;
     successNote: string;
     personalInfo: string;
     showingSlots: string;
+    slotsLeft: string;
   };
   confirmation: {
     title: string;
