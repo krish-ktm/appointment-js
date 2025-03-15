@@ -20,7 +20,30 @@ export const mrAppointmentTranslations: Record<string, MRAppointmentTranslations
       selectDate: "Select appointment date",
       availableWeekdays: "Appointments available on weekdays only",
       availableDates: "Available dates",
-      unavailableDates: "Weekends & past dates (not available)"
+      unavailableDates: "Weekends & past dates (not available)",
+      days: {
+        sunday: "Sunday",
+        monday: "Monday",
+        tuesday: "Tuesday",
+        wednesday: "Wednesday",
+        thursday: "Thursday",
+        friday: "Friday",
+        saturday: "Saturday"
+      },
+      months: {
+        january: "January",
+        february: "February",
+        march: "March",
+        april: "April",
+        may: "May",
+        june: "June",
+        july: "July",
+        august: "August",
+        september: "September",
+        october: "October",
+        november: "November",
+        december: "December"
+      }
     },
     confirmation: {
       title: "Appointment Confirmed",
@@ -61,7 +84,30 @@ export const mrAppointmentTranslations: Record<string, MRAppointmentTranslations
       selectDate: "એપોઈન્ટમેન્ટની તારીખ પસંદ કરો",
       availableWeekdays: "એપોઈન્ટમેન્ટ માત્ર કામકાજના દિવસોમાં ઉપલબ્ધ",
       availableDates: "ઉપલબ્ધ તારીખો",
-      unavailableDates: "સપ્તાહના અંત અને ભૂતકાળની તારીખો (ઉપલબ્ધ નથી)"
+      unavailableDates: "સપ્તાહના અંત અને ભૂતકાળની તારીખો (ઉપલબ્ધ નથી)",
+      days: {
+        sunday: "રવિવાર",
+        monday: "સોમવાર",
+        tuesday: "મંગળવાર",
+        wednesday: "બુધવાર",
+        thursday: "ગુરુવાર",
+        friday: "શુક્રવાર",
+        saturday: "શનિવાર"
+      },
+      months: {
+        january: "જાન્યુઆરી",
+        february: "ફેબ્રુઆરી",
+        march: "માર્ચ",
+        april: "એપ્રિલ",
+        may: "મે",
+        june: "જૂન",
+        july: "જુલાઈ",
+        august: "ઓગસ્ટ",
+        september: "સપ્ટેમ્બર",
+        october: "ઓક્ટોબર",
+        november: "નવેમ્બર",
+        december: "ડિસેમ્બર"
+      }
     },
     confirmation: {
       title: "એપોઈન્ટમેન્ટની પુષ્ટિ થઈ",
