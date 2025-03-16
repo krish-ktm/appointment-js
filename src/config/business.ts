@@ -8,9 +8,9 @@ export const businessInfo = {
     experience: 14
   },
   contact: {
-    phone: "+91 79471 31573",
+    phone: "+91 99095 87003",
     email: "contact@shubhamskinlaser.com",
-    address: "Mehsana Industrial Estate, Mehsana, Gujarat"
+    address: "2nd Floor, Avi Square, Radhanpur Cir, Mehsana, Gujarat 384002"
   },
   hours: {
     weekday: {
@@ -46,7 +46,7 @@ export const getFormattedHours = (language: 'en' | 'gu') => {
 
 export const getFormattedAddress = (language: 'en' | 'gu') => {
   return language === 'gu' 
-    ? 'મહેસાણા ઇન્ડસ્ટ્રીયલ એસ્ટેટ, મહેસાણા, ગુજરાત'
+    ? 'બીજો માળ, અવી સ્ક્વેર, રાધનપુર સર્કલ, મહેસાણા, ગુજરાત ૩૮૪૦૦૨'
     : businessInfo.contact.address;
 };
 
