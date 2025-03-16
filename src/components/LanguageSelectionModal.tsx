@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../i18n/useTranslation';
+import { Globe2, Languages } from 'lucide-react';
 
 interface LanguageSelectionModalProps {
   isOpen: boolean;
@@ -31,8 +32,13 @@ export function LanguageSelectionModal({ isOpen, onClose }: LanguageSelectionMod
             className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden"
           >
             <div className="p-6 bg-gradient-to-r from-blue-600 to-blue-700">
-              <h2 className="text-xl font-semibold text-white">Select Your Language</h2>
-              <p className="text-blue-100 mt-1">Choose your preferred language</p>
+              <div className="flex items-center gap-3">
+                <Globe2 className="h-6 w-6 text-white" />
+                <div>
+                  <h2 className="text-xl font-semibold text-white">Select Your Language</h2>
+                  <p className="text-blue-100 mt-1">Choose your preferred language</p>
+                </div>
+              </div>
             </div>
 
             <div className="p-6 space-y-4">
@@ -42,7 +48,7 @@ export function LanguageSelectionModal({ isOpen, onClose }: LanguageSelectionMod
               >
                 <div className="flex items-center gap-4">
                   <div className="bg-blue-100 p-3 rounded-lg">
-                    <span className="text-2xl">🇬🇧</span>
+                    <Languages className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-900">English</h3>
@@ -57,7 +63,7 @@ export function LanguageSelectionModal({ isOpen, onClose }: LanguageSelectionMod
               >
                 <div className="flex items-center gap-4">
                   <div className="bg-blue-100 p-3 rounded-lg">
-                    <span className="text-2xl">🇮🇳</span>
+                    <Languages className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-900">ગુજરાતી</h3>
