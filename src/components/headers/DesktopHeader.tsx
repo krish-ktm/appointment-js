@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Phone, Clock, MapPin, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../i18n/useTranslation';
 
 export function DesktopHeader() {
   const { t, language, setLanguage } = useTranslation();
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -43,6 +44,10 @@ export function DesktopHeader() {
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'gu' : 'en');
     setShowLanguageMenu(false);
+  };
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
   };
 
   return (
@@ -107,31 +112,47 @@ export function DesktopHeader() {
             <nav className="flex items-center gap-8">
               <Link
                 to="/"
-                className="relative py-2 text-gray-600 hover:text-gray-900 transition-colors group"
+                className={`relative py-2 transition-colors group ${
+                  isActive('/') ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
+                }`}
               >
                 <span className="relative z-10">{t.navigation.home}</span>
-                <span className="absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
+                <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 rounded-full transition-transform origin-left ${
+                  isActive('/') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                }`}></span>
               </Link>
               <Link
                 to="/about"
-                className="relative py-2 text-gray-600 hover:text-gray-900 transition-colors group"
+                className={`relative py-2 transition-colors group ${
+                  isActive('/about') ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
+                }`}
               >
                 <span className="relative z-10">{t.navigation.about}</span>
-                <span className="absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
+                <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 rounded-full transition-transform origin-left ${
+                  isActive('/about') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                }`}></span>
               </Link>
               <Link
                 to="/services"
-                className="relative py-2 text-gray-600 hover:text-gray-900 transition-colors group"
+                className={`relative py-2 transition-colors group ${
+                  isActive('/services') ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
+                }`}
               >
                 <span className="relative z-10">{t.navigation.services}</span>
-                <span className="absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
+                <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 rounded-full transition-transform origin-left ${
+                  isActive('/services') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                }`}></span>
               </Link>
               <Link
                 to="/mr-appointment"
-                className="relative py-2 text-gray-600 hover:text-gray-900 transition-colors group"
+                className={`relative py-2 transition-colors group ${
+                  isActive('/mr-appointment') ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
+                }`}
               >
                 <span className="relative z-10">{t.navigation.mrAppointment}</span>
-                <span className="absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
+                <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 rounded-full transition-transform origin-left ${
+                  isActive('/mr-appointment') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                }`}></span>
               </Link>
 
               <div className="relative">

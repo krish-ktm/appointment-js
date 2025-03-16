@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../../i18n/useTranslation';
@@ -7,10 +7,15 @@ import { useTranslation } from '../../i18n/useTranslation';
 export function MobileHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t, language, setLanguage } = useTranslation();
+  const location = useLocation();
 
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'gu' : 'en');
     setIsMenuOpen(false);
+  };
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
   };
 
   return (
@@ -59,28 +64,44 @@ export function MobileHeader() {
             <div className="px-4 py-3 space-y-1">
               <Link
                 to="/"
-                className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50/80 rounded-lg transition-colors"
+                className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors ${
+                  isActive('/') 
+                    ? 'bg-blue-50 text-blue-600' 
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50/80'
+                }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t.navigation.home}
               </Link>
               <Link
                 to="/about"
-                className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50/80 rounded-lg transition-colors"
+                className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors ${
+                  isActive('/about') 
+                    ? 'bg-blue-50 text-blue-600' 
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50/80'
+                }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t.navigation.about}
               </Link>
               <Link
                 to="/services"
-                className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50/80 rounded-lg transition-colors"
+                className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors ${
+                  isActive('/services') 
+                    ? 'bg-blue-50 text-blue-600' 
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50/80'
+                }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t.navigation.services}
               </Link>
               <Link
                 to="/mr-appointment"
-                className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50/80 rounded-lg transition-colors"
+                className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors ${
+                  isActive('/mr-appointment') 
+                    ? 'bg-blue-50 text-blue-600' 
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50/80'
+                }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t.navigation.mrAppointment}

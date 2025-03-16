@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { Login } from './components/Login';
 import { AdminLayout } from './components/admin/AdminLayout';
@@ -14,6 +14,17 @@ import { ServicesPage } from './components/ServicesPage';
 import { LanguageProvider } from './i18n/LanguageContext';
 import { LanguageSelectionModal } from './components/LanguageSelectionModal';
 
+// Scroll to top component
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function App() {
   const [showLanguageModal, setShowLanguageModal] = useState(false);
 
@@ -27,6 +38,7 @@ function App() {
   return (
     <LanguageProvider>
       <Router>
+        <ScrollToTop />
         <LanguageSelectionModal 
           isOpen={showLanguageModal} 
           onClose={() => setShowLanguageModal(false)} 
