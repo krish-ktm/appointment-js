@@ -1,4 +1,5 @@
 import { CommonTranslations } from '../types/common';
+import { businessInfo } from '../../config/business';
 
 export const commonTranslations: Record<string, CommonTranslations> = {
   en: {
@@ -19,7 +20,11 @@ export const commonTranslations: Record<string, CommonTranslations> = {
     confirm: "Confirm",
     back: "Back",
     next: "Next",
-    done: "Done"
+    done: "Done",
+    clinicName: businessInfo.name,
+    doctorName: businessInfo.doctor.name,
+    doctorQualification: businessInfo.doctor.qualifications,
+    doctorSpecialization: businessInfo.doctor.specialization
   },
   gu: {
     bookAppointment: "એપોઈન્ટમેન્ટ બુક કરો",
@@ -39,6 +44,10 @@ export const commonTranslations: Record<string, CommonTranslations> = {
     confirm: "પુષ્ટિ કરો",
     back: "પાછા",
     next: "આગળ",
-    done: "પૂર્ણ"
+    done: "પૂર્ણ",
+    clinicName: "શુભમ સ્કિન એન્ડ લેસર ક્લિનિક",
+    doctorName: "ડૉ. જેમિશ એ. પટેલ",
+    doctorQualification: "એમબીબીએસ, એમડી",
+    doctorSpecialization: "ડર્મેટોલોજિસ્ટ, કોસ્મેટિક સર્જન અને ટ્રાઇકોલોજિસ્ટ"
   }
 };

@@ -1,10 +1,11 @@
 import { AppointmentTranslations } from '../types/appointment';
+import { businessInfo, getFormattedDoctorInfo } from '../../config/business';
 
 export const appointmentTranslations: Record<string, AppointmentTranslations> = {
   en: {
     title: "Book Your Appointment",
     form: {
-      subtitle: "Select your preferred date and time for the appointment",
+      subtitle: `Schedule your appointment with ${businessInfo.doctor.name}`,
       name: "Full Name",
       phone: "Phone Number",
       age: "Age",
@@ -66,7 +67,7 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
   gu: {
     title: "તમારી એપોઈન્ટમેન્ટ બુક કરો",
     form: {
-      subtitle: "એપોઈન્ટમેન્ટ માટે તમારી પસંદગીની તારીખ અને સમય પસંદ કરો",
+      subtitle: `${getFormattedDoctorInfo('gu').name} સાથે તમારી એપોઈન્ટમેન્ટ શેડ્યૂલ કરો`,
       name: "પૂરું નામ",
       phone: "ફોન નંબર",
       age: "ઉંમર",

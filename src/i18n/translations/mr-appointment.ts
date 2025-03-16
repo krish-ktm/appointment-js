@@ -1,9 +1,10 @@
 import { MRAppointmentTranslations } from '../types/mr-appointment';
+import { businessInfo, getFormattedDoctorInfo } from '../../config/business';
 
 export const mrAppointmentTranslations: Record<string, MRAppointmentTranslations> = {
   en: {
-    title: "MR Appointment Booking",
-    subtitle: "Schedule your meeting with the doctor",
+    title: `MR Appointment at ${businessInfo.name}`,
+    subtitle: `Schedule your meeting with ${businessInfo.doctor.name}`,
     success: "Appointment booked successfully",
     form: {
       mrName: "MR Name",
@@ -66,8 +67,8 @@ export const mrAppointmentTranslations: Record<string, MRAppointmentTranslations
     }
   },
   gu: {
-    title: "એમઆર એપોઈન્ટમેન્ટ બુકિંગ",
-    subtitle: "ડૉક્ટર સાથે તમારી મીટિંગ શેડ્યૂલ કરો",
+    title: "શુભમ સ્કિન એન્ડ લેસર ક્લિનિક - એમઆર એપોઈન્ટમેન્ટ",
+    subtitle: `${getFormattedDoctorInfo('gu').name} સાથે તમારી મીટિંગ શેડ્યૂલ કરો`,
     success: "એપોઈન્ટમેન્ટ સફળતાપૂર્વક બુક થઈ ગઈ છે",
     form: {
       mrName: "એમઆર નામ",

@@ -1,9 +1,10 @@
 import { ServicesTranslations } from '../types/services';
+import { businessInfo } from '../../config/business';
 
 export const servicesTranslations: Record<string, ServicesTranslations> = {
   en: {
-    title: "Our Services",
-    subtitle: "Comprehensive dermatological care with advanced treatments",
+    title: `Services at ${businessInfo.name}`,
+    subtitle: `Comprehensive dermatological care with ${businessInfo.doctor.experience}+ years of expertise`,
     expertCare: "Expert Care",
     categories: {
       treatments: "Treatments",
@@ -71,8 +72,8 @@ export const servicesTranslations: Record<string, ServicesTranslations> = {
     }
   },
   gu: {
-    title: "અમારી સેવાઓ",
-    subtitle: "અદ્યતન સારવાર સાથે વ્યાપક ડર્મેટોલોજિકલ સંભાળ",
+    title: "શુભમ સ્કિન એન્ડ લેસર ક્લિનિકની સેવાઓ",
+    subtitle: "૧૪+ વર્ષના અનુભવ સાથે વ્યાપક ડર્મેટોલોજિકલ સંભાળ",
     expertCare: "નિષ્ણાત સંભાળ",
     categories: {
       treatments: "સારવાર",
