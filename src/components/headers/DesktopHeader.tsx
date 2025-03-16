@@ -66,21 +66,21 @@ export function DesktopHeader() {
           <div className="flex flex-wrap items-center justify-between gap-2 py-2">
             <div className="flex items-center gap-4 sm:gap-6">
               <a
-                href="tel:+917947131573"
+                href={`tel:${t.header.contact.phone}`}
                 className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700 hover:bg-gray-100 transition-colors"
               >
                 <Phone className="h-4 w-4 text-blue-500" />
-                <span>+91 79471 31573</span>
+                <span>{t.header.contact.phone}</span>
               </a>
               <div className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700">
                 <Clock className="h-4 w-4 text-blue-500" />
-                <span>Mon - Fri: 9:00 AM - 6:30 PM</span>
+                <span>{t.header.contact.hours.weekday}</span>
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700">
                 <MapPin className="h-4 w-4 text-blue-500" />
-                <span>Mehsana Industrial Estate, Mehsana</span>
+                <span>{t.header.contact.address}</span>
               </div>
             </div>
           </div>
@@ -104,7 +104,7 @@ export function DesktopHeader() {
                 to="/" 
                 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700"
               >
-                Shubham Skin & Laser
+                {t.header.clinicName}
               </Link>
             </div>
 
@@ -161,7 +161,7 @@ export function DesktopHeader() {
                   className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors"
                 >
                   <Globe className="h-4 w-4" />
-                  <span>{language === 'en' ? 'English' : 'ગુજરાતી'}</span>
+                  <span>{language === 'en' ? t.header.language.english : t.header.language.gujarati}</span>
                 </button>
 
                 {showLanguageMenu && (
@@ -170,7 +170,7 @@ export function DesktopHeader() {
                       onClick={toggleLanguage}
                       className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
                     >
-                      {language === 'en' ? 'ગુજરાતી' : 'English'}
+                      {language === 'en' ? t.header.language.gujarati : t.header.language.english}
                     </button>
                   </div>
                 )}

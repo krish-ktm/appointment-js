@@ -6,6 +6,7 @@ import { ServicesTranslations } from './services';
 import { MRAppointmentTranslations } from './mr-appointment';
 import { AboutTranslations } from './about';
 import { FooterTranslations } from './footer';
+import { HeaderTranslations } from './header';
 
 export interface LanguageContent {
   common: CommonTranslations;
@@ -16,6 +17,7 @@ export interface LanguageContent {
   mrAppointment: MRAppointmentTranslations;
   about: AboutTranslations;
   footer: FooterTranslations;
+  header: HeaderTranslations;
 }
 
 export * from './common';
@@ -26,3 +28,4 @@ export * from './services';
 export * from './mr-appointment';
 export * from './about';
 export * from './footer';
+export * from './header';

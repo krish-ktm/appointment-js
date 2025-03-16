@@ -27,7 +27,7 @@ export function MobileHeader() {
               to="/" 
               className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700"
             >
-              Shubham Skin & Laser
+              {t.header.clinicName}
             </Link>
           </div>
 
