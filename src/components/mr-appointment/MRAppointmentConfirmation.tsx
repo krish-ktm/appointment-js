@@ -63,9 +63,10 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
           transition={{ type: "spring", duration: 0.3 }}
           className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 my-8 overflow-hidden"
           onClick={e => e.stopPropagation()}
+          style={{ maxHeight: '90vh' }}
         >
           {/* Success Header */}
-          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 sm:p-6 relative">
+          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 sm:p-6 relative sticky top-0 z-10">
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="bg-white/10 rounded-xl p-2 sm:p-3">
                 <Check className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
@@ -86,90 +87,94 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
           </div>
 
           {/* Appointment Details */}
-          <div className="p-4 sm:p-6 max-h-[calc(100vh-16rem)] overflow-y-auto">
-            <div className="space-y-3 sm:space-y-4">
-              {/* Date */}
-              <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
-                <div className="flex items-center gap-3">
-                  <div className="bg-green-100 p-2 rounded-lg">
-                    <Calendar className="h-4 w-4 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.appointmentDate}</p>
-                    <p className="text-sm font-medium text-gray-900">
-                      {formatDate(appointment.appointment_date)}
-                    </p>
+          <div className="overflow-y-auto" style={{ maxHeight: 'calc(90vh - 16rem)' }}>
+            <div className="p-4 sm:p-6">
+              <div className="space-y-3 sm:space-y-4">
+                {/* Date */}
+                <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-green-100 p-2 rounded-lg">
+                      <Calendar className="h-4 w-4 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.appointmentDate}</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        {formatDate(appointment.appointment_date)}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* MR Details */}
-              <div className="bg-gray-50 rounded-xl p-3 sm:p-4 space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-100 p-2 rounded-lg">
-                    <Users className="h-4 w-4 text-blue-600" />
+                {/* MR Details */}
+                <div className="bg-gray-50 rounded-xl p-3 sm:p-4 space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-blue-100 p-2 rounded-lg">
+                      <Users className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.mrName}</p>
+                      <p className="text-sm font-medium text-gray-900">{appointment.mr_name}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.mrName}</p>
-                    <p className="text-sm font-medium text-gray-900">{appointment.mr_name}</p>
+                  <div className="flex items-center gap-3">
+                    <div className="bg-blue-100 p-2 rounded-lg">
+                      <Building2 className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.companyName}</p>
+                      <p className="text-sm font-medium text-gray-900">{appointment.company_name}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="bg-blue-100 p-2 rounded-lg">
+                      <Briefcase className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.divisionName}</p>
+                      <p className="text-sm font-medium text-gray-900">{appointment.division_name}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="bg-blue-100 p-2 rounded-lg">
+                      <Phone className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.contactNo}</p>
+                      <p className="text-sm font-medium text-gray-900">{appointment.contact_no}</p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-100 p-2 rounded-lg">
-                    <Building2 className="h-4 w-4 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.companyName}</p>
-                    <p className="text-sm font-medium text-gray-900">{appointment.company_name}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-100 p-2 rounded-lg">
-                    <Briefcase className="h-4 w-4 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.divisionName}</p>
-                    <p className="text-sm font-medium text-gray-900">{appointment.division_name}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-100 p-2 rounded-lg">
-                    <Phone className="h-4 w-4 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.contactNo}</p>
-                    <p className="text-sm font-medium text-gray-900">{appointment.contact_no}</p>
-                  </div>
-                </div>
-              </div>
 
-              {/* Booking ID */}
-              <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
-                <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.bookingId}</p>
-                <p className="text-sm font-medium text-gray-900">#{appointment.id.slice(-8).toUpperCase()}</p>
-              </div>
+                {/* Booking ID */}
+                <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
+                  <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.bookingId}</p>
+                  <p className="text-sm font-medium text-gray-900">#{appointment.id.slice(-8).toUpperCase()}</p>
+                </div>
 
-              {/* Important Notes */}
-              <div className="bg-blue-50 rounded-xl p-3 sm:p-4 text-sm text-blue-800">
-                <h4 className="font-medium mb-2">{t.mrAppointment.confirmation.notes.title}</h4>
-                <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm">
-                  <li>{t.mrAppointment.confirmation.notes.arrival}</li>
-                  <li>{t.mrAppointment.confirmation.notes.id}</li>
-                  <li>{t.mrAppointment.confirmation.notes.mask}</li>
-                </ul>
+                {/* Important Notes */}
+                <div className="bg-blue-50 rounded-xl p-3 sm:p-4 text-sm text-blue-800">
+                  <h4 className="font-medium mb-2">{t.mrAppointment.confirmation.notes.title}</h4>
+                  <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm">
+                    <li>{t.mrAppointment.confirmation.notes.arrival}</li>
+                    <li>{t.mrAppointment.confirmation.notes.id}</li>
+                    <li>{t.mrAppointment.confirmation.notes.mask}</li>
+                  </ul>
+                </div>
               </div>
             </div>
+          </div>
 
-            {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-6">
-              <div className="relative w-full">
+          {/* Actions - Fixed at bottom */}
+          <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <div className="relative w-full sm:w-[140px]"> {/* Fixed width container */}
                 <motion.button
                   onClick={handleDownload}
                   disabled={downloading}
                   className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors flex items-center justify-center gap-2"
                   whileTap={{ scale: 0.98 }}
                 >
-                  <div className="flex items-center justify-center gap-2">
+                  <div className="flex items-center justify-center gap-2 min-w-[100px]"> {/* Minimum width container */}
                     {downloading ? (
                       <>
                         <motion.div
@@ -190,13 +195,13 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
               </div>
               <button
                 onClick={onScheduleAnother}
-                className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors"
+                className="w-full sm:w-auto px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors"
               >
                 {t.mrAppointment.confirmation.scheduleAnother}
               </button>
               <button
                 onClick={onClose}
-                className="w-full px-4 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-colors"
+                className="w-full sm:w-auto px-4 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-colors"
               >
                 {t.mrAppointment.confirmation.done}
               </button>
