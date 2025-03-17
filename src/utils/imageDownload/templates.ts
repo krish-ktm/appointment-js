@@ -11,7 +11,7 @@ export function createPatientTemplate(
   container.style.backgroundColor = '#ffffff';
   container.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
   container.style.fontFamily = 'system-ui, -apple-system, sans-serif';
-  container.style.position = 'relative';
+  container.style.position = 'fixed';
   container.style.overflow = 'hidden';
 
   container.innerHTML = `
@@ -66,7 +66,7 @@ export function createMRTemplate(
   container.style.backgroundColor = '#ffffff';
   container.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
   container.style.fontFamily = 'system-ui, -apple-system, sans-serif';
-  container.style.position = 'relative';
+  container.style.position = 'fixed';
   container.style.overflow = 'hidden';
 
   container.innerHTML = `
