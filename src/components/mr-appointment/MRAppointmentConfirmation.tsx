@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../../i18n/useTranslation';
 import { downloadAppointmentImage } from '../../utils/imageDownload';
+import { useState } from 'react';
 
 const TIMEZONE = 'Asia/Kolkata';
 
@@ -25,6 +26,7 @@ interface MRAppointmentConfirmationProps {
 
 export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnother }: MRAppointmentConfirmationProps) {
   const { t } = useTranslation();
+  const [downloading, setDownloading] = useState(false);
 
   const formatDate = (dateStr: string) => {
     const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
@@ -36,7 +38,13 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
   };
 
   const handleDownload = async () => {
-    await downloadAppointmentImage(appointment, 'mr', t.mrAppointment);
+    if (downloading) return;
+    setDownloading(true);
+    try {
+      await downloadAppointmentImage(appointment, 'mr', t.mrAppointment);
+    } finally {
+      setDownloading(false);
+    }
   };
 
   return (
@@ -154,13 +162,28 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-6">
-              <button
+              <motion.button
                 onClick={handleDownload}
-                className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors flex items-center justify-center gap-2"
+                disabled={downloading}
+                className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors flex items-center justify-center gap-2 relative"
+                whileTap={{ scale: 0.98 }}
               >
-                <Download className="h-4 w-4" />
-                Download
-              </button>
+                {downloading ? (
+                  <>
+                    <motion.div
+                      className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    />
+                    <span>Downloading...</span>
+                  </>
+                ) : (
+                  <>
+                    <Download className="h-4 w-4" />
+                    <span>Download</span>
+                  </>
+                )}
+              </motion.button>
               <button
                 onClick={onScheduleAnother}
                 className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors"
