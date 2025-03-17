@@ -175,23 +175,6 @@ export const validateBookingRequest = async (
       return { isValid: false, error: 'Please enter a valid 10-digit phone number' };
     }
 
-    // Check if the user already has a booking for the same day
-    const { data: existingBookings, error: bookingError } = await supabase
-      .from('appointments')
-      .select('id')
-      .eq('phone', phone)
-      .eq('appointment_date', date)
-      .eq('status', 'pending');
-
-    if (bookingError) {
-      console.error('Supabase Error:', bookingError);
-      return { isValid: false, error: 'Database error. Please try again later' };
-    }
-
-    if (existingBookings && existingBookings.length > 0) {
-      return { isValid: false, error: 'You already have a booking for this date' };
-    }
-
     // Validate time slot availability
     const isAvailable = await isSlotAvailable(date, timeSlot);
     if (!isAvailable) {

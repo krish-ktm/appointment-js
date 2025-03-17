@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Calendar, Clock, User, Phone, MapPin, X } from 'lucide-react';
-import { BookingDetails, Translations } from '../types';
+import { BookingDetails } from '../types';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
+import { useTranslation } from '../i18n/useTranslation';
 
 const TIMEZONE = 'Asia/Kolkata';
 
@@ -10,13 +11,18 @@ interface BookingConfirmationProps {
   booking: BookingDetails;
   onClose: () => void;
   onScheduleAnother: () => void;
-  t: Translations;
 }
 
-export function BookingConfirmation({ booking, onClose, onScheduleAnother, t }: BookingConfirmationProps) {
+export function BookingConfirmation({ booking, onClose, onScheduleAnother }: BookingConfirmationProps) {
+  const { t } = useTranslation();
+
   const formatDate = (dateStr: string) => {
     const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
-    return format(date, 'EEEE, MMMM d, yyyy');
+    const dayName = t.appointment.form.days[format(date, 'EEEE').toLowerCase() as keyof typeof t.appointment.form.days];
+    const monthName = t.appointment.form.months[format(date, 'MMMM').toLowerCase() as keyof typeof t.appointment.form.months];
+    const day = format(date, 'd');
+    const year = format(date, 'yyyy');
+    return `${dayName}, ${monthName} ${day}, ${year}`;
   };
 
   return (
@@ -43,9 +49,9 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother, t }: 
                 <Check className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
               <div>
-                <h2 className="text-lg sm:text-xl font-semibold">{t.success}</h2>
+                <h2 className="text-lg sm:text-xl font-semibold">{t.appointment.confirmation.title}</h2>
                 <p className="text-green-100 text-sm mt-0.5">
-                  Your appointment has been confirmed
+                  {t.appointment.confirmation.subtitle}
                 </p>
               </div>
             </div>
@@ -68,7 +74,7 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother, t }: 
                       <Calendar className="h-4 w-4 text-green-600" />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500">{t.bookingDate}</p>
+                      <p className="text-xs text-gray-500">{t.appointment.confirmation.date}</p>
                       <p className="text-sm font-medium text-gray-900">
                         {formatDate(booking.appointment_date)}
                       </p>
@@ -81,7 +87,7 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother, t }: 
                       <Clock className="h-4 w-4 text-green-600" />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500">{t.bookingTime}</p>
+                      <p className="text-xs text-gray-500">{t.appointment.confirmation.time}</p>
                       <p className="text-sm font-medium text-gray-900">
                         {booking.appointment_time}
                       </p>
@@ -97,7 +103,7 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother, t }: 
                     <User className="h-4 w-4 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">{t.name}</p>
+                    <p className="text-xs text-gray-500">{t.appointment.form.name}</p>
                     <p className="text-sm font-medium text-gray-900">{booking.name}</p>
                   </div>
                 </div>
@@ -106,7 +112,7 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother, t }: 
                     <Phone className="h-4 w-4 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">{t.phone}</p>
+                    <p className="text-xs text-gray-500">{t.appointment.form.phone}</p>
                     <p className="text-sm font-medium text-gray-900">{booking.phone}</p>
                   </div>
                 </div>
@@ -115,7 +121,7 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother, t }: 
                     <MapPin className="h-4 w-4 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">{t.city}</p>
+                    <p className="text-xs text-gray-500">{t.appointment.form.city}</p>
                     <p className="text-sm font-medium text-gray-900">{booking.city}</p>
                   </div>
                 </div>
@@ -123,16 +129,17 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother, t }: 
 
               {/* Booking ID */}
               <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
-                <p className="text-xs text-gray-500">{t.bookingId}</p>
+                <p className="text-xs text-gray-500">{t.appointment.confirmation.bookingId}</p>
                 <p className="text-sm font-medium text-gray-900">#{booking.id.slice(-8).toUpperCase()}</p>
               </div>
 
               {/* Important Notes */}
               <div className="bg-blue-50 rounded-xl p-3 sm:p-4 text-sm text-blue-800">
+                <h4 className="font-medium mb-2">{t.appointment.confirmation.notes.title}</h4>
                 <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm">
-                  <li>Please arrive 10 minutes before your appointment time</li>
-                  <li>Bring any relevant medical records or previous prescriptions</li>
-                  <li>Wear a mask during your visit</li>
+                  <li>{t.appointment.confirmation.notes.arrival}</li>
+                  <li>{t.appointment.confirmation.notes.records}</li>
+                  <li>{t.appointment.confirmation.notes.mask}</li>
                 </ul>
               </div>
             </div>
@@ -143,13 +150,13 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother, t }: 
                 onClick={onScheduleAnother}
                 className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors"
               >
-                Schedule Another
+                {t.appointment.confirmation.scheduleAnother}
               </button>
               <button
                 onClick={onClose}
                 className="w-full px-4 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-colors"
               >
-                Done
+                {t.common.done}
               </button>
             </div>
           </div>
