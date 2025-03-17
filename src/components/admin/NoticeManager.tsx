@@ -156,12 +156,12 @@ export function NoticeManager() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-gray-900">Notice Board Manager</h2>
+    <div className="space-y-6 px-4 sm:px-0">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Notice Board Manager</h2>
         <button
           onClick={() => setShowForm(true)}
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors gap-2"
+          className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors gap-2"
         >
           <Plus className="h-4 w-4" />
           Add Notice
@@ -172,17 +172,30 @@ export function NoticeManager() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto"
         >
           <motion.div
             initial={{ scale: 0.95 }}
             animate={{ scale: 1 }}
-            className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden"
+            className="bg-white rounded-xl shadow-xl w-full max-w-lg mx-auto my-8"
           >
             <div className="p-6">
-              <h3 className="text-xl font-semibold mb-4">
-                {editingNotice ? 'Edit Notice' : 'Add New Notice'}
-              </h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold">
+                  {editingNotice ? 'Edit Notice' : 'Add New Notice'}
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowForm(false);
+                    setEditingNotice(null);
+                    setForm({ title: '', content: '', image_url: '', images: [], active: true });
+                  }}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X className="h-5 w-5 text-gray-500" />
+                </button>
+              </div>
+              
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -231,7 +244,6 @@ export function NoticeManager() {
                   </div>
                 </div>
 
-                {/* Image Preview Section */}
                 {form.images.length > 0 && (
                   <div className="grid grid-cols-2 gap-2">
                     {form.images.map((url, index) => (
@@ -266,7 +278,7 @@ export function NoticeManager() {
                   </label>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4">
+                <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
                   <button
                     type="button"
                     onClick={() => {
@@ -274,13 +286,13 @@ export function NoticeManager() {
                       setEditingNotice(null);
                       setForm({ title: '', content: '', image_url: '', images: [], active: true });
                     }}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg"
+                    className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                    className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
                   >
                     {editingNotice ? 'Update' : 'Create'}
                   </button>
@@ -295,10 +307,10 @@ export function NoticeManager() {
         <ul className="divide-y divide-gray-200">
           {notices.map((notice, index) => (
             <li key={notice.id} className="p-4 hover:bg-gray-50">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-start space-x-4">
                   {notice.images && notice.images.length > 0 && (
-                    <div className="flex -space-x-2">
+                    <div className="flex -space-x-2 flex-shrink-0">
                       {notice.images.slice(0, 3).map((image, imgIndex) => (
                         <div key={imgIndex} className="h-12 w-12 rounded-lg overflow-hidden bg-gray-100 border-2 border-white">
                           <img
@@ -315,18 +327,18 @@ export function NoticeManager() {
                       )}
                     </div>
                   )}
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-lg font-medium text-gray-900 truncate">
                       {notice.title}
                     </h3>
                     {notice.content && (
-                      <p className="text-sm text-gray-500 line-clamp-1">
+                      <p className="text-sm text-gray-500 line-clamp-2">
                         {notice.content}
                       </p>
                     )}
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 self-end sm:self-center">
                   <button
                     onClick={() => handleMove(notice.id, 'up')}
                     disabled={index === 0}

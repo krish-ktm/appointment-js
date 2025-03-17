@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'react-hot-toast';
-import { MessageCircle, Edit2, Trash2, Plus } from 'lucide-react';
+import { MessageCircle, Edit2, Trash2, Plus, X } from 'lucide-react';
 
 interface DoctorMessage {
   id: string;
@@ -109,12 +109,12 @@ export function MessageManager() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-gray-900">Doctor's Messages</h2>
+    <div className="space-y-6 px-4 sm:px-0">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Doctor's Messages</h2>
         <button
           onClick={() => setShowForm(true)}
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors gap-2"
+          className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors gap-2"
         >
           <Plus className="h-4 w-4" />
           Add Message
@@ -130,12 +130,24 @@ export function MessageManager() {
           <motion.div
             initial={{ scale: 0.95 }}
             animate={{ scale: 1 }}
-            className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden"
+            className="bg-white rounded-xl shadow-xl w-full max-w-lg mx-auto"
           >
             <div className="p-6">
-              <h3 className="text-xl font-semibold mb-4">
-                {editingMessage ? 'Edit Message' : 'Add New Message'}
-              </h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold">
+                  {editingMessage ? 'Edit Message' : 'Add New Message'}
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowForm(false);
+                    setEditingMessage(null);
+                    setForm({ message: '', active: true });
+                  }}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X className="h-5 w-5 text-gray-500" />
+                </button>
+              </div>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -163,7 +175,7 @@ export function MessageManager() {
                   </label>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4">
+                <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
                   <button
                     type="button"
                     onClick={() => {
@@ -171,13 +183,13 @@ export function MessageManager() {
                       setEditingMessage(null);
                       setForm({ message: '', active: true });
                     }}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg"
+                    className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                    className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
                   >
                     {editingMessage ? 'Update' : 'Create'}
                   </button>
@@ -192,21 +204,21 @@ export function MessageManager() {
         <ul className="divide-y divide-gray-200">
           {messages.map((message) => (
             <li key={message.id} className="p-4 hover:bg-gray-50">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="bg-blue-50 p-2 rounded-lg">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-start gap-4 flex-1">
+                  <div className="bg-blue-50 p-2 rounded-lg flex-shrink-0">
                     <MessageCircle className="h-5 w-5 text-blue-500" />
                   </div>
-                  <div>
-                    <p className="text-gray-900">{message.message}</p>
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                  <div className="flex-1 min-w-0">
+                    <p className="text-gray-900 break-words">{message.message}</p>
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-2 ${
                       message.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                     }`}>
                       {message.active ? 'Active' : 'Inactive'}
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 self-end sm:self-center">
                   <button
                     onClick={() => {
                       setEditingMessage(message);
