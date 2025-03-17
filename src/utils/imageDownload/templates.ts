@@ -20,9 +20,9 @@ export function createPatientTemplate(
       translations.confirmation.subtitle
     )}
     <div style="padding: 48px;">
-      ${createBookingDetails(appointmentDetails, formattedDate)}
+      ${createBookingDetails(appointmentDetails, formattedDate, translations)}
       <div style="background-color: #f9fafb; padding: 24px; border-radius: 12px; margin-bottom: 24px;">
-        <h2 style="color: #111827; font-size: 20px; font-weight: 600; margin: 0 0 20px 0;">Patient Details</h2>
+        <h2 style="color: #111827; font-size: 20px; font-weight: 600; margin: 0 0 20px 0;">${translations.confirmation.patientDetails}</h2>
         <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
           <div style="min-width: 0;">
             <p style="color: #6b7280; font-size: 14px; margin: 0 0 4px 0;">${translations.form.name}</p>
@@ -34,7 +34,7 @@ export function createPatientTemplate(
           </div>
           <div style="min-width: 0;">
             <p style="color: #6b7280; font-size: 14px; margin: 0 0 4px 0;">${translations.form.age}</p>
-            <p style="color: #111827; font-size: 16px; font-weight: 500; margin: 0; word-break: break-word;">${appointmentDetails.age} years</p>
+            <p style="color: #111827; font-size: 16px; font-weight: 500; margin: 0; word-break: break-word;">${appointmentDetails.age} ${translations.form.years}</p>
           </div>
           <div style="min-width: 0;">
             <p style="color: #6b7280; font-size: 14px; margin: 0 0 4px 0;">${translations.form.city}</p>
@@ -75,9 +75,9 @@ export function createMRTemplate(
       translations.confirmation.subtitle
     )}
     <div style="padding: 48px;">
-      ${createBookingDetails(appointmentDetails, formattedDate)}
+      ${createBookingDetails(appointmentDetails, formattedDate, translations)}
       <div style="background-color: #f9fafb; padding: 24px; border-radius: 12px; margin-bottom: 24px;">
-        <h2 style="color: #111827; font-size: 20px; font-weight: 600; margin: 0 0 20px 0;">MR Details</h2>
+        <h2 style="color: #111827; font-size: 20px; font-weight: 600; margin: 0 0 20px 0;">${translations.confirmation.mrDetails}</h2>
         <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
           <div style="min-width: 0;">
             <p style="color: #6b7280; font-size: 14px; margin: 0 0 4px 0;">${translations.form.mrName}</p>

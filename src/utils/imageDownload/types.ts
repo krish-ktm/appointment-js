@@ -21,6 +21,10 @@ export interface AppointmentTranslations {
   confirmation: {
     title: string;
     subtitle: string;
+    bookingId: string;
+    date: string;
+    patientDetails?: string;
+    mrDetails?: string;
     notes: {
       title: string;
       arrival: string;
@@ -34,9 +38,33 @@ export interface AppointmentTranslations {
     phone: string;
     age: string;
     city: string;
+    years: string;
     mrName?: string;
     companyName?: string;
     divisionName?: string;
     contactNo?: string;
+    days: {
+      sunday: string;
+      monday: string;
+      tuesday: string;
+      wednesday: string;
+      thursday: string;
+      friday: string;
+      saturday: string;
+    };
+    months: {
+      january: string;
+      february: string;
+      march: string;
+      april: string;
+      may: string;
+      june: string;
+      july: string;
+      august: string;
+      september: string;
+      october: string;
+      november: string;
+      december: string;
+    };
   };
 }

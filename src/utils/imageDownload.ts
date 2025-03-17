@@ -13,7 +13,11 @@ export async function downloadAppointmentImage(
   try {
     // Format date
     const appointmentDate = utcToZonedTime(new Date(appointmentDetails.appointment_date), TIMEZONE);
-    const formattedDate = format(appointmentDate, 'EEEE, MMMM d, yyyy');
+    const dayName = translations.form.days[format(appointmentDate, 'EEEE').toLowerCase()];
+    const monthName = translations.form.months[format(appointmentDate, 'MMMM').toLowerCase()];
+    const day = format(appointmentDate, 'd');
+    const year = format(appointmentDate, 'yyyy');
+    const formattedDate = `${dayName}, ${monthName} ${day}, ${year}`;
 
     // Create template based on appointment type
     const container = type === 'patient'

@@ -28,7 +28,7 @@ export function createHeaderSection(title: string, subtitle: string) {
   `;
 }
 
-export function createBookingDetails(appointmentDetails: AppointmentDetails, formattedDate: string) {
+export function createBookingDetails(appointmentDetails: AppointmentDetails, formattedDate: string, translations: any) {
   return `
     <div style="
       background: white;
@@ -37,7 +37,7 @@ export function createBookingDetails(appointmentDetails: AppointmentDetails, for
       padding: 32px;
       margin-bottom: 24px;
     ">
-      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+      <div style="display: flex; items-center; gap: 16px; margin-bottom: 24px;">
         <div style="
           background-color: #f0fdf4;
           padding: 12px;
@@ -52,13 +52,13 @@ export function createBookingDetails(appointmentDetails: AppointmentDetails, for
           </svg>
         </div>
         <div style="flex-grow: 1;">
-          <p style="color: #374151; font-size: 14px; margin: 0 0 4px 0;">Booking ID</p>
+          <p style="color: #374151; font-size: 14px; margin: 0 0 4px 0;">${translations.confirmation.bookingId}</p>
           <p style="color: #16a34a; font-size: 20px; font-weight: 600; margin: 0;">#${appointmentDetails.id.slice(-8).toUpperCase()}</p>
         </div>
       </div>
 
       <div style="margin-bottom: 24px;">
-        <p style="color: #6b7280; font-size: 14px; margin: 0 0 4px 0;">Appointment Date</p>
+        <p style="color: #6b7280; font-size: 14px; margin: 0 0 4px 0;">${translations.confirmation.date}</p>
         <p style="color: #111827; font-size: 18px; font-weight: 500; margin: 0;">${formattedDate}</p>
       </div>
     </div>
