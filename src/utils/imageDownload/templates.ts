@@ -34,7 +34,7 @@ export function createPatientTemplate(
           </div>
           <div style="min-width: 0;">
             <p style="color: #6b7280; font-size: 14px; margin: 0 0 4px 0;">${translations.form.age}</p>
-            <p style="color: #111827; font-size: 16px; font-weight: 500; margin: 0; word-break: break-word;">${appointmentDetails.age} ${translations.form.years}</p>
+            <p style="color: #111827; font-size: 16px; font-weight: 500; margin: 0; word-break: break-word;">${appointmentDetails.age} ${translations.form.age}</p>
           </div>
           <div style="min-width: 0;">
             <p style="color: #6b7280; font-size: 14px; margin: 0 0 4px 0;">${translations.form.city}</p>
