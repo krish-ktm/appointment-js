@@ -7,6 +7,7 @@ import { AdminDashboard } from './components/admin/AdminDashboard';
 import { NoticeManager } from './components/admin/NoticeManager';
 import { MessageManager } from './components/admin/MessageManager';
 import { MRAppointmentManager } from './components/admin/MRAppointmentManager';
+import { UsersManager } from './components/admin/UsersManager';
 import { LandingPage } from './components/LandingPage';
 import { AboutPage } from './components/AboutPage';
 import { MRAppointment } from './components/mr-appointment/MRAppointment';
@@ -54,6 +55,7 @@ function App() {
             <Route path="mr-appointments" element={<MRAppointmentManager />} />
             <Route path="notices" element={<NoticeManager />} />
             <Route path="messages" element={<MessageManager />} />
+            <Route path="users" element={<UsersManager />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
