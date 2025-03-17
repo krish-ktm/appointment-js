@@ -44,19 +44,21 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother }: Boo
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto"
+        className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50"
         onClick={onClose}
+        style={{ touchAction: 'none' }}
       >
         <motion.div
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ type: "spring", duration: 0.3 }}
-          className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 my-8 overflow-hidden"
+          className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-auto my-auto overflow-hidden"
           onClick={e => e.stopPropagation()}
+          style={{ maxHeight: '90vh', overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}
         >
           {/* Success Header */}
-          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 sm:p-6 relative">
+          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 sm:p-6 relative sticky top-0 z-10">
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="bg-white/10 rounded-xl p-2 sm:p-3">
                 <Check className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
@@ -77,7 +79,7 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother }: Boo
           </div>
 
           {/* Appointment Details */}
-          <div className="p-4 sm:p-6 max-h-[calc(100vh-16rem)] overflow-y-auto">
+          <div className="p-4 sm:p-6">
             <div className="space-y-3 sm:space-y-4">
               {/* Date & Time */}
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
@@ -158,7 +160,7 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother }: Boo
             </div>
 
             {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-6">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-6 sticky bottom-0 bg-white pt-4 border-t border-gray-100">
               <motion.button
                 onClick={handleDownload}
                 disabled={downloading}
