@@ -54,7 +54,7 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
         style={{ maxHeight: '90vh' }}
       >
         {/* Success Header */}
-        <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 sm:p-6 relative sticky top-0 z-10">
+        <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 sm:p-6 relative">
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="bg-white/10 rounded-xl p-2 sm:p-3">
               <Check className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
@@ -68,9 +68,9 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
           </div>
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white/80 hover:text-white hover:bg-white/10 p-1.5 sm:p-2 rounded-full transition-colors"
+            className="absolute top-4 right-4 text-white/80 hover:text-white hover:bg-white/10 p-2 rounded-full transition-colors"
           >
-            <X className="h-4 w-4 sm:h-5 sm:w-5" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
