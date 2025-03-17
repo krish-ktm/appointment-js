@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Calendar, Building2, Users, Phone, Briefcase, X } from 'lucide-react';
+import { Check, Calendar, Building2, Users, Phone, Briefcase, X, Download } from 'lucide-react';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../../i18n/useTranslation';
+import { downloadAppointmentImage } from '../../utils/imageDownload';
 
 const TIMEZONE = 'Asia/Kolkata';
 
@@ -32,6 +33,10 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
     const day = format(date, 'd');
     const year = format(date, 'yyyy');
     return `${dayName}, ${monthName} ${day}, ${year}`;
+  };
+
+  const handleDownload = async () => {
+    await downloadAppointmentImage(appointment, 'mr', t.mrAppointment);
   };
 
   return (
@@ -149,6 +154,13 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-6">
+              <button
+                onClick={handleDownload}
+                className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors flex items-center justify-center gap-2"
+              >
+                <Download className="h-4 w-4" />
+                Download
+              </button>
               <button
                 onClick={onScheduleAnother}
                 className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors"

@@ -1,9 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Calendar, Clock, User, Phone, MapPin, X } from 'lucide-react';
+import { Check, Calendar, Clock, User, Phone, MapPin, X, Download } from 'lucide-react';
 import { BookingDetails } from '../types';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../i18n/useTranslation';
+import { downloadAppointmentImage } from '../utils/imageDownload';
 
 const TIMEZONE = 'Asia/Kolkata';
 
@@ -23,6 +24,10 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother }: Boo
     const day = format(date, 'd');
     const year = format(date, 'yyyy');
     return `${dayName}, ${monthName} ${day}, ${year}`;
+  };
+
+  const handleDownload = async () => {
+    await downloadAppointmentImage(booking, 'patient', t.appointment);
   };
 
   return (
@@ -63,7 +68,7 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother }: Boo
             </button>
           </div>
 
-          {/* Booking Details */}
+          {/* Appointment Details */}
           <div className="p-4 sm:p-6 max-h-[calc(100vh-16rem)] overflow-y-auto">
             <div className="space-y-3 sm:space-y-4">
               {/* Date & Time */}
@@ -146,6 +151,13 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother }: Boo
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-6">
+              <button
+                onClick={handleDownload}
+                className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors flex items-center justify-center gap-2"
+              >
+                <Download className="h-4 w-4" />
+                Download
+              </button>
               <button
                 onClick={onScheduleAnother}
                 className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors"
