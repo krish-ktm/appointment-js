@@ -113,6 +113,8 @@ export function LandingPage() {
 
       setSuccess(true);
       setBookingDetails(appointment);
+      // Reset form after successful booking
+      setForm(initialForm);
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -141,7 +143,10 @@ export function LandingPage() {
       {bookingDetails && (
         <BookingConfirmation
           booking={bookingDetails}
-          onClose={() => setBookingDetails(null)}
+          onClose={() => {
+            setBookingDetails(null);
+            setSuccess(false);
+          }}
           onScheduleAnother={resetForm}
           t={t.appointment}
         />

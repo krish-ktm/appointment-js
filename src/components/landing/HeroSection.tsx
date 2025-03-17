@@ -12,7 +12,7 @@ interface HeroSectionProps {
   handleSubmit: (e: React.FormEvent) => void;
   success: boolean;
   loading: boolean;
-  t: any; // Using any for now, but we should define proper type
+  t: any;
 }
 
 export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, loading, t }: HeroSectionProps) {
@@ -87,23 +87,6 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
                 </div>
               ))}
             </div>
-
-            {/* MR Appointment Link */}
-            <div className="mt-12 sm:mt-16">
-              <Link
-                to="/mr-appointment"
-                className="group inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-sm hover:shadow transform hover:scale-[1.02]"
-              >
-                <div className="bg-white/10 p-2 rounded-lg">
-                  <Building2 className="h-5 w-5" />
-                </div>
-                <span className="font-medium">{t.mrAppointmentCta}</span>
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
-              <p className="mt-3 text-sm text-gray-500">
-                {t.mrAppointmentNote}
-              </p>
-            </div>
           </div>
 
           <div 
@@ -124,6 +107,26 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               success={success}
               loading={loading}
             />
+          </div>
+
+          {/* MR Appointment Link - Moved to bottom and styled differently */}
+          <div className="mt-12 sm:mt-16 border-t border-gray-100 pt-8 text-center">
+            <div className="inline-flex flex-col items-center">
+              <div className="bg-gray-50 px-4 py-2 rounded-lg mb-3">
+                <Building2 className="h-5 w-5 text-gray-600" />
+              </div>
+              <h3 className="text-gray-600 text-sm font-medium mb-2">For Medical Representatives</h3>
+              <Link
+                to="/mr-appointment"
+                className="group inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 border border-gray-200 transition-all duration-300 text-sm"
+              >
+                <span>{t.mrAppointmentCta}</span>
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+              <p className="mt-2 text-xs text-gray-500">
+                {t.mrAppointmentNote}
+              </p>
+            </div>
           </div>
         </div>
       </div>
