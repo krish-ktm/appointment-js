@@ -52,7 +52,7 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother }: Boo
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ type: "spring", duration: 0.3 }}
-          className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-auto overflow-hidden"
+          className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-auto overflow-hidden will-change-transform"
           onClick={e => e.stopPropagation()}
           style={{ maxHeight: '90vh' }}
         >
@@ -164,28 +164,33 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother }: Boo
           {/* Actions - Fixed at bottom */}
           <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-              <motion.button
-                onClick={handleDownload}
-                disabled={downloading}
-                className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors flex items-center justify-center gap-2"
-                whileTap={{ scale: 0.98 }}
-              >
-                {downloading ? (
-                  <>
-                    <motion.div
-                      className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full"
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    />
-                    <span>Downloading...</span>
-                  </>
-                ) : (
-                  <>
-                    <Download className="h-4 w-4" />
-                    <span>Download</span>
-                  </>
-                )}
-              </motion.button>
+              <div className="relative w-full">
+                <motion.button
+                  onClick={handleDownload}
+                  disabled={downloading}
+                  className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors flex items-center justify-center gap-2 relative"
+                  style={{ transform: 'translate3d(0, 0, 0)' }}
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    {downloading ? (
+                      <>
+                        <motion.div
+                          className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full"
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          style={{ transform: 'translate3d(0, 0, 0)' }}
+                        />
+                        <span>Downloading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Download className="h-4 w-4" />
+                        <span>Download</span>
+                      </>
+                    )}
+                  </div>
+                </motion.button>
+              </div>
               <button
                 onClick={onScheduleAnother}
                 className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors"
