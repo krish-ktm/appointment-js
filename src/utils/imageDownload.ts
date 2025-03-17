@@ -11,11 +11,11 @@ export async function downloadAppointmentImage(
   // Create a temporary div to render the content
   const container = document.createElement('div');
   container.style.width = '800px';
-  container.style.padding = '48px';
   container.style.backgroundColor = '#ffffff';
-  container.style.borderRadius = '16px';
   container.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
   container.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+  container.style.position = 'relative';
+  container.style.overflow = 'hidden';
 
   // Format date
   const appointmentDate = utcToZonedTime(new Date(appointmentDetails.appointment_date), TIMEZONE);
@@ -25,36 +25,30 @@ export async function downloadAppointmentImage(
   if (type === 'patient') {
     container.innerHTML = `
       <div style="
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 200px;
         background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-        border-radius: 16px 16px 0 0;
-        z-index: 0;
-      "></div>
-
-      <div style="position: relative; z-index: 1;">
-        <div style="text-align: center; margin-bottom: 40px;">
-          <div style="
-            width: 80px;
-            height: 80px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px auto;
-          ">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-              <path d="M20 7L9 18l-5-5"></path>
-            </svg>
-          </div>
-          <h1 style="color: white; font-size: 32px; margin: 0 0 8px 0; font-weight: 600;">${translations.confirmation.title}</h1>
-          <p style="color: rgba(255, 255, 255, 0.9); margin: 0; font-size: 18px;">${translations.confirmation.subtitle}</p>
+        padding: 48px;
+        color: white;
+        text-align: center;
+      ">
+        <div style="
+          width: 80px;
+          height: 80px;
+          background-color: rgba(255, 255, 255, 0.2);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 24px auto;
+        ">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M20 7L9 18l-5-5"></path>
+          </svg>
         </div>
+        <h1 style="font-size: 32px; margin: 0 0 8px 0; font-weight: 600;">${translations.confirmation.title}</h1>
+        <p style="font-size: 18px; margin: 0; opacity: 0.9;">${translations.confirmation.subtitle}</p>
+      </div>
 
+      <div style="padding: 48px;">
         <div style="
           background: white;
           border-radius: 16px;
@@ -62,7 +56,7 @@ export async function downloadAppointmentImage(
           padding: 32px;
           margin-bottom: 24px;
         ">
-          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+          <div style="display: flex; items-center; gap: 16px; margin-bottom: 24px;">
             <div style="
               background-color: #f0fdf4;
               padding: 12px;
@@ -122,11 +116,20 @@ export async function downloadAppointmentImage(
           border-radius: 12px;
         ">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="16" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12" y2="8"></line>
-            </svg>
+            <div style="
+              background-color: rgba(22, 163, 74, 0.1);
+              padding: 8px;
+              border-radius: 8px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            ">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12" y2="8"></line>
+              </svg>
+            </div>
             <h3 style="color: #16a34a; font-size: 18px; font-weight: 600; margin: 0;">${translations.confirmation.notes.title}</h3>
           </div>
           <ul style="color: #166534; margin: 0; padding-left: 24px; font-size: 15px; line-height: 1.6;">
@@ -140,36 +143,30 @@ export async function downloadAppointmentImage(
   } else {
     container.innerHTML = `
       <div style="
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 200px;
         background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-        border-radius: 16px 16px 0 0;
-        z-index: 0;
-      "></div>
-
-      <div style="position: relative; z-index: 1;">
-        <div style="text-align: center; margin-bottom: 40px;">
-          <div style="
-            width: 80px;
-            height: 80px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px auto;
-          ">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-              <path d="M20 7L9 18l-5-5"></path>
-            </svg>
-          </div>
-          <h1 style="color: white; font-size: 32px; margin: 0 0 8px 0; font-weight: 600;">${translations.confirmation.title}</h1>
-          <p style="color: rgba(255, 255, 255, 0.9); margin: 0; font-size: 18px;">${translations.confirmation.subtitle}</p>
+        padding: 48px;
+        color: white;
+        text-align: center;
+      ">
+        <div style="
+          width: 80px;
+          height: 80px;
+          background-color: rgba(255, 255, 255, 0.2);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 24px auto;
+        ">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M20 7L9 18l-5-5"></path>
+          </svg>
         </div>
+        <h1 style="font-size: 32px; margin: 0 0 8px 0; font-weight: 600;">${translations.confirmation.title}</h1>
+        <p style="font-size: 18px; margin: 0; opacity: 0.9;">${translations.confirmation.subtitle}</p>
+      </div>
 
+      <div style="padding: 48px;">
         <div style="
           background: white;
           border-radius: 16px;
@@ -177,7 +174,7 @@ export async function downloadAppointmentImage(
           padding: 32px;
           margin-bottom: 24px;
         ">
-          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+          <div style="display: flex; items-center; gap: 16px; margin-bottom: 24px;">
             <div style="
               background-color: #f0fdf4;
               padding: 12px;
@@ -231,11 +228,20 @@ export async function downloadAppointmentImage(
           border-radius: 12px;
         ">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="16" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12" y2="8"></line>
-            </svg>
+            <div style="
+              background-color: rgba(22, 163, 74, 0.1);
+              padding: 8px;
+              border-radius: 8px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            ">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12" y2="8"></line>
+              </svg>
+            </div>
             <h3 style="color: #16a34a; font-size: 18px; font-weight: 600; margin: 0;">${translations.confirmation.notes.title}</h3>
           </div>
           <ul style="color: #166534; margin: 0; padding-left: 24px; font-size: 15px; line-height: 1.6;">
@@ -254,6 +260,9 @@ export async function downloadAppointmentImage(
   const canvas = await html2canvas(container, {
     scale: 2,
     backgroundColor: '#ffffff',
+    windowWidth: 800,
+    width: 800,
+    height: container.offsetHeight
   });
   document.body.removeChild(container);
 
