@@ -96,7 +96,6 @@ export function AppointmentPage() {
           >
             <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700">
               <h1 className="text-xl sm:text-2xl font-semibold text-white">{t.appointment.title}</h1>
-              <p className="text-blue-100 mt-1 text-sm sm:text-base">{t.appointment.form.subtitle}</p>
             </div>
 
             <div className="p-4 sm:p-6">

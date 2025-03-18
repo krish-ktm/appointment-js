@@ -98,18 +98,24 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               contain: 'content'
             }}
           >
-            <AppointmentForm
-              form={form}
-              setForm={setForm}
-              timeSlots={timeSlots}
-              t={translations.en}
-              onSubmit={handleSubmit}
-              success={success}
-              loading={loading}
-            />
+            <div className="bg-white rounded-2xl  border border-gray-200 overflow-hidden">
+              <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700">
+                <h2 className="text-xl text-center sm:text-2xl font-semibold text-white">{t.title}</h2>
+              </div>
+              <div className="p-4 sm:p-6">
+                <AppointmentForm
+                  form={form}
+                  setForm={setForm}
+                  timeSlots={timeSlots}
+                  onSubmit={handleSubmit}
+                  success={success}
+                  loading={loading}
+                />
+              </div>
+            </div>
           </div>
 
-          {/* MR Appointment Link - Moved to bottom and styled differently */}
+          {/* MR Appointment Link */}
           <div className="mt-12 sm:mt-16 border-t border-gray-100 pt-8 text-center">
             <div className="inline-flex flex-col items-center">
               <div className="bg-gray-50 px-4 py-2 rounded-lg mb-3">
