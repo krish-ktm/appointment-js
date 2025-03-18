@@ -102,7 +102,7 @@ export function DesktopHeader() {
             <div className="flex items-center">
               <Link 
                 to="/" 
-                className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700"
+                className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700"
               >
                 {t.header.clinicName}
               </Link>
@@ -141,6 +141,17 @@ export function DesktopHeader() {
                 <span className="relative z-10">{t.navigation.services}</span>
                 <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 rounded-full transition-transform origin-left ${
                   isActive('/services') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                }`}></span>
+              </Link>
+              <Link
+                to="/appointment"
+                className={`relative py-2 transition-colors group ${
+                  isActive('/appointment') ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <span className="relative z-10">{t.navigation.appointment}</span>
+                <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 rounded-full transition-transform origin-left ${
+                  isActive('/appointment') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
                 }`}></span>
               </Link>
               <Link

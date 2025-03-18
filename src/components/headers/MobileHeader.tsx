@@ -25,7 +25,7 @@ export function MobileHeader() {
           <div className="flex items-center">
             <Link 
               to="/" 
-              className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700"
+              className="text-base font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700"
             >
               {t.header.clinicName}
             </Link>
@@ -94,6 +94,17 @@ export function MobileHeader() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t.navigation.services}
+              </Link>
+              <Link
+                to="/appointment"
+                className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors ${
+                  isActive('/appointment') 
+                    ? 'bg-blue-50 text-blue-600' 
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50/80'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t.navigation.appointment}
               </Link>
               <Link
                 to="/mr-appointment"

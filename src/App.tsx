@@ -50,6 +50,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/mr-appointment" element={<MRAppointment />} />
+          <Route path="/appointment" element={<AppointmentPage />} />
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="mr-appointments" element={<MRAppointmentManager />} />
