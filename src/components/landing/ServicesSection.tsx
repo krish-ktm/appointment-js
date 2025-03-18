@@ -98,7 +98,7 @@ export function ServicesSection({ t }: ServicesSectionProps) {
             to="/services"
             className="inline-flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 transition-all duration-300 shadow-sm hover:shadow"
           >
-            <span className="font-medium">{t.cta.button}</span>
+            <span className="font-medium">View All Services</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

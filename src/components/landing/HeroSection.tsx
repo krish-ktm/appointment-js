@@ -28,7 +28,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
       />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center pt-32 sm:pt-40 pb-12 sm:pb-32 lg:pb-40">
+        <div className="flex flex-col items-center pt-24 sm:pt-40 pb-12 sm:pb-32 lg:pb-40">
           <div 
             className="text-center max-w-3xl mx-auto"
             style={{ 
@@ -98,7 +98,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
               contain: 'content'
             }}
           >
-            <div className="bg-white rounded-2xl  border border-gray-200 overflow-hidden">
+            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
               <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700">
                 <h2 className="text-xl text-center sm:text-2xl font-semibold text-white">{t.title}</h2>
               </div>
