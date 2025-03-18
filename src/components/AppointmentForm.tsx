@@ -52,7 +52,7 @@ export function AppointmentForm({
   };
 
   return (
-    <div className="relative p-4 sm:p-6 md:p-8 bg-white rounded-xl sm:rounded-2xl border border-gray-200">
+    <div className="relative bg-white rounded-xl sm:rounded-2xl border border-gray-200">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

@@ -13,6 +13,7 @@ import { AboutPage } from './components/AboutPage';
 import { MRAppointment } from './components/mr-appointment/MRAppointment';
 import { ServicesPage } from './components/ServicesPage';
 import { LanguageProvider } from './i18n/LanguageContext';
+import { AppointmentPage } from './components/AppointmentPage';
 import { LanguageSelectionModal } from './components/LanguageSelectionModal';
 
 // Scroll to top component
