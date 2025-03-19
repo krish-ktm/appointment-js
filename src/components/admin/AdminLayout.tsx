@@ -3,7 +3,7 @@ import { useNavigate, Outlet, Link, useLocation } from 'react-router-dom';
 import { User } from '../../types';
 import { toast } from 'react-hot-toast';
 import { LoadingSpinner } from '../LoadingSpinner';
-import { Menu, X, Calendar, Bell, MessageCircle, Building2, LogOut, ChevronDown, Users } from 'lucide-react';
+import { Menu, X, Calendar, Bell, MessageCircle, Building2, LogOut, ChevronDown, Users, Clock } from 'lucide-react';
 
 export function AdminLayout() {
   const navigate = useNavigate();
@@ -54,7 +54,8 @@ export function AdminLayout() {
     ...(currentUser?.role === 'superadmin' ? [
       { name: 'Notice Board', href: '/admin/notices', icon: Bell },
       { name: 'Doctor Messages', href: '/admin/messages', icon: MessageCircle },
-      { name: 'Users', href: '/admin/users', icon: Users }
+      { name: 'Users', href: '/admin/users', icon: Users },
+      { name: 'Time Management', href: '/admin/time-management', icon: Clock }
     ] : [])
   ];
 
