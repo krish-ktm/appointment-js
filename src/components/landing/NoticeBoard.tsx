@@ -14,9 +14,24 @@ interface NoticeBoardProps {
 }
 
 export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 5000, stopOnInteraction: false })
   ]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    // Update selected index when slide changes
+    emblaApi.on('select', () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    });
+
+    // Cleanup
+    return () => {
+      emblaApi.off('select');
+    };
+  }, [emblaApi]);
 
   const formatDate = (dateStr: string | undefined) => {
     if (!dateStr) return '';
@@ -121,7 +136,7 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
                     key={index}
                     onClick={() => emblaApi?.scrollTo(index)}
                     className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      emblaApi?.selectedScrollSnap() === index
+                      selectedIndex === index
                         ? 'bg-blue-600 w-4'
                         : 'bg-gray-300 hover:bg-gray-400'
                     }`}
