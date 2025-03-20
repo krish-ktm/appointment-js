@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { WorkingHours } from './WorkingHours';
-import { TimeSlots } from './TimeSlots';
 import { Clock } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
 import { toast } from 'react-hot-toast';
@@ -45,7 +44,6 @@ export function TimeManagement() {
       </div>
 
       <WorkingHours />
-      <TimeSlots />
     </div>
   );
 }

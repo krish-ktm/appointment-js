@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabase';
 import { toast } from 'react-hot-toast';
-import { Calendar, ChevronDown, Clock, Sun, Moon } from 'lucide-react';
+import { Calendar, ChevronDown, Clock, Sun, Moon, Plus, Minus, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
+
+interface TimeSlot {
+  time: string;
+  maxBookings: number;
+}
 
 interface WorkingHour {
   id: string;
@@ -13,12 +18,15 @@ interface WorkingHour {
   morning_end: string | null;
   evening_start: string | null;
   evening_end: string | null;
+  slot_interval: number;
+  slots: TimeSlot[];
 }
 
 export function WorkingHours() {
   const [workingHours, setWorkingHours] = useState<WorkingHour[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedDay, setExpandedDay] = useState<string | null>(null);
+  const [editingSlot, setEditingSlot] = useState<{ day: string; index: number } | null>(null);
 
   useEffect(() => {
     loadWorkingHours();
@@ -60,54 +68,67 @@ export function WorkingHours() {
     }
   };
 
-  const toggleMorningHours = (day: WorkingHour) => {
-    const updates: Partial<WorkingHour> = {};
-    
-    if (day.morning_start && day.morning_end) {
-      updates.morning_start = null;
-      updates.morning_end = null;
-    } else {
-      updates.morning_start = '09:30';
-      updates.morning_end = '12:00';
+  const generateTimeSlots = (startTime: string, endTime: string, interval: number): TimeSlot[] => {
+    const slots: TimeSlot[] = [];
+    let currentTime = parse(startTime, 'HH:mm', new Date());
+    const end = parse(endTime, 'HH:mm', new Date());
+
+    while (currentTime <= end) {
+      slots.push({
+        time: format(currentTime, 'HH:mm'),
+        maxBookings: 3
+      });
+      currentTime = new Date(currentTime.getTime() + interval * 60000);
     }
 
-    handleWorkingHoursUpdate(day.day, updates);
+    return slots;
   };
 
-  const toggleEveningHours = (day: WorkingHour) => {
-    const updates: Partial<WorkingHour> = {};
-    
-    if (day.evening_start && day.evening_end) {
-      updates.evening_start = null;
-      updates.evening_end = null;
-    } else {
-      updates.evening_start = '16:00';
-      updates.evening_end = '18:30';
+  const handleGenerateSlots = async (day: WorkingHour) => {
+    try {
+      let newSlots: TimeSlot[] = [];
+
+      // Generate morning slots
+      if (day.morning_start && day.morning_end) {
+        newSlots = [
+          ...newSlots,
+          ...generateTimeSlots(day.morning_start, day.morning_end, day.slot_interval)
+        ];
+      }
+
+      // Generate evening slots
+      if (day.evening_start && day.evening_end) {
+        newSlots = [
+          ...newSlots,
+          ...generateTimeSlots(day.evening_start, day.evening_end, day.slot_interval)
+        ];
+      }
+
+      await handleWorkingHoursUpdate(day.day, { slots: newSlots });
+    } catch (error) {
+      console.error('Error generating time slots:', error);
+      toast.error('Failed to generate time slots');
     }
-
-    handleWorkingHoursUpdate(day.day, updates);
   };
 
-  const convertTo12Hour = (time24: string | null): string => {
-    if (!time24) return '';
-    const [hours, minutes] = time24.split(':');
-    const date = new Date();
-    date.setHours(parseInt(hours), parseInt(minutes));
-    return format(date, 'h:mm aa');
-  };
-
-  const convertTo24Hour = (time12: string): string => {
-    const [time, period] = time12.split(' ');
-    let [hours, minutes] = time.split(':');
-    let hoursNum = parseInt(hours);
-    
-    if (period.toLowerCase() === 'pm' && hoursNum !== 12) {
-      hoursNum += 12;
-    } else if (period.toLowerCase() === 'am' && hoursNum === 12) {
-      hoursNum = 0;
+  const handleSlotIntervalChange = async (day: string, interval: number) => {
+    try {
+      await handleWorkingHoursUpdate(day, { slot_interval: interval });
+    } catch (error) {
+      console.error('Error updating slot interval:', error);
+      toast.error('Failed to update slot interval');
     }
-    
-    return `${hoursNum.toString().padStart(2, '0')}:${minutes}`;
+  };
+
+  const handleMaxBookingsChange = async (day: WorkingHour, slotIndex: number, maxBookings: number) => {
+    try {
+      const updatedSlots = [...day.slots];
+      updatedSlots[slotIndex] = { ...updatedSlots[slotIndex], maxBookings };
+      await handleWorkingHoursUpdate(day.day, { slots: updatedSlots });
+    } catch (error) {
+      console.error('Error updating max bookings:', error);
+      toast.error('Failed to update max bookings');
+    }
   };
 
   if (loading) {
@@ -127,7 +148,7 @@ export function WorkingHours() {
           </div>
           <div>
             <h2 className="text-xl font-semibold text-gray-900">Working Hours</h2>
-            <p className="text-sm text-gray-500 mt-1">Configure clinic working hours</p>
+            <p className="text-sm text-gray-500 mt-1">Configure clinic working hours and time slots</p>
           </div>
         </div>
 
@@ -147,11 +168,11 @@ export function WorkingHours() {
                         <Clock className="h-4 w-4" />
                         <span>
                           {day.morning_start && day.morning_end
-                            ? `${convertTo12Hour(day.morning_start)} - ${convertTo12Hour(day.morning_end)}`
+                            ? `${day.morning_start} - ${day.morning_end}`
                             : 'No morning hours'
                           }
                           {day.evening_start && day.evening_end
-                            ? ` | ${convertTo12Hour(day.evening_start)} - ${convertTo12Hour(day.evening_end)}`
+                            ? ` | ${day.evening_start} - ${day.evening_end}`
                             : ' | No evening hours'
                           }
                         </span>
@@ -203,7 +224,19 @@ export function WorkingHours() {
                               <input
                                 type="checkbox"
                                 checked={!!(day.morning_start && day.morning_end)}
-                                onChange={() => toggleMorningHours(day)}
+                                onChange={() => {
+                                  if (day.morning_start && day.morning_end) {
+                                    handleWorkingHoursUpdate(day.day, {
+                                      morning_start: null,
+                                      morning_end: null
+                                    });
+                                  } else {
+                                    handleWorkingHoursUpdate(day.day, {
+                                      morning_start: '09:30',
+                                      morning_end: '12:00'
+                                    });
+                                  }
+                                }}
                                 className="sr-only peer"
                               />
                               <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
@@ -239,7 +272,19 @@ export function WorkingHours() {
                               <input
                                 type="checkbox"
                                 checked={!!(day.evening_start && day.evening_end)}
-                                onChange={() => toggleEveningHours(day)}
+                                onChange={() => {
+                                  if (day.evening_start && day.evening_end) {
+                                    handleWorkingHoursUpdate(day.day, {
+                                      evening_start: null,
+                                      evening_end: null
+                                    });
+                                  } else {
+                                    handleWorkingHoursUpdate(day.day, {
+                                      evening_start: '16:00',
+                                      evening_end: '18:30'
+                                    });
+                                  }
+                                }}
                                 className="sr-only peer"
                               />
                               <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
@@ -262,6 +307,66 @@ export function WorkingHours() {
                               />
                             </div>
                           )}
+                        </div>
+                      </div>
+
+                      {/* Time Slots Section */}
+                      <div className="mt-6 bg-white rounded-lg p-4 border border-gray-100">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <Settings className="h-5 w-5 text-gray-500" />
+                            <h4 className="font-medium text-gray-900">Time Slots Settings</h4>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
+                              <label className="text-sm text-gray-600">Interval:</label>
+                              <select
+                                value={day.slot_interval}
+                                onChange={(e) => handleSlotIntervalChange(day.day, parseInt(e.target.value))}
+                                className="px-2 py-1 border border-gray-300 rounded-lg text-sm"
+                              >
+                                <option value={15}>15 minutes</option>
+                                <option value={30}>30 minutes</option>
+                              </select>
+                            </div>
+                            <button
+                              onClick={() => handleGenerateSlots(day)}
+                              className="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors"
+                            >
+                              Generate Slots
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                          {day.slots.map((slot, index) => (
+                            <div
+                              key={index}
+                              className="bg-gray-50 p-3 rounded-lg border border-gray-200"
+                            >
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm font-medium text-gray-900">{slot.time}</span>
+                                <div className="flex items-center gap-1">
+                                  <button
+                                    onClick={() => handleMaxBookingsChange(day, index, Math.max(1, slot.maxBookings - 1))}
+                                    className="p-1 hover:bg-gray-200 rounded"
+                                  >
+                                    <Minus className="h-3 w-3 text-gray-500" />
+                                  </button>
+                                  <span className="text-sm text-gray-600 min-w-[20px] text-center">
+                                    {slot.maxBookings}
+                                  </span>
+                                  <button
+                                    onClick={() => handleMaxBookingsChange(day, index, slot.maxBookings + 1)}
+                                    className="p-1 hover:bg-gray-200 rounded"
+                                  >
+                                    <Plus className="h-3 w-3 text-gray-500" />
+                                  </button>
+                                </div>
+                              </div>
+                              <p className="text-xs text-gray-500">Max Bookings</p>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
