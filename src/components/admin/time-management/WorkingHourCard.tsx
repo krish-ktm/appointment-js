@@ -5,6 +5,8 @@ import { WorkingHour } from '../../../types';
 import { WorkingHoursForm } from './WorkingHoursForm';
 import { TimeSlotsManager } from './TimeSlotsManager';
 import { format } from 'date-fns';
+import { supabase } from '../../../lib/supabase';
+import { toast } from 'react-hot-toast';
 
 interface WorkingHourCardProps {
   day: WorkingHour;
@@ -25,6 +27,8 @@ export function WorkingHourCard({
   formErrors,
   isSaving
 }: WorkingHourCardProps) {
+  const [isToggling, setIsToggling] = useState(false);
+
   // Function to convert 24h time to 12h time for display
   const to12HourFormat = (time24: string | null): string => {
     if (!time24) return '';
@@ -68,6 +72,35 @@ export function WorkingHourCard({
     onUpdate({ slots: newSlots });
   };
 
+  const handleToggleWorking = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    setIsToggling(true);
+
+    try {
+      const isWorking = e.target.checked;
+      
+      // Update the database first - only update is_working status
+      const { error } = await supabase
+        .from('working_hours')
+        .update({ is_working: isWorking })
+        .eq('day', day.day);
+
+      if (error) throw error;
+
+      // If successful, update only the is_working status in local state
+      onUpdate({ is_working: isWorking });
+
+      toast.success(`${day.day} ${isWorking ? 'enabled' : 'disabled'} successfully`);
+    } catch (error) {
+      console.error('Error toggling working day:', error);
+      toast.error('Failed to update working hours');
+      // Revert the checkbox state on error
+      onUpdate({ is_working: !e.target.checked });
+    } finally {
+      setIsToggling(false);
+    }
+  };
+
   return (
     <div className="bg-gray-50 rounded-xl overflow-hidden">
       <button
@@ -99,15 +132,14 @@ export function WorkingHourCard({
             <input
               type="checkbox"
               checked={day.is_working}
-              onChange={(e) => {
-                onUpdate({ is_working: e.target.checked });
-              }}
+              onChange={handleToggleWorking}
+              disabled={isToggling}
               className="sr-only peer"
               onClick={(e) => e.stopPropagation()}
             />
             <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
             <span className="ms-3 text-sm font-medium text-gray-700">
-              {day.is_working ? 'Working' : 'Closed'}
+              {isToggling ? '...' : (day.is_working ? 'Working' : 'Closed')}
             </span>
           </label>
           <ChevronDown
