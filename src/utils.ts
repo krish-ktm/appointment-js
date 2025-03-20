@@ -5,90 +5,117 @@ import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 
 const TIMEZONE = 'Asia/Kolkata';
 
-export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
-  const baseSlots = [
-    // Morning slots (9:30 AM to 12:00 PM)
-    '9:30 AM', '9:45 AM',
-    '10:00 AM', '10:15 AM', '10:30 AM', '10:45 AM',
-    '11:00 AM', '11:15 AM', '11:30 AM', '11:45 AM',
-    '12:00 PM',
-    // Evening slots (4:00 PM to 6:30 PM)
-    '4:00 PM', '4:15 PM', '4:30 PM', '4:45 PM',
-    '5:00 PM', '5:15 PM', '5:30 PM', '5:45 PM',
-    '6:00 PM', '6:15 PM', '6:30 PM'
-  ];
+// Helper function to convert 24h time to 12h format
+const to12HourFormat = (time24: string): string => {
+  const [hours, minutes] = time24.split(':');
+  const hour = parseInt(hours, 10);
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  const hour12 = hour % 12 || 12;
+  return `${hour12}:${minutes} ${ampm}`;
+};
 
-  // Initialize slots with max 3 bookings
-  const slots: TimeSlot[] = baseSlots.map(time => ({
-    time,
-    maxBookings: 3,
-    currentBookings: 0
-  }));
-
-  // Get current time in IST
-  const istNow = utcToZonedTime(new Date(), TIMEZONE);
+// Helper function to convert 12h time to 24h format
+const to24HourFormat = (time12: string): string => {
+  const [time, period] = time12.split(' ');
+  let [hours, minutes] = time.split(':');
+  let hour = parseInt(hours, 10);
   
-  // Parse and convert selected date to IST
-  const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
-  const selectedDate = utcToZonedTime(parsedDate, TIMEZONE);
-  
-  // Check if selected date is today or tomorrow
-  const isSelectedToday = isToday(selectedDate);
-  const isSelectedTomorrow = isTomorrow(selectedDate);
-  const isSelectedSunday = isSunday(selectedDate);
-
-  // If it's Sunday, mark all slots as fully booked
-  if (isSelectedSunday) {
-    return slots.map(slot => ({
-      ...slot,
-      currentBookings: slot.maxBookings
-    }));
+  if (period.toUpperCase() === 'PM' && hour !== 12) {
+    hour += 12;
+  } else if (period.toUpperCase() === 'AM' && hour === 12) {
+    hour = 0;
   }
+  
+  return `${hour.toString().padStart(2, '0')}:${minutes}`;
+};
 
+export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
   try {
+    // Get working hours for the selected date
+    const selectedDate = utcToZonedTime(new Date(date), TIMEZONE);
+    const dayName = format(selectedDate, 'EEEE');
+
+    const { data: workingHours, error } = await supabase
+      .from('working_hours')
+      .select('*')
+      .eq('day', dayName)
+      .single();
+
+    if (error) throw error;
+    if (!workingHours || !workingHours.is_working) {
+      return [];
+    }
+
+    // Get current time in IST
+    const istNow = utcToZonedTime(new Date(), TIMEZONE);
+    
+    // Parse and convert selected date to IST
+    const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
+    const selectedDateInIST = utcToZonedTime(parsedDate, TIMEZONE);
+    
+    // Check if selected date is today or tomorrow
+    const isSelectedToday = isToday(selectedDateInIST);
+    const isSelectedTomorrow = isTomorrow(selectedDateInIST);
+    const isSelectedSunday = isSunday(selectedDateInIST);
+
+    // If it's Sunday, return empty array as clinic is closed
+    if (isSelectedSunday) {
+      return [];
+    }
+
+    // Convert slots from database to TimeSlot array and convert times to 12h format
+    let slots: TimeSlot[] = (workingHours.slots || []).map(slot => ({
+      ...slot,
+      time: to12HourFormat(slot.time)
+    }));
+
     // Get current bookings for each time slot
-    const { data: bookings, error } = await supabase
+    const { data: bookings, error: bookingsError } = await supabase
       .from('appointments')
       .select('appointment_time')
       .eq('appointment_date', date)
       .eq('status', 'pending');
 
-    if (error) {
-      console.error('Error fetching bookings:', error);
-      throw new Error('Failed to fetch bookings');
-    }
+    if (bookingsError) throw bookingsError;
 
-    if (bookings) {
-      // Count bookings for each time slot
-      const bookingCounts = bookings.reduce((acc, booking) => {
-        acc[booking.appointment_time] = (acc[booking.appointment_time] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
+    // Count bookings for each time slot (convert booking times to 12h format for comparison)
+    const bookingCounts = (bookings || []).reduce((acc, booking) => {
+      const time12h = to12HourFormat(booking.appointment_time);
+      acc[time12h] = (acc[time12h] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
 
-      // Update slots with booking counts and apply time restrictions
-      slots.forEach(slot => {
-        slot.currentBookings = bookingCounts[slot.time] || 0;
+    // Update slots with current bookings and apply time restrictions
+    slots = slots.map(slot => ({
+      time: slot.time,
+      maxBookings: slot.maxBookings,
+      currentBookings: bookingCounts[slot.time] || 0
+    }));
+
+    if (isSelectedToday) {
+      slots = slots.filter(slot => {
+        // Convert 12h time back to 24h for comparison
+        const time24h = to24HourFormat(slot.time);
+        // Combine date and time for accurate comparison
+        const slotDateTime = parse(`${date} ${time24h}`, 'yyyy-MM-dd HH:mm', new Date());
+        const slotTimeInIST = utcToZonedTime(slotDateTime, TIMEZONE);
         
-        if (isSelectedToday) {
-          // Combine date and time for accurate comparison
-          const slotDateTime = parse(`${date} ${slot.time}`, 'yyyy-MM-dd h:mm a', new Date());
-          const slotTimeInIST = utcToZonedTime(slotDateTime, TIMEZONE);
-          
-          // Block past time slots
-          if (isBefore(slotTimeInIST, istNow)) {
-            slot.currentBookings = slot.maxBookings;
-          }
-
-          // Rule 1: At 9 AM IST, block all morning slots (9:30 AM to 12 PM)
-          if (istNow.getHours() >= 9 && slotTimeInIST.getHours() < 12) {
-            slot.currentBookings = slot.maxBookings;
-          }
-
-          // Rule 2: At 1 PM IST, block all evening slots (4 PM to 6:30 PM)
-          if (istNow.getHours() >= 13) {
-            slot.currentBookings = slot.maxBookings;
-          }
+        // Block past time slots
+        if (isBefore(slotTimeInIST, istNow)) {
+          return false;
         }
+
+        // Rule 1: At 9 AM IST, block all morning slots (9:30 AM to 12 PM)
+        if (istNow.getHours() >= 9 && slotTimeInIST.getHours() < 12) {
+          return false;
+        }
+
+        // Rule 2: At 1 PM IST, block all evening slots (4 PM to 6:30 PM)
+        if (istNow.getHours() >= 13) {
+          return false;
+        }
+
+        return true;
       });
     }
 
@@ -96,62 +123,6 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
   } catch (error) {
     console.error('Error generating time slots:', error);
     return [];
-  }
-};
-
-const isSlotAvailable = async (date: string, time: string): Promise<boolean> => {
-  try {
-    // Parse and convert to IST
-    const istNow = utcToZonedTime(new Date(), TIMEZONE);
-    const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
-    const selectedDate = utcToZonedTime(parsedDate, TIMEZONE);
-    
-    // Check if selected date is today or Sunday
-    const isSelectedToday = isToday(selectedDate);
-    const isSelectedSunday = isSunday(selectedDate);
-
-    // Return false if it's Sunday
-    if (isSelectedSunday) {
-      return false;
-    }
-
-    if (isSelectedToday) {
-      // Combine date and time for accurate comparison
-      const slotDateTime = parse(`${date} ${time}`, 'yyyy-MM-dd h:mm a', new Date());
-      const slotTimeInIST = utcToZonedTime(slotDateTime, TIMEZONE);
-
-      // Block past time slots
-      if (isBefore(slotTimeInIST, istNow)) {
-        return false;
-      }
-
-      // Rule 1: At 9 AM IST, block all morning slots (9:30 AM to 12 PM)
-      if (istNow.getHours() >= 9 && slotTimeInIST.getHours() < 12) {
-        return false;
-      }
-
-      // Rule 2: At 1 PM IST, block all evening slots (4 PM to 6:30 PM)
-      if (istNow.getHours() >= 13) {
-        return false;
-      }
-    }
-
-    const { data, error } = await supabase
-      .from('appointments')
-      .select('id')
-      .eq('appointment_date', date)
-      .eq('appointment_time', time)
-      .eq('status', 'pending');
-
-    if (error) {
-      console.error('Error checking slot availability:', error);
-      throw new Error('Failed to check slot availability');
-    }
-
-    return data.length < 3; // Max 3 appointments per slot
-  } catch (error) {
-    console.error('Error in isSlotAvailable:', error);
-    return false;
   }
 };
 
@@ -164,6 +135,20 @@ export const validateBookingRequest = async (
     // Parse and convert to IST
     const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
     const selectedDate = utcToZonedTime(parsedDate, TIMEZONE);
+    const dayName = format(selectedDate, 'EEEE');
+
+    // Check if the clinic is working on this day
+    const { data: workingHours, error: workingHoursError } = await supabase
+      .from('working_hours')
+      .select('is_working, slots')
+      .eq('day', dayName)
+      .single();
+
+    if (workingHoursError) throw workingHoursError;
+
+    if (!workingHours || !workingHours.is_working) {
+      return { isValid: false, error: 'The clinic is closed on this day' };
+    }
 
     // Check if it's Sunday
     if (isSunday(selectedDate)) {
@@ -175,10 +160,29 @@ export const validateBookingRequest = async (
       return { isValid: false, error: 'Please enter a valid 10-digit phone number' };
     }
 
-    // Validate time slot availability
-    const isAvailable = await isSlotAvailable(date, timeSlot);
-    if (!isAvailable) {
-      return { isValid: false, error: 'This time slot is no longer available' };
+    // Convert input time slot to 24h format for comparison
+    const timeSlot24h = to24HourFormat(timeSlot);
+
+    // Check if the selected time slot exists and has available bookings
+    const slots = workingHours.slots || [];
+    const selectedSlot = slots.find(slot => slot.time === timeSlot24h);
+    
+    if (!selectedSlot) {
+      return { isValid: false, error: 'Invalid time slot selected' };
+    }
+
+    // Get current bookings for this slot
+    const { data: bookings, error: bookingsError } = await supabase
+      .from('appointments')
+      .select('id')
+      .eq('appointment_date', date)
+      .eq('appointment_time', timeSlot24h)
+      .eq('status', 'pending');
+
+    if (bookingsError) throw bookingsError;
+
+    if (bookings && bookings.length >= selectedSlot.maxBookings) {
+      return { isValid: false, error: 'This time slot is fully booked' };
     }
 
     return { isValid: true };
