@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabase';
 import { toast } from 'react-hot-toast';
-import { Calendar, ChevronDown, Clock, Sun, Moon, Plus, Minus, Settings } from 'lucide-react';
+import { Calendar, ChevronDown, Clock, Sun, Moon, Plus, Minus, Settings, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format, parse } from 'date-fns';
 
@@ -22,11 +22,19 @@ interface WorkingHour {
   slots: TimeSlot[];
 }
 
+interface FormErrors {
+  morning?: string;
+  evening?: string;
+  slots?: string;
+}
+
 export function WorkingHours() {
   const [workingHours, setWorkingHours] = useState<WorkingHour[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedDay, setExpandedDay] = useState<string | null>(null);
   const [editingSlot, setEditingSlot] = useState<{ day: string; index: number } | null>(null);
+  const [formErrors, setFormErrors] = useState<Record<string, FormErrors>>({});
+  const [savingDay, setSavingDay] = useState<string | null>(null);
 
   useEffect(() => {
     loadWorkingHours();
@@ -34,6 +42,7 @@ export function WorkingHours() {
 
   const loadWorkingHours = async () => {
     try {
+      setLoading(true);
       const { data, error } = await supabase
         .from('working_hours')
         .select('*')
@@ -49,22 +58,64 @@ export function WorkingHours() {
     }
   };
 
-  const handleWorkingHoursUpdate = async (day: string, updates: Partial<WorkingHour>) => {
+  const validateWorkingHours = (day: WorkingHour): FormErrors => {
+    const errors: FormErrors = {};
+
+    if (day.is_working) {
+      // Morning validation
+      if (day.morning_start && day.morning_end) {
+        const morningStart = parse(day.morning_start, 'HH:mm', new Date());
+        const morningEnd = parse(day.morning_end, 'HH:mm', new Date());
+        if (morningEnd <= morningStart) {
+          errors.morning = 'Morning end time must be after start time';
+        }
+      }
+
+      // Evening validation (except Saturday)
+      if (day.day !== 'Saturday' && day.evening_start && day.evening_end) {
+        const eveningStart = parse(day.evening_start, 'HH:mm', new Date());
+        const eveningEnd = parse(day.evening_end, 'HH:mm', new Date());
+        if (eveningEnd <= eveningStart) {
+          errors.evening = 'Evening end time must be after start time';
+        }
+      }
+
+      // Slots validation
+      if (day.slots.length === 0) {
+        errors.slots = 'At least one time slot is required';
+      }
+    }
+
+    return errors;
+  };
+
+  const handleWorkingHoursUpdate = async (day: string) => {
     try {
+      setSavingDay(day);
+      const dayData = workingHours.find(wh => wh.day === day);
+      if (!dayData) return;
+
+      // Validate before saving
+      const errors = validateWorkingHours(dayData);
+      if (Object.keys(errors).length > 0) {
+        setFormErrors({ ...formErrors, [day]: errors });
+        toast.error('Please fix the validation errors before saving');
+        return;
+      }
+
       const { error } = await supabase
         .from('working_hours')
-        .update(updates)
+        .update(dayData)
         .eq('day', day);
 
       if (error) throw error;
-
-      setWorkingHours(workingHours.map(wh => 
-        wh.day === day ? { ...wh, ...updates } : wh
-      ));
       toast.success('Working hours updated successfully');
+      setFormErrors({ ...formErrors, [day]: {} });
     } catch (error) {
       console.error('Error updating working hours:', error);
       toast.error('Failed to update working hours');
+    } finally {
+      setSavingDay(null);
     }
   };
 
@@ -84,7 +135,7 @@ export function WorkingHours() {
     return slots;
   };
 
-  const handleGenerateSlots = async (day: WorkingHour) => {
+  const handleGenerateSlots = (day: WorkingHour) => {
     try {
       let newSlots: TimeSlot[] = [];
 
@@ -104,31 +155,28 @@ export function WorkingHours() {
         ];
       }
 
-      await handleWorkingHoursUpdate(day.day, { slots: newSlots });
+      setWorkingHours(workingHours.map(wh => 
+        wh.day === day.day ? { ...wh, slots: newSlots } : wh
+      ));
     } catch (error) {
       console.error('Error generating time slots:', error);
       toast.error('Failed to generate time slots');
     }
   };
 
-  const handleSlotIntervalChange = async (day: string, interval: number) => {
-    try {
-      await handleWorkingHoursUpdate(day, { slot_interval: interval });
-    } catch (error) {
-      console.error('Error updating slot interval:', error);
-      toast.error('Failed to update slot interval');
-    }
+  const handleSlotIntervalChange = (day: string, interval: number) => {
+    setWorkingHours(workingHours.map(wh => 
+      wh.day === day ? { ...wh, slot_interval: interval } : wh
+    ));
   };
 
-  const handleMaxBookingsChange = async (day: WorkingHour, slotIndex: number, maxBookings: number) => {
-    try {
-      const updatedSlots = [...day.slots];
-      updatedSlots[slotIndex] = { ...updatedSlots[slotIndex], maxBookings };
-      await handleWorkingHoursUpdate(day.day, { slots: updatedSlots });
-    } catch (error) {
-      console.error('Error updating max bookings:', error);
-      toast.error('Failed to update max bookings');
-    }
+  const handleMaxBookingsChange = (day: WorkingHour, slotIndex: number, maxBookings: number) => {
+    const updatedSlots = [...day.slots];
+    updatedSlots[slotIndex] = { ...updatedSlots[slotIndex], maxBookings };
+    
+    setWorkingHours(workingHours.map(wh => 
+      wh.day === day.day ? { ...wh, slots: updatedSlots } : wh
+    ));
   };
 
   if (loading) {
@@ -185,7 +233,11 @@ export function WorkingHours() {
                     <input
                       type="checkbox"
                       checked={day.is_working}
-                      onChange={(e) => handleWorkingHoursUpdate(day.day, { is_working: e.target.checked })}
+                      onChange={(e) => {
+                        setWorkingHours(workingHours.map(wh => 
+                          wh.day === day.day ? { ...wh, is_working: e.target.checked } : wh
+                        ));
+                      }}
                       className="sr-only peer"
                       onClick={(e) => e.stopPropagation()}
                     />
@@ -226,15 +278,13 @@ export function WorkingHours() {
                                 checked={!!(day.morning_start && day.morning_end)}
                                 onChange={() => {
                                   if (day.morning_start && day.morning_end) {
-                                    handleWorkingHoursUpdate(day.day, {
-                                      morning_start: null,
-                                      morning_end: null
-                                    });
+                                    setWorkingHours(workingHours.map(wh => 
+                                      wh.day === day.day ? { ...wh, morning_start: null, morning_end: null } : wh
+                                    ));
                                   } else {
-                                    handleWorkingHoursUpdate(day.day, {
-                                      morning_start: '09:30',
-                                      morning_end: '12:00'
-                                    });
+                                    setWorkingHours(workingHours.map(wh => 
+                                      wh.day === day.day ? { ...wh, morning_start: '09:30', morning_end: '12:00' } : wh
+                                    ));
                                   }
                                 }}
                                 className="sr-only peer"
@@ -243,71 +293,97 @@ export function WorkingHours() {
                             </label>
                           </div>
                           {day.morning_start && day.morning_end && (
-                            <div className="flex items-center gap-2">
-                              <input
-                                type="time"
-                                value={day.morning_start}
-                                onChange={(e) => handleWorkingHoursUpdate(day.day, { morning_start: e.target.value })}
-                                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
-                              />
-                              <span className="text-gray-500">to</span>
-                              <input
-                                type="time"
-                                value={day.morning_end}
-                                onChange={(e) => handleWorkingHoursUpdate(day.day, { morning_end: e.target.value })}
-                                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
-                              />
-                            </div>
+                            <>
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="time"
+                                  value={day.morning_start}
+                                  onChange={(e) => {
+                                    setWorkingHours(workingHours.map(wh => 
+                                      wh.day === day.day ? { ...wh, morning_start: e.target.value } : wh
+                                    ));
+                                  }}
+                                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+                                />
+                                <span className="text-gray-500">to</span>
+                                <input
+                                  type="time"
+                                  value={day.morning_end}
+                                  onChange={(e) => {
+                                    setWorkingHours(workingHours.map(wh => 
+                                      wh.day === day.day ? { ...wh, morning_end: e.target.value } : wh
+                                    ));
+                                  }}
+                                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+                                />
+                              </div>
+                              {formErrors[day.day]?.morning && (
+                                <p className="mt-2 text-sm text-red-600">{formErrors[day.day].morning}</p>
+                              )}
+                            </>
                           )}
                         </div>
 
                         {/* Evening Hours Section */}
-                        <div className="bg-white rounded-lg p-4 border border-gray-100">
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-2">
-                              <Moon className="h-5 w-5 text-indigo-500" />
-                              <h4 className="font-medium text-gray-900">Evening Hours</h4>
+                        {day.day !== 'Saturday' && (
+                          <div className="bg-white rounded-lg p-4 border border-gray-100">
+                            <div className="flex items-center justify-between mb-4">
+                              <div className="flex items-center gap-2">
+                                <Moon className="h-5 w-5 text-indigo-500" />
+                                <h4 className="font-medium text-gray-900">Evening Hours</h4>
+                              </div>
+                              <label className="relative inline-flex items-center cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={!!(day.evening_start && day.evening_end)}
+                                  onChange={() => {
+                                    if (day.evening_start && day.evening_end) {
+                                      setWorkingHours(workingHours.map(wh => 
+                                        wh.day === day.day ? { ...wh, evening_start: null, evening_end: null } : wh
+                                      ));
+                                    } else {
+                                      setWorkingHours(workingHours.map(wh => 
+                                        wh.day === day.day ? { ...wh, evening_start: '16:00', evening_end: '18:30' } : wh
+                                      ));
+                                    }
+                                  }}
+                                  className="sr-only peer"
+                                />
+                                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                              </label>
                             </div>
-                            <label className="relative inline-flex items-center cursor-pointer">
-                              <input
-                                type="checkbox"
-                                checked={!!(day.evening_start && day.evening_end)}
-                                onChange={() => {
-                                  if (day.evening_start && day.evening_end) {
-                                    handleWorkingHoursUpdate(day.day, {
-                                      evening_start: null,
-                                      evening_end: null
-                                    });
-                                  } else {
-                                    handleWorkingHoursUpdate(day.day, {
-                                      evening_start: '16:00',
-                                      evening_end: '18:30'
-                                    });
-                                  }
-                                }}
-                                className="sr-only peer"
-                              />
-                              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                            </label>
+                            {day.evening_start && day.evening_end && (
+                              <>
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    type="time"
+                                    value={day.evening_start}
+                                    onChange={(e) => {
+                                      setWorkingHours(workingHours.map(wh => 
+                                        wh.day === day.day ? { ...wh, evening_start: e.target.value } : wh
+                                      ));
+                                    }}
+                                    className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+                                  />
+                                  <span className="text-gray-500">to</span>
+                                  <input
+                                    type="time"
+                                    value={day.evening_end}
+                                    onChange={(e) => {
+                                      setWorkingHours(workingHours.map(wh => 
+                                        wh.day === day.day ? { ...wh, evening_end: e.target.value } : wh
+                                      ));
+                                    }}
+                                    className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+                                  />
+                                </div>
+                                {formErrors[day.day]?.evening && (
+                                  <p className="mt-2 text-sm text-red-600">{formErrors[day.day].evening}</p>
+                                )}
+                              </>
+                            )}
                           </div>
-                          {day.evening_start && day.evening_end && (
-                            <div className="flex items-center gap-2">
-                              <input
-                                type="time"
-                                value={day.evening_start}
-                                onChange={(e) => handleWorkingHoursUpdate(day.day, { evening_start: e.target.value })}
-                                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
-                              />
-                              <span className="text-gray-500">to</span>
-                              <input
-                                type="time"
-                                value={day.evening_end}
-                                onChange={(e) => handleWorkingHoursUpdate(day.day, { evening_end: e.target.value })}
-                                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
-                              />
-                            </div>
-                          )}
-                        </div>
+                        )}
                       </div>
 
                       {/* Time Slots Section */}
@@ -368,6 +444,32 @@ export function WorkingHours() {
                             </div>
                           ))}
                         </div>
+                        {formErrors[day.day]?.slots && (
+                          <p className="mt-2 text-sm text-red-600">{formErrors[day.day].slots}</p>
+                        )}
+                      </div>
+
+                      {/* Save Button */}
+                      <div className="mt-6 flex justify-end">
+                        <button
+                          onClick={() => handleWorkingHoursUpdate(day.day)}
+                          disabled={savingDay === day.day}
+                          className={`inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors ${
+                            savingDay === day.day ? 'opacity-70 cursor-not-allowed' : ''
+                          }`}
+                        >
+                          {savingDay === day.day ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                              <span>Saving...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Save className="h-4 w-4" />
+                              <span>Save Changes</span>
+                            </>
+                          )}
+                        </button>
                       </div>
                     </div>
                   </motion.div>
