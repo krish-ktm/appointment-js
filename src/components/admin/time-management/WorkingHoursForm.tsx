@@ -117,62 +117,60 @@ export function WorkingHoursForm({ day, onUpdate, formErrors }: WorkingHoursForm
       </div>
 
       {/* Evening Hours Section */}
-      {day.day !== 'Saturday' && (
-        <div className="bg-white rounded-lg p-4 border border-gray-100">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Moon className="h-5 w-5 text-indigo-500" />
-              <h4 className="font-medium text-gray-900">Evening Hours</h4>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={!!(day.evening_start && day.evening_end)}
-                onChange={(e) => {
-                  if (!e.target.checked) {
-                    onUpdate({ evening_start: null, evening_end: null });
-                  } else {
-                    onUpdate({ evening_start: '16:00', evening_end: '18:30' });
-                  }
-                }}
-                className="sr-only peer"
-              />
-              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-            </label>
+      <div className="bg-white rounded-lg p-4 border border-gray-100">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Moon className="h-5 w-5 text-indigo-500" />
+            <h4 className="font-medium text-gray-900">Evening Hours</h4>
           </div>
-          {day.evening_start && day.evening_end && (
-            <>
-              <div className="flex items-center gap-2">
-                <input
-                  type="time"
-                  value={day.evening_start}
-                  onChange={(e) => {
-                    const time12 = format(new Date(`2000-01-01T${e.target.value}`), 'hh:mm aa');
-                    handleTimeChange('evening', 'start', time12);
-                  }}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
-                />
-                <span className="text-gray-500">to</span>
-                <input
-                  type="time"
-                  value={day.evening_end}
-                  onChange={(e) => {
-                    const time12 = format(new Date(`2000-01-01T${e.target.value}`), 'hh:mm aa');
-                    handleTimeChange('evening', 'end', time12);
-                  }}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
-                />
-              </div>
-              <div className="mt-2 text-sm text-gray-500">
-                {to12HourFormat(day.evening_start)} - {to12HourFormat(day.evening_end)}
-              </div>
-              {formErrors?.evening && (
-                <p className="mt-2 text-sm text-red-600">{formErrors.evening}</p>
-              )}
-            </>
-          )}
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={!!(day.evening_start && day.evening_end)}
+              onChange={(e) => {
+                if (!e.target.checked) {
+                  onUpdate({ evening_start: null, evening_end: null });
+                } else {
+                  onUpdate({ evening_start: '16:00', evening_end: '18:30' });
+                }
+              }}
+              className="sr-only peer"
+            />
+            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
         </div>
-      )}
+        {day.evening_start && day.evening_end && (
+          <>
+            <div className="flex items-center gap-2">
+              <input
+                type="time"
+                value={day.evening_start}
+                onChange={(e) => {
+                  const time12 = format(new Date(`2000-01-01T${e.target.value}`), 'hh:mm aa');
+                  handleTimeChange('evening', 'start', time12);
+                }}
+                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+              />
+              <span className="text-gray-500">to</span>
+              <input
+                type="time"
+                value={day.evening_end}
+                onChange={(e) => {
+                  const time12 = format(new Date(`2000-01-01T${e.target.value}`), 'hh:mm aa');
+                  handleTimeChange('evening', 'end', time12);
+                }}
+                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+              />
+            </div>
+            <div className="mt-2 text-sm text-gray-500">
+              {to12HourFormat(day.evening_start)} - {to12HourFormat(day.evening_end)}
+            </div>
+            {formErrors?.evening && (
+              <p className="mt-2 text-sm text-red-600">{formErrors.evening}</p>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
