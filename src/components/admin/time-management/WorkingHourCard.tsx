@@ -42,11 +42,12 @@ export function WorkingHourCard({
     // Generate time slots based on working hours
     const newSlots = [];
     const interval = day.slot_interval || 30;
+    const defaultMaxBookings = 3;
 
     if (day.morning_start && day.morning_end) {
       let time = day.morning_start;
       while (time <= day.morning_end) {
-        newSlots.push({ time, maxBookings: 3 });
+        newSlots.push({ time, maxBookings: defaultMaxBookings });
         // Add interval minutes to time
         const [hours, minutes] = time.split(':').map(Number);
         const totalMinutes = hours * 60 + minutes + interval;
@@ -59,7 +60,7 @@ export function WorkingHourCard({
     if (day.evening_start && day.evening_end) {
       let time = day.evening_start;
       while (time <= day.evening_end) {
-        newSlots.push({ time, maxBookings: 3 });
+        newSlots.push({ time, maxBookings: defaultMaxBookings });
         // Add interval minutes to time
         const [hours, minutes] = time.split(':').map(Number);
         const totalMinutes = hours * 60 + minutes + interval;
@@ -106,6 +107,20 @@ export function WorkingHourCard({
     if (!(e.target as HTMLElement).closest('label')) {
       onToggle();
     }
+  };
+
+  const handleDeleteSlot = (index: number) => {
+    const newSlots = [...day.slots];
+    newSlots.splice(index, 1);
+    onUpdate({ slots: newSlots });
+  };
+
+  const handleDefaultMaxBookingsChange = (maxBookings: number) => {
+    const newSlots = day.slots.map(slot => ({
+      ...slot,
+      maxBookings
+    }));
+    onUpdate({ slots: newSlots });
   };
 
   return (
@@ -182,6 +197,8 @@ export function WorkingHourCard({
                     newSlots[index] = { ...newSlots[index], maxBookings };
                     onUpdate({ slots: newSlots });
                   }}
+                  onDeleteSlot={handleDeleteSlot}
+                  onDefaultMaxBookingsChange={handleDefaultMaxBookingsChange}
                 />
               </div>
 
