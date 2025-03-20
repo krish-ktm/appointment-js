@@ -5,11 +5,10 @@ import { format } from 'date-fns';
 
 interface TimeSlotsManagerProps {
   day: WorkingHour;
-  onGenerateSlots: () => void;
+  onGenerateSlots: (defaultMaxBookings: number) => void;
   onSlotIntervalChange: (interval: number) => void;
   onMaxBookingsChange: (index: number, maxBookings: number) => void;
   onDeleteSlot: (index: number) => void;
-  onDefaultMaxBookingsChange: (maxBookings: number) => void;
 }
 
 export function TimeSlotsManager({ 
@@ -17,8 +16,7 @@ export function TimeSlotsManager({
   onGenerateSlots, 
   onSlotIntervalChange,
   onMaxBookingsChange,
-  onDeleteSlot,
-  onDefaultMaxBookingsChange
+  onDeleteSlot
 }: TimeSlotsManagerProps) {
   const [defaultMaxBookings, setDefaultMaxBookings] = useState(3);
 
@@ -53,11 +51,7 @@ export function TimeSlotsManager({
             <label className="text-sm text-gray-600">Default Max Bookings:</label>
             <select
               value={defaultMaxBookings}
-              onChange={(e) => {
-                const value = parseInt(e.target.value);
-                setDefaultMaxBookings(value);
-                onDefaultMaxBookingsChange(value);
-              }}
+              onChange={(e) => setDefaultMaxBookings(parseInt(e.target.value))}
               className="px-2 py-1 border border-gray-300 rounded-lg text-sm"
             >
               {[1, 2, 3, 4, 5].map(num => (
@@ -66,7 +60,7 @@ export function TimeSlotsManager({
             </select>
           </div>
           <button
-            onClick={onGenerateSlots}
+            onClick={() => onGenerateSlots(defaultMaxBookings)}
             className="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors"
           >
             Generate Slots
