@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { supabase } from '../../../lib/supabase';
 import { toast } from 'react-hot-toast';
 import { X, Clock } from 'lucide-react';
+import { format, parse } from 'date-fns';
 
 interface TimeSlot {
   id: string;
@@ -28,10 +29,16 @@ export function TimeSlotModal({ slot, onClose, onSave }: TimeSlotModalProps) {
     e.preventDefault();
 
     try {
+      // Keep the time in 24-hour format for storage
+      const timeValue = form.time;
+
       if (slot) {
         const { error } = await supabase
           .from('time_slots')
-          .update(form)
+          .update({
+            ...form,
+            time: timeValue
+          })
           .eq('id', slot.id);
 
         if (error) throw error;
@@ -39,7 +46,10 @@ export function TimeSlotModal({ slot, onClose, onSave }: TimeSlotModalProps) {
       } else {
         const { error } = await supabase
           .from('time_slots')
-          .insert([form]);
+          .insert([{
+            ...form,
+            time: timeValue
+          }]);
 
         if (error) throw error;
         toast.success('Time slot added successfully');
@@ -88,7 +98,7 @@ export function TimeSlotModal({ slot, onClose, onSave }: TimeSlotModalProps) {
                 required
                 value={form.time}
                 onChange={(e) => setForm({ ...form, time: e.target.value })}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                className="block w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               />
             </div>
 
@@ -102,7 +112,7 @@ export function TimeSlotModal({ slot, onClose, onSave }: TimeSlotModalProps) {
                 min="1"
                 value={form.max_bookings}
                 onChange={(e) => setForm({ ...form, max_bookings: parseInt(e.target.value) })}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                className="block w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               />
             </div>
 

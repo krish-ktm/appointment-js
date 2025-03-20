@@ -3,6 +3,7 @@ import { supabase } from '../../../lib/supabase';
 import { toast } from 'react-hot-toast';
 import { Clock, Plus, Edit2, Trash2, X } from 'lucide-react';
 import { TimeSlotModal } from './TimeSlotModal';
+import { format, parse } from 'date-fns';
 
 interface TimeSlot {
   id: string;
@@ -54,6 +55,20 @@ export function TimeSlots() {
     }
   };
 
+  const formatTime = (timeStr: string) => {
+    try {
+      // Create a base date to work with (using today's date)
+      const baseDate = new Date();
+      const [hours, minutes] = timeStr.split(':');
+      baseDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+      
+      // Format to 12-hour time with AM/PM
+      return format(baseDate, 'h:mm aa');
+    } catch (error) {
+      return timeStr;
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[200px]">
@@ -97,7 +112,7 @@ export function TimeSlots() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-gray-500" />
-                    <span className="font-medium text-gray-900">{slot.time}</span>
+                    <span className="font-medium text-gray-900">{formatTime(slot.time)}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
