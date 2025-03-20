@@ -1,8 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'react-hot-toast';
-import { Clock, Calendar, Plus, X, Edit2, Trash2 } from 'lucide-react';
+import { Clock, Calendar, Plus, X, Edit2, Trash2, Check } from 'lucide-react';
+
+interface WorkingHours {
+  id: string;
+  day: string;
+  is_working: boolean;
+  morning_start: string | null;
+  morning_end: string | null;
+  evening_start: string | null;
+  evening_end: string | null;
+}
 
 interface TimeSlot {
   id: string;
@@ -11,19 +21,10 @@ interface TimeSlot {
   is_available: boolean;
 }
 
-interface WorkingHours {
-  id: string;
-  day: string;
-  is_working: boolean;
-  morning_start?: string;
-  morning_end?: string;
-  evening_start?: string;
-  evening_end?: string;
-}
-
 export function TimeManagement() {
-  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [workingHours, setWorkingHours] = useState<WorkingHours[]>([]);
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+  const [loading, setLoading] = useState(true);
   const [showTimeSlotForm, setShowTimeSlotForm] = useState(false);
   const [editingTimeSlot, setEditingTimeSlot] = useState<TimeSlot | null>(null);
   const [form, setForm] = useState({
@@ -32,122 +33,193 @@ export function TimeManagement() {
     is_available: true
   });
 
-  const days = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday'
-  ];
+  useEffect(() => {
+    loadData();
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const loadData = async () => {
     try {
-      const { data, error } = await supabase
+      // Load working hours
+      const { data: workingHoursData, error: workingHoursError } = await supabase
+        .from('working_hours')
+        .select('*')
+        .order('day', { ascending: true });
+
+      if (workingHoursError) throw workingHoursError;
+      setWorkingHours(workingHoursData || []);
+
+      // Load time slots
+      const { data: timeSlotsData, error: timeSlotsError } = await supabase
         .from('time_slots')
-        .insert([form])
-        .select()
-        .single();
+        .select('*')
+        .order('time', { ascending: true });
 
-      if (error) throw error;
-
-      setTimeSlots([...timeSlots, data]);
-      setShowTimeSlotForm(false);
-      setForm({ time: '', max_bookings: 3, is_available: true });
-      toast.success('Time slot added successfully');
+      if (timeSlotsError) throw timeSlotsError;
+      setTimeSlots(timeSlotsData || []);
     } catch (error) {
-      toast.error('Failed to add time slot');
+      console.error('Error loading data:', error);
+      toast.error('Failed to load time management data');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleWorkingHoursUpdate = async (day: string, field: string, value: any) => {
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('working_hours')
         .update({ [field]: value })
-        .eq('day', day)
-        .select();
+        .eq('day', day);
 
       if (error) throw error;
 
       setWorkingHours(workingHours.map(wh => 
         wh.day === day ? { ...wh, [field]: value } : wh
       ));
-      toast.success('Working hours updated');
+      toast.success('Working hours updated successfully');
     } catch (error) {
+      console.error('Error updating working hours:', error);
       toast.error('Failed to update working hours');
     }
   };
 
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-gray-900">Time Management</h2>
-        <button
-          onClick={() => setShowTimeSlotForm(true)}
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors gap-2"
-        >
-          <Plus className="h-4 w-4" />
-          Add Time Slot
-        </button>
-      </div>
+  const handleTimeSlotSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (editingTimeSlot) {
+        const { error } = await supabase
+          .from('time_slots')
+          .update(form)
+          .eq('id', editingTimeSlot.id);
 
+        if (error) throw error;
+        toast.success('Time slot updated successfully');
+      } else {
+        const { error } = await supabase
+          .from('time_slots')
+          .insert([form]);
+
+        if (error) throw error;
+        toast.success('Time slot added successfully');
+      }
+
+      setShowTimeSlotForm(false);
+      setEditingTimeSlot(null);
+      setForm({ time: '', max_bookings: 3, is_available: true });
+      loadData();
+    } catch (error) {
+      console.error('Error saving time slot:', error);
+      toast.error('Failed to save time slot');
+    }
+  };
+
+  const handleTimeSlotDelete = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('time_slots')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      toast.success('Time slot deleted successfully');
+      loadData();
+    } catch (error) {
+      console.error('Error deleting time slot:', error);
+      toast.error('Failed to delete time slot');
+    }
+  };
+
+  const formatTime = (time: string | null) => {
+    if (!time) return '';
+    return time;
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
       {/* Working Hours Section */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200">
         <div className="p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Working Hours</h3>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="bg-blue-50 p-3 rounded-lg">
+              <Clock className="h-6 w-6 text-blue-600" />
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900">Working Hours</h2>
+              <p className="text-sm text-gray-500 mt-1">Configure clinic working hours</p>
+            </div>
+          </div>
+
           <div className="space-y-4">
-            {days.map((day) => (
-              <div key={day} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
-                <div className="w-32">
-                  <span className="font-medium text-gray-700">{day}</span>
-                </div>
-                <div className="flex-1 grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm text-gray-500 mb-1">Morning Hours</label>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="time"
-                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                        onChange={(e) => handleWorkingHoursUpdate(day, 'morning_start', e.target.value)}
-                      />
-                      <span>to</span>
-                      <input
-                        type="time"
-                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                        onChange={(e) => handleWorkingHoursUpdate(day, 'morning_end', e.target.value)}
-                      />
-                    </div>
+            {workingHours.map((day) => (
+              <div key={day.day} className="bg-gray-50 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <Calendar className="h-5 w-5 text-gray-500" />
+                    <h3 className="font-medium text-gray-900">{day.day}</h3>
                   </div>
-                  <div>
-                    <label className="block text-sm text-gray-500 mb-1">Evening Hours</label>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="time"
-                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                        onChange={(e) => handleWorkingHoursUpdate(day, 'evening_start', e.target.value)}
-                      />
-                      <span>to</span>
-                      <input
-                        type="time"
-                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                        onChange={(e) => handleWorkingHoursUpdate(day, 'evening_end', e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <label className="inline-flex items-center">
+                  <label className="relative inline-flex items-center cursor-pointer">
                     <input
                       type="checkbox"
-                      className="form-checkbox h-5 w-5 text-blue-600"
-                      onChange={(e) => handleWorkingHoursUpdate(day, 'is_working', e.target.checked)}
+                      checked={day.is_working}
+                      onChange={(e) => handleWorkingHoursUpdate(day.day, 'is_working', e.target.checked)}
+                      className="sr-only peer"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Working Day</span>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    <span className="ms-3 text-sm font-medium text-gray-700">
+                      {day.is_working ? 'Working' : 'Closed'}
+                    </span>
                   </label>
                 </div>
+
+                {day.is_working && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Morning Hours</label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="time"
+                          value={formatTime(day.morning_start)}
+                          onChange={(e) => handleWorkingHoursUpdate(day.day, 'morning_start', e.target.value)}
+                          className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        />
+                        <span className="text-gray-500">to</span>
+                        <input
+                          type="time"
+                          value={formatTime(day.morning_end)}
+                          onChange={(e) => handleWorkingHoursUpdate(day.day, 'morning_end', e.target.value)}
+                          className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Evening Hours</label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="time"
+                          value={formatTime(day.evening_start)}
+                          onChange={(e) => handleWorkingHoursUpdate(day.day, 'evening_start', e.target.value)}
+                          className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        />
+                        <span className="text-gray-500">to</span>
+                        <input
+                          type="time"
+                          value={formatTime(day.evening_end)}
+                          onChange={(e) => handleWorkingHoursUpdate(day.day, 'evening_end', e.target.value)}
+                          className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -157,54 +229,82 @@ export function TimeManagement() {
       {/* Time Slots Section */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200">
         <div className="p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Time Slots</h3>
+          <div className="flex items-center justify-between gap-3 mb-6">
+            <div className="flex items-center gap-3">
+              <div className="bg-blue-50 p-3 rounded-lg">
+                <Clock className="h-6 w-6 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">Time Slots</h2>
+                <p className="text-sm text-gray-500 mt-1">Manage appointment time slots</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowTimeSlotForm(true)}
+              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Add Time Slot
+            </button>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {timeSlots.map((slot) => (
               <div
                 key={slot.id}
-                className="p-4 bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-between"
+                className="bg-gray-50 rounded-lg p-4 border border-gray-200"
               >
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-100 p-2 rounded-lg">
-                    <Clock className="h-5 w-5 text-blue-600" />
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-gray-500" />
+                    <span className="font-medium text-gray-900">{slot.time}</span>
                   </div>
-                  <div>
-                    <p className="font-medium text-gray-900">{slot.time}</p>
-                    <p className="text-sm text-gray-500">Max: {slot.max_bookings} bookings</p>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        setEditingTimeSlot(slot);
+                        setForm({
+                          time: slot.time,
+                          max_bookings: slot.max_bookings,
+                          is_available: slot.is_available
+                        });
+                        setShowTimeSlotForm(true);
+                      }}
+                      className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
+                    >
+                      <Edit2 className="h-4 w-4 text-gray-500" />
+                    </button>
+                    <button
+                      onClick={() => handleTimeSlotDelete(slot.id)}
+                      className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
+                    >
+                      <Trash2 className="h-4 w-4 text-red-500" />
+                    </button>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => {
-                      setEditingTimeSlot(slot);
-                      setShowTimeSlotForm(true);
-                    }}
-                    className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
-                  >
-                    <Edit2 className="h-4 w-4 text-gray-500" />
-                  </button>
-                  <button
-                    onClick={async () => {
-                      if (confirm('Are you sure you want to delete this time slot?')) {
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-500">Max: {slot.max_bookings} bookings</span>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={slot.is_available}
+                      onChange={async () => {
                         try {
                           const { error } = await supabase
                             .from('time_slots')
-                            .delete()
+                            .update({ is_available: !slot.is_available })
                             .eq('id', slot.id);
 
                           if (error) throw error;
-
-                          setTimeSlots(timeSlots.filter(s => s.id !== slot.id));
-                          toast.success('Time slot deleted successfully');
+                          loadData();
                         } catch (error) {
-                          toast.error('Failed to delete time slot');
+                          toast.error('Failed to update time slot');
                         }
-                      }
-                    }}
-                    className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
-                  >
-                    <Trash2 className="h-4 w-4 text-red-500" />
-                  </button>
+                      }}
+                      className="sr-only peer"
+                    />
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
                 </div>
               </div>
             ))}
@@ -217,8 +317,8 @@ export function TimeManagement() {
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
             <div className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-semibold text-gray-900">
                   {editingTimeSlot ? 'Edit Time Slot' : 'Add New Time Slot'}
                 </h3>
                 <button
@@ -233,7 +333,7 @@ export function TimeManagement() {
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleTimeSlotSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Time
@@ -243,7 +343,7 @@ export function TimeManagement() {
                     required
                     value={form.time}
                     onChange={(e) => setForm({ ...form, time: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   />
                 </div>
 
@@ -257,7 +357,7 @@ export function TimeManagement() {
                     min="1"
                     value={form.max_bookings}
                     onChange={(e) => setForm({ ...form, max_bookings: parseInt(e.target.value) })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   />
                 </div>
 
