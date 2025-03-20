@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { WorkingHour } from '../../../types';
 import { WorkingHoursForm } from './WorkingHoursForm';
 import { TimeSlotsManager } from './TimeSlotsManager';
+import { format } from 'date-fns';
 
 interface WorkingHourCardProps {
   day: WorkingHour;
@@ -24,6 +25,15 @@ export function WorkingHourCard({
   formErrors,
   isSaving
 }: WorkingHourCardProps) {
+  // Function to convert 24h time to 12h time for display
+  const to12HourFormat = (time24: string | null): string => {
+    if (!time24) return '';
+    const [hours, minutes] = time24.split(':');
+    const date = new Date();
+    date.setHours(parseInt(hours), parseInt(minutes));
+    return format(date, 'hh:mm aa');
+  };
+
   const handleGenerateSlots = () => {
     // Generate time slots based on working hours
     const newSlots = [];
@@ -72,11 +82,11 @@ export function WorkingHourCard({
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <span>
                   {day.morning_start && day.morning_end
-                    ? `${day.morning_start} - ${day.morning_end}`
+                    ? `${to12HourFormat(day.morning_start)} - ${to12HourFormat(day.morning_end)}`
                     : 'No morning hours'
                   }
                   {day.evening_start && day.evening_end
-                    ? ` | ${day.evening_start} - ${day.evening_end}`
+                    ? ` | ${to12HourFormat(day.evening_start)} - ${to12HourFormat(day.evening_end)}`
                     : ' | No evening hours'
                   }
                 </span>
