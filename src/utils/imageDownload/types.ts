@@ -17,7 +17,7 @@ export interface MRDetails {
   contact_no: string;
 }
 
-export interface AppointmentTranslations {
+interface AppointmentTranslations {
   confirmation: {
     title: string;
     subtitle: string;

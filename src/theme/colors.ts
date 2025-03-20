@@ -5,7 +5,7 @@
 // - Subtle accents: Warmth and approachability
 
 // Primary colors (Professional Blues)
-export const primary = {
+const primary = {
   50: '#f0f9ff',
   100: '#e0f2fe',
   200: '#bae6fd',
@@ -20,7 +20,7 @@ export const primary = {
 };
 
 // Secondary colors (Neutral Grays)
-export const secondary = {
+const secondary = {
   50: '#f8fafc',
   100: '#f1f5f9',
   200: '#e2e8f0',
@@ -35,7 +35,7 @@ export const secondary = {
 };
 
 // Accent colors (Subtle Warmth)
-export const accent = {
+const accent = {
   50: '#fff7ed',
   100: '#ffedd5',
   200: '#fed7aa',
@@ -92,7 +92,7 @@ export const border = {
 };
 
 // Shadow configurations
-export const shadow = {
+const shadow = {
   sm: 'shadow-sm',
   md: 'shadow',
   lg: 'shadow-md',
@@ -101,7 +101,7 @@ export const shadow = {
 };
 
 // Status colors (Clean & Professional)
-export const status = {
+const status = {
   success: {
     bg: 'bg-green-50',
     text: 'text-green-600',
@@ -125,7 +125,7 @@ export const status = {
 };
 
 // Button variants
-export const button = {
+const button = {
   primary: `
     bg-blue-600
     text-white 
@@ -150,7 +150,7 @@ export const button = {
 };
 
 // Form element styles (Clean & Minimal)
-export const form = {
+const form = {
   input: {
     base: `
       border-gray-200 

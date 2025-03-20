@@ -99,7 +99,7 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
   }
 };
 
-export const isSlotAvailable = async (date: string, time: string): Promise<boolean> => {
+const isSlotAvailable = async (date: string, time: string): Promise<boolean> => {
   try {
     // Parse and convert to IST
     const istNow = utcToZonedTime(new Date(), TIMEZONE);
