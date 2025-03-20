@@ -8,7 +8,7 @@ import { NoticeManager } from './components/admin/NoticeManager';
 import { MessageManager } from './components/admin/MessageManager';
 import { MRAppointmentManager } from './components/admin/MRAppointmentManager';
 import { UsersManager } from './components/admin/UsersManager';
-import { TimeManagement } from './components/admin/TimeManagement';
+import { TimeManagement } from './components/admin/time-management/TimeManagement';
 import { LandingPage } from './components/LandingPage';
 import { AboutPage } from './components/AboutPage';
 import { MRAppointment } from './components/mr-appointment/MRAppointment';
