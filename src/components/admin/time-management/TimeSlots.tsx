@@ -55,6 +55,29 @@ export function TimeSlots() {
     }
   };
 
+  const handleAvailabilityToggle = async (slot: TimeSlot) => {
+    try {
+      const { error } = await supabase
+        .from('time_slots')
+        .update({ is_available: !slot.is_available })
+        .eq('id', slot.id);
+
+      if (error) throw error;
+
+      // Show success notification with specific message
+      toast.success(
+        slot.is_available 
+          ? `Time slot ${formatTime(slot.time)} disabled`
+          : `Time slot ${formatTime(slot.time)} enabled`
+      );
+
+      loadTimeSlots();
+    } catch (error) {
+      console.error('Error updating time slot:', error);
+      toast.error('Failed to update time slot');
+    }
+  };
+
   const formatTime = (timeStr: string) => {
     try {
       // Create a base date to work with (using today's date)
@@ -138,19 +161,7 @@ export function TimeSlots() {
                     <input
                       type="checkbox"
                       checked={slot.is_available}
-                      onChange={async () => {
-                        try {
-                          const { error } = await supabase
-                            .from('time_slots')
-                            .update({ is_available: !slot.is_available })
-                            .eq('id', slot.id);
-
-                          if (error) throw error;
-                          loadTimeSlots();
-                        } catch (error) {
-                          toast.error('Failed to update time slot');
-                        }
-                      }}
+                      onChange={() => handleAvailabilityToggle(slot)}
                       className="sr-only peer"
                     />
                     <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>

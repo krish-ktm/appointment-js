@@ -3,6 +3,7 @@ import { supabase } from '../../../lib/supabase';
 import { toast } from 'react-hot-toast';
 import { Calendar, ChevronDown, Clock, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { format } from 'date-fns';
 
 interface WorkingHour {
   id: string;
@@ -63,11 +64,9 @@ export function WorkingHours() {
     const updates: Partial<WorkingHour> = {};
     
     if (day.morning_start && day.morning_end) {
-      // If morning hours exist, clear them
       updates.morning_start = null;
       updates.morning_end = null;
     } else {
-      // If no morning hours, set default (9:30 AM - 12:00 PM)
       updates.morning_start = '09:30';
       updates.morning_end = '12:00';
     }
@@ -79,16 +78,36 @@ export function WorkingHours() {
     const updates: Partial<WorkingHour> = {};
     
     if (day.evening_start && day.evening_end) {
-      // If evening hours exist, clear them
       updates.evening_start = null;
       updates.evening_end = null;
     } else {
-      // If no evening hours, set default (4:00 PM - 6:30 PM)
       updates.evening_start = '16:00';
       updates.evening_end = '18:30';
     }
 
     handleWorkingHoursUpdate(day.day, updates);
+  };
+
+  const convertTo12Hour = (time24: string | null): string => {
+    if (!time24) return '';
+    const [hours, minutes] = time24.split(':');
+    const date = new Date();
+    date.setHours(parseInt(hours), parseInt(minutes));
+    return format(date, 'h:mm aa');
+  };
+
+  const convertTo24Hour = (time12: string): string => {
+    const [time, period] = time12.split(' ');
+    let [hours, minutes] = time.split(':');
+    let hoursNum = parseInt(hours);
+    
+    if (period.toLowerCase() === 'pm' && hoursNum !== 12) {
+      hoursNum += 12;
+    } else if (period.toLowerCase() === 'am' && hoursNum === 12) {
+      hoursNum = 0;
+    }
+    
+    return `${hoursNum.toString().padStart(2, '0')}:${minutes}`;
   };
 
   if (loading) {
@@ -128,11 +147,11 @@ export function WorkingHours() {
                         <Clock className="h-4 w-4" />
                         <span>
                           {day.morning_start && day.morning_end
-                            ? `${day.morning_start} - ${day.morning_end}`
+                            ? `${convertTo12Hour(day.morning_start)} - ${convertTo12Hour(day.morning_end)}`
                             : 'No morning hours'
                           }
                           {day.evening_start && day.evening_end
-                            ? ` | ${day.evening_start} - ${day.evening_end}`
+                            ? ` | ${convertTo12Hour(day.evening_start)} - ${convertTo12Hour(day.evening_end)}`
                             : ' | No evening hours'
                           }
                         </span>
