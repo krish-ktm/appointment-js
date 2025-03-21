@@ -129,17 +129,23 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
 
   const renderDayContents = useCallback((day: number, date: Date) => {
     const bookings = dateBookings[format(date, 'yyyy-MM-dd')];
+    const isDisabled = isDateDisabled(date);
+    
     return (
       <div className="relative w-full h-full flex flex-col items-center justify-center min-h-[40px]">
         <span className="leading-none mb-1">{day}</span>
-        {bookings && (
-          <span className="text-[10px] leading-none text-gray-500">
+        {bookings && !isDisabled && (
+          <span className={`text-[10px] leading-none ${
+            selectedDate && isSameDay(date, selectedDate)
+              ? 'text-white'
+              : 'text-gray-500'
+          }`}>
             {bookings.max - bookings.current} slots
           </span>
         )}
       </div>
     );
-  }, [dateBookings]);
+  }, [dateBookings, selectedDate, isDateDisabled]);
 
   const dayClassName = useCallback((date: Date) => {
     const dateStr = format(date, 'yyyy-MM-dd');
@@ -189,7 +195,7 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
           </div>
         </div>
         
-        <div className="w-full">
+        <div className="w-full relative">
           <DatePicker
             selected={selectedDate}
             onChange={handleDateChange}
@@ -202,6 +208,15 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
             calendarClassName="!bg-transparent !border-0 !shadow-none w-full"
             dayClassName={dayClassName}
             renderDayContents={renderDayContents}
+            popperPlacement="bottom"
+            popperModifiers={[
+              {
+                name: "preventOverflow",
+                options: {
+                  padding: 16
+                }
+              }
+            ]}
           />
         </div>
         
