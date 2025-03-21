@@ -1,3 +1,7 @@
+import { supabase } from '../lib/supabase';
+import { startOfToday, format, isBefore } from 'date-fns';
+import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
+
 export async function validateMRAppointment(date: Date): Promise<{ isValid: boolean; error?: string }> {
   try {
     const dateStr = format(date, 'yyyy-MM-dd');
