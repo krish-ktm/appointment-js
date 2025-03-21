@@ -113,7 +113,6 @@ export function MRAppointment() {
                   <MRAppointmentCalendar
                     selectedDate={form.appointment_date}
                     onDateChange={(date) => setForm({ ...form, appointment_date: date })}
-                    onValidationError={(error) => toast.error(error)}
                   />
                 </div>
               </div>

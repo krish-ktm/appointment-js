@@ -5,7 +5,6 @@ import { format, isWeekend, isSameDay, startOfToday, isBefore } from 'date-fns';
 import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../../i18n/useTranslation';
 import { supabase } from '../../lib/supabase';
-import { validateMRAppointment } from '../../utils/mrAppointments';
 
 interface MRAppointmentCalendarProps {
   selectedDate: Date | null;
@@ -14,9 +13,6 @@ interface MRAppointmentCalendarProps {
 }
 
 const TIMEZONE = 'Asia/Kolkata';
-
-// Validation cache at module level
-const validationCache = new Map<string, { isValid: boolean; error?: string }>();
 
 export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidationError }: MRAppointmentCalendarProps) {
   const { t } = useTranslation();
@@ -103,48 +99,6 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     }
   };
 
-  const handleDateChange = useCallback(async (date: Date | null) => {
-    if (!date) {
-      onDateChange(null);
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const dateStr = format(date, 'yyyy-MM-dd');
-      
-      // Check cache first
-      if (validationCache.has(dateStr)) {
-        const cachedResult = validationCache.get(dateStr)!;
-        if (!cachedResult.isValid) {
-          onValidationError?.(cachedResult.error || 'Invalid date selected');
-          onDateChange(null);
-          return;
-        }
-        onDateChange(date);
-        return;
-      }
-
-      // If not in cache, validate and cache result
-      const { isValid, error } = await validateMRAppointment(date);
-      validationCache.set(dateStr, { isValid, error });
-      
-      if (!isValid) {
-        onValidationError?.(error || 'Invalid date selected');
-        onDateChange(null);
-        return;
-      }
-
-      onDateChange(date);
-    } catch (error) {
-      console.error('Error validating date:', error);
-      onValidationError?.('Error validating selected date');
-      onDateChange(null);
-    } finally {
-      setLoading(false);
-    }
-  }, [onDateChange, onValidationError]);
-  
   const isDateDisabled = useCallback((date: Date) => {
     const today = startOfToday();
     const dateStr = format(date, 'yyyy-MM-dd');
@@ -155,6 +109,14 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
       nonWorkingDays.includes(dayName)
     );
   }, [closureDates, nonWorkingDays]);
+
+  const handleDateChange = (date: Date | null) => {
+    if (!date) {
+      onDateChange(null);
+      return;
+    }
+    onDateChange(date);
+  };
 
   const formatSelectedDate = useCallback((date: Date) => {
     const istDate = utcToZonedTime(date, TIMEZONE);
