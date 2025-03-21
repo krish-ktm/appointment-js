@@ -1,4 +1,4 @@
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, Users } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import { format, isWeekend, isSameDay, startOfToday, isBefore } from 'date-fns';
 import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
@@ -13,6 +13,13 @@ interface MRAppointmentCalendarProps {
   onValidationError?: (error: string) => void;
 }
 
+interface DateBookings {
+  [key: string]: {
+    current: number;
+    max: number;
+  };
+}
+
 const TIMEZONE = 'Asia/Kolkata';
 
 export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidationError }: MRAppointmentCalendarProps) {
@@ -20,10 +27,12 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
   const [closureDates, setClosureDates] = useState<string[]>([]);
   const [nonWorkingDays, setNonWorkingDays] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [dateBookings, setDateBookings] = useState<DateBookings>({});
   
   useEffect(() => {
     loadClosureDates();
     loadWorkingDays();
+    loadBookings();
   }, []);
 
   const loadClosureDates = async () => {
@@ -44,14 +53,64 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     try {
       const { data, error } = await supabase
         .from('mr_weekdays')
-        .select('day, is_working')
-        .eq('is_working', false);
+        .select('day, is_working, max_appointments');
 
       if (error) throw error;
-      setNonWorkingDays((data || []).map(d => d.day));
+      
+      // Store non-working days
+      setNonWorkingDays((data || [])
+        .filter(d => !d.is_working)
+        .map(d => d.day));
+
+      // Initialize date bookings with max appointments
+      const workingDaysMap = data?.reduce((acc, day) => {
+        acc[day.day] = day.max_appointments;
+        return acc;
+      }, {} as { [key: string]: number });
+
+      // Load current bookings for the next 30 days
+      const today = startOfToday();
+      const { data: bookings, error: bookingsError } = await supabase
+        .from('mr_appointments')
+        .select('appointment_date')
+        .gte('appointment_date', format(today, 'yyyy-MM-dd'))
+        .lt('appointment_date', format(new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'))
+        .eq('status', 'pending');
+
+      if (bookingsError) throw bookingsError;
+
+      // Count bookings by date
+      const bookingCounts = (bookings || []).reduce((acc, booking) => {
+        acc[booking.appointment_date] = (acc[booking.appointment_date] || 0) + 1;
+        return acc;
+      }, {} as { [key: string]: number });
+
+      // Create date bookings object
+      const newDateBookings: DateBookings = {};
+      for (let i = 0; i < 30; i++) {
+        const date = new Date(today.getTime() + i * 24 * 60 * 60 * 1000);
+        const dayName = format(date, 'EEEE');
+        const dateStr = format(date, 'yyyy-MM-dd');
+        const maxAppointments = workingDaysMap?.[dayName] || 0;
+        const currentBookings = bookingCounts[dateStr] || 0;
+
+        if (maxAppointments > 0) {
+          newDateBookings[dateStr] = {
+            current: currentBookings,
+            max: maxAppointments
+          };
+        }
+      }
+
+      setDateBookings(newDateBookings);
     } catch (error) {
       console.error('Error loading working days:', error);
     }
+  };
+
+  const loadBookings = async () => {
+    // This function can be used to refresh bookings periodically
+    // For now, it's handled in loadWorkingDays
   };
 
   const handleDateChange = async (date: Date | null) => {
@@ -142,6 +201,8 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
             inline
             calendarClassName="!bg-transparent !border-0 !shadow-none w-full"
             dayClassName={date => {
+              const dateStr = format(date, 'yyyy-MM-dd');
+              const bookings = dateBookings[dateStr];
               const isSelected = selectedDate && isSameDay(date, selectedDate);
               const isDisabled = isDateDisabled(date);
               const isToday = isSameDay(date, new Date());
@@ -157,17 +218,29 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
               }
               return "!text-gray-700 hover:!bg-blue-50 hover:!text-blue-600 transition-all duration-200";
             }}
+            renderDayContents={(day, date) => (
+              <div className="relative w-full h-full flex flex-col items-center justify-center">
+                <span>{day}</span>
+                {dateBookings[format(date, 'yyyy-MM-dd')] && (
+                  <span className="text-[10px] mt-0.5">
+                    {dateBookings[format(date, 'yyyy-MM-dd')].max - dateBookings[format(date, 'yyyy-MM-dd')].current} slots left
+                  </span>
+                )}
+              </div>
+            )}
           />
         </div>
         
         <div className="mt-4 pt-3 border-t border-gray-100">
-          <div className="flex items-center gap-2 text-xs text-gray-500">
-            <span className="w-2 h-2 rounded-full bg-blue-600"></span>
-            {t.mrAppointment.form.availableDates}
-          </div>
-          <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
-            <span className="w-2 h-2 rounded-full bg-gray-300"></span>
-            {t.mrAppointment.form.unavailableDates}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-xs text-gray-500">
+              <Users className="h-4 w-4 text-blue-600" />
+              <span>Available slots</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-gray-500">
+              <span className="w-2 h-2 rounded-full bg-gray-300"></span>
+              <span>Not available</span>
+            </div>
           </div>
         </div>
       </div>
