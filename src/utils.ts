@@ -29,6 +29,34 @@ const to24HourFormat = (time12: string): string => {
   return `${hour.toString().padStart(2, '0')}:${minutes}`;
 };
 
+// Check if a date is a closure date
+export const isClosureDate = async (date: string): Promise<{ isClosed: boolean; reason?: string }> => {
+  try {
+    const { data, error } = await supabase
+      .from('clinic_closure_dates')
+      .select('reason')
+      .eq('date', date);
+
+    if (error) {
+      console.error('Error checking closure date:', error);
+      return { isClosed: false };
+    }
+
+    // If we have data and at least one row, the date is a closure date
+    if (data && data.length > 0) {
+      return {
+        isClosed: true,
+        reason: data[0].reason
+      };
+    }
+
+    return { isClosed: false };
+  } catch (error) {
+    console.error('Error checking closure date:', error);
+    return { isClosed: false };
+  }
+};
+
 // Cache invalidation for time slots
 export const invalidateTimeSlots = () => {
   // This function would be called when working hours are updated
@@ -39,6 +67,12 @@ export const invalidateTimeSlots = () => {
 // Improved time slots generation with retries
 export const generateTimeSlots = async (date: string, retries = 3): Promise<TimeSlot[]> => {
   try {
+    // First check if it's a closure date
+    const { isClosed } = await isClosureDate(date);
+    if (isClosed) {
+      return [];
+    }
+
     // Get working hours for the selected date
     const selectedDate = utcToZonedTime(new Date(date), TIMEZONE);
     const dayName = format(selectedDate, 'EEEE');
@@ -153,6 +187,12 @@ export const validateBookingRequest = async (
     // Validate phone number (10 digits)
     if (!/^\d{10}$/.test(phone)) {
       return { isValid: false, error: 'Please enter a valid 10-digit phone number' };
+    }
+
+    // Check if it's a closure date
+    const { isClosed, reason } = await isClosureDate(date);
+    if (isClosed) {
+      return { isValid: false, error: `The clinic is closed on this date${reason ? `: ${reason}` : ''}` };
     }
 
     // Parse and convert to IST
