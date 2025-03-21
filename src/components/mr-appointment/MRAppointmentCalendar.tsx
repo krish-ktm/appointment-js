@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { Calendar as CalendarIcon, Users } from 'lucide-react';
 import DatePicker from 'react-datepicker';
-import { format, isWeekend, isSameDay, startOfToday, isBefore } from 'date-fns';
+import { format, isWeekend, isSameDay, startOfToday, isBefore, addMonths } from 'date-fns';
 import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../../i18n/useTranslation';
 import { supabase } from '../../lib/supabase';
@@ -19,6 +19,7 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
   const [closureDates, setClosureDates] = useState<string[]>([]);
   const [nonWorkingDays, setNonWorkingDays] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [workingDaysMap, setWorkingDaysMap] = useState<{ [key: string]: number }>({});
   const [dateBookings, setDateBookings] = useState<Record<string, { current: number; max: number }>>({});
   
   useEffect(() => {
@@ -53,19 +54,25 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
         .filter(d => !d.is_working)
         .map(d => d.day));
 
-      // Initialize date bookings with max appointments
-      const workingDaysMap = data?.reduce((acc, day) => {
-        acc[day.day] = day.max_appointments;
+      // Store working days map
+      const workingDays = data?.reduce((acc, day) => {
+        if (day.is_working) {
+          acc[day.day] = day.max_appointments;
+        }
         return acc;
       }, {} as { [key: string]: number });
+      
+      setWorkingDaysMap(workingDays || {});
 
-      // Load current bookings for the next 30 days
+      // Load current bookings for the next 6 months
       const today = startOfToday();
+      const sixMonthsLater = addMonths(today, 6);
+      
       const { data: bookings, error: bookingsError } = await supabase
         .from('mr_appointments')
         .select('appointment_date')
         .gte('appointment_date', format(today, 'yyyy-MM-dd'))
-        .lt('appointment_date', format(new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'))
+        .lt('appointment_date', format(sixMonthsLater, 'yyyy-MM-dd'))
         .eq('status', 'pending');
 
       if (bookingsError) throw bookingsError;
@@ -76,21 +83,23 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
         return acc;
       }, {} as { [key: string]: number });
 
-      // Create date bookings object
+      // Create date bookings object for the next 6 months
       const newDateBookings: Record<string, { current: number; max: number }> = {};
-      for (let i = 0; i < 30; i++) {
-        const date = new Date(today.getTime() + i * 24 * 60 * 60 * 1000);
-        const dayName = format(date, 'EEEE');
-        const dateStr = format(date, 'yyyy-MM-dd');
-        const maxAppointments = workingDaysMap?.[dayName] || 0;
-        const currentBookings = bookingCounts[dateStr] || 0;
-
+      let currentDate = today;
+      
+      while (currentDate < sixMonthsLater) {
+        const dayName = format(currentDate, 'EEEE');
+        const dateStr = format(currentDate, 'yyyy-MM-dd');
+        const maxAppointments = workingDays?.[dayName] || 0;
+        
         if (maxAppointments > 0) {
           newDateBookings[dateStr] = {
-            current: currentBookings,
+            current: bookingCounts[dateStr] || 0,
             max: maxAppointments
           };
         }
+        
+        currentDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
       }
 
       setDateBookings(newDateBookings);
@@ -128,24 +137,30 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
   }, [t.mrAppointment.form.days, t.mrAppointment.form.months]);
 
   const renderDayContents = useCallback((day: number, date: Date) => {
-    const bookings = dateBookings[format(date, 'yyyy-MM-dd')];
+    const dateStr = format(date, 'yyyy-MM-dd');
+    const dayName = format(date, 'EEEE');
     const isDisabled = isDateDisabled(date);
+    
+    // If it's a working day, show slots even if no bookings yet
+    const maxAppointments = workingDaysMap[dayName] || 0;
+    const currentBookings = dateBookings[dateStr]?.current || 0;
+    const hasSlots = maxAppointments > 0;
     
     return (
       <div className="relative w-full h-full flex flex-col items-center justify-center min-h-[40px]">
         <span className="leading-none mb-1">{day}</span>
-        {bookings && !isDisabled && (
+        {hasSlots && !isDisabled && (
           <span className={`text-[10px] leading-none ${
             selectedDate && isSameDay(date, selectedDate)
               ? 'text-white'
               : 'text-gray-500'
           }`}>
-            {bookings.max - bookings.current} slots
+            {maxAppointments - currentBookings} slots
           </span>
         )}
       </div>
     );
-  }, [dateBookings, selectedDate, isDateDisabled]);
+  }, [dateBookings, selectedDate, isDateDisabled, workingDaysMap]);
 
   const dayClassName = useCallback((date: Date) => {
     const dateStr = format(date, 'yyyy-MM-dd');
@@ -195,11 +210,12 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
           </div>
         </div>
         
-        <div className="w-full relative">
+        <div className="w-full relative pb-4">
           <DatePicker
             selected={selectedDate}
             onChange={handleDateChange}
             minDate={startOfToday()}
+            maxDate={addMonths(new Date(), 6)}
             filterDate={(date) => !isDateDisabled(date)}
             dateFormat="MMMM d, yyyy"
             placeholderText={t.mrAppointment.form.selectDate}
