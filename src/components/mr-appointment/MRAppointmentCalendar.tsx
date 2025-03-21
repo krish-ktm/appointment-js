@@ -4,7 +4,7 @@ import { format, isWeekend, isSameDay, startOfToday, isBefore } from 'date-fns';
 import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../../i18n/useTranslation';
 import { supabase } from '../../lib/supabase';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { validateMRAppointment } from '../../utils/mrAppointments';
 
 interface MRAppointmentCalendarProps {
@@ -32,7 +32,6 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
   useEffect(() => {
     loadClosureDates();
     loadWorkingDays();
-    loadBookings();
   }, []);
 
   const loadClosureDates = async () => {
@@ -108,12 +107,7 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     }
   };
 
-  const loadBookings = async () => {
-    // This function can be used to refresh bookings periodically
-    // For now, it's handled in loadWorkingDays
-  };
-
-  const handleDateChange = async (date: Date | null) => {
+  const handleDateChange = useCallback(async (date: Date | null) => {
     if (!date) {
       onDateChange(null);
       return;
@@ -137,9 +131,9 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     } finally {
       setLoading(false);
     }
-  };
+  }, [onDateChange, onValidationError]);
   
-  const isDateDisabled = (date: Date) => {
+  const isDateDisabled = useCallback((date: Date) => {
     const today = startOfToday();
     const dateStr = format(date, 'yyyy-MM-dd');
     const dayName = format(date, 'EEEE');
@@ -148,16 +142,48 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
       closureDates.includes(dateStr) ||
       nonWorkingDays.includes(dayName)
     );
-  };
+  }, [closureDates, nonWorkingDays]);
 
-  const formatSelectedDate = (date: Date) => {
+  const formatSelectedDate = useCallback((date: Date) => {
     const istDate = utcToZonedTime(date, TIMEZONE);
     const dayName = t.mrAppointment.form.days[format(istDate, 'EEEE').toLowerCase() as keyof typeof t.mrAppointment.form.days];
     const monthName = t.mrAppointment.form.months[format(istDate, 'MMMM').toLowerCase() as keyof typeof t.mrAppointment.form.months];
     const day = format(istDate, 'd');
     const year = format(istDate, 'yyyy');
     return `${dayName}, ${monthName} ${day}, ${year}`;
-  };
+  }, [t.mrAppointment.form.days, t.mrAppointment.form.months]);
+
+  const renderDayContents = useCallback((day: number, date: Date) => {
+    const bookings = dateBookings[format(date, 'yyyy-MM-dd')];
+    return (
+      <div className="relative w-full h-full flex flex-col items-center justify-center min-h-[40px]">
+        <span className="leading-none mb-1">{day}</span>
+        {bookings && (
+          <span className="text-[10px] leading-none text-gray-500">
+            {bookings.max - bookings.current} slots
+          </span>
+        )}
+      </div>
+    );
+  }, [dateBookings]);
+
+  const dayClassName = useCallback((date: Date) => {
+    const dateStr = format(date, 'yyyy-MM-dd');
+    const isSelected = selectedDate && isSameDay(date, selectedDate);
+    const isDisabled = isDateDisabled(date);
+    const isTodays = isSameDay(date, new Date());
+    
+    if (isDisabled) {
+      return "!text-gray-300 hover:!bg-transparent cursor-not-allowed opacity-50";
+    }
+    if (isSelected) {
+      return "!bg-blue-600 !text-white hover:!bg-blue-700 ring-4 ring-blue-100";
+    }
+    if (isTodays) {
+      return "!bg-blue-50/50 !text-blue-600 font-medium hover:!bg-blue-100";
+    }
+    return "!text-gray-700 hover:!bg-blue-50 hover:!text-blue-600 transition-all duration-200";
+  }, [selectedDate, isDateDisabled]);
 
   return (
     <div>
@@ -200,34 +226,8 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
             required
             inline
             calendarClassName="!bg-transparent !border-0 !shadow-none w-full"
-            dayClassName={date => {
-              const dateStr = format(date, 'yyyy-MM-dd');
-              const bookings = dateBookings[dateStr];
-              const isSelected = selectedDate && isSameDay(date, selectedDate);
-              const isDisabled = isDateDisabled(date);
-              const isToday = isSameDay(date, new Date());
-              
-              if (isDisabled) {
-                return "!text-gray-300 hover:!bg-transparent cursor-not-allowed opacity-50";
-              }
-              if (isSelected) {
-                return "!bg-blue-600 !text-white hover:!bg-blue-700 ring-4 ring-blue-100";
-              }
-              if (isToday) {
-                return "!bg-blue-50/50 !text-blue-600 font-medium hover:!bg-blue-100";
-              }
-              return "!text-gray-700 hover:!bg-blue-50 hover:!text-blue-600 transition-all duration-200";
-            }}
-            renderDayContents={(day, date) => (
-              <div className="relative w-full h-full flex flex-col items-center justify-center min-h-[40px]">
-                <span className="leading-none mb-1">{day}</span>
-                {dateBookings[format(date, 'yyyy-MM-dd')] && (
-                  <span className="text-[10px] leading-none text-gray-500">
-                    {dateBookings[format(date, 'yyyy-MM-dd')].max - dateBookings[format(date, 'yyyy-MM-dd')].current} slots
-                  </span>
-                )}
-              </div>
-            )}
+            dayClassName={dayClassName}
+            renderDayContents={renderDayContents}
           />
         </div>
         

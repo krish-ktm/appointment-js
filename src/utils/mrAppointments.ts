@@ -32,14 +32,14 @@ export async function validateMRAppointment(date: Date): Promise<{ isValid: bool
       return { isValid: false, error: 'Appointments are not available on this day' };
     }
 
-    // Check if it's a closure date
+    // Check if it's a closure date - Changed from single() to maybeSingle()
     const { data: closureDate, error: closureError } = await supabase
       .from('mr_closure_dates')
       .select('reason')
       .eq('date', dateStr)
-      .single();
+      .maybeSingle();
 
-    if (closureError && closureError.code !== 'PGRST116') {
+    if (closureError) {
       console.error('Error checking closure date:', closureError);
       return { isValid: false, error: 'Error checking closure dates' };
     }
