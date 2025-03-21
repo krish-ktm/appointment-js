@@ -5,26 +5,31 @@ import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../../i18n/useTranslation';
 import { supabase } from '../../lib/supabase';
 import { useEffect, useState } from 'react';
+import { validateMRAppointment } from '../../utils/mrAppointments';
 
 interface MRAppointmentCalendarProps {
   selectedDate: Date | null;
   onDateChange: (date: Date | null) => void;
+  onValidationError?: (error: string) => void;
 }
 
 const TIMEZONE = 'Asia/Kolkata';
 
-export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointmentCalendarProps) {
+export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidationError }: MRAppointmentCalendarProps) {
   const { t } = useTranslation();
   const [closureDates, setClosureDates] = useState<string[]>([]);
+  const [nonWorkingDays, setNonWorkingDays] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   
   useEffect(() => {
     loadClosureDates();
+    loadWorkingDays();
   }, []);
 
   const loadClosureDates = async () => {
     try {
       const { data, error } = await supabase
-        .from('clinic_closure_dates')
+        .from('mr_closure_dates')
         .select('date')
         .gte('date', format(startOfToday(), 'yyyy-MM-dd'));
 
@@ -34,11 +39,56 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointm
       console.error('Error loading closure dates:', error);
     }
   };
+
+  const loadWorkingDays = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('mr_weekdays')
+        .select('day, is_working')
+        .eq('is_working', false);
+
+      if (error) throw error;
+      setNonWorkingDays((data || []).map(d => d.day));
+    } catch (error) {
+      console.error('Error loading working days:', error);
+    }
+  };
+
+  const handleDateChange = async (date: Date | null) => {
+    if (!date) {
+      onDateChange(null);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { isValid, error } = await validateMRAppointment(date);
+      
+      if (!isValid) {
+        onValidationError?.(error || 'Invalid date selected');
+        onDateChange(null);
+        return;
+      }
+
+      onDateChange(date);
+    } catch (error) {
+      console.error('Error validating date:', error);
+      onValidationError?.('Error validating selected date');
+      onDateChange(null);
+    } finally {
+      setLoading(false);
+    }
+  };
   
   const isDateDisabled = (date: Date) => {
     const today = startOfToday();
     const dateStr = format(date, 'yyyy-MM-dd');
-    return isWeekend(date) || isBefore(date, today) || closureDates.includes(dateStr);
+    const dayName = format(date, 'EEEE');
+    return (
+      isBefore(date, today) || 
+      closureDates.includes(dateStr) ||
+      nonWorkingDays.includes(dayName)
+    );
   };
 
   const formatSelectedDate = (date: Date) => {
@@ -83,7 +133,7 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointm
         <div className="w-full">
           <DatePicker
             selected={selectedDate}
-            onChange={onDateChange}
+            onChange={handleDateChange}
             minDate={startOfToday()}
             filterDate={(date) => !isDateDisabled(date)}
             dateFormat="MMMM d, yyyy"
@@ -106,50 +156,6 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointm
                 return "!bg-blue-50/50 !text-blue-600 font-medium hover:!bg-blue-100";
               }
               return "!text-gray-700 hover:!bg-blue-50 hover:!text-blue-600 transition-all duration-200";
-            }}
-            renderCustomHeader={({
-              date,
-              decreaseMonth,
-              increaseMonth,
-              prevMonthButtonDisabled,
-              nextMonthButtonDisabled
-            }) => {
-              const monthName = t.mrAppointment.form.months[format(date, 'MMMM').toLowerCase() as keyof typeof t.mrAppointment.form.months];
-              const year = format(date, 'yyyy');
-              
-              return (
-                <div className="flex items-center justify-between px-2 py-2">
-                  <span className="text-lg font-semibold text-gray-900">
-                    {`${monthName} ${year}`}
-                  </span>
-                  <div className="space-x-2">
-                    <button
-                      onClick={decreaseMonth}
-                      disabled={prevMonthButtonDisabled}
-                      type="button"
-                      className={`p-2 rounded-lg transition-colors ${
-                        prevMonthButtonDisabled
-                          ? 'text-gray-300 cursor-not-allowed'
-                          : 'text-gray-600 hover:bg-gray-100'
-                      }`}
-                    >
-                      ←
-                    </button>
-                    <button
-                      onClick={increaseMonth}
-                      disabled={nextMonthButtonDisabled}
-                      type="button"
-                      className={`p-2 rounded-lg transition-colors ${
-                        nextMonthButtonDisabled
-                          ? 'text-gray-300 cursor-not-allowed'
-                          : 'text-gray-600 hover:bg-gray-100'
-                      }`}
-                    >
-                      →
-                    </button>
-                  </div>
-                </div>
-              );
             }}
           />
         </div>

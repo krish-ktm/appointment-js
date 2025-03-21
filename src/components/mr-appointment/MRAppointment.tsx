@@ -10,6 +10,7 @@ import { MRAppointmentForm } from './MRAppointmentForm';
 import { MRAppointmentCalendar } from './MRAppointmentCalendar';
 import { MRAppointmentConfirmation } from './MRAppointmentConfirmation';
 import { useTranslation } from '../../i18n/useTranslation';
+import { validateMRAppointment } from '../../utils/mrAppointments';
 
 export function MRAppointment() {
   const { t } = useTranslation();
@@ -48,17 +49,10 @@ export function MRAppointment() {
         throw new Error(t.mrAppointment.form.invalidPhone);
       }
 
-      // Check if the selected date already has 5 appointments
-      const { data: existingAppointments, error: countError } = await supabase
-        .from('mr_appointments')
-        .select('id')
-        .eq('appointment_date', format(form.appointment_date, 'yyyy-MM-dd'))
-        .eq('status', 'pending');
-
-      if (countError) throw countError;
-
-      if (existingAppointments && existingAppointments.length >= 5) {
-        throw new Error(t.mrAppointment.form.maxAppointments);
+      // Validate appointment date
+      const { isValid, error: validationError } = await validateMRAppointment(form.appointment_date);
+      if (!isValid) {
+        throw new Error(validationError);
       }
 
       // Create the appointment
@@ -119,7 +113,7 @@ export function MRAppointment() {
                   <MRAppointmentCalendar
                     selectedDate={form.appointment_date}
                     onDateChange={(date) => setForm({ ...form, appointment_date: date })}
-                    t={t.mrAppointment.form}
+                    onValidationError={(error) => toast.error(error)}
                   />
                 </div>
               </div>
