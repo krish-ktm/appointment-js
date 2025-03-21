@@ -219,11 +219,11 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
               return "!text-gray-700 hover:!bg-blue-50 hover:!text-blue-600 transition-all duration-200";
             }}
             renderDayContents={(day, date) => (
-              <div className="relative w-full h-full flex flex-col items-center justify-center">
-                <span>{day}</span>
+              <div className="relative w-full h-full flex flex-col items-center justify-center min-h-[40px]">
+                <span className="leading-none mb-1">{day}</span>
                 {dateBookings[format(date, 'yyyy-MM-dd')] && (
-                  <span className="text-[10px] mt-0.5">
-                    {dateBookings[format(date, 'yyyy-MM-dd')].max - dateBookings[format(date, 'yyyy-MM-dd')].current} slots left
+                  <span className="text-[10px] leading-none text-gray-500">
+                    {dateBookings[format(date, 'yyyy-MM-dd')].max - dateBookings[format(date, 'yyyy-MM-dd')].current} slots
                   </span>
                 )}
               </div>
