@@ -58,9 +58,9 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
     // Check if selected date is today
     const isSelectedToday = isToday(selectedDateInIST);
 
-    // Convert slots from database to TimeSlot array and convert times to 12h format
+    // Convert slots from database to TimeSlot array
     let slots: TimeSlot[] = workingHours.slots.map(slot => ({
-      time: to12HourFormat(slot.time),
+      time: slot.time, // Database already stores in 12-hour format
       maxBookings: slot.maxBookings,
       currentBookings: 0
     }));
@@ -74,10 +74,9 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
 
     if (bookingsError) throw bookingsError;
 
-    // Count bookings for each time slot (convert booking times to 12h format for comparison)
+    // Count bookings for each time slot
     const bookingCounts = (bookings || []).reduce((acc, booking) => {
-      const time12h = to12HourFormat(booking.appointment_time);
-      acc[time12h] = (acc[time12h] || 0) + 1;
+      acc[booking.appointment_time] = (acc[booking.appointment_time] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
@@ -91,7 +90,7 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
     // Apply time restrictions for today's slots
     if (isSelectedToday) {
       slots = slots.filter(slot => {
-        // Convert 12h time back to 24h for comparison
+        // Convert 12h time to 24h for comparison
         const time24h = to24HourFormat(slot.time);
         // Combine date and time for accurate comparison
         const slotDateTime = parse(`${date} ${time24h}`, 'yyyy-MM-dd HH:mm', new Date());
@@ -153,11 +152,8 @@ export const validateBookingRequest = async (
       return { isValid: false, error: 'Please enter a valid 10-digit phone number' };
     }
 
-    // Convert input time slot to 24h format for comparison
-    const timeSlot24h = to24HourFormat(timeSlot);
-
     // Check if the selected time slot exists and has available bookings
-    const selectedSlot = workingHours.slots.find(slot => slot.time === timeSlot24h);
+    const selectedSlot = workingHours.slots.find(slot => slot.time === timeSlot);
     
     if (!selectedSlot) {
       return { isValid: false, error: 'Invalid time slot selected' };
@@ -168,7 +164,7 @@ export const validateBookingRequest = async (
       .from('appointments')
       .select('id')
       .eq('appointment_date', date)
-      .eq('appointment_time', timeSlot24h)
+      .eq('appointment_time', timeSlot)
       .eq('status', 'pending');
 
     if (bookingsError) throw bookingsError;

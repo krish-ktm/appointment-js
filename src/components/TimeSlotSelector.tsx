@@ -7,7 +7,7 @@ interface TimeSlotSelectorProps {
   selectedTime: string;
   onSelectTime: (time: string) => void;
   label: string;
-  t: any; // Add translations prop
+  t: any;
 }
 
 export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t }: TimeSlotSelectorProps) {
@@ -33,9 +33,16 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t }: T
     );
   }
 
+  // Sort time slots by time
+  const sortedSlots = [...timeSlots].sort((a, b) => {
+    const timeA = new Date(`1970/01/01 ${a.time}`).getTime();
+    const timeB = new Date(`1970/01/01 ${b.time}`).getTime();
+    return timeA - timeB;
+  });
+
   return (
     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-1 sm:gap-1.5">
-      {timeSlots.map((slot, index) => {
+      {sortedSlots.map((slot, index) => {
         const isUnavailable = slot.currentBookings >= slot.maxBookings;
         
         return (
