@@ -9,6 +9,7 @@ import { MessageManager } from './components/admin/MessageManager';
 import { MRAppointmentManager } from './components/admin/MRAppointmentManager';
 import { UsersManager } from './components/admin/UsersManager';
 import { TimeManagement } from './components/admin/time-management/TimeManagement';
+import { ClosureDatesManager } from './components/admin/ClosureDatesManager';
 import { LandingPage } from './components/LandingPage';
 import { AboutPage } from './components/AboutPage';
 import { MRAppointment } from './components/mr-appointment/MRAppointment';
@@ -60,6 +61,7 @@ function App() {
             <Route path="messages" element={<MessageManager />} />
             <Route path="users" element={<UsersManager />} />
             <Route path="time-management" element={<TimeManagement />} />
+            <Route path="closure-dates" element={<ClosureDatesManager />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
