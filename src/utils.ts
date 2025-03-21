@@ -30,7 +30,7 @@ const to24HourFormat = (time12: string): string => {
 };
 
 // Check if a date is a closure date
-export const isClosureDate = async (date: string): Promise<{ isClosed: boolean; reason?: string }> => {
+const isClosureDate = async (date: string): Promise<{ isClosed: boolean; reason?: string }> => {
   try {
     const { data, error } = await supabase
       .from('clinic_closure_dates')
@@ -58,7 +58,7 @@ export const isClosureDate = async (date: string): Promise<{ isClosed: boolean; 
 };
 
 // Cache invalidation for time slots
-export const invalidateTimeSlots = () => {
+const invalidateTimeSlots = () => {
   // This function would be called when working hours are updated
   // For now it's a placeholder as we don't have client-side caching yet
   console.log('Time slots cache invalidated');
