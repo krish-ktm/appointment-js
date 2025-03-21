@@ -19,6 +19,13 @@ export function TimeSlotsManager({
 }: TimeSlotsManagerProps) {
   const [defaultMaxBookings, setDefaultMaxBookings] = useState(3);
 
+  const handleMaxBookingsChange = (value: string) => {
+    const num = parseInt(value);
+    if (!isNaN(num) && num > 0) {
+      setDefaultMaxBookings(num);
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg p-4 border border-gray-100">
       <div className="flex items-center justify-between mb-4">
@@ -40,15 +47,13 @@ export function TimeSlotsManager({
           </div>
           <div className="flex items-center gap-2">
             <label className="text-sm text-gray-600">Default Max Bookings:</label>
-            <select
+            <input
+              type="number"
+              min="1"
               value={defaultMaxBookings}
-              onChange={(e) => setDefaultMaxBookings(parseInt(e.target.value))}
-              className="px-2 py-1 border border-gray-300 rounded-lg text-sm"
-            >
-              {[1, 2, 3, 4, 5].map(num => (
-                <option key={num} value={num}>{num}</option>
-              ))}
-            </select>
+              onChange={(e) => handleMaxBookingsChange(e.target.value)}
+              className="w-20 px-2 py-1 border border-gray-300 rounded-lg text-sm"
+            />
           </div>
           <button
             onClick={() => onGenerateSlots(defaultMaxBookings)}
