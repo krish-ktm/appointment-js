@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast';
 import { Calendar } from 'lucide-react';
 import { WorkingHour } from '../../../types';
 import { WorkingHourCard } from './WorkingHourCard';
-import { format, parse } from 'date-fns';
+import { format } from 'date-fns';
 
 export function WorkingHours() {
   const [workingHours, setWorkingHours] = useState<WorkingHour[]>([]);
@@ -22,11 +22,19 @@ export function WorkingHours() {
       setLoading(true);
       const { data, error } = await supabase
         .from('working_hours')
-        .select('*')
-        .order('day');
+        .select('*');
 
       if (error) throw error;
-      setWorkingHours(data || []);
+
+      // Define the correct order of days
+      const dayOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      
+      // Sort the working hours based on the day order
+      const sortedWorkingHours = [...(data || [])].sort((a, b) => {
+        return dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day);
+      });
+
+      setWorkingHours(sortedWorkingHours);
     } catch (error) {
       console.error('Error loading working hours:', error);
       toast.error('Failed to load working hours');
@@ -41,8 +49,8 @@ export function WorkingHours() {
     if (day.is_working) {
       // Morning validation
       if (day.morning_start && day.morning_end) {
-        const startTime = parse(day.morning_start, 'hh:mm aa', new Date());
-        const endTime = parse(day.morning_end, 'hh:mm aa', new Date());
+        const startTime = new Date(`1970/01/01 ${day.morning_start}`).getTime();
+        const endTime = new Date(`1970/01/01 ${day.morning_end}`).getTime();
         if (endTime <= startTime) {
           errors.morning = 'Morning end time must be after start time';
         }
@@ -50,8 +58,8 @@ export function WorkingHours() {
 
       // Evening validation (except Saturday)
       if (day.day !== 'Saturday' && day.evening_start && day.evening_end) {
-        const startTime = parse(day.evening_start, 'hh:mm aa', new Date());
-        const endTime = parse(day.evening_end, 'hh:mm aa', new Date());
+        const startTime = new Date(`1970/01/01 ${day.evening_start}`).getTime();
+        const endTime = new Date(`1970/01/01 ${day.evening_end}`).getTime();
         if (endTime <= startTime) {
           errors.evening = 'Evening end time must be after start time';
         }

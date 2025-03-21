@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import { WorkingHour } from '../../../types';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 
 interface WorkingHoursFormProps {
   day: WorkingHour;
@@ -10,27 +10,35 @@ interface WorkingHoursFormProps {
 }
 
 export function WorkingHoursForm({ day, onUpdate, formErrors }: WorkingHoursFormProps) {
-  // Function to convert 24h time to 12h time for display
-  const to12HourFormat = (time24: string | null): string => {
-    if (!time24) return '';
-    const [hours, minutes] = time24.split(':');
-    const date = new Date();
-    date.setHours(parseInt(hours), parseInt(minutes));
-    return format(date, 'hh:mm aa');
+  // Function to convert 12h time to 24h time for input
+  const to24HourFormat = (time12: string | null): string => {
+    if (!time12) return '';
+    try {
+      const date = parse(time12, 'hh:mm aa', new Date());
+      return format(date, 'HH:mm');
+    } catch (error) {
+      console.error('Error converting time:', error);
+      return '';
+    }
   };
 
-  // Function to convert 12h time back to 12h format for storage
-  const to12HourFormatForStorage = (time24: string): string => {
+  // Function to convert 24h time back to 12h format for storage
+  const to12HourFormat = (time24: string): string => {
     if (!time24) return '';
-    const [hours, minutes] = time24.split(':');
-    const date = new Date();
-    date.setHours(parseInt(hours), parseInt(minutes));
-    return format(date, 'hh:mm aa');
+    try {
+      const [hours, minutes] = time24.split(':');
+      const date = new Date();
+      date.setHours(parseInt(hours), parseInt(minutes));
+      return format(date, 'hh:mm aa');
+    } catch (error) {
+      console.error('Error converting time:', error);
+      return '';
+    }
   };
 
   const handleTimeChange = (period: 'morning' | 'evening', type: 'start' | 'end', value: string) => {
     const updates: Partial<WorkingHour> = {};
-    const time12 = value ? to12HourFormatForStorage(value) : null;
+    const time12 = value ? to12HourFormat(value) : null;
     updates[`${period}_${type}`] = time12;
     
     // If either start or end time is set, ensure both are set with default values
@@ -81,14 +89,14 @@ export function WorkingHoursForm({ day, onUpdate, formErrors }: WorkingHoursForm
             <div className="flex items-center gap-2">
               <input
                 type="time"
-                value={day.morning_start.split(' ')[0]}
+                value={to24HourFormat(day.morning_start)}
                 onChange={(e) => handleTimeChange('morning', 'start', e.target.value)}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
               />
               <span className="text-gray-500">to</span>
               <input
                 type="time"
-                value={day.morning_end.split(' ')[0]}
+                value={to24HourFormat(day.morning_end)}
                 onChange={(e) => handleTimeChange('morning', 'end', e.target.value)}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
               />
@@ -131,14 +139,14 @@ export function WorkingHoursForm({ day, onUpdate, formErrors }: WorkingHoursForm
             <div className="flex items-center gap-2">
               <input
                 type="time"
-                value={day.evening_start.split(' ')[0]}
+                value={to24HourFormat(day.evening_start)}
                 onChange={(e) => handleTimeChange('evening', 'start', e.target.value)}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
               />
               <span className="text-gray-500">to</span>
               <input
                 type="time"
-                value={day.evening_end.split(' ')[0]}
+                value={to24HourFormat(day.evening_end)}
                 onChange={(e) => handleTimeChange('evening', 'end', e.target.value)}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
               />
