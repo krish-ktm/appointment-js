@@ -1,9 +1,3 @@
-import { supabase } from '../lib/supabase';
-import { format, isWeekend, startOfToday, isBefore } from 'date-fns';
-import { utcToZonedTime } from 'date-fns-tz';
-
-const TIMEZONE = 'Asia/Kolkata';
-
 export async function validateMRAppointment(date: Date): Promise<{ isValid: boolean; error?: string }> {
   try {
     const dateStr = format(date, 'yyyy-MM-dd');
@@ -15,59 +9,59 @@ export async function validateMRAppointment(date: Date): Promise<{ isValid: bool
       return { isValid: false, error: 'Cannot book appointments for past dates' };
     }
 
-    // Get working day settings first
-    const { data: workingDay, error: workingDayError } = await supabase
-      .from('mr_weekdays')
-      .select('is_working, max_appointments')
-      .eq('day', dayName)
-      .single();
+    // Batch our database queries
+    const [workingDayResponse, closureDateResponse, appointmentsResponse] = await Promise.all([
+      // Get working day settings
+      supabase
+        .from('mr_weekdays')
+        .select('is_working, max_appointments')
+        .eq('day', dayName)
+        .single(),
+      
+      // Check closure dates
+      supabase
+        .from('mr_closure_dates')
+        .select('reason')
+        .eq('date', dateStr)
+        .maybeSingle(),
+      
+      // Get existing appointments
+      supabase
+        .from('mr_appointments')
+        .select('id')
+        .eq('appointment_date', dateStr)
+        .eq('status', 'pending')
+    ]);
 
-    if (workingDayError) {
-      console.error('Error fetching working day settings:', workingDayError);
-      return { isValid: false, error: 'Error checking working day settings' };
-    }
-
-    // If no working day settings found or day is not working
-    if (!workingDay || !workingDay.is_working) {
+    // Handle working day settings
+    if (workingDayResponse.error || !workingDayResponse.data || !workingDayResponse.data.is_working) {
       return { isValid: false, error: 'Appointments are not available on this day' };
     }
 
-    // Check if it's a closure date - Changed from single() to maybeSingle()
-    const { data: closureDate, error: closureError } = await supabase
-      .from('mr_closure_dates')
-      .select('reason')
-      .eq('date', dateStr)
-      .maybeSingle();
-
-    if (closureError) {
-      console.error('Error checking closure date:', closureError);
+    // Handle closure dates
+    if (closureDateResponse.error) {
+      console.error('Error checking closure date:', closureDateResponse.error);
       return { isValid: false, error: 'Error checking closure dates' };
     }
 
-    if (closureDate) {
+    if (closureDateResponse.data) {
       return { 
         isValid: false, 
-        error: `Appointments are not available on this date${closureDate.reason ? `: ${closureDate.reason}` : ''}`
+        error: `Appointments are not available on this date${closureDateResponse.data.reason ? `: ${closureDateResponse.data.reason}` : ''}`
       };
     }
 
-    // Check number of existing appointments
-    const { data: appointments, error: appointmentsError } = await supabase
-      .from('mr_appointments')
-      .select('id')
-      .eq('appointment_date', dateStr)
-      .eq('status', 'pending');
-
-    if (appointmentsError) {
-      console.error('Error checking existing appointments:', appointmentsError);
+    // Handle appointments count
+    if (appointmentsResponse.error) {
+      console.error('Error checking existing appointments:', appointmentsResponse.error);
       return { isValid: false, error: 'Error checking existing appointments' };
     }
 
-    const currentAppointments = appointments?.length || 0;
-    if (currentAppointments >= workingDay.max_appointments) {
+    const currentAppointments = appointmentsResponse.data?.length || 0;
+    if (currentAppointments >= workingDayResponse.data.max_appointments) {
       return { 
         isValid: false, 
-        error: `Maximum appointments (${workingDay.max_appointments}) reached for this date` 
+        error: `Maximum appointments (${workingDayResponse.data.max_appointments}) reached for this date` 
       };
     }
 

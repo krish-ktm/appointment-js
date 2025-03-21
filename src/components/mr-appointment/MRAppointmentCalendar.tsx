@@ -1,10 +1,10 @@
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { Calendar as CalendarIcon, Users } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import { format, isWeekend, isSameDay, startOfToday, isBefore } from 'date-fns';
 import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../../i18n/useTranslation';
 import { supabase } from '../../lib/supabase';
-import { useEffect, useState, useMemo, useCallback } from 'react';
 import { validateMRAppointment } from '../../utils/mrAppointments';
 
 interface MRAppointmentCalendarProps {
@@ -13,21 +13,17 @@ interface MRAppointmentCalendarProps {
   onValidationError?: (error: string) => void;
 }
 
-interface DateBookings {
-  [key: string]: {
-    current: number;
-    max: number;
-  };
-}
-
 const TIMEZONE = 'Asia/Kolkata';
+
+// Validation cache at module level
+const validationCache = new Map<string, { isValid: boolean; error?: string }>();
 
 export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidationError }: MRAppointmentCalendarProps) {
   const { t } = useTranslation();
   const [closureDates, setClosureDates] = useState<string[]>([]);
   const [nonWorkingDays, setNonWorkingDays] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [dateBookings, setDateBookings] = useState<DateBookings>({});
+  const [dateBookings, setDateBookings] = useState<Record<string, { current: number; max: number }>>({});
   
   useEffect(() => {
     loadClosureDates();
@@ -85,7 +81,7 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
       }, {} as { [key: string]: number });
 
       // Create date bookings object
-      const newDateBookings: DateBookings = {};
+      const newDateBookings: Record<string, { current: number; max: number }> = {};
       for (let i = 0; i < 30; i++) {
         const date = new Date(today.getTime() + i * 24 * 60 * 60 * 1000);
         const dayName = format(date, 'EEEE');
@@ -115,7 +111,23 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
 
     setLoading(true);
     try {
+      const dateStr = format(date, 'yyyy-MM-dd');
+      
+      // Check cache first
+      if (validationCache.has(dateStr)) {
+        const cachedResult = validationCache.get(dateStr)!;
+        if (!cachedResult.isValid) {
+          onValidationError?.(cachedResult.error || 'Invalid date selected');
+          onDateChange(null);
+          return;
+        }
+        onDateChange(date);
+        return;
+      }
+
+      // If not in cache, validate and cache result
       const { isValid, error } = await validateMRAppointment(date);
+      validationCache.set(dateStr, { isValid, error });
       
       if (!isValid) {
         onValidationError?.(error || 'Invalid date selected');
