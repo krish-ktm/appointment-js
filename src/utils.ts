@@ -29,7 +29,15 @@ const to24HourFormat = (time12: string): string => {
   return `${hour.toString().padStart(2, '0')}:${minutes}`;
 };
 
-export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
+// Cache invalidation for time slots
+export const invalidateTimeSlots = () => {
+  // This function would be called when working hours are updated
+  // For now it's a placeholder as we don't have client-side caching yet
+  console.log('Time slots cache invalidated');
+};
+
+// Improved time slots generation with retries
+export const generateTimeSlots = async (date: string, retries = 3): Promise<TimeSlot[]> => {
   try {
     // Get working hours for the selected date
     const selectedDate = utcToZonedTime(new Date(date), TIMEZONE);
@@ -60,7 +68,7 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
 
     // Convert slots from database to TimeSlot array
     let slots: TimeSlot[] = workingHours.slots.map(slot => ({
-      time: slot.time, // Database already stores in 12-hour format
+      time: slot.time,
       maxBookings: slot.maxBookings,
       currentBookings: 0
     }));
@@ -118,6 +126,11 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
     return slots;
   } catch (error) {
     console.error('Error generating time slots:', error);
+    if (retries > 0) {
+      // Wait for 1 second before retrying
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return generateTimeSlots(date, retries - 1);
+    }
     return [];
   }
 };
@@ -128,6 +141,20 @@ export const validateBookingRequest = async (
   timeSlot: string
 ): Promise<{ isValid: boolean; error?: string }> => {
   try {
+    // Basic validation
+    if (!date) {
+      return { isValid: false, error: 'Please select a date' };
+    }
+
+    if (!timeSlot) {
+      return { isValid: false, error: 'Please select a time slot' };
+    }
+
+    // Validate phone number (10 digits)
+    if (!/^\d{10}$/.test(phone)) {
+      return { isValid: false, error: 'Please enter a valid 10-digit phone number' };
+    }
+
     // Parse and convert to IST
     const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
     const selectedDate = utcToZonedTime(parsedDate, TIMEZONE);
@@ -147,11 +174,6 @@ export const validateBookingRequest = async (
       return { isValid: false, error: 'The clinic is closed on this day' };
     }
 
-    // Validate phone number (10 digits)
-    if (!/^\d{10}$/.test(phone)) {
-      return { isValid: false, error: 'Please enter a valid 10-digit phone number' };
-    }
-
     // Check if the selected time slot exists and has available bookings
     const selectedSlot = workingHours.slots.find(slot => slot.time === timeSlot);
     
@@ -169,7 +191,8 @@ export const validateBookingRequest = async (
 
     if (bookingsError) throw bookingsError;
 
-    if (bookings && bookings.length >= selectedSlot.maxBookings) {
+    const currentBookings = bookings?.length || 0;
+    if (currentBookings >= selectedSlot.maxBookings) {
       return { isValid: false, error: 'This time slot is fully booked' };
     }
 

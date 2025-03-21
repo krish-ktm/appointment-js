@@ -10,6 +10,7 @@ const TIMEZONE = 'Asia/Kolkata';
 
 export function useAppointmentForm() {
   const [loading, setLoading] = useState(false);
+  const [loadingSlots, setLoadingSlots] = useState(false);
   const [success, setSuccess] = useState(false);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(null);
@@ -35,11 +36,18 @@ export function useAppointmentForm() {
   }, [form.date]);
 
   const loadTimeSlots = async () => {
-    if (form.date) {
+    if (!form.date) return;
+    
+    setLoadingSlots(true);
+    try {
       const slots = await generateTimeSlots(form.date);
       setTimeSlots(slots);
-    } else {
+    } catch (error) {
+      console.error('Error loading time slots:', error);
+      toast.error('Failed to load available time slots');
       setTimeSlots([]);
+    } finally {
+      setLoadingSlots(false);
     }
   };
 
@@ -83,6 +91,9 @@ export function useAppointmentForm() {
       setSuccess(true);
       setBookingDetails(appointment);
       setForm(initialForm);
+      
+      // Reload time slots to reflect the new booking
+      loadTimeSlots();
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -99,6 +110,7 @@ export function useAppointmentForm() {
     form,
     setForm,
     loading,
+    loadingSlots,
     success,
     timeSlots,
     bookingDetails,

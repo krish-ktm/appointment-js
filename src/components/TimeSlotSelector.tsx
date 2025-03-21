@@ -8,9 +8,23 @@ interface TimeSlotSelectorProps {
   onSelectTime: (time: string) => void;
   label: string;
   t: any;
+  loading?: boolean;
 }
 
-export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t }: TimeSlotSelectorProps) {
+export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t, loading = false }: TimeSlotSelectorProps) {
+  if (loading) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-gray-50 border border-gray-200 rounded-xl p-3 sm:p-4 text-center"
+      >
+        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto mb-2"></div>
+        <p className="text-sm text-gray-600">Loading available time slots...</p>
+      </motion.div>
+    );
+  }
+
   const availableSlots = timeSlots.filter(slot => slot.currentBookings < slot.maxBookings);
   
   if (timeSlots.length === 0 || availableSlots.length === 0) {
