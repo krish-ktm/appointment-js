@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import { Calendar } from 'lucide-react';
 import { WorkingHour } from '../../../types';
 import { WorkingHourCard } from './WorkingHourCard';
+import { format, parse } from 'date-fns';
 
 export function WorkingHours() {
   const [workingHours, setWorkingHours] = useState<WorkingHour[]>([]);
@@ -40,14 +41,18 @@ export function WorkingHours() {
     if (day.is_working) {
       // Morning validation
       if (day.morning_start && day.morning_end) {
-        if (day.morning_end <= day.morning_start) {
+        const startTime = parse(day.morning_start, 'hh:mm aa', new Date());
+        const endTime = parse(day.morning_end, 'hh:mm aa', new Date());
+        if (endTime <= startTime) {
           errors.morning = 'Morning end time must be after start time';
         }
       }
 
       // Evening validation (except Saturday)
       if (day.day !== 'Saturday' && day.evening_start && day.evening_end) {
-        if (day.evening_end <= day.evening_start) {
+        const startTime = parse(day.evening_start, 'hh:mm aa', new Date());
+        const endTime = parse(day.evening_end, 'hh:mm aa', new Date());
+        if (endTime <= startTime) {
           errors.evening = 'Evening end time must be after start time';
         }
       }

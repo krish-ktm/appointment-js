@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Settings, Plus, Minus, Trash2 } from 'lucide-react';
 import { WorkingHour, TimeSlot } from '../../../types';
-import { format } from 'date-fns';
 
 interface TimeSlotsManagerProps {
   day: WorkingHour;
@@ -19,14 +18,6 @@ export function TimeSlotsManager({
   onDeleteSlot
 }: TimeSlotsManagerProps) {
   const [defaultMaxBookings, setDefaultMaxBookings] = useState(3);
-
-  // Function to convert 24h time to 12h time for display
-  const to12HourFormat = (time24: string): string => {
-    const [hours, minutes] = time24.split(':');
-    const date = new Date();
-    date.setHours(parseInt(hours), parseInt(minutes));
-    return format(date, 'hh:mm aa');
-  };
 
   return (
     <div className="bg-white rounded-lg p-4 border border-gray-100">
@@ -75,7 +66,7 @@ export function TimeSlotsManager({
             className="bg-gray-50 p-3 rounded-lg border border-gray-200 relative group"
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-900">{to12HourFormat(slot.time)}</span>
+              <span className="text-sm font-medium text-gray-900">{slot.time}</span>
               <div className="flex items-center">
                 <button
                   onClick={() => onDeleteSlot(index)}

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { WorkingHour } from '../../../types';
 import { WorkingHoursForm } from './WorkingHoursForm';
 import { TimeSlotsManager } from './TimeSlotsManager';
-import { format } from 'date-fns';
+import { format, parse, addMinutes } from 'date-fns';
 import { supabase } from '../../../lib/supabase';
 import { toast } from 'react-hot-toast';
 
@@ -29,43 +29,34 @@ export function WorkingHourCard({
 }: WorkingHourCardProps) {
   const [isToggling, setIsToggling] = useState(false);
 
-  // Function to convert 24h time to 12h time for display
-  const to12HourFormat = (time24: string | null): string => {
-    if (!time24) return '';
-    const [hours, minutes] = time24.split(':');
-    const date = new Date();
-    date.setHours(parseInt(hours), parseInt(minutes));
-    return format(date, 'hh:mm aa');
-  };
-
   const handleGenerateSlots = (defaultMaxBookings: number) => {
     // Generate time slots based on working hours
     const newSlots = [];
     const interval = day.slot_interval || 30;
 
     if (day.morning_start && day.morning_end) {
-      let time = day.morning_start;
-      while (time <= day.morning_end) {
-        newSlots.push({ time, maxBookings: defaultMaxBookings });
-        // Add interval minutes to time
-        const [hours, minutes] = time.split(':').map(Number);
-        const totalMinutes = hours * 60 + minutes + interval;
-        const newHours = Math.floor(totalMinutes / 60);
-        const newMinutes = totalMinutes % 60;
-        time = `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
+      let currentTime = parse(day.morning_start, 'hh:mm aa', new Date());
+      const endTime = parse(day.morning_end, 'hh:mm aa', new Date());
+
+      while (currentTime <= endTime) {
+        newSlots.push({
+          time: format(currentTime, 'hh:mm aa'),
+          maxBookings: defaultMaxBookings
+        });
+        currentTime = addMinutes(currentTime, interval);
       }
     }
 
     if (day.evening_start && day.evening_end) {
-      let time = day.evening_start;
-      while (time <= day.evening_end) {
-        newSlots.push({ time, maxBookings: defaultMaxBookings });
-        // Add interval minutes to time
-        const [hours, minutes] = time.split(':').map(Number);
-        const totalMinutes = hours * 60 + minutes + interval;
-        const newHours = Math.floor(totalMinutes / 60);
-        const newMinutes = totalMinutes % 60;
-        time = `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
+      let currentTime = parse(day.evening_start, 'hh:mm aa', new Date());
+      const endTime = parse(day.evening_end, 'hh:mm aa', new Date());
+
+      while (currentTime <= endTime) {
+        newSlots.push({
+          time: format(currentTime, 'hh:mm aa'),
+          maxBookings: defaultMaxBookings
+        });
+        currentTime = addMinutes(currentTime, interval);
       }
     }
 
@@ -74,13 +65,12 @@ export function WorkingHourCard({
 
   const handleToggleWorking = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
-    if (isToggling) return; // Prevent multiple toggles while processing
+    if (isToggling) return;
     
     setIsToggling(true);
     const newIsWorking = e.target.checked;
 
     try {
-      // Update the database first - only update is_working status
       const { error } = await supabase
         .from('working_hours')
         .update({ is_working: newIsWorking })
@@ -88,13 +78,11 @@ export function WorkingHourCard({
 
       if (error) throw error;
 
-      // If successful, update the local state
       onUpdate({ is_working: newIsWorking });
       toast.success(`${day.day} ${newIsWorking ? 'enabled' : 'disabled'} successfully`);
     } catch (error) {
       console.error('Error toggling working day:', error);
       toast.error('Failed to update working hours');
-      // Revert the checkbox state on error
       onUpdate({ is_working: !newIsWorking });
     } finally {
       setIsToggling(false);
@@ -102,7 +90,6 @@ export function WorkingHourCard({
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
-    // Only toggle if the click is not on the checkbox or its label
     if (!(e.target as HTMLElement).closest('label')) {
       onToggle();
     }
@@ -128,11 +115,11 @@ export function WorkingHourCard({
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <span>
                   {day.morning_start && day.morning_end
-                    ? `${to12HourFormat(day.morning_start)} - ${to12HourFormat(day.morning_end)}`
+                    ? `${day.morning_start} - ${day.morning_end}`
                     : 'No morning hours'
                   }
                   {day.evening_start && day.evening_end
-                    ? ` | ${to12HourFormat(day.evening_start)} - ${to12HourFormat(day.evening_end)}`
+                    ? ` | ${day.evening_start} - ${day.evening_end}`
                     : ' | No evening hours'
                   }
                 </span>

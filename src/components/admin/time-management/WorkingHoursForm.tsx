@@ -19,39 +19,32 @@ export function WorkingHoursForm({ day, onUpdate, formErrors }: WorkingHoursForm
     return format(date, 'hh:mm aa');
   };
 
-  // Function to convert 12h time back to 24h format for storage
-  const to24HourFormat = (time12: string): string => {
-    if (!time12) return '';
-    const [time, period] = time12.split(' ');
-    let [hours, minutes] = time.split(':');
-    let hoursNum = parseInt(hours);
-    
-    if (period.toLowerCase() === 'pm' && hoursNum !== 12) {
-      hoursNum += 12;
-    } else if (period.toLowerCase() === 'am' && hoursNum === 12) {
-      hoursNum = 0;
-    }
-    
-    return `${hoursNum.toString().padStart(2, '0')}:${minutes}`;
+  // Function to convert 12h time back to 12h format for storage
+  const to12HourFormatForStorage = (time24: string): string => {
+    if (!time24) return '';
+    const [hours, minutes] = time24.split(':');
+    const date = new Date();
+    date.setHours(parseInt(hours), parseInt(minutes));
+    return format(date, 'hh:mm aa');
   };
 
   const handleTimeChange = (period: 'morning' | 'evening', type: 'start' | 'end', value: string) => {
     const updates: Partial<WorkingHour> = {};
-    const time24 = value ? to24HourFormat(value) : null;
-    updates[`${period}_${type}`] = time24;
+    const time12 = value ? to12HourFormatForStorage(value) : null;
+    updates[`${period}_${type}`] = time12;
     
     // If either start or end time is set, ensure both are set with default values
     if (value && period === 'morning') {
       if (type === 'start' && !day.morning_end) {
-        updates.morning_end = '12:00';
+        updates.morning_end = '12:00 PM';
       } else if (type === 'end' && !day.morning_start) {
-        updates.morning_start = '09:30';
+        updates.morning_start = '09:30 AM';
       }
     } else if (value && period === 'evening') {
       if (type === 'start' && !day.evening_end) {
-        updates.evening_end = '18:30';
+        updates.evening_end = '06:30 PM';
       } else if (type === 'end' && !day.evening_start) {
-        updates.evening_start = '16:00';
+        updates.evening_start = '04:00 PM';
       }
     }
 
@@ -75,7 +68,7 @@ export function WorkingHoursForm({ day, onUpdate, formErrors }: WorkingHoursForm
                 if (!e.target.checked) {
                   onUpdate({ morning_start: null, morning_end: null });
                 } else {
-                  onUpdate({ morning_start: '09:30', morning_end: '12:00' });
+                  onUpdate({ morning_start: '09:30 AM', morning_end: '12:00 PM' });
                 }
               }}
               className="sr-only peer"
@@ -88,26 +81,20 @@ export function WorkingHoursForm({ day, onUpdate, formErrors }: WorkingHoursForm
             <div className="flex items-center gap-2">
               <input
                 type="time"
-                value={day.morning_start}
-                onChange={(e) => {
-                  const time12 = format(new Date(`2000-01-01T${e.target.value}`), 'hh:mm aa');
-                  handleTimeChange('morning', 'start', time12);
-                }}
+                value={day.morning_start.split(' ')[0]}
+                onChange={(e) => handleTimeChange('morning', 'start', e.target.value)}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
               />
               <span className="text-gray-500">to</span>
               <input
                 type="time"
-                value={day.morning_end}
-                onChange={(e) => {
-                  const time12 = format(new Date(`2000-01-01T${e.target.value}`), 'hh:mm aa');
-                  handleTimeChange('morning', 'end', time12);
-                }}
+                value={day.morning_end.split(' ')[0]}
+                onChange={(e) => handleTimeChange('morning', 'end', e.target.value)}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
               />
             </div>
             <div className="mt-2 text-sm text-gray-500">
-              {to12HourFormat(day.morning_start)} - {to12HourFormat(day.morning_end)}
+              {day.morning_start} - {day.morning_end}
             </div>
             {formErrors?.morning && (
               <p className="mt-2 text-sm text-red-600">{formErrors.morning}</p>
@@ -131,7 +118,7 @@ export function WorkingHoursForm({ day, onUpdate, formErrors }: WorkingHoursForm
                 if (!e.target.checked) {
                   onUpdate({ evening_start: null, evening_end: null });
                 } else {
-                  onUpdate({ evening_start: '16:00', evening_end: '18:30' });
+                  onUpdate({ evening_start: '04:00 PM', evening_end: '06:30 PM' });
                 }
               }}
               className="sr-only peer"
@@ -144,26 +131,20 @@ export function WorkingHoursForm({ day, onUpdate, formErrors }: WorkingHoursForm
             <div className="flex items-center gap-2">
               <input
                 type="time"
-                value={day.evening_start}
-                onChange={(e) => {
-                  const time12 = format(new Date(`2000-01-01T${e.target.value}`), 'hh:mm aa');
-                  handleTimeChange('evening', 'start', time12);
-                }}
+                value={day.evening_start.split(' ')[0]}
+                onChange={(e) => handleTimeChange('evening', 'start', e.target.value)}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
               />
               <span className="text-gray-500">to</span>
               <input
                 type="time"
-                value={day.evening_end}
-                onChange={(e) => {
-                  const time12 = format(new Date(`2000-01-01T${e.target.value}`), 'hh:mm aa');
-                  handleTimeChange('evening', 'end', time12);
-                }}
+                value={day.evening_end.split(' ')[0]}
+                onChange={(e) => handleTimeChange('evening', 'end', e.target.value)}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
               />
             </div>
             <div className="mt-2 text-sm text-gray-500">
-              {to12HourFormat(day.evening_start)} - {to12HourFormat(day.evening_end)}
+              {day.evening_start} - {day.evening_end}
             </div>
             {formErrors?.evening && (
               <p className="mt-2 text-sm text-red-600">{formErrors.evening}</p>
