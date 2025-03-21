@@ -1,6 +1,6 @@
 import { TimeSlot } from './types';
 import { supabase } from './lib/supabase';
-import { startOfToday, addDays, format, parse, isToday, isTomorrow, isAfter, isBefore, isSunday } from 'date-fns';
+import { startOfToday, addDays, format, parse, isToday, isTomorrow, isAfter, isBefore } from 'date-fns';
 import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 
 const TIMEZONE = 'Asia/Kolkata';
@@ -42,7 +42,9 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
       .single();
 
     if (error) throw error;
-    if (!workingHours || !workingHours.is_working) {
+    
+    // If the day is not configured or not working, return empty slots
+    if (!workingHours || !workingHours.is_working || !workingHours.slots) {
       return [];
     }
 
@@ -53,20 +55,14 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
     const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
     const selectedDateInIST = utcToZonedTime(parsedDate, TIMEZONE);
     
-    // Check if selected date is today or tomorrow
+    // Check if selected date is today
     const isSelectedToday = isToday(selectedDateInIST);
-    const isSelectedTomorrow = isTomorrow(selectedDateInIST);
-    const isSelectedSunday = isSunday(selectedDateInIST);
-
-    // If it's Sunday, return empty array as clinic is closed
-    if (isSelectedSunday) {
-      return [];
-    }
 
     // Convert slots from database to TimeSlot array and convert times to 12h format
-    let slots: TimeSlot[] = (workingHours.slots || []).map(slot => ({
-      ...slot,
-      time: to12HourFormat(slot.time)
+    let slots: TimeSlot[] = workingHours.slots.map(slot => ({
+      time: to12HourFormat(slot.time),
+      maxBookings: slot.maxBookings,
+      currentBookings: 0
     }));
 
     // Get current bookings for each time slot
@@ -92,6 +88,7 @@ export const generateTimeSlots = async (date: string): Promise<TimeSlot[]> => {
       currentBookings: bookingCounts[slot.time] || 0
     }));
 
+    // Apply time restrictions for today's slots
     if (isSelectedToday) {
       slots = slots.filter(slot => {
         // Convert 12h time back to 24h for comparison
@@ -146,13 +143,9 @@ export const validateBookingRequest = async (
 
     if (workingHoursError) throw workingHoursError;
 
-    if (!workingHours || !workingHours.is_working) {
+    // Check working hours configuration
+    if (!workingHours || !workingHours.is_working || !workingHours.slots) {
       return { isValid: false, error: 'The clinic is closed on this day' };
-    }
-
-    // Check if it's Sunday
-    if (isSunday(selectedDate)) {
-      return { isValid: false, error: 'Appointments are not available on Sundays' };
     }
 
     // Validate phone number (10 digits)
@@ -164,8 +157,7 @@ export const validateBookingRequest = async (
     const timeSlot24h = to24HourFormat(timeSlot);
 
     // Check if the selected time slot exists and has available bookings
-    const slots = workingHours.slots || [];
-    const selectedSlot = slots.find(slot => slot.time === timeSlot24h);
+    const selectedSlot = workingHours.slots.find(slot => slot.time === timeSlot24h);
     
     if (!selectedSlot) {
       return { isValid: false, error: 'Invalid time slot selected' };
