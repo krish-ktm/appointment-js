@@ -7,6 +7,7 @@ import { AdminDashboard } from './components/admin/AdminDashboard';
 import { NoticeManager } from './components/admin/NoticeManager';
 import { MessageManager } from './components/admin/MessageManager';
 import { MRAppointmentManager } from './components/admin/MRAppointmentManager';
+import { MRAppointmentManagement } from './components/admin/mr-appointment/MRAppointmentManagement';
 import { UsersManager } from './components/admin/UsersManager';
 import { TimeManagement } from './components/admin/time-management/TimeManagement';
 import { ClosureDatesManager } from './components/admin/ClosureDatesManager';
@@ -57,6 +58,7 @@ function App() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="mr-appointments" element={<MRAppointmentManager />} />
+            <Route path="mr-settings" element={<MRAppointmentManagement />} />
             <Route path="notices" element={<NoticeManager />} />
             <Route path="messages" element={<MessageManager />} />
             <Route path="users" element={<UsersManager />} />
