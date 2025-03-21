@@ -1,8 +1,10 @@
 import { Calendar as CalendarIcon } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import { format, isWeekend, isSameDay, startOfToday, isBefore } from 'date-fns';
-import { utcToZonedTime } from 'date-fns-tz';
+import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../../i18n/useTranslation';
+import { supabase } from '../../lib/supabase';
+import { useEffect, useState } from 'react';
 
 interface MRAppointmentCalendarProps {
   selectedDate: Date | null;
@@ -13,10 +15,30 @@ const TIMEZONE = 'Asia/Kolkata';
 
 export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointmentCalendarProps) {
   const { t } = useTranslation();
+  const [closureDates, setClosureDates] = useState<string[]>([]);
+  
+  useEffect(() => {
+    loadClosureDates();
+  }, []);
+
+  const loadClosureDates = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('clinic_closure_dates')
+        .select('date')
+        .gte('date', format(startOfToday(), 'yyyy-MM-dd'));
+
+      if (error) throw error;
+      setClosureDates((data || []).map(d => d.date));
+    } catch (error) {
+      console.error('Error loading closure dates:', error);
+    }
+  };
   
   const isDateDisabled = (date: Date) => {
     const today = startOfToday();
-    return isWeekend(date) || isBefore(date, today);
+    const dateStr = format(date, 'yyyy-MM-dd');
+    return isWeekend(date) || isBefore(date, today) || closureDates.includes(dateStr);
   };
 
   const formatSelectedDate = (date: Date) => {
