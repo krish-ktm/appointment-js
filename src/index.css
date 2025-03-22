@@ -77,19 +77,19 @@ body {
 }
 
 .mr-calendar .react-datepicker__month-container {
-  @apply w-full float-none;
+  @apply w-full float-none bg-white rounded-xl shadow-sm border border-gray-100;
 }
 
 .mr-calendar .react-datepicker__header {
-  @apply bg-transparent border-0 pb-4;
+  @apply bg-white border-0 pb-4 rounded-t-xl;
 }
 
 .mr-calendar .react-datepicker__current-month {
-  @apply text-gray-900 font-semibold py-3 text-lg;
+  @apply text-gray-900 font-semibold py-4 text-lg;
 }
 
 .mr-calendar .react-datepicker__day-names {
-  @apply border-b border-gray-100 pb-2 mb-2;
+  @apply border-b border-gray-100 pb-2 mb-2 pt-4 bg-white;
 }
 
 .mr-calendar .react-datepicker__day-name {
@@ -97,20 +97,21 @@ body {
 }
 
 .mr-calendar .react-datepicker__month {
-  @apply m-0;
+  @apply m-0 p-2;
 }
 
 .mr-calendar .react-datepicker__week {
-  @apply flex;
+  @apply flex mb-1;
 }
 
 .mr-calendar .react-datepicker__day {
-  @apply m-0 p-1 w-[calc(100%/7)] h-16 flex flex-col items-center justify-start 
-    hover:bg-blue-50 hover:text-blue-600 relative border border-transparent;
+  @apply m-0.5 p-1 w-[calc(100%/7-0.5rem)] h-24 flex flex-col items-center justify-start 
+    hover:bg-blue-50 hover:text-blue-600 relative border border-transparent rounded-xl
+    transition-all duration-200;
 }
 
 .mr-calendar .react-datepicker__day--selected {
-  @apply bg-blue-600 text-white hover:bg-blue-700 hover:text-white border-blue-300;
+  @apply bg-blue-600 text-white hover:bg-blue-700 hover:text-white border-blue-300 shadow-sm;
 }
 
 .mr-calendar .react-datepicker__day--keyboard-selected {
@@ -118,11 +119,11 @@ body {
 }
 
 .mr-calendar .react-datepicker__day--disabled {
-  @apply text-gray-300 hover:bg-transparent cursor-not-allowed opacity-50;
+  @apply text-gray-300 hover:bg-gray-50/50 cursor-not-allowed opacity-50;
 }
 
 .mr-calendar .react-datepicker__day--weekend {
-  @apply text-gray-400;
+  @apply text-gray-400 bg-gray-50/50;
 }
 
 .mr-calendar .react-datepicker__day--outside-month {
@@ -130,7 +131,7 @@ body {
 }
 
 .mr-calendar .react-datepicker__navigation {
-  @apply top-3;
+  @apply top-4 z-10;
 }
 
 .mr-calendar .react-datepicker__navigation--previous {
@@ -147,38 +148,50 @@ body {
 
 /* Calendar day content */
 .mr-calendar-day {
-  @apply w-full h-full flex flex-col items-center gap-1 pt-1.5;
+  @apply w-full h-full flex flex-col items-center gap-1 pt-2;
 }
 
 .mr-calendar-day__number {
-  @apply text-sm font-medium;
+  @apply text-sm font-medium mb-1;
 }
 
 .mr-calendar-day__slots {
-  @apply text-[10px] text-gray-500 bg-gray-50/80 px-1.5 py-0.5 rounded-sm;
+  @apply text-[10px] text-gray-500 bg-gray-50/80 px-2 py-1 rounded-md;
 }
 
 .mr-calendar-day__indicator {
-  @apply absolute top-1 right-1 w-1.5 h-1.5 rounded-full;
+  @apply absolute top-2 right-2 w-2 h-2 rounded-full;
 }
 
 .mr-calendar-day__indicator--available {
-  @apply bg-green-500;
+  @apply bg-green-500 shadow-sm shadow-green-500/20;
 }
 
 .mr-calendar-day__indicator--full {
-  @apply bg-red-500;
+  @apply bg-red-500 shadow-sm shadow-red-500/20;
 }
 
 /* Calendar legend */
 .mr-calendar__legend {
-  @apply flex items-center gap-4 mt-4 px-4 justify-center border-t border-gray-100 pt-4;
+  @apply flex items-center gap-6 mt-6 px-6 justify-center border-t border-gray-100 pt-4 pb-2 bg-white;
 }
 
 .mr-calendar__legend-item {
-  @apply flex items-center gap-1.5 text-xs text-gray-500;
+  @apply flex items-center gap-2 text-sm text-gray-600;
 }
 
 .mr-calendar__legend-dot {
-  @apply w-1.5 h-1.5 rounded-full;
+  @apply w-2 h-2 rounded-full shadow-sm;
+}
+
+.mr-calendar__legend-dot--available {
+  @apply bg-green-500 shadow-green-500/20;
+}
+
+.mr-calendar__legend-dot--full {
+  @apply bg-red-500 shadow-red-500/20;
+}
+
+.mr-calendar__legend-dot--disabled {
+  @apply bg-gray-300 shadow-gray-300/20;
 }

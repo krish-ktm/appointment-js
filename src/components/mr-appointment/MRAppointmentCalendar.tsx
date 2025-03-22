@@ -212,15 +212,15 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
         
         <div className="mr-calendar__legend">
           <div className="mr-calendar__legend-item">
-            <span className="mr-calendar__legend-dot bg-green-500"></span>
+            <span className="mr-calendar__legend-dot mr-calendar__legend-dot--available"></span>
             <span>Available</span>
           </div>
           <div className="mr-calendar__legend-item">
-            <span className="mr-calendar__legend-dot bg-red-500"></span>
+            <span className="mr-calendar__legend-dot mr-calendar__legend-dot--full"></span>
             <span>Full</span>
           </div>
           <div className="mr-calendar__legend-item">
-            <span className="mr-calendar__legend-dot bg-gray-300"></span>
+            <span className="mr-calendar__legend-dot mr-calendar__legend-dot--disabled"></span>
             <span>Not available</span>
           </div>
         </div>
