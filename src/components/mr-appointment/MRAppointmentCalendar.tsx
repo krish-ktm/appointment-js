@@ -49,12 +49,10 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
 
       if (error) throw error;
       
-      // Store non-working days
       setNonWorkingDays((data || [])
         .filter(d => !d.is_working)
         .map(d => d.day));
 
-      // Store working days map
       const workingDays = data?.reduce((acc, day) => {
         if (day.is_working) {
           acc[day.day] = day.max_appointments;
@@ -64,7 +62,6 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
       
       setWorkingDaysMap(workingDays || {});
 
-      // Load current bookings for the next 6 months
       const today = startOfToday();
       const sixMonthsLater = addMonths(today, 6);
       
@@ -77,13 +74,11 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
 
       if (bookingsError) throw bookingsError;
 
-      // Count bookings by date
       const bookingCounts = (bookings || []).reduce((acc, booking) => {
         acc[booking.appointment_date] = (acc[booking.appointment_date] || 0) + 1;
         return acc;
       }, {} as { [key: string]: number });
 
-      // Create date bookings object for the next 6 months
       const newDateBookings: Record<string, { current: number; max: number }> = {};
       let currentDate = today;
       
@@ -119,14 +114,6 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     );
   }, [closureDates, nonWorkingDays]);
 
-  const handleDateChange = (date: Date | null) => {
-    if (!date) {
-      onDateChange(null);
-      return;
-    }
-    onDateChange(date);
-  };
-
   const formatSelectedDate = useCallback((date: Date) => {
     const istDate = utcToZonedTime(date, TIMEZONE);
     const dayName = t.mrAppointment.form.days[format(istDate, 'EEEE').toLowerCase() as keyof typeof t.mrAppointment.form.days];
@@ -141,22 +128,24 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     const dayName = format(date, 'EEEE');
     const isDisabled = isDateDisabled(date);
     
-    // If it's a working day, show slots even if no bookings yet
     const maxAppointments = workingDaysMap[dayName] || 0;
     const currentBookings = dateBookings[dateStr]?.current || 0;
     const hasSlots = maxAppointments > 0;
+    const availableSlots = maxAppointments - currentBookings;
+    const isFull = currentBookings >= maxAppointments;
     
     return (
-      <div className="relative w-full h-full flex flex-col items-center justify-center min-h-[40px]">
-        <span className="leading-none mb-1">{day}</span>
+      <div className="mr-calendar-day">
+        <span className="mr-calendar-day__number">{day}</span>
         {hasSlots && !isDisabled && (
-          <span className={`text-[10px] leading-none ${
-            selectedDate && isSameDay(date, selectedDate)
-              ? 'text-white'
-              : 'text-gray-500'
-          }`}>
-            {maxAppointments - currentBookings} slots
-          </span>
+          <>
+            <span className="mr-calendar-day__slots">
+              {availableSlots} slots
+            </span>
+            <span className={`mr-calendar-day__indicator ${
+              isFull ? 'mr-calendar-day__indicator--full' : 'mr-calendar-day__indicator--available'
+            }`} />
+          </>
         )}
       </div>
     );
@@ -168,16 +157,10 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     const isDisabled = isDateDisabled(date);
     const isTodays = isSameDay(date, new Date());
     
-    if (isDisabled) {
-      return "!text-gray-300 hover:!bg-transparent cursor-not-allowed opacity-50";
-    }
-    if (isSelected) {
-      return "!bg-blue-600 !text-white hover:!bg-blue-700 ring-4 ring-blue-100";
-    }
-    if (isTodays) {
-      return "!bg-blue-50/50 !text-blue-600 font-medium hover:!bg-blue-100";
-    }
-    return "!text-gray-700 hover:!bg-blue-50 hover:!text-blue-600 transition-all duration-200";
+    if (isDisabled) return "react-datepicker__day--disabled";
+    if (isSelected) return "react-datepicker__day--selected";
+    if (isTodays) return "react-datepicker__day--today";
+    return "";
   }, [selectedDate, isDateDisabled]);
 
   return (
@@ -210,10 +193,10 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
           </div>
         </div>
         
-        <div className="w-full relative pb-4">
+        <div className="w-full relative">
           <DatePicker
             selected={selectedDate}
-            onChange={handleDateChange}
+            onChange={onDateChange}
             minDate={startOfToday()}
             maxDate={addMonths(new Date(), 6)}
             filterDate={(date) => !isDateDisabled(date)}
@@ -221,31 +204,24 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
             placeholderText={t.mrAppointment.form.selectDate}
             required
             inline
-            calendarClassName="!bg-transparent !border-0 !shadow-none w-full"
+            calendarClassName="mr-calendar"
             dayClassName={dayClassName}
             renderDayContents={renderDayContents}
-            popperPlacement="bottom"
-            popperModifiers={[
-              {
-                name: "preventOverflow",
-                options: {
-                  padding: 16
-                }
-              }
-            ]}
           />
         </div>
         
-        <div className="mt-4 pt-3 border-t border-gray-100">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-              <Users className="h-4 w-4 text-blue-600" />
-              <span>Available slots</span>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-              <span className="w-2 h-2 rounded-full bg-gray-300"></span>
-              <span>Not available</span>
-            </div>
+        <div className="mr-calendar__legend">
+          <div className="mr-calendar__legend-item">
+            <span className="mr-calendar__legend-dot bg-green-500"></span>
+            <span>Available</span>
+          </div>
+          <div className="mr-calendar__legend-item">
+            <span className="mr-calendar__legend-dot bg-red-500"></span>
+            <span>Full</span>
+          </div>
+          <div className="mr-calendar__legend-item">
+            <span className="mr-calendar__legend-dot bg-gray-300"></span>
+            <span>Not available</span>
           </div>
         </div>
       </div>
