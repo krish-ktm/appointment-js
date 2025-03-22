@@ -57,9 +57,15 @@ export function createBookingDetails(appointmentDetails: AppointmentDetails, for
         </div>
       </div>
 
-      <div style="margin-bottom: 24px;">
-        <p style="color: #6b7280; font-size: 14px; margin: 0 0 4px 0;">${translations.confirmation.appointmentDate}</p>
-        <p style="color: #111827; font-size: 18px; font-weight: 500; margin: 0;">${formattedDate}</p>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 24px;">
+        <div>
+          <p style="color: #6b7280; font-size: 14px; margin: 0 0 4px 0;">${translations.confirmation.date}</p>
+          <p style="color: #111827; font-size: 18px; font-weight: 500; margin: 0;">${formattedDate}</p>
+        </div>
+        <div>
+          <p style="color: #6b7280; font-size: 14px; margin: 0 0 4px 0;">${translations.confirmation.time}</p>
+          <p style="color: #111827; font-size: 18px; font-weight: 500; margin: 0;">${appointmentDetails.appointment_time}</p>
+        </div>
       </div>
     </div>
   `;
