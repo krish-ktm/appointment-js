@@ -38,8 +38,8 @@ export function TimeManagement() {
           <Clock className="h-6 w-6 text-blue-600" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">Time Management</h2>
-          <p className="text-sm text-gray-500 mt-1">Configure clinic working hours</p>
+          <h2 className="text-xl font-semibold text-gray-900">Appointment System Settings</h2>
+          <p className="text-sm text-gray-500 mt-1">Configure clinic working hours and appointment slots</p>
         </div>
       </div>
 

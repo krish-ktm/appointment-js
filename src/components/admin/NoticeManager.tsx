@@ -113,20 +113,28 @@ export function NoticeManager() {
     newNotices[newIndex] = temp;
 
     try {
+      // Create updates array with all required fields
       const updates = newNotices.map((notice, index) => ({
         id: notice.id,
-        order: index
+        order: index,
+        title: notice.title,
+        content: notice.content,
+        active: notice.active,
+        images: notice.images || []
       }));
 
       const { error } = await supabase
         .from('notices')
-        .upsert(updates);
+        .upsert(updates, { onConflict: 'id' });
 
       if (error) throw error;
       setNotices(newNotices);
+      toast.success('Notice order updated successfully');
     } catch (error) {
       console.error('Error reordering notices:', error);
       toast.error('Failed to reorder notices');
+      // Revert the local state on error
+      loadNotices();
     }
   };
 

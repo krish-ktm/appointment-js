@@ -56,7 +56,7 @@ export function AdminLayout() {
       { name: 'Notice Board', href: '/admin/notices', icon: Bell },
       { name: 'Doctor Messages', href: '/admin/messages', icon: MessageCircle },
       { name: 'Users', href: '/admin/users', icon: Users },
-      { name: 'Time Management', href: '/admin/time-management', icon: Clock },
+      { name: 'Appointment System Settings', href: '/admin/time-management', icon: Clock },
       { name: 'Closure Dates', href: '/admin/closure-dates', icon: CalendarOff }
     ] : [])
   ];
