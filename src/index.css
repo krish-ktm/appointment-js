@@ -84,9 +84,17 @@ body {
     @apply flex justify-between mb-1;
   }
 
+  /* Desktop Calendar Day */
   .mr-calendar .react-datepicker__day {
     @apply m-0.5 p-1 w-[calc(100%/7-0.5rem)] h-20 flex flex-col items-center justify-start 
       bg-white text-gray-900 border border-transparent rounded-xl transition-all duration-200
+      hover:bg-blue-50 hover:border-blue-200 hover:shadow-sm [contain:content] [will-change:transform];
+  }
+
+  /* Mobile Calendar Day */
+  .mr-calendar--mobile .react-datepicker__day {
+    @apply m-0.5 p-1 w-[calc(100%/7-0.5rem)] h-10 flex flex-col items-center justify-center 
+      bg-white text-gray-900 border border-transparent rounded-lg transition-all duration-200
       hover:bg-blue-50 hover:border-blue-200 hover:shadow-sm [contain:content] [will-change:transform];
   }
 
@@ -124,7 +132,7 @@ body {
     @apply border-gray-400;
   }
 
-  /* Calendar day content */
+  /* Desktop Calendar Day Content */
   .mr-calendar-day {
     @apply w-full h-full flex flex-col items-center pt-2 [contain:content];
   }
@@ -143,6 +151,27 @@ body {
 
   .mr-calendar-day__indicator {
     @apply absolute top-2 right-2 w-2 h-2 rounded-full transition-all duration-200;
+  }
+
+  /* Mobile Calendar Day Content */
+  .mr-calendar-day-mobile {
+    @apply w-full h-full flex flex-col items-center justify-center relative [contain:content];
+  }
+
+  .mr-calendar-day-mobile__number {
+    @apply text-sm font-medium;
+  }
+
+  .mr-calendar-day-mobile__indicator {
+    @apply absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full;
+  }
+
+  .mr-calendar-day-mobile__indicator--available {
+    @apply bg-green-500;
+  }
+
+  .mr-calendar-day-mobile__indicator--full {
+    @apply bg-red-500;
   }
 
   .mr-calendar-day__indicator--available {

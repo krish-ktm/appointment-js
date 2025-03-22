@@ -21,7 +21,17 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
   const [loading, setLoading] = useState(false);
   const [workingDaysMap, setWorkingDaysMap] = useState<{ [key: string]: number }>({});
   const [dateBookings, setDateBookings] = useState<Record<string, { current: number; max: number }>>({});
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     loadClosureDates();
     loadWorkingDays();
@@ -140,6 +150,19 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     const hasSlots = maxAppointments > 0;
     const availableSlots = maxAppointments - currentBookings;
     const isFull = currentBookings >= maxAppointments;
+
+    if (isMobile) {
+      return (
+        <div className="mr-calendar-day-mobile">
+          <span className="mr-calendar-day-mobile__number">{day}</span>
+          {hasSlots && !isDisabled && (
+            <span className={`mr-calendar-day-mobile__indicator ${
+              isFull ? 'mr-calendar-day-mobile__indicator--full' : 'mr-calendar-day-mobile__indicator--available'
+            }`} />
+          )}
+        </div>
+      );
+    }
     
     return (
       <div className="mr-calendar-day">
@@ -163,7 +186,7 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
         )}
       </div>
     );
-  }, [dateBookings, selectedDate, isDateDisabled, workingDaysMap]);
+  }, [dateBookings, selectedDate, isDateDisabled, workingDaysMap, isMobile]);
 
   const dayClassName = useCallback((date: Date) => {
     const dateStr = format(date, 'yyyy-MM-dd');
@@ -228,7 +251,7 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
             placeholderText={t.mrAppointment.form.selectDate}
             required
             inline
-            calendarClassName="mr-calendar"
+            calendarClassName={`mr-calendar ${isMobile ? 'mr-calendar--mobile' : ''}`}
             dayClassName={dayClassName}
             renderDayContents={renderDayContents}
           />
