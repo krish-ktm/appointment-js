@@ -14,7 +14,7 @@ export async function validateMRAppointment(date: Date): Promise<{ isValid: bool
     }
 
     // Batch our database queries
-    const [workingDayResponse, closureDateResponse, appointmentsResponse] = await Promise.all([
+    const [workingDayResponse, mrClosureDateResponse, clinicClosureDateResponse, appointmentsResponse] = await Promise.all([
       // Get working day settings
       supabase
         .from('mr_weekdays')
@@ -22,9 +22,16 @@ export async function validateMRAppointment(date: Date): Promise<{ isValid: bool
         .eq('day', dayName)
         .single(),
       
-      // Check closure dates
+      // Check MR closure dates
       supabase
         .from('mr_closure_dates')
+        .select('reason')
+        .eq('date', dateStr)
+        .maybeSingle(),
+
+      // Check clinic closure dates
+      supabase
+        .from('clinic_closure_dates')
         .select('reason')
         .eq('date', dateStr)
         .maybeSingle(),
@@ -42,16 +49,29 @@ export async function validateMRAppointment(date: Date): Promise<{ isValid: bool
       return { isValid: false, error: 'Appointments are not available on this day' };
     }
 
-    // Handle closure dates
-    if (closureDateResponse.error) {
-      console.error('Error checking closure date:', closureDateResponse.error);
+    // Handle MR closure dates
+    if (mrClosureDateResponse.error) {
+      console.error('Error checking MR closure date:', mrClosureDateResponse.error);
       return { isValid: false, error: 'Error checking closure dates' };
     }
 
-    if (closureDateResponse.data) {
+    if (mrClosureDateResponse.data) {
       return { 
         isValid: false, 
-        error: `Appointments are not available on this date${closureDateResponse.data.reason ? `: ${closureDateResponse.data.reason}` : ''}`
+        error: `Appointments are not available on this date${mrClosureDateResponse.data.reason ? `: ${mrClosureDateResponse.data.reason}` : ''}`
+      };
+    }
+
+    // Handle clinic closure dates
+    if (clinicClosureDateResponse.error) {
+      console.error('Error checking clinic closure date:', clinicClosureDateResponse.error);
+      return { isValid: false, error: 'Error checking clinic closure dates' };
+    }
+
+    if (clinicClosureDateResponse.data) {
+      return { 
+        isValid: false, 
+        error: `Clinic is closed on this date${clinicClosureDateResponse.data.reason ? `: ${clinicClosureDateResponse.data.reason}` : ''}`
       };
     }
 

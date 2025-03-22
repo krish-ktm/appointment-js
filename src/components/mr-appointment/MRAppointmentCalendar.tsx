@@ -16,7 +16,8 @@ const TIMEZONE = 'Asia/Kolkata';
 
 export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidationError }: MRAppointmentCalendarProps) {
   const { t } = useTranslation();
-  const [closureDates, setClosureDates] = useState<string[]>([]);
+  const [mrClosureDates, setMRClosureDates] = useState<string[]>([]);
+  const [clinicClosureDates, setClinicClosureDates] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [workingDaysMap, setWorkingDaysMap] = useState<{ [key: string]: number }>({});
   const [dateBookings, setDateBookings] = useState<Record<string, { current: number; max: number }>>({});
@@ -28,13 +29,22 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
 
   const loadClosureDates = async () => {
     try {
-      const { data, error } = await supabase
-        .from('mr_closure_dates')
-        .select('date')
-        .gte('date', format(startOfToday(), 'yyyy-MM-dd'));
+      const [mrResponse, clinicResponse] = await Promise.all([
+        supabase
+          .from('mr_closure_dates')
+          .select('date')
+          .gte('date', format(startOfToday(), 'yyyy-MM-dd')),
+        supabase
+          .from('clinic_closure_dates')
+          .select('date')
+          .gte('date', format(startOfToday(), 'yyyy-MM-dd'))
+      ]);
 
-      if (error) throw error;
-      setClosureDates((data || []).map(d => d.date));
+      if (mrResponse.error) throw mrResponse.error;
+      if (clinicResponse.error) throw clinicResponse.error;
+
+      setMRClosureDates((mrResponse.data || []).map(d => d.date));
+      setClinicClosureDates((clinicResponse.data || []).map(d => d.date));
     } catch (error) {
       console.error('Error loading closure dates:', error);
     }
@@ -105,10 +115,11 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     
     return (
       isBefore(date, today) || 
-      closureDates.includes(dateStr) ||
+      mrClosureDates.includes(dateStr) ||
+      clinicClosureDates.includes(dateStr) ||
       !workingDaysMap[dayName]
     );
-  }, [closureDates, workingDaysMap]);
+  }, [mrClosureDates, clinicClosureDates, workingDaysMap]);
 
   const formatSelectedDate = useCallback((date: Date) => {
     const istDate = utcToZonedTime(date, TIMEZONE);
@@ -167,6 +178,14 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     if (isTodays) return "react-datepicker__day--today";
     return "";
   }, [selectedDate, isDateDisabled, dateBookings]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
