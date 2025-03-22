@@ -2,6 +2,7 @@ export interface ServicesTranslations {
   title: string;
   subtitle: string;
   expertCare: string;
+  viewAll: string;
   categories: {
     treatments: string;
     facial: string;

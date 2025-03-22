@@ -6,6 +6,7 @@ export const servicesTranslations: Record<string, ServicesTranslations> = {
     title: `Services at ${businessInfo.name}`,
     subtitle: `Comprehensive dermatological care with ${businessInfo.doctor.experience}+ years of expertise`,
     expertCare: "Expert Care",
+    viewAll: "View All Services",
     categories: {
       treatments: "Treatments",
       facial: "Facial Services",
@@ -75,6 +76,7 @@ export const servicesTranslations: Record<string, ServicesTranslations> = {
     title: "શુભમ સ્કિન એન્ડ લેસર ક્લિનિકની સેવાઓ",
     subtitle: "૧૪+ વર્ષના અનુભવ સાથે વ્યાપક ડર્મેટોલોજિકલ સંભાળ",
     expertCare: "નિષ્ણાત સંભાળ",
+    viewAll: "બધી સેવાઓ જુઓ",
     categories: {
       treatments: "સારવાર",
       facial: "ફેશિયલ સેવાઓ",
