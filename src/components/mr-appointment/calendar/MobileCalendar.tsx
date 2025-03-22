@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { format, addDays, startOfWeek, isSameDay, isToday } from 'date-fns';
+import { format, addDays, startOfWeek, isSameDay, isToday, isBefore, startOfToday } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -24,7 +24,11 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
 
   const handlePrevWeek = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent form submission
-    setCurrentWeekStart(prev => addDays(prev, -7));
+    const newWeekStart = addDays(currentWeekStart, -7);
+    // Only allow going back if the new week includes today or future dates
+    if (!isBefore(addDays(newWeekStart, 6), startOfToday())) {
+      setCurrentWeekStart(newWeekStart);
+    }
   };
 
   const handleNextWeek = (e: React.MouseEvent) => {
@@ -34,7 +38,7 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
 
   const handleDateClick = (e: React.MouseEvent, date: Date) => {
     e.preventDefault(); // Prevent form submission
-    if (!isDateDisabled(date)) {
+    if (!isDateDisabled(date) && !isBefore(date, startOfToday())) {
       onDateChange(date);
     }
   };
@@ -44,6 +48,9 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
     return t.days[dayKey];
   }, [t]);
 
+  // Check if previous week button should be disabled
+  const isPrevWeekDisabled = isBefore(addDays(currentWeekStart, 6), startOfToday());
+
   return (
     <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
       {/* Week Navigation */}
@@ -51,9 +58,14 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
         <button
           onClick={handlePrevWeek}
           type="button"
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          disabled={isPrevWeekDisabled}
+          className={`p-2 rounded-lg transition-colors ${
+            isPrevWeekDisabled
+              ? 'text-gray-300 cursor-not-allowed'
+              : 'hover:bg-gray-100 text-gray-500'
+          }`}
         >
-          <ChevronLeft className="h-5 w-5 text-gray-500" />
+          <ChevronLeft className="h-5 w-5" />
         </button>
         <div className="text-sm font-medium text-gray-900">
           {format(currentWeekStart, 'MMMM yyyy')}
@@ -71,11 +83,12 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
       <div className="grid grid-cols-7 gap-1">
         {weekDates.map((date) => {
           const dateStr = format(date, 'yyyy-MM-dd');
-          const isDisabled = isDateDisabled(date);
+          const isDisabled = isDateDisabled(date) || isBefore(date, startOfToday());
           const isSelected = selectedDate && isSameDay(date, selectedDate);
           const bookingInfo = dateBookings[dateStr];
           const isFull = bookingInfo && bookingInfo.current >= bookingInfo.max;
           const isAvailable = !isDisabled && !isFull;
+          const hasSlots = bookingInfo !== undefined;
 
           return (
             <button
@@ -104,20 +117,20 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
               </span>
 
               {/* Slots Available */}
-              {isAvailable && bookingInfo && (
+              {isAvailable && hasSlots && (
                 <span className={`text-[10px] ${isSelected ? 'text-white/90' : 'text-gray-500'}`}>
                   {bookingInfo.max - bookingInfo.current} slots
                 </span>
               )}
 
               {/* Availability Indicator */}
-              {isAvailable && bookingInfo && (
+              {hasSlots && !isDisabled && (
                 <span className={`absolute top-1 right-1 w-2 h-2 rounded-full ${
-                  bookingInfo.current === 0
-                    ? 'bg-green-500'
-                    : bookingInfo.current < bookingInfo.max
-                      ? 'bg-yellow-500'
-                      : 'bg-red-500'
+                  isFull
+                    ? 'bg-red-500'
+                    : bookingInfo.current === 0
+                      ? 'bg-green-500'
+                      : 'bg-yellow-500'
                 }`} />
               )}
             </button>
