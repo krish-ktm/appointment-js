@@ -3,6 +3,7 @@ import { addMonths, format } from 'date-fns';
 import { supabase } from '../../lib/supabase';
 import { MobileCalendar } from './calendar/MobileCalendar';
 import { DesktopCalendar } from './calendar/DesktopCalendar';
+import { useTranslation } from '../../i18n/useTranslation';
 
 interface MRAppointmentCalendarProps {
   selectedDate: Date | null;
@@ -10,6 +11,7 @@ interface MRAppointmentCalendarProps {
 }
 
 export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointmentCalendarProps) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [workingDaysMap, setWorkingDaysMap] = useState<{ [key: string]: number }>({});
   const [dateBookings, setDateBookings] = useState<Record<string, { current: number; max: number }>>({});
@@ -123,35 +125,6 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointm
 
   const maxDate = addMonths(new Date(), 6);
 
-  const translations = {
-    appointmentDate: "Appointment Date",
-    selectDate: "Select appointment date",
-    availableWeekdays: "Appointments available on weekdays only",
-    days: {
-      sunday: "Sunday",
-      monday: "Monday",
-      tuesday: "Tuesday",
-      wednesday: "Wednesday",
-      thursday: "Thursday",
-      friday: "Friday",
-      saturday: "Saturday"
-    },
-    months: {
-      january: "January",
-      february: "February",
-      march: "March",
-      april: "April",
-      may: "May",
-      june: "June",
-      july: "July",
-      august: "August",
-      september: "September",
-      october: "October",
-      november: "November",
-      december: "December"
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[200px]">
@@ -166,7 +139,7 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointm
       onDateChange={onDateChange}
       isDateDisabled={isDateDisabled}
       dateBookings={dateBookings}
-      t={translations}
+      t={t.mrAppointment.form}
     />
   ) : (
     <DesktopCalendar
@@ -175,7 +148,7 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointm
       isDateDisabled={isDateDisabled}
       dateBookings={dateBookings}
       maxDate={maxDate}
-      t={translations}
+      t={t.mrAppointment.form}
     />
   );
 }
