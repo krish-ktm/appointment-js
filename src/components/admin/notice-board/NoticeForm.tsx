@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Plus, Image as ImageIcon, X, Upload } from 'lucide-react';
 import { Notice } from '../../../types';
 import { supabase } from '../../../lib/supabase';
+import { toast } from 'react-hot-toast';
 
 interface NoticeFormProps {
   editingNotice: Notice | null;
@@ -45,17 +46,37 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
       const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
       const filePath = `notices/${fileName}`;
 
+      // Create bucket if it doesn't exist
+      const { data: bucketData, error: bucketError } = await supabase
+        .storage
+        .getBucket('notices');
+
+      if (!bucketData) {
+        const { error: createError } = await supabase
+          .storage
+          .createBucket('notices', {
+            public: true,
+            allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+            fileSizeLimit: 5242880 // 5MB
+          });
+
+        if (createError) throw createError;
+      }
+
       // Upload to Supabase Storage
       const { data, error } = await supabase.storage
-        .from('images')
-        .upload(filePath, file);
+        .from('notices')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
       if (error) throw error;
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
-        .from('images')
-        .getPublicUrl(filePath);
+        .from('notices')
+        .getPublicUrl(fileName);
 
       // Add to images array
       setForm(prev => ({
@@ -93,8 +114,8 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
         const path = imageUrl.split('/').pop();
         if (path) {
           await supabase.storage
-            .from('images')
-            .remove([`notices/${path}`]);
+            .from('notices')
+            .remove([path]);
         }
       }
 
