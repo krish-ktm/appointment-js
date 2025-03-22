@@ -25,7 +25,7 @@ export function AppointmentPage() {
       <ResponsiveHeader />
       
       <main className="flex-grow pt-20 sm:pt-32 pb-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
