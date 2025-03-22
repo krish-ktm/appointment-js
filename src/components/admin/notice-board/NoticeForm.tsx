@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Image as ImageIcon, X } from 'lucide-react';
+import { Plus, Image as ImageIcon, X, Upload } from 'lucide-react';
 import { Notice } from '../../../types';
+import { supabase } from '../../../lib/supabase';
 
 interface NoticeFormProps {
   editingNotice: Notice | null;
@@ -18,6 +19,61 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
     active: editingNotice?.active ?? true
   });
 
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please upload an image file');
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('Image size should be less than 5MB');
+        return;
+      }
+
+      setUploading(true);
+
+      // Generate a unique file name
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `notices/${fileName}`;
+
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('images')
+        .upload(filePath, file);
+
+      if (error) throw error;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('images')
+        .getPublicUrl(filePath);
+
+      // Add to images array
+      setForm(prev => ({
+        ...prev,
+        images: [...prev.images, publicUrl]
+      }));
+
+      toast.success('Image uploaded successfully');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error('Failed to upload image');
+    } finally {
+      setUploading(false);
+      // Reset file input
+      e.target.value = '';
+    }
+  };
+
   const handleAddImage = () => {
     if (form.image_url && !form.images.includes(form.image_url)) {
       setForm(prev => ({
@@ -28,11 +84,28 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
     }
   };
 
-  const handleRemoveImage = (index: number) => {
-    setForm(prev => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index)
-    }));
+  const handleRemoveImage = async (index: number) => {
+    try {
+      const imageUrl = form.images[index];
+      
+      // If it's a Supabase storage URL, delete from storage
+      if (imageUrl.includes(supabase.storageUrl)) {
+        const path = imageUrl.split('/').pop();
+        if (path) {
+          await supabase.storage
+            .from('images')
+            .remove([`notices/${path}`]);
+        }
+      }
+
+      setForm(prev => ({
+        ...prev,
+        images: prev.images.filter((_, i) => i !== index)
+      }));
+    } catch (error) {
+      console.error('Error removing image:', error);
+      toast.error('Failed to remove image');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -94,21 +167,45 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Add Images
               </label>
-              <div className="flex gap-2">
-                <input
-                  type="url"
-                  value={form.image_url}
-                  onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                  placeholder="Enter image URL"
-                />
-                <button
-                  type="button"
-                  onClick={handleAddImage}
-                  className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                >
-                  Add
-                </button>
+              <div className="space-y-3">
+                {/* Image Upload */}
+                <div className="flex items-center gap-2">
+                  <label className="flex-1 cursor-pointer">
+                    <div className="relative px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        disabled={uploading}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      />
+                      <div className="flex items-center justify-center gap-2 text-gray-600">
+                        <Upload className="h-5 w-5" />
+                        <span className="text-sm font-medium">
+                          {uploading ? 'Uploading...' : 'Upload Image'}
+                        </span>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+                {/* Image URL Input */}
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    value={form.image_url}
+                    onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    placeholder="Or enter image URL"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddImage}
+                    className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  >
+                    Add
+                  </button>
+                </div>
               </div>
             </div>
 
