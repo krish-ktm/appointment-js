@@ -148,15 +148,15 @@ body {
 
 /* Calendar day content */
 .mr-calendar-day {
-  @apply w-full h-full flex flex-col items-center gap-1 pt-2;
+  @apply w-full h-full flex flex-col items-center pt-2;
 }
 
 .mr-calendar-day__number {
-  @apply text-sm font-medium mb-1;
+  @apply text-sm font-medium mb-2;
 }
 
 .mr-calendar-day__slots {
-  @apply text-[10px] text-gray-500 bg-gray-50/80 px-2 py-1 rounded-md;
+  @apply text-[10px] text-gray-500 font-medium;
 }
 
 .mr-calendar-day__indicator {

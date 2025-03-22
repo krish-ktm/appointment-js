@@ -17,7 +17,6 @@ const TIMEZONE = 'Asia/Kolkata';
 export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidationError }: MRAppointmentCalendarProps) {
   const { t } = useTranslation();
   const [closureDates, setClosureDates] = useState<string[]>([]);
-  const [nonWorkingDays, setNonWorkingDays] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [workingDaysMap, setWorkingDaysMap] = useState<{ [key: string]: number }>({});
   const [dateBookings, setDateBookings] = useState<Record<string, { current: number; max: number }>>({});
@@ -49,10 +48,6 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
 
       if (error) throw error;
       
-      setNonWorkingDays((data || [])
-        .filter(d => !d.is_working)
-        .map(d => d.day));
-
       const workingDays = data?.reduce((acc, day) => {
         if (day.is_working) {
           acc[day.day] = day.max_appointments;
@@ -110,9 +105,9 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     return (
       isBefore(date, today) || 
       closureDates.includes(dateStr) ||
-      nonWorkingDays.includes(dayName)
+      !workingDaysMap[dayName]
     );
-  }, [closureDates, nonWorkingDays]);
+  }, [closureDates, workingDaysMap]);
 
   const formatSelectedDate = useCallback((date: Date) => {
     const istDate = utcToZonedTime(date, TIMEZONE);
