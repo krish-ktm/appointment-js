@@ -16,6 +16,7 @@ export function MRAppointment() {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [appointmentDetails, setAppointmentDetails] = useState<any>(null);
+  const [calendarKey, setCalendarKey] = useState(0); // Add this line
   const [form, setForm] = useState<MRForm>({
     mr_name: '',
     company_name: '',
@@ -33,6 +34,7 @@ export function MRAppointment() {
       appointment_date: null
     });
     setAppointmentDetails(null);
+    setCalendarKey(prev => prev + 1); // Add this line
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -72,6 +74,9 @@ export function MRAppointment() {
 
       setAppointmentDetails(appointment);
       toast.success(t.mrAppointment.success);
+      
+      // Force calendar refresh by updating the key
+      setCalendarKey(prev => prev + 1);
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -111,6 +116,7 @@ export function MRAppointment() {
 
                 <div className="lg:order-1">
                   <MRAppointmentCalendar
+                    key={calendarKey} // Add this line
                     selectedDate={form.appointment_date}
                     onDateChange={(date) => setForm({ ...form, appointment_date: date })}
                   />
