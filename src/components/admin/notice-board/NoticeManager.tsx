@@ -42,22 +42,30 @@ export function NoticeManager() {
       const noticeData = {
         ...formData,
         created_by: user.id,
-        order: notices.length,
         images: [...formData.images, formData.image_url].filter(Boolean)
       };
 
       if (editingNotice) {
+        // When updating, maintain the same order
         const { error } = await supabase
           .from('notices')
-          .update(noticeData)
+          .update({
+            ...noticeData,
+            order: editingNotice.order // Keep the original order
+          })
           .eq('id', editingNotice.id);
 
         if (error) throw error;
         toast.success('Notice updated successfully');
       } else {
+        // For new notices, add to the end
+        const maxOrder = Math.max(...notices.map(n => n.order), -1);
         const { error } = await supabase
           .from('notices')
-          .insert(noticeData);
+          .insert({
+            ...noticeData,
+            order: maxOrder + 1
+          });
 
         if (error) throw error;
         toast.success('Notice created successfully');
@@ -104,14 +112,17 @@ export function NoticeManager() {
     newNotices[newIndex] = temp;
 
     try {
-      const updates = newNotices.map((notice, index) => ({
-        id: notice.id,
-        order: index,
-        title: notice.title,
-        content: notice.content,
-        active: notice.active,
-        images: notice.images || []
-      }));
+      // Update the order of both affected notices
+      const updates = [
+        {
+          id: newNotices[currentIndex].id,
+          order: newNotices[currentIndex].order
+        },
+        {
+          id: newNotices[newIndex].id,
+          order: newNotices[newIndex].order
+        }
+      ];
 
       const { error } = await supabase
         .from('notices')
