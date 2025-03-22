@@ -102,6 +102,7 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     const today = startOfToday();
     const dateStr = format(date, 'yyyy-MM-dd');
     const dayName = format(date, 'EEEE');
+    
     return (
       isBefore(date, today) || 
       closureDates.includes(dateStr) ||
@@ -134,12 +135,19 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
         <span className="mr-calendar-day__number">{day}</span>
         {hasSlots && !isDisabled && (
           <>
-            <span className="mr-calendar-day__slots">
-              {availableSlots} slots
-            </span>
-            <span className={`mr-calendar-day__indicator ${
-              isFull ? 'mr-calendar-day__indicator--full' : 'mr-calendar-day__indicator--available'
-            }`} />
+            {isFull ? (
+              <>
+                <span className="mr-calendar-day__slots text-red-500">Full</span>
+                <span className="mr-calendar-day__indicator mr-calendar-day__indicator--full" />
+              </>
+            ) : (
+              <>
+                <span className="mr-calendar-day__slots">
+                  {availableSlots} slots
+                </span>
+                <span className="mr-calendar-day__indicator mr-calendar-day__indicator--available" />
+              </>
+            )}
           </>
         )}
       </div>
@@ -151,12 +159,14 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     const isSelected = selectedDate && isSameDay(date, selectedDate);
     const isDisabled = isDateDisabled(date);
     const isTodays = isSameDay(date, new Date());
+    const bookingInfo = dateBookings[dateStr];
+    const isFull = bookingInfo && bookingInfo.current >= bookingInfo.max;
     
-    if (isDisabled) return "react-datepicker__day--disabled";
+    if (isDisabled || isFull) return "react-datepicker__day--disabled";
     if (isSelected) return "react-datepicker__day--selected";
     if (isTodays) return "react-datepicker__day--today";
     return "";
-  }, [selectedDate, isDateDisabled]);
+  }, [selectedDate, isDateDisabled, dateBookings]);
 
   return (
     <div>
