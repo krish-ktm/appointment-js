@@ -22,12 +22,21 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
   // Generate dates for the current week
   const weekDates = Array.from({ length: 7 }, (_, i) => addDays(currentWeekStart, i));
 
-  const handlePrevWeek = () => {
+  const handlePrevWeek = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent form submission
     setCurrentWeekStart(prev => addDays(prev, -7));
   };
 
-  const handleNextWeek = () => {
+  const handleNextWeek = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent form submission
     setCurrentWeekStart(prev => addDays(prev, 7));
+  };
+
+  const handleDateClick = (e: React.MouseEvent, date: Date) => {
+    e.preventDefault(); // Prevent form submission
+    if (!isDateDisabled(date)) {
+      onDateChange(date);
+    }
   };
 
   const formatDayName = useCallback((date: Date) => {
@@ -41,6 +50,7 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={handlePrevWeek}
+          type="button"
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
         >
           <ChevronLeft className="h-5 w-5 text-gray-500" />
@@ -50,6 +60,7 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
         </div>
         <button
           onClick={handleNextWeek}
+          type="button"
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
         >
           <ChevronRight className="h-5 w-5 text-gray-500" />
@@ -69,10 +80,11 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
           return (
             <button
               key={dateStr}
-              onClick={() => isAvailable && onDateChange(date)}
+              onClick={(e) => handleDateClick(e, date)}
+              type="button"
               disabled={!isAvailable}
               className={`
-                relative flex flex-col items-center justify-center p-2 rounded-lg transition-all
+                relative flex flex-col items-center justify-center p-2 rounded-lg transition-all min-h-[80px]
                 ${isSelected
                   ? 'bg-blue-600 text-white shadow-sm'
                   : isAvailable
@@ -87,13 +99,20 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
               </span>
               
               {/* Date */}
-              <span className={`text-sm font-semibold ${isToday(date) ? 'ring-2 ring-blue-500 rounded-full w-6 h-6 flex items-center justify-center' : ''}`}>
+              <span className={`text-sm font-semibold mb-1 ${isToday(date) ? 'ring-2 ring-blue-500 rounded-full w-6 h-6 flex items-center justify-center' : ''}`}>
                 {format(date, 'd')}
               </span>
 
+              {/* Slots Available */}
+              {isAvailable && bookingInfo && (
+                <span className={`text-[10px] ${isSelected ? 'text-white/90' : 'text-gray-500'}`}>
+                  {bookingInfo.max - bookingInfo.current} slots
+                </span>
+              )}
+
               {/* Availability Indicator */}
               {isAvailable && bookingInfo && (
-                <span className={`absolute top-0 right-0 w-2 h-2 rounded-full ${
+                <span className={`absolute top-1 right-1 w-2 h-2 rounded-full ${
                   bookingInfo.current === 0
                     ? 'bg-green-500'
                     : bookingInfo.current < bookingInfo.max
