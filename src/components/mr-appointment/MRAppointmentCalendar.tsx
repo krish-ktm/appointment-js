@@ -1,40 +1,32 @@
-import { useEffect, useState, useMemo, useCallback } from 'react';
-import { Calendar as CalendarIcon, Users } from 'lucide-react';
-import DatePicker from 'react-datepicker';
-import { format, isWeekend, isSameDay, startOfToday, isBefore, addMonths } from 'date-fns';
-import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
-import { useTranslation } from '../../i18n/useTranslation';
+import { useState, useEffect } from 'react';
+import { addMonths, format } from 'date-fns';
 import { supabase } from '../../lib/supabase';
+import { MobileCalendar } from './calendar/MobileCalendar';
+import { DesktopCalendar } from './calendar/DesktopCalendar';
 
 interface MRAppointmentCalendarProps {
   selectedDate: Date | null;
   onDateChange: (date: Date | null) => void;
-  onValidationError?: (error: string) => void;
 }
 
-const TIMEZONE = 'Asia/Kolkata';
-
-export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidationError }: MRAppointmentCalendarProps) {
-  const { t } = useTranslation();
-  const [mrClosureDates, setMRClosureDates] = useState<string[]>([]);
-  const [clinicClosureDates, setClinicClosureDates] = useState<string[]>([]);
+export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointmentCalendarProps) {
   const [loading, setLoading] = useState(false);
   const [workingDaysMap, setWorkingDaysMap] = useState<{ [key: string]: number }>({});
   const [dateBookings, setDateBookings] = useState<Record<string, { current: number; max: number }>>({});
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  
+  const [mrClosureDates, setMRClosureDates] = useState<string[]>([]);
+  const [clinicClosureDates, setClinicClosureDates] = useState<string[]>([]);
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
     loadClosureDates();
     loadWorkingDays();
+
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const loadClosureDates = async () => {
@@ -43,11 +35,11 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
         supabase
           .from('mr_closure_dates')
           .select('date')
-          .gte('date', format(startOfToday(), 'yyyy-MM-dd')),
+          .gte('date', format(new Date(), 'yyyy-MM-dd')),
         supabase
           .from('clinic_closure_dates')
           .select('date')
-          .gte('date', format(startOfToday(), 'yyyy-MM-dd'))
+          .gte('date', format(new Date(), 'yyyy-MM-dd'))
       ]);
 
       if (mrResponse.error) throw mrResponse.error;
@@ -77,7 +69,7 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
       
       setWorkingDaysMap(workingDays || {});
 
-      const today = startOfToday();
+      const today = new Date();
       const sixMonthsLater = addMonths(today, 6);
       
       const { data: bookings, error: bookingsError } = await supabase
@@ -118,89 +110,47 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     }
   };
 
-  const isDateDisabled = useCallback((date: Date) => {
-    const today = startOfToday();
+  const isDateDisabled = (date: Date) => {
     const dateStr = format(date, 'yyyy-MM-dd');
     const dayName = format(date, 'EEEE');
     
     return (
-      isBefore(date, today) || 
       mrClosureDates.includes(dateStr) ||
       clinicClosureDates.includes(dateStr) ||
       !workingDaysMap[dayName]
     );
-  }, [mrClosureDates, clinicClosureDates, workingDaysMap]);
+  };
 
-  const formatSelectedDate = useCallback((date: Date) => {
-    const istDate = utcToZonedTime(date, TIMEZONE);
-    const dayName = t.mrAppointment.form.days[format(istDate, 'EEEE').toLowerCase() as keyof typeof t.mrAppointment.form.days];
-    const monthName = t.mrAppointment.form.months[format(istDate, 'MMMM').toLowerCase() as keyof typeof t.mrAppointment.form.months];
-    const day = format(istDate, 'd');
-    const year = format(istDate, 'yyyy');
-    return `${dayName}, ${monthName} ${day}, ${year}`;
-  }, [t.mrAppointment.form.days, t.mrAppointment.form.months]);
+  const maxDate = addMonths(new Date(), 6);
 
-  const renderDayContents = useCallback((day: number, date: Date) => {
-    const dateStr = format(date, 'yyyy-MM-dd');
-    const dayName = format(date, 'EEEE');
-    const isDisabled = isDateDisabled(date);
-    
-    const maxAppointments = workingDaysMap[dayName] || 0;
-    const currentBookings = dateBookings[dateStr]?.current || 0;
-    const hasSlots = maxAppointments > 0;
-    const availableSlots = maxAppointments - currentBookings;
-    const isFull = currentBookings >= maxAppointments;
-
-    if (isMobile) {
-      return (
-        <div className="mr-calendar-day-mobile">
-          <span className="mr-calendar-day-mobile__number">{day}</span>
-          {hasSlots && !isDisabled && (
-            <span className={`mr-calendar-day-mobile__indicator ${
-              isFull ? 'mr-calendar-day-mobile__indicator--full' : 'mr-calendar-day-mobile__indicator--available'
-            }`} />
-          )}
-        </div>
-      );
+  const translations = {
+    appointmentDate: "Appointment Date",
+    selectDate: "Select appointment date",
+    availableWeekdays: "Appointments available on weekdays only",
+    days: {
+      sunday: "Sunday",
+      monday: "Monday",
+      tuesday: "Tuesday",
+      wednesday: "Wednesday",
+      thursday: "Thursday",
+      friday: "Friday",
+      saturday: "Saturday"
+    },
+    months: {
+      january: "January",
+      february: "February",
+      march: "March",
+      april: "April",
+      may: "May",
+      june: "June",
+      july: "July",
+      august: "August",
+      september: "September",
+      october: "October",
+      november: "November",
+      december: "December"
     }
-    
-    return (
-      <div className="mr-calendar-day">
-        <span className="mr-calendar-day__number">{day}</span>
-        {hasSlots && !isDisabled && (
-          <>
-            {isFull ? (
-              <>
-                <span className="mr-calendar-day__slots text-red-500">Full</span>
-                <span className="mr-calendar-day__indicator mr-calendar-day__indicator--full" />
-              </>
-            ) : (
-              <>
-                <span className="mr-calendar-day__slots">
-                  {availableSlots} slots
-                </span>
-                <span className="mr-calendar-day__indicator mr-calendar-day__indicator--available" />
-              </>
-            )}
-          </>
-        )}
-      </div>
-    );
-  }, [dateBookings, selectedDate, isDateDisabled, workingDaysMap, isMobile]);
-
-  const dayClassName = useCallback((date: Date) => {
-    const dateStr = format(date, 'yyyy-MM-dd');
-    const isSelected = selectedDate && isSameDay(date, selectedDate);
-    const isDisabled = isDateDisabled(date);
-    const isTodays = isSameDay(date, new Date());
-    const bookingInfo = dateBookings[dateStr];
-    const isFull = bookingInfo && bookingInfo.current >= bookingInfo.max;
-    
-    if (isDisabled || isFull) return "react-datepicker__day--disabled";
-    if (isSelected) return "react-datepicker__day--selected";
-    if (isTodays) return "react-datepicker__day--today";
-    return "";
-  }, [selectedDate, isDateDisabled, dateBookings]);
+  };
 
   if (loading) {
     return (
@@ -210,68 +160,22 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange, onValidation
     );
   }
 
-  return (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        {t.mrAppointment.form.appointmentDate} *
-      </label>
-      <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
-        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-gray-100">
-          <div className={`p-2 rounded-lg transition-colors ${
-            selectedDate 
-              ? 'bg-blue-600 text-white' 
-              : 'bg-blue-50 text-blue-600'
-          }`}>
-            <CalendarIcon className="h-5 w-5" />
-          </div>
-          <div>
-            <p className={`text-sm font-medium ${
-              selectedDate
-                ? 'text-blue-600'
-                : 'text-gray-900'
-            }`}>
-              {selectedDate
-                ? formatSelectedDate(selectedDate)
-                : t.mrAppointment.form.selectDate}
-            </p>
-            <p className="text-xs text-gray-500 mt-0.5">
-              {t.mrAppointment.form.availableWeekdays}
-            </p>
-          </div>
-        </div>
-        
-        <div className="w-full relative">
-          <DatePicker
-            selected={selectedDate}
-            onChange={onDateChange}
-            minDate={startOfToday()}
-            maxDate={addMonths(new Date(), 6)}
-            filterDate={(date) => !isDateDisabled(date)}
-            dateFormat="MMMM d, yyyy"
-            placeholderText={t.mrAppointment.form.selectDate}
-            required
-            inline
-            calendarClassName={`mr-calendar ${isMobile ? 'mr-calendar--mobile' : ''}`}
-            dayClassName={dayClassName}
-            renderDayContents={renderDayContents}
-          />
-        </div>
-        
-        <div className="mr-calendar__legend">
-          <div className="mr-calendar__legend-item">
-            <span className="mr-calendar__legend-dot mr-calendar__legend-dot--available"></span>
-            <span>Available</span>
-          </div>
-          <div className="mr-calendar__legend-item">
-            <span className="mr-calendar__legend-dot mr-calendar__legend-dot--full"></span>
-            <span>Full</span>
-          </div>
-          <div className="mr-calendar__legend-item">
-            <span className="mr-calendar__legend-dot mr-calendar__legend-dot--disabled"></span>
-            <span>Not available</span>
-          </div>
-        </div>
-      </div>
-    </div>
+  return isMobile ? (
+    <MobileCalendar
+      selectedDate={selectedDate}
+      onDateChange={onDateChange}
+      isDateDisabled={isDateDisabled}
+      dateBookings={dateBookings}
+      t={translations}
+    />
+  ) : (
+    <DesktopCalendar
+      selectedDate={selectedDate}
+      onDateChange={onDateChange}
+      isDateDisabled={isDateDisabled}
+      dateBookings={dateBookings}
+      maxDate={maxDate}
+      t={translations}
+    />
   );
 }
