@@ -106,14 +106,19 @@ body {
 
 .mr-calendar .react-datepicker__day {
   @apply m-0.5 p-1 w-[calc(100%/7-0.5rem)] h-20 flex flex-col items-center justify-start 
-    hover:bg-blue-50 hover:text-blue-600 relative border border-transparent rounded-xl
-    transition-all duration-300 ease-in-out transform hover:scale-[1.02] bg-white text-gray-900
-    hover:shadow-sm hover:border-blue-100;
+    bg-white text-gray-900 border border-transparent rounded-xl;
+}
+
+.mr-calendar .react-datepicker__day:hover:not(.react-datepicker__day--disabled) {
+  @apply bg-blue-50 text-blue-600 border-blue-100 shadow-sm;
 }
 
 .mr-calendar .react-datepicker__day--selected {
-  @apply bg-blue-600 text-white hover:bg-blue-700 hover:text-white border-blue-300 shadow-sm
-    scale-[1.02] hover:scale-[1.03];
+  @apply bg-blue-600 text-white border-blue-300 shadow-sm;
+}
+
+.mr-calendar .react-datepicker__day--selected:hover {
+  @apply bg-blue-700 text-white;
 }
 
 .mr-calendar .react-datepicker__day--selected .mr-calendar-day__slots {
@@ -121,12 +126,11 @@ body {
 }
 
 .mr-calendar .react-datepicker__day--keyboard-selected {
-  @apply bg-blue-50 text-blue-600 hover:bg-blue-100;
+  @apply bg-blue-50 text-blue-600;
 }
 
 .mr-calendar .react-datepicker__day--disabled {
-  @apply text-gray-300 hover:bg-gray-50/50 cursor-not-allowed opacity-50
-    transform-none hover:scale-100 hover:shadow-none hover:border-transparent;
+  @apply text-gray-300 bg-gray-50/50 cursor-not-allowed opacity-50 border-transparent;
 }
 
 .mr-calendar .react-datepicker__day--outside-month {
@@ -138,11 +142,11 @@ body {
 }
 
 .mr-calendar .react-datepicker__navigation--previous {
-  @apply left-4 w-8 h-8 rounded-full hover:bg-gray-100 transition-colors;
+  @apply left-4 w-8 h-8 rounded-full hover:bg-gray-100;
 }
 
 .mr-calendar .react-datepicker__navigation--next {
-  @apply right-4 w-8 h-8 rounded-full hover:bg-gray-100 transition-colors;
+  @apply right-4 w-8 h-8 rounded-full hover:bg-gray-100;
 }
 
 .mr-calendar .react-datepicker__navigation-icon::before {
@@ -151,19 +155,19 @@ body {
 
 /* Calendar day content */
 .mr-calendar-day {
-  @apply w-full h-full flex flex-col items-center pt-2 transition-all duration-300 ease-in-out;
+  @apply w-full h-full flex flex-col items-center pt-2;
 }
 
 .mr-calendar-day__number {
-  @apply text-sm font-medium mb-1 transition-colors duration-300 ease-in-out;
+  @apply text-sm font-medium mb-1;
 }
 
 .mr-calendar-day__slots {
-  @apply text-[10px] text-gray-500 font-medium transition-colors duration-300 ease-in-out;
+  @apply text-[10px] text-gray-500 font-medium;
 }
 
 .mr-calendar-day__indicator {
-  @apply absolute top-2 right-2 w-2 h-2 rounded-full transition-all duration-300 ease-in-out;
+  @apply absolute top-2 right-2 w-2 h-2 rounded-full;
 }
 
 .mr-calendar-day__indicator--available {
@@ -184,7 +188,7 @@ body {
 }
 
 .mr-calendar__legend-dot {
-  @apply w-2 h-2 rounded-full shadow-sm transition-all duration-300 ease-in-out;
+  @apply w-2 h-2 rounded-full shadow-sm;
 }
 
 .mr-calendar__legend-dot--available {
