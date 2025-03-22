@@ -38,27 +38,6 @@ body {
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
   }
-
-  .shadow-md {
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 
-                0 2px 4px -2px rgb(0 0 0 / 0.05);
-  }
-
-  .shadow-lg {
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 
-                0 4px 6px -4px rgb(0 0 0 / 0.05);
-  }
-
-  .shadow-xl {
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05), 
-                0 8px 10px -6px rgb(0 0 0 / 0.05);
-  }
-
-  .fixed {
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    perspective: 1000;
-  }
 }
 
 /* Reduce motion when requested */
@@ -73,11 +52,11 @@ body {
 
 /* Custom Calendar Styles */
 .mr-calendar {
-  @apply w-full bg-transparent border-0 shadow-none rounded-xl overflow-hidden;
+  @apply w-full bg-transparent border-0 shadow-none rounded-xl overflow-hidden [contain:content];
 }
 
 .mr-calendar .react-datepicker__month-container {
-  @apply w-full float-none bg-white rounded-xl shadow-sm border border-gray-100;
+  @apply w-full float-none bg-white rounded-xl shadow-sm border border-gray-100 [contain:content];
 }
 
 .mr-calendar .react-datepicker__header {
@@ -97,7 +76,7 @@ body {
 }
 
 .mr-calendar .react-datepicker__month {
-  @apply m-0 p-2;
+  @apply m-0 p-2 [contain:content];
 }
 
 .mr-calendar .react-datepicker__week {
@@ -106,7 +85,7 @@ body {
 
 .mr-calendar .react-datepicker__day {
   @apply m-0.5 p-1 w-[calc(100%/7-0.5rem)] h-20 flex flex-col items-center justify-start 
-    bg-white text-gray-900 border border-transparent rounded-xl;
+    bg-white text-gray-900 border border-transparent rounded-xl [contain:content] [will-change:background-color,border-color];
 }
 
 .mr-calendar .react-datepicker__day:hover:not(.react-datepicker__day--disabled) {
@@ -155,7 +134,7 @@ body {
 
 /* Calendar day content */
 .mr-calendar-day {
-  @apply w-full h-full flex flex-col items-center pt-2;
+  @apply w-full h-full flex flex-col items-center pt-2 [contain:content];
 }
 
 .mr-calendar-day__number {
@@ -163,7 +142,11 @@ body {
 }
 
 .mr-calendar-day__slots {
-  @apply text-[10px] text-gray-500 font-medium;
+  @apply text-[10px] font-medium text-gray-500;
+}
+
+.react-datepicker__day--selected .mr-calendar-day__slots {
+  @apply text-white;
 }
 
 .mr-calendar-day__indicator {
@@ -171,11 +154,11 @@ body {
 }
 
 .mr-calendar-day__indicator--available {
-  @apply bg-green-500 shadow-sm shadow-green-500/20;
+  @apply bg-green-500 shadow-[0_1px_2px_0_rgb(34_197_94_/_0.2)];
 }
 
 .mr-calendar-day__indicator--full {
-  @apply bg-red-500 shadow-sm shadow-red-500/20;
+  @apply bg-red-500 shadow-[0_1px_2px_0_rgb(239_68_68_/_0.2)];
 }
 
 /* Calendar legend */
@@ -188,17 +171,17 @@ body {
 }
 
 .mr-calendar__legend-dot {
-  @apply w-2 h-2 rounded-full shadow-sm;
+  @apply w-2 h-2 rounded-full;
 }
 
 .mr-calendar__legend-dot--available {
-  @apply bg-green-500 shadow-green-500/20;
+  @apply bg-green-500 shadow-[0_1px_2px_0_rgb(34_197_94_/_0.2)];
 }
 
 .mr-calendar__legend-dot--full {
-  @apply bg-red-500 shadow-red-500/20;
+  @apply bg-red-500 shadow-[0_1px_2px_0_rgb(239_68_68_/_0.2)];
 }
 
 .mr-calendar__legend-dot--disabled {
-  @apply bg-gray-300 shadow-gray-300/20;
+  @apply bg-gray-300 shadow-[0_1px_2px_0_rgb(209_213_219_/_0.2)];
 }
