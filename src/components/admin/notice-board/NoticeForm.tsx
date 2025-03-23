@@ -41,27 +41,17 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
 
       setUploading(true);
 
+      // First sign in with Supabase Auth
+      const { data: { user }, error: signInError } = await supabase.auth.signInWithPassword({
+        email: 'ktpatel100@gmail.com',
+        password: 'Krish@12'
+      });
+
+      if (signInError) throw signInError;
+
       // Generate a unique file name
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-      const filePath = `notices/${fileName}`;
-
-      // Create bucket if it doesn't exist
-      const { data: bucketData, error: bucketError } = await supabase
-        .storage
-        .getBucket('notices');
-
-      if (!bucketData) {
-        const { error: createError } = await supabase
-          .storage
-          .createBucket('notices', {
-            public: true,
-            allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-            fileSizeLimit: 5242880 // 5MB
-          });
-
-        if (createError) throw createError;
-      }
 
       // Upload to Supabase Storage
       const { data, error } = await supabase.storage
@@ -111,6 +101,14 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
       
       // If it's a Supabase storage URL, delete from storage
       if (imageUrl.includes(supabase.storageUrl)) {
+        // Sign in first
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: 'ktpatel100@gmail.com',
+          password: 'Krish@12'
+        });
+
+        if (signInError) throw signInError;
+
         const path = imageUrl.split('/').pop();
         if (path) {
           await supabase.storage
