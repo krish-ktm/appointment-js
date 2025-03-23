@@ -137,27 +137,31 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+      onClick={onClose}
     >
       <motion.div
         initial={{ scale: 0.95 }}
         animate={{ scale: 1 }}
-        className="bg-white rounded-xl shadow-xl w-full max-w-lg mx-auto"
+        className="bg-white rounded-xl shadow-xl w-full max-w-2xl mx-auto"
+        onClick={e => e.stopPropagation()}
       >
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold">
+        <div className="p-6 bg-gradient-to-r from-blue-600 to-blue-700">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-semibold text-white">
               {editingNotice ? 'Edit Notice' : 'Add New Notice'}
             </h3>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
             >
-              <X className="h-5 w-5 text-gray-500" />
+              <X className="h-5 w-5 text-white" />
             </button>
           </div>
-          
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+        </div>
+        
+        <div className="p-6">
+          <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6">
+            <div className="col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Title
               </label>
@@ -170,46 +174,42 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
               />
             </div>
 
-            <div>
+            <div className="col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Content
               </label>
               <textarea
                 value={form.content}
                 onChange={(e) => setForm({ ...form, content: e.target.value })}
-                rows={3}
+                rows={2}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               />
             </div>
 
-            <div>
+            <div className="col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Add Images
               </label>
-              <div className="space-y-3">
-                {/* Image Upload */}
-                <div className="flex items-center gap-2">
-                  <label className="flex-1 cursor-pointer">
-                    <div className="relative px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        disabled={uploading}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                      />
-                      <div className="flex items-center justify-center gap-2 text-gray-600">
-                        <Upload className="h-5 w-5" />
-                        <span className="text-sm font-medium">
-                          {uploading ? 'Uploading...' : 'Upload Image'}
-                        </span>
-                      </div>
+              <div className="flex gap-4">
+                <label className="flex-1 cursor-pointer">
+                  <div className="relative px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={uploading}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                    <div className="flex items-center justify-center gap-2 text-gray-600">
+                      <Upload className="h-5 w-5" />
+                      <span className="text-sm font-medium">
+                        {uploading ? 'Uploading...' : 'Upload Image'}
+                      </span>
                     </div>
-                  </label>
-                </div>
+                  </div>
+                </label>
 
-                {/* Image URL Input */}
-                <div className="flex gap-2">
+                <div className="flex-1 flex gap-2">
                   <input
                     type="url"
                     value={form.image_url}
@@ -229,13 +229,13 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
             </div>
 
             {form.images.length > 0 && (
-              <div className="grid grid-cols-2 gap-2">
+              <div className="col-span-2 grid grid-cols-4 gap-2">
                 {form.images.map((url, index) => (
                   <div key={index} className="relative group">
                     <img
                       src={url}
                       alt={`Preview ${index + 1}`}
-                      className="w-full h-32 object-cover rounded-lg"
+                      className="w-full h-24 object-cover rounded-lg"
                     />
                     <button
                       type="button"
@@ -249,33 +249,35 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
               </div>
             )}
 
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="active"
-                checked={form.active}
-                onChange={(e) => setForm({ ...form, active: e.target.checked })}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label htmlFor="active" className="ml-2 text-sm text-gray-700">
-                Active
-              </label>
-            </div>
+            <div className="col-span-2 flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="active"
+                  checked={form.active}
+                  onChange={(e) => setForm({ ...form, active: e.target.checked })}
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <label htmlFor="active" className="ml-2 text-sm text-gray-700">
+                  Active
+                </label>
+              </div>
 
-            <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-              >
-                {editingNotice ? 'Update' : 'Create'}
-              </button>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                >
+                  {editingNotice ? 'Update' : 'Create'}
+                </button>
+              </div>
             </div>
           </form>
         </div>
