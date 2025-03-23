@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../../lib/supabase';
 import { toast } from 'react-hot-toast';
-import { Calendar, Plus, X, Edit2, Trash2 } from 'lucide-react';
+import { Calendar, Plus, X, Edit2, Trash2, AlertCircle, CalendarDays } from 'lucide-react';
 import DatePicker from 'react-datepicker';
-import { format, isAfter, isBefore, startOfToday } from 'date-fns';
+import { format, isAfter, isBefore, startOfToday, addMonths, isToday } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 
 interface MRClosureDate {
@@ -21,6 +21,7 @@ export function MRDateManager() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingDate, setEditingDate] = useState<MRClosureDate | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [form, setForm] = useState({
     date: null as Date | null,
     reason: ''
@@ -32,9 +33,11 @@ export function MRDateManager() {
 
   const loadClosureDates = async () => {
     try {
+      const today = startOfToday();
       const { data, error } = await supabase
         .from('mr_closure_dates')
         .select('*')
+        .gte('date', format(today, 'yyyy-MM-dd'))
         .order('date', { ascending: true });
 
       if (error) throw error;
@@ -60,6 +63,15 @@ export function MRDateManager() {
       
       const user = JSON.parse(userStr);
       const dateStr = format(form.date, 'yyyy-MM-dd');
+
+      // Check for duplicate date
+      const isDuplicate = closureDates.some(date => 
+        date.date === dateStr && (!editingDate || date.id !== editingDate.id)
+      );
+
+      if (isDuplicate) {
+        throw new Error('A closure date already exists for this date');
+      }
 
       if (editingDate) {
         const { error } = await supabase
@@ -97,8 +109,6 @@ export function MRDateManager() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this closure date?')) return;
-
     try {
       const { error } = await supabase
         .from('mr_closure_dates')
@@ -107,6 +117,7 @@ export function MRDateManager() {
 
       if (error) throw error;
       toast.success('Closure date deleted successfully');
+      setDeleteConfirm(null);
       loadClosureDates();
     } catch (error) {
       console.error('Error deleting closure date:', error);
@@ -119,13 +130,26 @@ export function MRDateManager() {
     return format(date, 'EEEE, MMMM d, yyyy');
   };
 
+  const groupDatesByMonth = (dates: MRClosureDate[]) => {
+    return dates.reduce((acc, date) => {
+      const monthYear = format(new Date(date.date), 'MMMM yyyy');
+      if (!acc[monthYear]) {
+        acc[monthYear] = [];
+      }
+      acc[monthYear].push(date);
+      return acc;
+    }, {} as Record<string, MRClosureDate[]>);
+  };
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[200px]">
+      <div className="flex items-center justify-center min-h-[400px]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
+
+  const groupedDates = groupDatesByMonth(closureDates);
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200">
@@ -150,21 +174,30 @@ export function MRDateManager() {
         </div>
 
         {showForm && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+          <div 
             className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+            onClick={() => {
+              setShowForm(false);
+              setEditingDate(null);
+              setForm({ date: null, reason: '' });
+            }}
           >
             <motion.div
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
               className="bg-white rounded-xl shadow-xl w-full max-w-lg"
+              onClick={e => e.stopPropagation()}
             >
               <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold">
-                    {editingDate ? 'Edit Closure Date' : 'Add New Closure Date'}
-                  </h3>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-blue-50 p-2 rounded-lg">
+                      <CalendarDays className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      {editingDate ? 'Edit Closure Date' : 'Add New Closure Date'}
+                    </h3>
+                  </div>
                   <button
                     onClick={() => {
                       setShowForm(false);
@@ -187,9 +220,12 @@ export function MRDateManager() {
                       onChange={(date) => setForm({ ...form, date })}
                       dateFormat="MMMM d, yyyy"
                       minDate={startOfToday()}
+                      maxDate={addMonths(new Date(), 12)}
                       placeholderText="Select date"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                       required
+                      calendarClassName="shadow-xl border border-gray-200 rounded-lg"
+                      showPopperArrow={false}
                     />
                   </div>
 
@@ -229,77 +265,135 @@ export function MRDateManager() {
                 </form>
               </div>
             </motion.div>
-          </motion.div>
+          </div>
         )}
 
-        <div className="space-y-4">
+        <div className="space-y-8">
           {closureDates.length === 0 ? (
-            <div className="text-center py-8">
-              <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No closure dates have been added yet.</p>
+            <div className="text-center py-12">
+              <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Calendar className="h-8 w-8 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-1">No Upcoming Closure Dates</h3>
+              <p className="text-gray-500">No closure dates have been added for upcoming days.</p>
             </div>
           ) : (
-            closureDates.map((date) => {
-              const closureDate = utcToZonedTime(new Date(date.date), TIMEZONE);
-              const isPast = isBefore(closureDate, startOfToday());
-              const isFuture = isAfter(closureDate, startOfToday());
+            Object.entries(groupedDates).map(([monthYear, dates]) => (
+              <div key={monthYear}>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">{monthYear}</h3>
+                <div className="space-y-3">
+                  {dates.map((date) => {
+                    const closureDate = utcToZonedTime(new Date(date.date), TIMEZONE);
+                    const isTodays = isToday(closureDate);
+                    const isFuture = isAfter(closureDate, startOfToday());
 
-              return (
-                <div
-                  key={date.id}
-                  className={`flex items-center justify-between p-4 rounded-lg border ${
-                    isPast
-                      ? 'bg-gray-50 border-gray-200'
-                      : isFuture
-                      ? 'bg-blue-50 border-blue-100'
-                      : 'bg-green-50 border-green-100'
-                  }`}
-                >
-                  <div>
-                    <p className={`font-medium ${
-                      isPast
-                        ? 'text-gray-700'
-                        : isFuture
-                        ? 'text-blue-700'
-                        : 'text-green-700'
-                    }`}>
-                      {formatDate(date.date)}
-                    </p>
-                    <p className={`text-sm ${
-                      isPast
-                        ? 'text-gray-500'
-                        : isFuture
-                        ? 'text-blue-600'
-                        : 'text-green-600'
-                    }`}>
-                      {date.reason}
-                    </p>
-                  </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => {
-                        setEditingDate(date);
-                        setForm({
-                          date: utcToZonedTime(new Date(date.date), TIMEZONE),
-                          reason: date.reason
-                        });
-                        setShowForm(true);
-                      }}
-                      className="p-1 rounded-lg hover:bg-white/50 transition-colors"
-                    >
-                      <Edit2 className="h-4 w-4 text-gray-500" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(date.id)}
-                      className="p-1 rounded-lg hover:bg-white/50 transition-colors"
-                    >
-                      <Trash2 className="h-4 w-4 text-red-500" />
-                    </button>
-                  </div>
+                    return (
+                      <motion.div
+                        key={date.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={`flex items-center justify-between p-4 rounded-lg border ${
+                          isTodays
+                            ? 'bg-green-50 border-green-100'
+                            : 'bg-blue-50 border-blue-100'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`p-2 rounded-lg ${
+                            isTodays
+                              ? 'bg-green-100'
+                              : 'bg-blue-100'
+                          }`}>
+                            <Calendar className={`h-5 w-5 ${
+                              isTodays
+                                ? 'text-green-600'
+                                : 'text-blue-600'
+                            }`} />
+                          </div>
+                          <div>
+                            <p className={`font-medium ${
+                              isTodays
+                                ? 'text-green-700'
+                                : 'text-blue-700'
+                            }`}>
+                              {formatDate(date.date)}
+                            </p>
+                            <p className={`text-sm ${
+                              isTodays
+                                ? 'text-green-600'
+                                : 'text-blue-600'
+                            }`}>
+                              {date.reason}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => {
+                              setEditingDate(date);
+                              setForm({
+                                date: utcToZonedTime(new Date(date.date), TIMEZONE),
+                                reason: date.reason
+                              });
+                              setShowForm(true);
+                            }}
+                            className="p-1.5 rounded-lg hover:bg-white/50 transition-colors"
+                            title="Edit"
+                          >
+                            <Edit2 className="h-4 w-4 text-gray-500" />
+                          </button>
+                          <button
+                            onClick={() => setDeleteConfirm(date.id)}
+                            className="p-1.5 rounded-lg hover:bg-white/50 transition-colors"
+                            title="Delete"
+                          >
+                            <Trash2 className="h-4 w-4 text-red-500" />
+                          </button>
+
+                          {/* Delete Confirmation Popover */}
+                          <AnimatePresence>
+                            {deleteConfirm === date.id && (
+                              <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                className="absolute right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 p-4 z-10"
+                              >
+                                <div className="flex items-start gap-3 mb-4">
+                                  <div className="bg-red-50 p-2 rounded-lg flex-shrink-0">
+                                    <AlertCircle className="h-5 w-5 text-red-600" />
+                                  </div>
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-900">Confirm Delete</h4>
+                                    <p className="text-sm text-gray-500 mt-1">Are you sure you want to delete this closure date?</p>
+                                  </div>
+                                </div>
+                                <div className="flex justify-end gap-2">
+                                  <button
+                                    onClick={() => setDeleteConfirm(null)}
+                                    className="px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+                                  >
+                                    Cancel
+                                  </button>
+                                  <button
+                                    onClick={() => handleDelete(date.id)}
+                                    className="px-3 py-1.5 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-1.5"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                    Delete
+                                  </button>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </div>
-              );
-            })
+              </div>
+            ))
           )}
         </div>
       </div>
