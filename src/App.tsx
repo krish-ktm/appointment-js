@@ -6,11 +6,11 @@ import { AdminLayout } from './components/admin/AdminLayout';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { NoticeManager } from './components/admin/NoticeManager';
 import { MessageManager } from './components/admin/MessageManager';
+import { AppointmentManager } from './components/admin/appointments/AppointmentManager';
+import { AppointmentSettings } from './components/admin/appointments/AppointmentSettings';
 import { MRAppointmentManager } from './components/admin/MRAppointmentManager';
 import { MRAppointmentManagement } from './components/admin/mr-appointment/MRAppointmentManagement';
 import { UsersManager } from './components/admin/UsersManager';
-import { TimeManagement } from './components/admin/time-management/TimeManagement';
-import { ClosureDatesManager } from './components/admin/ClosureDatesManager';
 import { LandingPage } from './components/LandingPage';
 import { AboutPage } from './components/AboutPage';
 import { MRAppointment } from './components/mr-appointment/MRAppointment';
@@ -57,13 +57,13 @@ function App() {
           <Route path="/appointment" element={<AppointmentPage />} />
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
+            <Route path="appointments" element={<AppointmentManager />} />
+            <Route path="appointment-settings" element={<AppointmentSettings />} />
             <Route path="mr-appointments" element={<MRAppointmentManager />} />
             <Route path="mr-settings" element={<MRAppointmentManagement />} />
             <Route path="notices" element={<NoticeManager />} />
             <Route path="messages" element={<MessageManager />} />
             <Route path="users" element={<UsersManager />} />
-            <Route path="time-management" element={<TimeManagement />} />
-            <Route path="closure-dates" element={<ClosureDatesManager />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

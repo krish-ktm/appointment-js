@@ -13,8 +13,6 @@ import {
   LogOut, 
   ChevronDown, 
   Users, 
-  Clock, 
-  CalendarOff, 
   Settings,
   LayoutDashboard,
   ChevronRight,
@@ -37,7 +35,7 @@ export function AdminLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [expandedGroups, setExpandedGroups] = useState<string[]>(['General', 'MR Management', 'System']);
+  const [expandedGroups, setExpandedGroups] = useState<string[]>(['General', 'Appointments', 'MR Management', 'Communication', 'System']);
 
   useEffect(() => {
     checkAuth();
@@ -79,6 +77,15 @@ export function AdminLayout() {
       ]
     },
     {
+      name: 'Appointments',
+      items: [
+        { name: 'Appointments', href: '/admin/appointments', icon: Calendar },
+        ...(currentUser?.role === 'superadmin' ? [
+          { name: 'Appointment Settings', href: '/admin/appointment-settings', icon: Settings }
+        ] : [])
+      ]
+    },
+    {
       name: 'MR Management',
       items: [
         { name: 'MR Appointments', href: '/admin/mr-appointments', icon: Building2 },
@@ -97,9 +104,7 @@ export function AdminLayout() {
     {
       name: 'System',
       items: [
-        { name: 'Users', href: '/admin/users', icon: Users },
-        { name: 'Time Management', href: '/admin/time-management', icon: Clock },
-        { name: 'Closure Dates', href: '/admin/closure-dates', icon: CalendarOff }
+        { name: 'Users', href: '/admin/users', icon: Users }
       ]
     }
   ].filter(group => group.items.length > 0);
@@ -126,9 +131,9 @@ export function AdminLayout() {
           isSidebarCollapsed ? 'lg:w-20' : 'lg:w-72'
         }`}
       >
-        <div className="flex flex-col flex-grow bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+        <div className="flex flex-col flex-grow bg-gradient-to-b from-blue-900 to-blue-800 text-white">
           {/* Sidebar Header */}
-          <div className="flex items-center justify-between h-16 px-4 bg-gray-900/50 backdrop-blur-sm">
+          <div className="flex items-center justify-between h-16 px-4 bg-blue-900/50 backdrop-blur-sm">
             <h1 className={`font-bold transition-all duration-300 ${
               isSidebarCollapsed ? 'text-lg' : 'text-xl'
             }`}>
@@ -172,12 +177,12 @@ export function AdminLayout() {
                           to={item.href}
                           className={`flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group relative overflow-hidden ${
                             active
-                              ? 'bg-white/20 text-white'
+                              ? 'bg-blue-500/20 text-white'
                               : 'text-gray-300 hover:bg-white/10 hover:text-white'
                           }`}
                         >
                           {active && (
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 animate-pulse" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-blue-300/20 animate-pulse" />
                           )}
                           <Icon className={`flex-shrink-0 transition-all duration-300 relative z-10 ${
                             isSidebarCollapsed ? 'h-6 w-6' : 'h-5 w-5 mr-3'
@@ -202,7 +207,7 @@ export function AdminLayout() {
               }`}>
                 <div className="flex items-center group cursor-pointer p-2 rounded-xl hover:bg-white/10 transition-colors">
                   <div className="flex-shrink-0">
-                    <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg">
+                    <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-400 flex items-center justify-center shadow-lg">
                       <span className="text-sm font-medium">
                         {currentUser?.name.charAt(0).toUpperCase()}
                       </span>
@@ -236,7 +241,7 @@ export function AdminLayout() {
 
       {/* Mobile header */}
       <div className="lg:hidden">
-        <div className="bg-gray-900 text-white">
+        <div className="bg-blue-900 text-white">
           <div className="flex items-center justify-between h-16 px-4">
             <h1 className="text-xl font-bold">Admin Panel</h1>
             <div className="flex items-center">
@@ -245,7 +250,7 @@ export function AdminLayout() {
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="flex items-center text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
-                  <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+                  <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-400 flex items-center justify-center">
                     <span className="text-sm font-medium">
                       {currentUser?.name.charAt(0).toUpperCase()}
                     </span>
@@ -253,11 +258,11 @@ export function AdminLayout() {
                   <ChevronDown className="ml-1 h-4 w-4 text-gray-400" />
                 </button>
                 {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-xl overflow-hidden bg-gray-800 ring-1 ring-white/10">
+                  <div className="absolute right-0 mt-2 w-48 rounded-xl overflow-hidden bg-blue-800 ring-1 ring-white/10">
                     <div className="py-1">
                       <div className="px-4 py-2 text-sm">
-                        <p className="font-medium">{currentUser?.name}</p>
-                        <p className="text-gray-400">{currentUser?.role}</p>
+                        <p className="font-medium text-white">{currentUser?.name}</p>
+                        <p className="text-blue-300">{currentUser?.role}</p>
                       </div>
                       <button
                         onClick={handleLogout}
@@ -285,7 +290,7 @@ export function AdminLayout() {
 
         {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="bg-gray-900 border-t border-white/10">
+          <div className="bg-blue-900 border-t border-white/10">
             <nav className="px-4 py-3">
               {navigationGroups.map((group) => (
                 <div key={group.name} className="mb-4">
@@ -302,7 +307,7 @@ export function AdminLayout() {
                           to={item.href}
                           className={`flex items-center px-3 py-2 text-base font-medium rounded-xl ${
                             active
-                              ? 'bg-white/20 text-white'
+                              ? 'bg-blue-500/20 text-white'
                               : 'text-gray-300 hover:bg-white/10 hover:text-white'
                           }`}
                           onClick={() => setIsMobileMenuOpen(false)}
