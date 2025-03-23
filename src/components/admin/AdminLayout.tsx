@@ -131,17 +131,17 @@ export function AdminLayout() {
           isSidebarCollapsed ? 'lg:w-20' : 'lg:w-72'
         }`}
       >
-        <div className="flex flex-col flex-grow bg-gradient-to-b from-blue-900 to-blue-800 text-white">
+        <div className="flex flex-col flex-grow bg-white border-r border-gray-200">
           {/* Sidebar Header */}
-          <div className="flex items-center justify-between h-16 px-4 bg-blue-900/50 backdrop-blur-sm">
-            <h1 className={`font-bold transition-all duration-300 ${
+          <div className="flex items-center justify-between h-16 px-4 bg-gradient-to-r from-blue-600 to-blue-700">
+            <h1 className={`font-bold text-white transition-all duration-300 ${
               isSidebarCollapsed ? 'text-lg' : 'text-xl'
             }`}>
               {isSidebarCollapsed ? 'AP' : 'Admin Panel'}
             </h1>
             <button
               onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
-              className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+              className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-white"
             >
               <ChevronRight className={`h-5 w-5 transition-transform duration-300 ${
                 isSidebarCollapsed ? 'rotate-0' : 'rotate-180'
@@ -156,7 +156,7 @@ export function AdminLayout() {
                 <div key={group.name} className="mb-2">
                   {!isSidebarCollapsed && (
                     <div 
-                      className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-gray-400 uppercase cursor-pointer hover:text-gray-300"
+                      className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-gray-400 uppercase cursor-pointer hover:text-gray-600"
                       onClick={() => toggleGroup(group.name)}
                     >
                       <span>{group.name}</span>
@@ -177,16 +177,13 @@ export function AdminLayout() {
                           to={item.href}
                           className={`flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group relative overflow-hidden ${
                             active
-                              ? 'bg-blue-500/20 text-white'
-                              : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                              ? 'bg-blue-50 text-blue-600'
+                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                           }`}
                         >
-                          {active && (
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-blue-300/20 animate-pulse" />
-                          )}
-                          <Icon className={`flex-shrink-0 transition-all duration-300 relative z-10 ${
+                          <Icon className={`flex-shrink-0 transition-all duration-300 ${
                             isSidebarCollapsed ? 'h-6 w-6' : 'h-5 w-5 mr-3'
-                          }`} />
+                          } ${active ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'}`} />
                           <span className={`transition-all duration-300 relative z-10 ${
                             isSidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100'
                           }`}>
@@ -201,14 +198,14 @@ export function AdminLayout() {
             </nav>
 
             {/* User Profile */}
-            <div className="mt-auto pt-4 border-t border-white/10">
+            <div className="mt-auto pt-4 border-t border-gray-100">
               <div className={`transition-all duration-300 ${
                 isSidebarCollapsed ? 'text-center' : ''
               }`}>
-                <div className="flex items-center group cursor-pointer p-2 rounded-xl hover:bg-white/10 transition-colors">
+                <div className="flex items-center group cursor-pointer p-2 rounded-xl hover:bg-gray-50 transition-colors">
                   <div className="flex-shrink-0">
                     <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-400 flex items-center justify-center shadow-lg">
-                      <span className="text-sm font-medium">
+                      <span className="text-sm font-medium text-white">
                         {currentUser?.name.charAt(0).toUpperCase()}
                       </span>
                     </div>
@@ -216,13 +213,13 @@ export function AdminLayout() {
                   <div className={`ml-3 transition-all duration-300 ${
                     isSidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100'
                   }`}>
-                    <p className="text-sm font-medium">{currentUser?.name}</p>
-                    <p className="text-xs text-gray-400">{currentUser?.role}</p>
+                    <p className="text-sm font-medium text-gray-900">{currentUser?.name}</p>
+                    <p className="text-xs text-gray-500">{currentUser?.role}</p>
                   </div>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className={`mt-2 flex items-center px-3 py-2 text-sm font-medium text-red-400 rounded-xl hover:bg-red-500/20 transition-colors w-full ${
+                  className={`mt-2 flex items-center px-3 py-2 text-sm font-medium text-red-600 rounded-xl hover:bg-red-50 transition-colors w-full ${
                     isSidebarCollapsed ? 'justify-center' : ''
                   }`}
                 >
@@ -241,7 +238,7 @@ export function AdminLayout() {
 
       {/* Mobile header */}
       <div className="lg:hidden">
-        <div className="bg-blue-900 text-white">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
           <div className="flex items-center justify-between h-16 px-4">
             <h1 className="text-xl font-bold">Admin Panel</h1>
             <div className="flex items-center">
@@ -250,23 +247,23 @@ export function AdminLayout() {
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="flex items-center text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
-                  <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-400 flex items-center justify-center">
+                  <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center">
                     <span className="text-sm font-medium">
                       {currentUser?.name.charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <ChevronDown className="ml-1 h-4 w-4 text-gray-400" />
+                  <ChevronDown className="ml-1 h-4 w-4 text-white/80" />
                 </button>
                 {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-xl overflow-hidden bg-blue-800 ring-1 ring-white/10">
+                  <div className="absolute right-0 mt-2 w-48 rounded-xl overflow-hidden bg-white ring-1 ring-gray-200 shadow-lg">
                     <div className="py-1">
                       <div className="px-4 py-2 text-sm">
-                        <p className="font-medium text-white">{currentUser?.name}</p>
-                        <p className="text-blue-300">{currentUser?.role}</p>
+                        <p className="font-medium text-gray-900">{currentUser?.name}</p>
+                        <p className="text-gray-500">{currentUser?.role}</p>
                       </div>
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-500/20"
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                       >
                         Logout
                       </button>
@@ -276,7 +273,7 @@ export function AdminLayout() {
               </div>
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="ml-4 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
+                className="ml-4 p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
               >
                 {isMobileMenuOpen ? (
                   <X className="h-6 w-6" />
@@ -290,7 +287,7 @@ export function AdminLayout() {
 
         {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="bg-blue-900 border-t border-white/10">
+          <div className="bg-white border-t border-gray-200">
             <nav className="px-4 py-3">
               {navigationGroups.map((group) => (
                 <div key={group.name} className="mb-4">
@@ -307,12 +304,14 @@ export function AdminLayout() {
                           to={item.href}
                           className={`flex items-center px-3 py-2 text-base font-medium rounded-xl ${
                             active
-                              ? 'bg-blue-500/20 text-white'
-                              : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                              ? 'bg-blue-50 text-blue-600'
+                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                           }`}
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
-                          <Icon className="h-5 w-5 mr-3" />
+                          <Icon className={`h-5 w-5 mr-3 ${
+                            active ? 'text-blue-600' : 'text-gray-400'
+                          }`} />
                           {item.name}
                         </Link>
                       );
