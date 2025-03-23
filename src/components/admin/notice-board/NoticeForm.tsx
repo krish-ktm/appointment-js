@@ -137,7 +137,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center p-4 z-[9999] overflow-y-auto"
-      style={{ paddingTop: '2vh', paddingBottom: '2vh' }}
+      style={{ margin: 0 }}
       onClick={onClose}
     >
       <motion.div
