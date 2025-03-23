@@ -17,8 +17,18 @@ import {
   CalendarOff, 
   Settings,
   LayoutDashboard,
-  ChevronRight
+  ChevronRight,
+  ChevronUp
 } from 'lucide-react';
+
+interface NavigationGroup {
+  name: string;
+  items: {
+    name: string;
+    href: string;
+    icon: any;
+  }[];
+}
 
 export function AdminLayout() {
   const navigate = useNavigate();
@@ -27,6 +37,7 @@ export function AdminLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState<string[]>(['General', 'MR Management', 'System']);
 
   useEffect(() => {
     checkAuth();
@@ -60,24 +71,52 @@ export function AdminLayout() {
   const userStr = localStorage.getItem('user');
   const currentUser = userStr ? JSON.parse(userStr) as User : null;
 
+  const navigationGroups: NavigationGroup[] = [
+    {
+      name: 'General',
+      items: [
+        { name: 'Dashboard', href: '/admin', icon: LayoutDashboard }
+      ]
+    },
+    {
+      name: 'MR Management',
+      items: [
+        { name: 'MR Appointments', href: '/admin/mr-appointments', icon: Building2 },
+        ...(currentUser?.role === 'superadmin' ? [
+          { name: 'MR Settings', href: '/admin/mr-settings', icon: Settings }
+        ] : [])
+      ]
+    },
+    {
+      name: 'Communication',
+      items: [
+        { name: 'Notice Board', href: '/admin/notices', icon: Bell },
+        { name: 'Doctor Messages', href: '/admin/messages', icon: MessageCircle }
+      ]
+    },
+    {
+      name: 'System',
+      items: [
+        { name: 'Users', href: '/admin/users', icon: Users },
+        { name: 'Time Management', href: '/admin/time-management', icon: Clock },
+        { name: 'Closure Dates', href: '/admin/closure-dates', icon: CalendarOff }
+      ]
+    }
+  ].filter(group => group.items.length > 0);
+
+  const toggleGroup = (groupName: string) => {
+    setExpandedGroups(prev => 
+      prev.includes(groupName)
+        ? prev.filter(g => g !== groupName)
+        : [...prev, groupName]
+    );
+  };
+
+  const isActive = (path: string) => location.pathname === path;
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
-
-  const navigation = [
-    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-    { name: 'MR Appointments', href: '/admin/mr-appointments', icon: Building2 },
-    ...(currentUser?.role === 'superadmin' ? [
-      { name: 'MR Settings', href: '/admin/mr-settings', icon: Settings },
-      { name: 'Notice Board', href: '/admin/notices', icon: Bell },
-      { name: 'Doctor Messages', href: '/admin/messages', icon: MessageCircle },
-      { name: 'Users', href: '/admin/users', icon: Users },
-      { name: 'Time Management', href: '/admin/time-management', icon: Clock },
-      { name: 'Closure Dates', href: '/admin/closure-dates', icon: CalendarOff }
-    ] : [])
-  ];
-
-  const isActive = (path: string) => location.pathname === path;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -108,33 +147,52 @@ export function AdminLayout() {
           {/* Navigation */}
           <div className="flex flex-col flex-grow px-3 py-4">
             <nav className="flex-1 space-y-1">
-              {navigation.map((item) => {
-                const Icon = item.icon;
-                const active = isActive(item.href);
-                return (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={`flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group relative overflow-hidden ${
-                      active
-                        ? 'bg-white/20 text-white'
-                        : 'text-gray-300 hover:bg-white/10 hover:text-white'
-                    }`}
-                  >
-                    {active && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 animate-pulse" />
-                    )}
-                    <Icon className={`flex-shrink-0 transition-all duration-300 relative z-10 ${
-                      isSidebarCollapsed ? 'h-6 w-6' : 'h-5 w-5 mr-3'
-                    }`} />
-                    <span className={`transition-all duration-300 relative z-10 ${
-                      isSidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100'
-                    }`}>
-                      {item.name}
-                    </span>
-                  </Link>
-                );
-              })}
+              {navigationGroups.map((group) => (
+                <div key={group.name} className="mb-2">
+                  {!isSidebarCollapsed && (
+                    <div 
+                      className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-gray-400 uppercase cursor-pointer hover:text-gray-300"
+                      onClick={() => toggleGroup(group.name)}
+                    >
+                      <span>{group.name}</span>
+                      <ChevronUp className={`h-4 w-4 transition-transform duration-200 ${
+                        expandedGroups.includes(group.name) ? 'rotate-0' : 'rotate-180'
+                      }`} />
+                    </div>
+                  )}
+                  <div className={`space-y-1 ${
+                    !isSidebarCollapsed && !expandedGroups.includes(group.name) ? 'hidden' : ''
+                  }`}>
+                    {group.items.map((item) => {
+                      const Icon = item.icon;
+                      const active = isActive(item.href);
+                      return (
+                        <Link
+                          key={item.name}
+                          to={item.href}
+                          className={`flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group relative overflow-hidden ${
+                            active
+                              ? 'bg-white/20 text-white'
+                              : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                          }`}
+                        >
+                          {active && (
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 animate-pulse" />
+                          )}
+                          <Icon className={`flex-shrink-0 transition-all duration-300 relative z-10 ${
+                            isSidebarCollapsed ? 'h-6 w-6' : 'h-5 w-5 mr-3'
+                          }`} />
+                          <span className={`transition-all duration-300 relative z-10 ${
+                            isSidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100'
+                          }`}>
+                            {item.name}
+                          </span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </nav>
 
             {/* User Profile */}
@@ -228,26 +286,35 @@ export function AdminLayout() {
         {/* Mobile menu */}
         {isMobileMenuOpen && (
           <div className="bg-gray-900 border-t border-white/10">
-            <nav className="px-4 py-3 space-y-1">
-              {navigation.map((item) => {
-                const Icon = item.icon;
-                const active = isActive(item.href);
-                return (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={`flex items-center px-3 py-2 text-base font-medium rounded-xl ${
-                      active
-                        ? 'bg-white/20 text-white'
-                        : 'text-gray-300 hover:bg-white/10 hover:text-white'
-                    }`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <Icon className="h-5 w-5 mr-3" />
-                    {item.name}
-                  </Link>
-                );
-              })}
+            <nav className="px-4 py-3">
+              {navigationGroups.map((group) => (
+                <div key={group.name} className="mb-4">
+                  <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase">
+                    {group.name}
+                  </div>
+                  <div className="space-y-1">
+                    {group.items.map((item) => {
+                      const Icon = item.icon;
+                      const active = isActive(item.href);
+                      return (
+                        <Link
+                          key={item.name}
+                          to={item.href}
+                          className={`flex items-center px-3 py-2 text-base font-medium rounded-xl ${
+                            active
+                              ? 'bg-white/20 text-white'
+                              : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                          }`}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <Icon className="h-5 w-5 mr-3" />
+                          {item.name}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </nav>
           </div>
         )}
