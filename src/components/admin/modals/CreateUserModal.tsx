@@ -54,7 +54,7 @@ export function CreateUserModal({ onClose, onUserCreated }: CreateUserModalProps
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ type: "spring", duration: 0.3 }}
-          className="bg-white rounded-2xl shadow-xl w xl max-w-md overflow-hidden"
+          className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden"
           onClick={e => e.stopPropagation()}
         >
           <div className="relative">
@@ -79,7 +79,7 @@ export function CreateUserModal({ onClose, onUserCreated }: CreateUserModalProps
           </div>
 
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Name
@@ -155,7 +155,7 @@ export function CreateUserModal({ onClose, onUserCreated }: CreateUserModalProps
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4">
+            <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
               <button
                 type="button"
                 onClick={onClose}

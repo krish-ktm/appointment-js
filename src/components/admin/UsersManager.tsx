@@ -5,13 +5,11 @@ import { toast } from 'react-hot-toast';
 import { UsersTable } from './UsersTable';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { useNavigate } from 'react-router-dom';
-import { UserPlus } from 'lucide-react';
 
 export function UsersManager() {
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     loadUsers();
@@ -54,13 +52,6 @@ export function UsersManager() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-semibold text-gray-900">User Management</h2>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors gap-2 shadow-sm"
-        >
-          <UserPlus className="h-4 w-4" />
-          <span>Add New User</span>
-        </button>
       </div>
 
       <div className="bg-white shadow rounded-lg">
