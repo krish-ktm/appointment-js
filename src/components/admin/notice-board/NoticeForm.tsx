@@ -136,30 +136,34 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center p-4 z-[9999] overflow-y-auto"
+      style={{ paddingTop: '2vh', paddingBottom: '2vh' }}
       onClick={onClose}
     >
       <motion.div
         initial={{ scale: 0.95 }}
         animate={{ scale: 1 }}
-        className="bg-white rounded-xl shadow-xl w-full max-w-2xl mx-auto"
+        className="bg-white rounded-xl shadow-xl w-full max-w-2xl mx-auto my-auto relative"
+        style={{ maxHeight: '96vh' }}
         onClick={e => e.stopPropagation()}
       >
-        <div className="p-6 bg-gradient-to-r from-blue-600 to-blue-700">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-semibold text-white">
-              {editingNotice ? 'Edit Notice' : 'Add New Notice'}
-            </h3>
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-            >
-              <X className="h-5 w-5 text-white" />
-            </button>
+        <div className="sticky top-0 z-[9999] bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-xl">
+          <div className="p-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-semibold text-white">
+                {editingNotice ? 'Edit Notice' : 'Add New Notice'}
+              </h3>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5 text-white" />
+              </button>
+            </div>
           </div>
         </div>
         
-        <div className="p-6">
+        <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(96vh - 83px)' }}>
           <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6">
             <div className="col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
