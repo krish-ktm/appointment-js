@@ -133,15 +133,15 @@ export function AdminLayout() {
       >
         <div className="flex flex-col flex-grow bg-white border-r border-gray-200">
           {/* Sidebar Header */}
-          <div className="flex items-center justify-between h-16 px-4 bg-gradient-to-r from-blue-600 to-blue-700">
-            <h1 className={`font-bold text-white transition-all duration-300 ${
+          <div className="flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200">
+            <h1 className={`font-bold text-gray-900 transition-all duration-300 ${
               isSidebarCollapsed ? 'text-lg' : 'text-xl'
             }`}>
               {isSidebarCollapsed ? 'AP' : 'Admin Panel'}
             </h1>
             <button
               onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
-              className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-white"
+              className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-500"
             >
               <ChevronRight className={`h-5 w-5 transition-transform duration-300 ${
                 isSidebarCollapsed ? 'rotate-0' : 'rotate-180'
@@ -150,7 +150,7 @@ export function AdminLayout() {
           </div>
 
           {/* Navigation */}
-          <div className="flex flex-col flex-grow px-3 py-4">
+          <div className="flex flex-col flex-grow px-3 py-4 overflow-y-auto">
             <nav className="flex-1 space-y-1">
               {navigationGroups.map((group) => (
                 <div key={group.name} className="mb-2">
@@ -198,7 +198,7 @@ export function AdminLayout() {
             </nav>
 
             {/* User Profile */}
-            <div className="mt-auto pt-4 border-t border-gray-100">
+            <div className="mt-auto border-t border-gray-100">
               <div className={`transition-all duration-300 ${
                 isSidebarCollapsed ? 'text-center' : ''
               }`}>
@@ -238,21 +238,21 @@ export function AdminLayout() {
 
       {/* Mobile header */}
       <div className="lg:hidden">
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+        <div className="bg-white border-b border-gray-200">
           <div className="flex items-center justify-between h-16 px-4">
-            <h1 className="text-xl font-bold">Admin Panel</h1>
+            <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
             <div className="flex items-center">
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-white/20"
+                  className="flex items-center text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20"
                 >
-                  <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center">
-                    <span className="text-sm font-medium">
+                  <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-400 flex items-center justify-center">
+                    <span className="text-sm font-medium text-white">
                       {currentUser?.name.charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <ChevronDown className="ml-1 h-4 w-4 text-white/80" />
+                  <ChevronDown className="ml-1 h-4 w-4 text-gray-500" />
                 </button>
                 {isUserMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 rounded-xl overflow-hidden bg-white ring-1 ring-gray-200 shadow-lg">
@@ -273,7 +273,7 @@ export function AdminLayout() {
               </div>
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="ml-4 p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
+                className="ml-4 p-2 rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500/20"
               >
                 {isMobileMenuOpen ? (
                   <X className="h-6 w-6" />
