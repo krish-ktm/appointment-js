@@ -11,7 +11,6 @@ interface NoticeFormProps {
   onSubmit: (formData: { 
     title: { en: string; gu: string; }; 
     content: { en: string; gu: string; }; 
-    image_url: string; 
     images: string[]; 
     active: boolean;
     formatted_content?: { en: string; gu: string; };
@@ -35,7 +34,6 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
       en: editingNotice?.formatted_content?.en || '',
       gu: editingNotice?.formatted_content?.gu || ''
     },
-    image_url: '',
     images: editingNotice?.images || [],
     active: editingNotice?.active ?? true
   });
@@ -94,16 +92,6 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
     } finally {
       setUploading(false);
       e.target.value = '';
-    }
-  };
-
-  const handleAddImage = () => {
-    if (form.image_url && !form.images.includes(form.image_url)) {
-      setForm(prev => ({
-        ...prev,
-        images: [...prev.images, prev.image_url],
-        image_url: ''
-      }));
     }
   };
 
@@ -351,23 +339,6 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
                     </div>
                   </div>
                 </label>
-
-                <div className="flex-1 flex gap-2">
-                  <input
-                    type="url"
-                    value={form.image_url}
-                    onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                    placeholder="Or enter image URL"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleAddImage}
-                    className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                  >
-                    Add
-                  </button>
-                </div>
               </div>
             </div>
 
