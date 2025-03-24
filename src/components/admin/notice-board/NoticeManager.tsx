@@ -112,20 +112,37 @@ export function NoticeManager() {
 
     const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
     const newNotices = [...notices];
-    const temp = newNotices[currentIndex];
-    newNotices[currentIndex] = newNotices[newIndex];
-    newNotices[newIndex] = temp;
+    
+    // Swap positions
+    const currentNotice = newNotices[currentIndex];
+    const targetNotice = newNotices[newIndex];
+    
+    // Store original orders
+    const currentOrder = currentNotice.order;
+    const targetOrder = targetNotice.order;
+    
+    // Update orders in the array
+    newNotices[currentIndex] = {...targetNotice, order: currentOrder};
+    newNotices[newIndex] = {...currentNotice, order: targetOrder};
 
     try {
-      // Update the order of both affected notices
+      // Create update objects with ALL required fields
       const updates = [
         {
-          id: newNotices[currentIndex].id,
-          order: newNotices[currentIndex].order
+          id: targetNotice.id,
+          order: currentOrder,
+          title: targetNotice.title,  // Preserve the title
+          content: targetNotice.content,  // Preserve the content
+          active: targetNotice.active, // Preserve active status
+          // Add other required fields as needed
         },
         {
-          id: newNotices[newIndex].id,
-          order: newNotices[newIndex].order
+          id: currentNotice.id,
+          order: targetOrder,
+          title: currentNotice.title,  // Preserve the title
+          content: currentNotice.content,  // Preserve the content
+          active: currentNotice.active, // Preserve active status
+          // Add other required fields as needed
         }
       ];
 
