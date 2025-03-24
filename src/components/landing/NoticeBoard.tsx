@@ -7,6 +7,7 @@ import { utcToZonedTime } from 'date-fns-tz';
 import { useState, useEffect } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
+import { useTranslation } from '../../i18n/useTranslation';
 
 interface NoticeBoardProps {
   notices: Notice[];
@@ -14,6 +15,7 @@ interface NoticeBoardProps {
 }
 
 export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
+  const { language } = useTranslation();
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 5000, stopOnInteraction: false })
   ]);
@@ -27,6 +29,12 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
       console.error('Error formatting date:', error);
       return '';
     }
+  };
+
+  // Helper function to get content in current language
+  const getLocalizedContent = (content: string | { en: string; gu: string }) => {
+    if (typeof content === 'string') return content;
+    return content[language] || content.en; // Fallback to English if translation not available
   };
 
   return (
@@ -75,7 +83,7 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
                         <div className="relative w-full aspect-[2/1] overflow-hidden bg-gray-100">
                           <img
                             src={notice.images[0]}
-                            alt={notice.title}
+                            alt={getLocalizedContent(notice.title)}
                             className="w-full h-full object-cover"
                             loading="lazy"
                           />
@@ -98,13 +106,13 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
                         </div>
 
                         <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                          {notice.title}
+                          {getLocalizedContent(notice.title)}
                         </h3>
 
                         {notice.content && (
                           <div className="prose prose-blue max-w-none">
                             <p className="text-gray-600 leading-relaxed">
-                              {notice.content}
+                              {getLocalizedContent(notice.content)}
                             </p>
                           </div>
                         )}
