@@ -61,7 +61,6 @@ export interface Notice {
   title: string | { en: string; gu: string; };
   content: string | { en: string; gu: string; };
   formatted_content?: { en: string; gu: string; };
-  image_url: string | null;
   images?: string[];
   active: boolean;
   order: number;

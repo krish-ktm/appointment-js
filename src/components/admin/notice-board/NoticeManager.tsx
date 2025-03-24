@@ -33,7 +33,13 @@ export function NoticeManager() {
     }
   };
 
-  const handleSubmit = async (formData: { title: string; content: string; image_url: string; images: string[]; active: boolean }) => {
+  const handleSubmit = async (formData: { 
+    title: { en: string; gu: string; }; 
+    content: { en: string; gu: string; }; 
+    images: string[]; 
+    active: boolean;
+    formatted_content?: { en: string; gu: string; };
+  }) => {
     try {
       const userStr = localStorage.getItem('user');
       if (!userStr) throw new Error('User not found');
@@ -41,8 +47,7 @@ export function NoticeManager() {
       const user = JSON.parse(userStr);
       const noticeData = {
         ...formData,
-        created_by: user.id,
-        images: [...formData.images, formData.image_url].filter(Boolean)
+        created_by: user.id
       };
 
       if (editingNotice) {
