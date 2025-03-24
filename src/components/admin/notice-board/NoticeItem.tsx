@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { Edit2, Trash2, MoveUp, MoveDown } from 'lucide-react';
 import { Notice } from '../../../types';
+import { useTranslation } from '../../../i18n/useTranslation';
+import { formatMarkdown } from '../../../utils/markdown';
 
 interface NoticeItemProps {
   notice: Notice;
@@ -12,6 +14,13 @@ interface NoticeItemProps {
 }
 
 export function NoticeItem({ notice, index, totalNotices, onEdit, onDelete, onMove }: NoticeItemProps) {
+  const { language } = useTranslation();
+
+  // Get content based on language
+  const title = typeof notice.title === 'object' ? notice.title[language] : notice.title;
+  const content = typeof notice.content === 'object' ? notice.content[language] : notice.content;
+  const formattedContent = content ? formatMarkdown(content) : '';
+
   return (
     <motion.li
       initial={{ opacity: 0, x: -20 }}
@@ -26,7 +35,7 @@ export function NoticeItem({ notice, index, totalNotices, onEdit, onDelete, onMo
                 <div key={imgIndex} className="h-12 w-12 rounded-lg overflow-hidden bg-gray-100 border-2 border-white">
                   <img
                     src={image}
-                    alt={`${notice.title} - ${imgIndex + 1}`}
+                    alt={`${title} - ${imgIndex + 1}`}
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -40,12 +49,13 @@ export function NoticeItem({ notice, index, totalNotices, onEdit, onDelete, onMo
           )}
           <div className="flex-1 min-w-0">
             <h3 className="text-lg font-medium text-gray-900 truncate">
-              {notice.title}
+              {title}
             </h3>
-            {notice.content && (
-              <p className="text-sm text-gray-500 line-clamp-2">
-                {notice.content}
-              </p>
+            {content && (
+              <div 
+                className="text-sm text-gray-500 line-clamp-2"
+                dangerouslySetInnerHTML={{ __html: formattedContent }}
+              />
             )}
           </div>
         </div>

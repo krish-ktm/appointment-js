@@ -1,20 +1,40 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Image as ImageIcon, X, Upload } from 'lucide-react';
+import { Plus, Image as ImageIcon, X, Upload, Languages, Bold, Italic, Link as LinkIcon, ListOrdered, ListOrdered as ListUnordered } from 'lucide-react';
 import { Notice } from '../../../types';
 import { supabase } from '../../../lib/supabase';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 interface NoticeFormProps {
   editingNotice: Notice | null;
-  onSubmit: (formData: { title: string; content: string; image_url: string; images: string[]; active: boolean }) => Promise<void>;
+  onSubmit: (formData: { 
+    title: { en: string; gu: string; }; 
+    content: { en: string; gu: string; }; 
+    image_url: string; 
+    images: string[]; 
+    active: boolean;
+    formatted_content?: { en: string; gu: string; };
+  }) => Promise<void>;
   onClose: () => void;
 }
 
 export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps) {
+  const { language } = useTranslation();
+  const [currentLang, setCurrentLang] = useState<'en' | 'gu'>(language);
   const [form, setForm] = useState({
-    title: editingNotice?.title || '',
-    content: editingNotice?.content || '',
+    title: {
+      en: editingNotice?.title?.en || editingNotice?.title || '',
+      gu: editingNotice?.title?.gu || ''
+    },
+    content: {
+      en: editingNotice?.content?.en || editingNotice?.content || '',
+      gu: editingNotice?.content?.gu || ''
+    },
+    formatted_content: {
+      en: editingNotice?.formatted_content?.en || '',
+      gu: editingNotice?.formatted_content?.gu || ''
+    },
     image_url: '',
     images: editingNotice?.images || [],
     active: editingNotice?.active ?? true
@@ -27,13 +47,11 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
       const file = e.target.files?.[0];
       if (!file) return;
 
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         toast.error('Please upload an image file');
         return;
       }
 
-      // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         toast.error('Image size should be less than 5MB');
         return;
@@ -41,7 +59,6 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
 
       setUploading(true);
 
-      // First sign in with Supabase Auth
       const { data: { user }, error: signInError } = await supabase.auth.signInWithPassword({
         email: 'ktpatel100@gmail.com',
         password: 'Krish@12'
@@ -49,11 +66,9 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
 
       if (signInError) throw signInError;
 
-      // Generate a unique file name
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
 
-      // Upload to Supabase Storage
       const { data, error } = await supabase.storage
         .from('notices')
         .upload(fileName, file, {
@@ -63,12 +78,10 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
 
       if (error) throw error;
 
-      // Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from('notices')
         .getPublicUrl(fileName);
 
-      // Add to images array
       setForm(prev => ({
         ...prev,
         images: [...prev.images, publicUrl]
@@ -80,7 +93,6 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
       toast.error('Failed to upload image');
     } finally {
       setUploading(false);
-      // Reset file input
       e.target.value = '';
     }
   };
@@ -99,9 +111,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
     try {
       const imageUrl = form.images[index];
       
-      // If it's a Supabase storage URL, delete from storage
       if (imageUrl.includes(supabase.storageUrl)) {
-        // Sign in first
         const { error: signInError } = await supabase.auth.signInWithPassword({
           email: 'ktpatel100@gmail.com',
           password: 'Krish@12'
@@ -130,6 +140,46 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await onSubmit(form);
+  };
+
+  const addFormatting = (tag: string) => {
+    const textarea = document.getElementById(`content-${currentLang}`) as HTMLTextAreaElement;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    const selectedText = text.substring(start, end);
+
+    let newText = '';
+    switch (tag) {
+      case 'bold':
+        newText = `**${selectedText}**`;
+        break;
+      case 'italic':
+        newText = `*${selectedText}*`;
+        break;
+      case 'link':
+        newText = `[${selectedText}](url)`;
+        break;
+      case 'ul':
+        newText = `\n- ${selectedText}`;
+        break;
+      case 'ol':
+        newText = `\n1. ${selectedText}`;
+        break;
+      default:
+        return;
+    }
+
+    const newContent = text.substring(0, start) + newText + text.substring(end);
+    setForm(prev => ({
+      ...prev,
+      content: {
+        ...prev.content,
+        [currentLang]: newContent
+      }
+    }));
   };
 
   return (
@@ -164,34 +214,123 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
         </div>
         
         <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(96vh - 83px)' }}>
-          <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6">
-            <div className="col-span-2">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Language Selector */}
+            <div className="flex items-center gap-4 mb-6">
+              <button
+                type="button"
+                onClick={() => setCurrentLang('en')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                  currentLang === 'en'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <Languages className="h-4 w-4" />
+                English
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentLang('gu')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                  currentLang === 'gu'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <Languages className="h-4 w-4" />
+                ગુજરાતી
+              </button>
+            </div>
+
+            {/* Title */}
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Title
+                Title ({currentLang === 'en' ? 'English' : 'ગુજરાતી'})
               </label>
               <input
                 type="text"
-                required
-                value={form.title}
-                onChange={(e) => setForm({ ...form, title: e.target.value })}
+                required={currentLang === 'en'}
+                value={form.title[currentLang]}
+                onChange={(e) => setForm(prev => ({
+                  ...prev,
+                  title: {
+                    ...prev.title,
+                    [currentLang]: e.target.value
+                  }
+                }))}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               />
             </div>
 
-            <div className="col-span-2">
+            {/* Content with Formatting Tools */}
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Content
+                Content ({currentLang === 'en' ? 'English' : 'ગુજરાતી'})
               </label>
+              <div className="flex items-center gap-2 mb-2 bg-gray-50 p-2 rounded-lg">
+                <button
+                  type="button"
+                  onClick={() => addFormatting('bold')}
+                  className="p-1.5 hover:bg-gray-200 rounded transition-colors"
+                  title="Bold"
+                >
+                  <Bold className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => addFormatting('italic')}
+                  className="p-1.5 hover:bg-gray-200 rounded transition-colors"
+                  title="Italic"
+                >
+                  <Italic className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => addFormatting('link')}
+                  className="p-1.5 hover:bg-gray-200 rounded transition-colors"
+                  title="Link"
+                >
+                  <LinkIcon className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => addFormatting('ul')}
+                  className="p-1.5 hover:bg-gray-200 rounded transition-colors"
+                  title="Bullet List"
+                >
+                  <ListUnordered className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => addFormatting('ol')}
+                  className="p-1.5 hover:bg-gray-200 rounded transition-colors"
+                  title="Numbered List"
+                >
+                  <ListOrdered className="h-4 w-4" />
+                </button>
+              </div>
               <textarea
-                value={form.content}
-                onChange={(e) => setForm({ ...form, content: e.target.value })}
-                rows={2}
+                id={`content-${currentLang}`}
+                value={form.content[currentLang]}
+                onChange={(e) => setForm(prev => ({
+                  ...prev,
+                  content: {
+                    ...prev.content,
+                    [currentLang]: e.target.value
+                  }
+                }))}
+                rows={4}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               />
+              <p className="mt-1 text-sm text-gray-500">
+                Use markdown for formatting: **bold**, *italic*, [link](url), - for bullets, 1. for numbers
+              </p>
             </div>
 
-            <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            {/* Images Section */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Add Images
               </label>
               <div className="flex gap-4">
@@ -233,7 +372,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
             </div>
 
             {form.images.length > 0 && (
-              <div className="col-span-2 grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-4 gap-2">
                 {form.images.map((url, index) => (
                   <div key={index} className="relative group">
                     <img
@@ -253,7 +392,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
               </div>
             )}
 
-            <div className="col-span-2 flex items-center justify-between">
+            <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
                   type="checkbox"

@@ -58,8 +58,9 @@ export interface LoginCredentials {
 
 export interface Notice {
   id: string;
-  title: string;
-  content: string | null;
+  title: string | { en: string; gu: string; };
+  content: string | { en: string; gu: string; };
+  formatted_content?: { en: string; gu: string; };
   image_url: string | null;
   images?: string[];
   active: boolean;
