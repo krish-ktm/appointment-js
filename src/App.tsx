@@ -11,6 +11,7 @@ import { AppointmentSettings } from './components/admin/appointments/Appointment
 import { MRAppointmentManager } from './components/admin/MRAppointmentManager';
 import { MRAppointmentManagement } from './components/admin/mr-appointment/MRAppointmentManagement';
 import { UsersManager } from './components/admin/UsersManager';
+import { ClinicClosurePage } from './components/admin/ClinicClosurePage';
 import { LandingPage } from './components/LandingPage';
 import { AboutPage } from './components/AboutPage';
 import { MRAppointment } from './components/mr-appointment/MRAppointment';
@@ -64,6 +65,7 @@ function App() {
             <Route path="notices" element={<NoticeManager />} />
             <Route path="messages" element={<MessageManager />} />
             <Route path="users" element={<UsersManager />} />
+            <Route path="clinic-closure" element={<ClinicClosurePage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

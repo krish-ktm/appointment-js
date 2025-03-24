@@ -16,7 +16,8 @@ import {
   Settings,
   LayoutDashboard,
   ChevronRight,
-  ChevronUp
+  ChevronUp,
+  Clock
 } from 'lucide-react';
 
 interface NavigationGroup {
@@ -104,7 +105,10 @@ export function AdminLayout() {
     {
       name: 'System',
       items: [
-        { name: 'Users', href: '/admin/users', icon: Users }
+        { name: 'Users', href: '/admin/users', icon: Users },
+        ...(currentUser?.role === 'superadmin' ? [
+          { name: 'Clinic Closure', href: '/admin/clinic-closure', icon: Clock }
+        ] : [])
       ]
     }
   ].filter(group => group.items.length > 0);
