@@ -5,6 +5,7 @@ import { AppointmentForm } from './AppointmentForm';
 import { BookingConfirmation } from './BookingConfirmation';
 import { useTranslation } from '../i18n/useTranslation';
 import { useAppointmentForm } from '../hooks/useAppointmentForm';
+import AppointmentRules from './AppointmentRules';
 
 export function AppointmentPage() {
   const { t } = useTranslation();
@@ -35,7 +36,8 @@ export function AppointmentPage() {
               <h1 className="text-xl sm:text-2xl font-semibold text-white">{t.appointment.title}</h1>
             </div>
 
-            <div className="p-4 sm:p-6">
+            <div className="p-4 sm:p-6 space-y-6">
+              <AppointmentRules />
               <AppointmentForm
                 form={form}
                 setForm={setForm}

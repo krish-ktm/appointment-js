@@ -207,3 +207,22 @@ body {
     @apply bg-gray-300 shadow-[0_1px_2px_0_rgb(209_213_219_/_0.2)];
   }
 }
+
+/* Add these animation classes at the end of the file */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(10%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}

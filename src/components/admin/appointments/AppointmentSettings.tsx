@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
 import { toast } from 'react-hot-toast';
-import { Clock, Calendar } from 'lucide-react';
+import { Clock, ListChecks } from 'lucide-react';
 import { WorkingHours } from '../time-management/WorkingHours';
-import { ClosureDatesManager } from '../ClosureDatesManager';
+import AppointmentRules from '../AppointmentRules';
 
 export function AppointmentSettings() {
   const [loading, setLoading] = useState(true);
@@ -39,13 +38,24 @@ export function AppointmentSettings() {
           <Clock className="h-6 w-6 text-blue-600" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">Appointment Settings</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Working Hours</h2>
           <p className="text-sm text-gray-500 mt-1">Configure clinic working hours and appointment slots</p>
         </div>
       </div>
 
       <WorkingHours />
-      <ClosureDatesManager />
+
+      <div className="flex items-center gap-3 mb-6">
+        <div className="bg-blue-50 p-3 rounded-lg">
+          <ListChecks className="h-6 w-6 text-blue-600" />
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900">Appointment Rules</h2>
+          <p className="text-sm text-gray-500 mt-1">Manage rules and instructions for appointments</p>
+        </div>
+      </div>
+
+      <AppointmentRules />
     </div>
   );
 }

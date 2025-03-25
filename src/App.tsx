@@ -42,8 +42,8 @@ function App() {
   }, []);
 
   return (
-    <LanguageProvider>
-      <Router>
+    <Router>
+      <LanguageProvider>
         <ScrollToTop />
         <LanguageSelectionModal 
           isOpen={showLanguageModal} 
@@ -70,8 +70,8 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <Toaster position="top-right" />
-      </Router>
-    </LanguageProvider>
+      </LanguageProvider>
+    </Router>
   );
 }
 
