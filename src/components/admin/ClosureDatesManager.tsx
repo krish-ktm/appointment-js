@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'react-hot-toast';
-import { Calendar, Plus, X, Edit2, Trash2, AlertCircle, CalendarDays } from 'lucide-react';
-import DatePicker from 'react-datepicker';
-import { format, isAfter, startOfToday, addMonths, isToday } from 'date-fns';
+import { Calendar, Plus, X, Edit2, Trash2, AlertCircle } from 'lucide-react';
+import { format, startOfToday, addMonths, isToday } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
+import { CustomDatePicker } from './CustomDatePicker';
 
 interface ClosureDate {
   id: string;
@@ -22,8 +22,8 @@ export function ClosureDatesManager() {
   const [showForm, setShowForm] = useState(false);
   const [editingDate, setEditingDate] = useState<ClosureDate | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [selectedDates, setSelectedDates] = useState<Date[]>([new Date()]);
   const [form, setForm] = useState({
-    date: null as Date | null,
     reason: ''
   });
 
@@ -54,26 +54,28 @@ export function ClosureDatesManager() {
     e.preventDefault();
     
     try {
-      if (!form.date) {
-        throw new Error('Please select a date');
+      if (selectedDates.length === 0) {
+        throw new Error('Please select at least one date');
       }
 
       const userStr = localStorage.getItem('user');
       if (!userStr) throw new Error('User not found');
       
       const user = JSON.parse(userStr);
-      const dateStr = format(form.date, 'yyyy-MM-dd');
 
-      // Check for duplicate date
-      const isDuplicate = closureDates.some(date => 
-        date.date === dateStr && (!editingDate || date.id !== editingDate.id)
-      );
-
-      if (isDuplicate) {
-        throw new Error('A closure date already exists for this date');
-      }
-
+      // If editing, just update that single date
       if (editingDate) {
+        const dateStr = format(selectedDates[0], 'yyyy-MM-dd');
+        
+        // Check for duplicate date
+        const isDuplicate = closureDates.some(date => 
+          date.date === dateStr && date.id !== editingDate.id
+        );
+
+        if (isDuplicate) {
+          throw new Error('A closure date already exists for this date');
+        }
+
         const { error } = await supabase
           .from('clinic_closure_dates')
           .update({
@@ -86,25 +88,55 @@ export function ClosureDatesManager() {
         if (error) throw error;
         toast.success('Closure date updated successfully');
       } else {
-        const { error } = await supabase
-          .from('clinic_closure_dates')
-          .insert({
-            date: dateStr,
-            reason: form.reason,
-            created_by: user.id
-          });
+        // For new entries - handle single date or date range
+        
+        // Create an array of dates to insert
+        const datesToInsert = selectedDates.map(date => ({
+          date: format(date, 'yyyy-MM-dd'),
+          reason: form.reason,
+          created_by: user.id
+        }));
 
-        if (error) throw error;
-        toast.success('Closure date added successfully');
+        // Check for duplicates in the database for all dates to insert
+        for (const dateObj of datesToInsert) {
+          const isDuplicate = closureDates.some(existingDate => 
+            existingDate.date === dateObj.date
+          );
+
+          if (isDuplicate) {
+            throw new Error(`A closure date already exists for ${format(new Date(dateObj.date), 'MMMM d, yyyy')}`);
+          }
+        }
+
+        // Insert all dates
+        if (datesToInsert.length > 0) {
+          const { error } = await supabase
+            .from('clinic_closure_dates')
+            .insert(datesToInsert);
+  
+          if (error) throw error;
+          
+          toast.success(
+            datesToInsert.length === 1 
+              ? 'Closure date added successfully' 
+              : `${datesToInsert.length} closure dates added successfully`
+          );
+        }
       }
 
-      setForm({ date: null, reason: '' });
+      // Reset state
+      setSelectedDates([new Date()]);
+      setForm({ reason: '' });
       setShowForm(false);
       setEditingDate(null);
       loadClosureDates();
     } catch (error) {
       console.error('Error saving closure date:', error);
-      toast.error(error.message || 'Failed to save closure date');
+      if (error instanceof Error) {
+        toast.error(error.message || 'Failed to save closure date');
+      } else {
+        toast.error('Failed to save closure date');
+      }
     }
   };
 
@@ -140,6 +172,14 @@ export function ClosureDatesManager() {
       return acc;
     }, {} as Record<string, ClosureDate[]>);
   };
+
+  // Set up the editing date in form
+  useEffect(() => {
+    if (editingDate) {
+      setSelectedDates([new Date(editingDate.date)]);
+      setForm({ reason: editingDate.reason });
+    }
+  }, [editingDate]);
 
   if (loading) {
     return (
@@ -179,7 +219,8 @@ export function ClosureDatesManager() {
           onClick={() => {
             setShowForm(false);
             setEditingDate(null);
-            setForm({ date: null, reason: '' });
+            setSelectedDates([new Date()]);
+            setForm({ reason: '' });
           }}
         >
           <div className="w-full h-full flex items-center justify-center p-4">
@@ -199,7 +240,8 @@ export function ClosureDatesManager() {
                       onClick={() => {
                         setShowForm(false);
                         setEditingDate(null);
-                        setForm({ date: null, reason: '' });
+                        setSelectedDates([new Date()]);
+                        setForm({ reason: '' });
                       }}
                       className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                     >
@@ -210,22 +252,14 @@ export function ClosureDatesManager() {
               </div>
               
               <div className="p-6 overflow-y-auto">
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Date
-                    </label>
-                    <DatePicker
-                      selected={form.date}
-                      onChange={(date) => setForm({ ...form, date })}
-                      dateFormat="MMMM d, yyyy"
-                      minDate={startOfToday()}
-                      maxDate={addMonths(new Date(), 12)}
-                      placeholderText="Select date"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                      required
-                    />
-                  </div>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <CustomDatePicker 
+                    selectedDates={selectedDates}
+                    onChange={setSelectedDates}
+                    minDate={startOfToday()}
+                    maxDate={addMonths(new Date(), 12)}
+                    disableEditMode={editingDate !== null}
+                  />
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -247,7 +281,8 @@ export function ClosureDatesManager() {
                       onClick={() => {
                         setShowForm(false);
                         setEditingDate(null);
-                        setForm({ date: null, reason: '' });
+                        setSelectedDates([new Date()]);
+                        setForm({ reason: '' });
                       }}
                       className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg"
                     >
@@ -286,7 +321,6 @@ export function ClosureDatesManager() {
                     {dates.map((date) => {
                       const closureDate = utcToZonedTime(new Date(date.date), TIMEZONE);
                       const isTodays = isToday(closureDate);
-                      const isFuture = isAfter(closureDate, startOfToday());
 
                       return (
                         <motion.div
@@ -333,10 +367,8 @@ export function ClosureDatesManager() {
                             <button
                               onClick={() => {
                                 setEditingDate(date);
-                                setForm({
-                                  date: utcToZonedTime(new Date(date.date), TIMEZONE),
-                                  reason: date.reason
-                                });
+                                setSelectedDates([new Date(date.date)]);
+                                setForm({ reason: date.reason });
                                 setShowForm(true);
                               }}
                               className="p-1.5 rounded-lg hover:bg-white/50 transition-colors"
