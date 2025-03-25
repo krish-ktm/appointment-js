@@ -8,6 +8,8 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 
 interface AppointmentFormProps {
   form: AppointmentFormType;
@@ -28,10 +30,31 @@ export function AppointmentForm({
   success,
   loading
 }: AppointmentFormProps) {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
+
+  const [rules, setRules] = useState<any[]>([]);
+
+  useEffect(() => {
+    loadRules();
+  }, []);
+
+  const loadRules = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('appointment_rules')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+
+      if (error) throw error;
+      setRules(data || []);
+    } catch (error) {
+      console.error('Error loading rules:', error);
+    }
+  };
 
   const handleDateChange = (date: Date | null) => {
     if (date) {
@@ -66,6 +89,24 @@ export function AppointmentForm({
           {t.appointment.form.subtitle}
         </p>
       </motion.div>
+
+      {/* Appointment Rules */}
+      {rules.length > 0 && (
+        <div className="mb-6 bg-green-100 rounded-xl p-4">
+          <div className="space-y-3">
+            {rules.map((rule) => (
+              <div key={rule.id}>
+                <h4 className="font-medium text-gray-900 mb-1">
+                  {rule.title[language]}
+                </h4>
+                <p className="text-gray-600">
+                  {rule.content[language]}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {success && (
         <motion.div
