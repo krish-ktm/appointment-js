@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../lib/supabase';
 import { MessageCircle, X } from 'lucide-react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 interface DoctorMessage {
   id: string;
-  message: string;
+  message_en: string;
+  message_gu: string;
   active: boolean;
   created_at: string;
 }
@@ -14,6 +16,7 @@ export function DoctorMessage() {
   const [message, setMessage] = useState<DoctorMessage | null>(null);
   const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(true);
+  const { language } = useLanguage();
 
   useEffect(() => {
     loadMessage();
@@ -38,6 +41,17 @@ export function DoctorMessage() {
     }
   };
 
+  // Get message in current language or fall back to English
+  const getMessageText = () => {
+    if (!message) return '';
+    
+    if (language === 'gu' && message.message_gu) {
+      return message.message_gu;
+    }
+    
+    return message.message_en;
+  };
+
   if (loading || !message) return null;
 
   return (
@@ -59,8 +73,8 @@ export function DoctorMessage() {
                       <MessageCircle className="h-5 w-5 text-white" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm sm:text-base font-medium text-white line-clamp-2">
-                        {message.message}
+                      <p className="text-sm sm:text-base font-medium text-white line-clamp-2" dir={language === 'gu' ? 'auto' : 'ltr'}>
+                        {getMessageText()}
                       </p>
                     </div>
                   </div>

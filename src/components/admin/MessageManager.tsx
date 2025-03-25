@@ -3,10 +3,12 @@ import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'react-hot-toast';
 import { MessageCircle, Edit2, Trash2, Plus, X } from 'lucide-react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface DoctorMessage {
   id: string;
-  message: string;
+  message_en: string;
+  message_gu: string;
   active: boolean;
   created_at: string;
 }
@@ -16,10 +18,13 @@ export function MessageManager() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingMessage, setEditingMessage] = useState<DoctorMessage | null>(null);
+  const [activeTab, setActiveTab] = useState<'en' | 'gu'>('en');
   const [form, setForm] = useState({
-    message: '',
+    message_en: '',
+    message_gu: '',
     active: true
   });
+  const { language } = useLanguage();
 
   useEffect(() => {
     loadMessages();
@@ -49,9 +54,18 @@ export function MessageManager() {
       const userStr = localStorage.getItem('user');
       if (!userStr) throw new Error('User not found');
       
+      // Validate that at least English message is provided
+      if (!form.message_en.trim()) {
+        throw new Error('English message is required');
+      }
+      
       const user = JSON.parse(userStr);
+      
+      // Prepare data for submission
       const messageData = {
-        ...form,
+        message_en: form.message_en,
+        message_gu: form.message_gu,
+        active: form.active,
         created_by: user.id
       };
 
@@ -72,13 +86,17 @@ export function MessageManager() {
         toast.success('Message created successfully');
       }
 
-      setForm({ message: '', active: true });
+      setForm({ message_en: '', message_gu: '', active: true });
       setShowForm(false);
       setEditingMessage(null);
       loadMessages();
     } catch (error) {
       console.error('Error saving message:', error);
-      toast.error('Failed to save message');
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('Failed to save message');
+      }
     }
   };
 
@@ -108,6 +126,27 @@ export function MessageManager() {
     );
   }
 
+  const getMessageDisplay = (message: DoctorMessage) => {
+    // Get message in current language or fall back to English
+    const messageText = language === 'gu' && message.message_gu 
+      ? message.message_gu 
+      : message.message_en;
+    
+    // Show indicator if message has content in both languages
+    const hasBothLanguages = message.message_en && message.message_gu;
+    
+    return (
+      <div>
+        <p className="text-gray-900 break-words">{messageText}</p>
+        {hasBothLanguages && (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-2 bg-blue-100 text-blue-800 mr-2">
+            Bilingual
+          </span>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6 px-4 sm:px-0">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -133,7 +172,8 @@ export function MessageManager() {
           onClick={() => {
             setShowForm(false);
             setEditingMessage(null);
-            setForm({ message: '', active: true });
+            setForm({ message_en: '', message_gu: '', active: true });
+            setActiveTab('en');
           }}
         >
           <div className="w-full h-full flex items-center justify-center p-4">
@@ -153,7 +193,8 @@ export function MessageManager() {
                       onClick={() => {
                         setShowForm(false);
                         setEditingMessage(null);
-                        setForm({ message: '', active: true });
+                        setForm({ message_en: '', message_gu: '', active: true });
+                        setActiveTab('en');
                       }}
                       className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                     >
@@ -165,18 +206,65 @@ export function MessageManager() {
               
               <div className="p-6 overflow-y-auto">
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Message
-                    </label>
-                    <textarea
-                      value={form.message}
-                      onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                      required
-                    />
+                  {/* Language Tabs */}
+                  <div className="border-b border-gray-200">
+                    <nav className="-mb-px flex">
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab('en')}
+                        className={`w-1/2 py-2 px-1 text-center border-b-2 text-sm font-medium ${
+                          activeTab === 'en'
+                            ? 'border-blue-500 text-blue-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        }`}
+                      >
+                        English
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab('gu')}
+                        className={`w-1/2 py-2 px-1 text-center border-b-2 text-sm font-medium ${
+                          activeTab === 'gu'
+                            ? 'border-blue-500 text-blue-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        }`}
+                      >
+                        ગુજરાતી
+                      </button>
+                    </nav>
                   </div>
+
+                  {/* English Message */}
+                  {activeTab === 'en' && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Message (English)
+                      </label>
+                      <textarea
+                        value={form.message_en}
+                        onChange={(e) => setForm({ ...form, message_en: e.target.value })}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        required
+                      />
+                    </div>
+                  )}
+
+                  {/* Gujarati Message */}
+                  {activeTab === 'gu' && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Message (ગુજરાતી)
+                      </label>
+                      <textarea
+                        value={form.message_gu}
+                        onChange={(e) => setForm({ ...form, message_gu: e.target.value })}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        dir="auto"
+                      />
+                    </div>
+                  )}
 
                   <div className="flex items-center">
                     <input
@@ -197,7 +285,8 @@ export function MessageManager() {
                       onClick={() => {
                         setShowForm(false);
                         setEditingMessage(null);
-                        setForm({ message: '', active: true });
+                        setForm({ message_en: '', message_gu: '', active: true });
+                        setActiveTab('en');
                       }}
                       className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg"
                     >
@@ -219,51 +308,53 @@ export function MessageManager() {
 
       <div className="bg-white shadow rounded-lg overflow-hidden">
         <ul className="divide-y divide-gray-200">
-          {messages.map((message) => (
-            <li key={message.id} className="p-4 hover:bg-gray-50">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex items-start gap-4 flex-1">
-                  <div className="bg-blue-50 p-2 rounded-lg flex-shrink-0">
-                    <MessageCircle className="h-5 w-5 text-blue-500" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-gray-900 break-words">{message.message}</p>
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-2 ${
-                      message.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                    }`}>
-                      {message.active ? 'Active' : 'Inactive'}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 self-end sm:self-center">
-                  <button
-                    onClick={() => {
-                      setEditingMessage(message);
-                      setForm({
-                        message: message.message,
-                        active: message.active
-                      });
-                      setShowForm(true);
-                    }}
-                    className="p-1 rounded-lg hover:bg-gray-100"
-                  >
-                    <Edit2 className="h-4 w-4 text-gray-500" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(message.id)}
-                    className="p-1 rounded-lg hover:bg-gray-100"
-                  >
-                    <Trash2 className="h-4 w-4 text-red-500" />
-                  </button>
-                </div>
-              </div>
-            </li>
-          ))}
-
-          {messages.length === 0 && (
+          {messages.length === 0 ? (
             <li className="p-8 text-center text-gray-500">
-              No messages have been created yet.
+              No messages found. Click "Add Message" to create one.
             </li>
+          ) : (
+            messages.map((message) => (
+              <li key={message.id} className="p-4 hover:bg-gray-50">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-start gap-4 flex-1">
+                    <div className="bg-blue-50 p-2 rounded-lg flex-shrink-0">
+                      <MessageCircle className="h-5 w-5 text-blue-500" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      {getMessageDisplay(message)}
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-2 ${
+                        message.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {message.active ? 'Active' : 'Inactive'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 self-end sm:self-center">
+                    <button
+                      onClick={() => {
+                        setEditingMessage(message);
+                        setForm({
+                          message_en: message.message_en,
+                          message_gu: message.message_gu || '',
+                          active: message.active
+                        });
+                        setActiveTab('en');
+                        setShowForm(true);
+                      }}
+                      className="p-1 rounded-lg hover:bg-gray-100"
+                    >
+                      <Edit2 className="h-4 w-4 text-gray-500" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(message.id)}
+                      className="p-1 rounded-lg hover:bg-gray-100"
+                    >
+                      <Trash2 className="h-4 w-4 text-red-500" />
+                    </button>
+                  </div>
+                </div>
+              </li>
+            ))
           )}
         </ul>
       </div>
