@@ -12,7 +12,7 @@ interface MRAppointmentCalendarProps {
 
 export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointmentCalendarProps) {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [workingDaysMap, setWorkingDaysMap] = useState<{ [key: string]: number }>({});
   const [dateBookings, setDateBookings] = useState<Record<string, { current: number; max: number }>>({});
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -25,8 +25,9 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointm
     };
 
     window.addEventListener('resize', handleResize);
-    loadClosureDates();
-    loadWorkingDays();
+    setLoading(true);
+    Promise.all([loadClosureDates(), loadWorkingDays()])
+      .finally(() => setLoading(false));
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -58,13 +59,16 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointm
     try {
       const { data, error } = await supabase
         .from('mr_weekdays')
-        .select('day, is_working, max_appointments');
+        .select('day, is_working, slots');
 
       if (error) throw error;
       
       const workingDays = data?.reduce((acc, day) => {
-        if (day.is_working) {
-          acc[day.day] = day.max_appointments;
+        if (day.is_working && day.slots && day.slots.length > 0) {
+          // Calculate the total capacity across all slots
+          const totalCapacity = day.slots.reduce((sum: number, slot: { maxBookings: number }) => 
+            sum + slot.maxBookings, 0);
+          acc[day.day] = totalCapacity;
         }
         return acc;
       }, {} as { [key: string]: number });
@@ -94,12 +98,12 @@ export function MRAppointmentCalendar({ selectedDate, onDateChange }: MRAppointm
       while (currentDate < sixMonthsLater) {
         const dayName = format(currentDate, 'EEEE');
         const dateStr = format(currentDate, 'yyyy-MM-dd');
-        const maxAppointments = workingDays?.[dayName] || 0;
+        const totalCapacity = workingDays?.[dayName] || 0;
         
-        if (maxAppointments > 0) {
+        if (totalCapacity > 0) {
           newDateBookings[dateStr] = {
             current: bookingCounts[dateStr] || 0,
-            max: maxAppointments
+            max: totalCapacity
           };
         }
         

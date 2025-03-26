@@ -1,6 +1,5 @@
 import { supabase } from '../lib/supabase';
 import { startOfToday, format, isBefore } from 'date-fns';
-import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 
 export async function validateMRAppointment(date: Date): Promise<{ isValid: boolean; error?: string }> {
   try {
@@ -14,11 +13,11 @@ export async function validateMRAppointment(date: Date): Promise<{ isValid: bool
     }
 
     // Batch our database queries
-    const [workingDayResponse, mrClosureDateResponse, clinicClosureDateResponse, appointmentsResponse] = await Promise.all([
+    const [workingDayResponse, mrClosureDateResponse, clinicClosureDateResponse] = await Promise.all([
       // Get working day settings
       supabase
         .from('mr_weekdays')
-        .select('is_working, max_appointments')
+        .select('is_working, slots')
         .eq('day', dayName)
         .single(),
       
@@ -35,13 +34,6 @@ export async function validateMRAppointment(date: Date): Promise<{ isValid: bool
         .select('reason')
         .eq('date', dateStr)
         .maybeSingle(),
-      
-      // Get existing appointments
-      supabase
-        .from('mr_appointments')
-        .select('id')
-        .eq('appointment_date', dateStr)
-        .eq('status', 'pending')
     ]);
 
     // Handle working day settings
@@ -75,18 +67,39 @@ export async function validateMRAppointment(date: Date): Promise<{ isValid: bool
       };
     }
 
-    // Handle appointments count
-    if (appointmentsResponse.error) {
-      console.error('Error checking existing appointments:', appointmentsResponse.error);
+    // If no slots are configured, the day is not available
+    if (!workingDayResponse.data.slots || workingDayResponse.data.slots.length === 0) {
+      return { isValid: false, error: 'No time slots available on this day' };
+    }
+
+    // Check if at least one slot is available
+    const { data: bookings, error: bookingsError } = await supabase
+      .from('mr_appointments')
+      .select('appointment_time')
+      .eq('appointment_date', dateStr)
+      .eq('status', 'pending');
+
+    if (bookingsError) {
+      console.error('Error checking existing appointments:', bookingsError);
       return { isValid: false, error: 'Error checking existing appointments' };
     }
 
-    const currentAppointments = appointmentsResponse.data?.length || 0;
-    if (currentAppointments >= workingDayResponse.data.max_appointments) {
-      return { 
-        isValid: false, 
-        error: `Maximum appointments (${workingDayResponse.data.max_appointments}) reached for this date` 
-      };
+    // Count bookings per slot
+    const bookingCounts = (bookings || []).reduce((acc, booking) => {
+      if (booking.appointment_time) {
+        acc[booking.appointment_time] = (acc[booking.appointment_time] || 0) + 1;
+      }
+      return acc;
+    }, {} as Record<string, number>);
+
+    // Check if any slot has available capacity
+    const availableSlot = workingDayResponse.data.slots.some((slot: { time: string, maxBookings: number }) => {
+      const currentBookings = bookingCounts[slot.time] || 0;
+      return currentBookings < slot.maxBookings;
+    });
+
+    if (!availableSlot) {
+      return { isValid: false, error: 'All time slots are fully booked for this date' };
     }
 
     // All checks passed
