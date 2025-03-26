@@ -1,15 +1,15 @@
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, Phone, User, Clock } from 'lucide-react';
-import { AppointmentForm as AppointmentFormType, TimeSlot } from '../types';
+import { AppointmentForm as AppointmentFormType, TimeSlot } from '../../types';
 import { FormField } from './FormField';
 import { TimeSlotSelector } from './TimeSlotSelector';
-import { useTranslation } from '../i18n/useTranslation';
+import { useTranslation } from '../../i18n/useTranslation';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../../lib/supabase';
 
 interface AppointmentFormProps {
   form: AppointmentFormType;
@@ -253,4 +253,4 @@ export function AppointmentForm({
       </form>
     </div>
   );
-}
+} 

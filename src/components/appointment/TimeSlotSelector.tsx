@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { AlertCircle } from 'lucide-react';
-import { TimeSlot } from '../types';
+import { TimeSlot } from '../../types';
 
 interface TimeSlotSelectorProps {
   timeSlots: TimeSlot[];
@@ -101,4 +101,4 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t, loa
       })}
     </div>
   );
-}
+} 

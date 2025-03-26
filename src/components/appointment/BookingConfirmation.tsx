@@ -1,10 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Calendar, Clock, User, Phone, MapPin, X, Download } from 'lucide-react';
-import { BookingDetails } from '../types';
+import { BookingDetails } from '../../types';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import { useTranslation } from '../i18n/useTranslation';
-import { downloadAppointmentImage } from '../utils/imageDownload';
+import { useTranslation } from '../../i18n/useTranslation';
+import { downloadAppointmentImage } from '../../utils/imageDownload';
 import { useState } from 'react';
 
 const TIMEZONE = 'Asia/Kolkata';
@@ -198,4 +198,4 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother }: Boo
       </div>
     </div>
   );
-}
+} 

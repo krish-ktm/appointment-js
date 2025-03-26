@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 import { Notice, AppointmentForm as AppointmentFormType, BookingDetails as BookingDetailsType, TimeSlot } from '../types';
 import { ResponsiveHeader } from './headers/ResponsiveHeader';
 import { Footer } from './Footer';
-import { BookingConfirmation } from './BookingConfirmation';
+import { BookingConfirmation } from './appointment/BookingConfirmation';
 import { generateTimeSlots, validateBookingRequest } from '../utils';
 import { toast } from 'react-hot-toast';
 import { HeroSection } from './landing/HeroSection';

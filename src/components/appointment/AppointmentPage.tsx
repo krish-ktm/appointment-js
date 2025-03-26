@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
-import { ResponsiveHeader } from './headers/ResponsiveHeader';
-import { Footer } from './Footer';
+import { ResponsiveHeader } from '../headers/ResponsiveHeader';
+import { Footer } from '../Footer';
 import { AppointmentForm } from './AppointmentForm';
 import { BookingConfirmation } from './BookingConfirmation';
-import { useTranslation } from '../i18n/useTranslation';
-import { useAppointmentForm } from '../hooks/useAppointmentForm';
+import { useTranslation } from '../../i18n/useTranslation';
+import { useAppointmentForm } from '../../hooks/useAppointmentForm';
 
 export function AppointmentPage() {
   const { t } = useTranslation();
@@ -60,4 +60,4 @@ export function AppointmentPage() {
       <Footer />
     </div>
   );
-}
+} 

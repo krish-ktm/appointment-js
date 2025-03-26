@@ -1,4 +1,4 @@
-import { AppointmentForm } from '../AppointmentForm';
+import { AppointmentForm } from '../appointment/AppointmentForm';
 import { AppointmentFormType, TimeSlot } from '../../types';
 import { translations } from '../../translations';
 import { text } from '../../theme/colors';
