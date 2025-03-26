@@ -8,8 +8,6 @@ interface MRWeekday {
   id: string;
   day: string;
   is_working: boolean;
-  max_appointments: number;
-  slot_interval: number;
   slots: Array<{
     time: string;
     maxBookings: number;

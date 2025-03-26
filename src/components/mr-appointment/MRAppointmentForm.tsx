@@ -1,13 +1,27 @@
 import { Building2, Users, Phone, Briefcase } from 'lucide-react';
-import { MRForm } from './types';
+import { MRForm, TimeSlot } from './types';
+import { MRTimeSlotSelector } from './TimeSlotSelector';
+
+interface MRAppointmentFormTranslations {
+  mrName: string;
+  companyName: string;
+  divisionName: string;
+  contactNo: string;
+  timeSlot: string;
+  slotAvailable: string;
+  noTimeSlots: string;
+  selectAnotherDate: string;
+  [key: string]: string | Record<string, string>;
+}
 
 interface MRAppointmentFormProps {
   form: MRForm;
   onChange: (form: MRForm) => void;
-  t: any;
+  timeSlots: TimeSlot[];
+  t: MRAppointmentFormTranslations;
 }
 
-export function MRAppointmentForm({ form, onChange, t }: MRAppointmentFormProps) {
+export function MRAppointmentForm({ form, onChange, timeSlots, t }: MRAppointmentFormProps) {
   return (
     <div className="space-y-4">
       <div>
@@ -86,6 +100,15 @@ export function MRAppointmentForm({ form, onChange, t }: MRAppointmentFormProps)
           />
         </div>
       </div>
+
+      {form.appointment_date && (
+        <MRTimeSlotSelector
+          slots={timeSlots}
+          selectedTime={form.appointment_time}
+          onSelectTime={(time) => onChange({ ...form, appointment_time: time })}
+          t={t}
+        />
+      )}
     </div>
   );
 }

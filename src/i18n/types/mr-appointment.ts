@@ -8,6 +8,12 @@ export interface MRAppointmentTranslations {
     divisionName: string;
     contactNo: string;
     appointmentDate: string;
+    timeSlot: string;
+    slotAvailable: string;
+    slotsAvailable: string;
+    noTimeSlots: string;
+    selectAnotherDate: string;
+    timeSlotRequired: string;
     submit: string;
     submitting: string;
     dateRequired: string;
@@ -46,6 +52,7 @@ export interface MRAppointmentTranslations {
     title: string;
     subtitle: string;
     appointmentDate: string;
+    appointmentTime: string;
     mrDetails: string;
     mrName: string;
     companyName: string;

@@ -1,9 +1,9 @@
-import { Check, Calendar, Building2, Users, Phone, Briefcase, X, Download } from 'lucide-react';
+import { Check, Calendar, Building2, Users, Phone, Briefcase, X, Download, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import { useTranslation } from '../../i18n/useTranslation';
 import { downloadAppointmentImage } from '../../utils/imageDownload';
 import { useState } from 'react';
+import { MRAppointmentTranslations } from '../../i18n/types/mr-appointment';
 
 const TIMEZONE = 'Asia/Kolkata';
 
@@ -14,6 +14,7 @@ interface MRAppointmentDetails {
   division_name: string;
   contact_no: string;
   appointment_date: string;
+  appointment_time?: string;
   created_at: string;
 }
 
@@ -21,16 +22,16 @@ interface MRAppointmentConfirmationProps {
   appointment: MRAppointmentDetails;
   onClose: () => void;
   onScheduleAnother: () => void;
+  t: MRAppointmentTranslations;
 }
 
-export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnother }: MRAppointmentConfirmationProps) {
-  const { t } = useTranslation();
+export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnother, t }: MRAppointmentConfirmationProps) {
   const [downloading, setDownloading] = useState(false);
 
   const formatDate = (dateStr: string) => {
     const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
-    const dayName = t.mrAppointment.form.days[format(date, 'EEEE').toLowerCase() as keyof typeof t.mrAppointment.form.days];
-    const monthName = t.mrAppointment.form.months[format(date, 'MMMM').toLowerCase() as keyof typeof t.mrAppointment.form.months];
+    const dayName = t.form.days[format(date, 'EEEE').toLowerCase() as keyof typeof t.form.days];
+    const monthName = t.form.months[format(date, 'MMMM').toLowerCase() as keyof typeof t.form.months];
     const day = format(date, 'd');
     const year = format(date, 'yyyy');
     return `${dayName}, ${monthName} ${day}, ${year}`;
@@ -40,7 +41,7 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
     if (downloading) return;
     setDownloading(true);
     try {
-      await downloadAppointmentImage(appointment, 'mr', t.mrAppointment);
+      await downloadAppointmentImage(appointment, 'mr', t);
     } finally {
       setDownloading(false);
     }
@@ -60,9 +61,9 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
               <Check className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
             </div>
             <div>
-              <h2 className="text-lg sm:text-xl font-semibold">{t.mrAppointment.confirmation.title}</h2>
+              <h2 className="text-lg sm:text-xl font-semibold">{t.confirmation.title}</h2>
               <p className="text-green-100 text-sm mt-0.5">
-                {t.mrAppointment.confirmation.subtitle}
+                {t.confirmation.subtitle}
               </p>
             </div>
           </div>
@@ -78,19 +79,33 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
         <div className="overflow-y-auto" style={{ maxHeight: 'calc(90vh - 16rem)' }}>
           <div className="p-4 sm:p-6">
             <div className="space-y-3 sm:space-y-4">
-              {/* Date */}
-              <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
+              {/* Date and Time */}
+              <div className="bg-gray-50 rounded-xl p-3 sm:p-4 space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="bg-green-100 p-2 rounded-lg">
                     <Calendar className="h-4 w-4 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.appointmentDate}</p>
+                    <p className="text-xs text-gray-500">{t.confirmation.appointmentDate}</p>
                     <p className="text-sm font-medium text-gray-900">
                       {formatDate(appointment.appointment_date)}
                     </p>
                   </div>
                 </div>
+                
+                {appointment.appointment_time && (
+                  <div className="flex items-center gap-3">
+                    <div className="bg-green-100 p-2 rounded-lg">
+                      <Clock className="h-4 w-4 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">{t.confirmation.appointmentTime}</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        {appointment.appointment_time}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* MR Details */}
@@ -100,7 +115,7 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
                     <Users className="h-4 w-4 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.mrName}</p>
+                    <p className="text-xs text-gray-500">{t.confirmation.mrName}</p>
                     <p className="text-sm font-medium text-gray-900">{appointment.mr_name}</p>
                   </div>
                 </div>
@@ -109,7 +124,7 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
                     <Building2 className="h-4 w-4 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.companyName}</p>
+                    <p className="text-xs text-gray-500">{t.confirmation.companyName}</p>
                     <p className="text-sm font-medium text-gray-900">{appointment.company_name}</p>
                   </div>
                 </div>
@@ -118,7 +133,7 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
                     <Briefcase className="h-4 w-4 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.divisionName}</p>
+                    <p className="text-xs text-gray-500">{t.confirmation.divisionName}</p>
                     <p className="text-sm font-medium text-gray-900">{appointment.division_name}</p>
                   </div>
                 </div>
@@ -127,7 +142,7 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
                     <Phone className="h-4 w-4 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.contactNo}</p>
+                    <p className="text-xs text-gray-500">{t.confirmation.contactNo}</p>
                     <p className="text-sm font-medium text-gray-900">{appointment.contact_no}</p>
                   </div>
                 </div>
@@ -135,17 +150,17 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
 
               {/* Booking ID */}
               <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
-                <p className="text-xs text-gray-500">{t.mrAppointment.confirmation.bookingId}</p>
+                <p className="text-xs text-gray-500">{t.confirmation.bookingId}</p>
                 <p className="text-sm font-medium text-gray-900">#{appointment.id.slice(-8).toUpperCase()}</p>
               </div>
 
               {/* Important Notes */}
               <div className="bg-blue-50 rounded-xl p-3 sm:p-4 text-sm text-blue-800">
-                <h4 className="font-medium mb-2">{t.mrAppointment.confirmation.notes.title}</h4>
+                <h4 className="font-medium mb-2">{t.confirmation.notes.title}</h4>
                 <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm">
-                  <li>{t.mrAppointment.confirmation.notes.arrival}</li>
-                  <li>{t.mrAppointment.confirmation.notes.id}</li>
-                  <li>{t.mrAppointment.confirmation.notes.mask}</li>
+                  <li>{t.confirmation.notes.arrival}</li>
+                  <li>{t.confirmation.notes.id}</li>
+                  <li>{t.confirmation.notes.mask}</li>
                 </ul>
               </div>
             </div>
@@ -178,13 +193,13 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
               onClick={onScheduleAnother}
               className="w-full sm:w-auto h-10 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors"
             >
-              {t.mrAppointment.confirmation.scheduleAnother}
+              {t.confirmation.scheduleAnother}
             </button>
             <button
               onClick={onClose}
               className="w-full sm:w-auto h-10 px-4 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-colors"
             >
-              {t.mrAppointment.confirmation.done}
+              {t.confirmation.done}
             </button>
           </div>
         </div>
