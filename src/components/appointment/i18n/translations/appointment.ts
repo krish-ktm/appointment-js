@@ -1,5 +1,5 @@
 import { AppointmentTranslations } from '../types/appointment';
-import { businessInfo, getFormattedDoctorInfo } from '../../config/business';
+import { businessInfo, getFormattedDoctorInfo } from '../../../../config/business';
 
 export const appointmentTranslations: Record<string, AppointmentTranslations> = {
   en: {
@@ -126,4 +126,4 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
       }
     }
   }
-};
+}; 

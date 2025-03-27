@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { getTodayAndTomorrowAppointments } from '../../../lib/appointments';
-import { User, Appointment } from '../../../types';
+import { getTodayAndTomorrowAppointments } from '../../../components/appointment/lib/appointments';
+import { BookingDetails } from '../../../types';
 import { toast } from 'react-hot-toast';
 import { AppointmentsTable } from '../AppointmentsTable';
 import { LoadingSpinner } from '../../LoadingSpinner';
@@ -12,7 +12,7 @@ const TIMEZONE = 'Asia/Kolkata';
 
 export function AppointmentManager() {
   const navigate = useNavigate();
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointments, setAppointments] = useState<BookingDetails[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,10 +36,11 @@ export function AppointmentManager() {
         setAppointments(appointments);
       }
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error loading data:', error);
-      toast.error(error.message || 'Failed to load data');
-      if (error.message === 'Authentication required') {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to load data';
+      toast.error(errorMessage);
+      if (error instanceof Error && error.message === 'Authentication required') {
         navigate('/login');
       }
     } finally {
@@ -52,7 +53,7 @@ export function AppointmentManager() {
   }
 
   // Group appointments by date using IST timezone
-  const appointmentsByDate = appointments.reduce((acc, app) => {
+  const appointmentsByDate: Record<string, BookingDetails[]> = appointments.reduce((acc, app) => {
     const appointmentDate = utcToZonedTime(new Date(app.appointment_date), TIMEZONE);
     
     if (isToday(appointmentDate)) {
@@ -64,7 +65,7 @@ export function AppointmentManager() {
     }
     
     return acc;
-  }, { today: [], tomorrow: [] } as { today: Appointment[], tomorrow: Appointment[] });
+  }, { today: [], tomorrow: [] } as Record<string, BookingDetails[]>);
 
   return (
     <div className="space-y-4 sm:space-y-6">

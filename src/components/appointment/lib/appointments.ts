@@ -1,11 +1,11 @@
-import { supabase } from './supabase';
-import { Appointment } from '../types';
+import { supabase } from '../../../lib/supabase';
+import { BookingDetails } from '../../../types';
 import { startOfToday, addDays, format, isToday, isTomorrow } from 'date-fns';
-import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
+import { utcToZonedTime } from 'date-fns-tz';
 
 const TIMEZONE = 'Asia/Kolkata';
 
-export async function getTodayAndTomorrowAppointments(): Promise<{ appointments: Appointment[]; error: string | null }> {
+export async function getTodayAndTomorrowAppointments(): Promise<{ appointments: BookingDetails[]; error: string | null }> {
   try {
     const userStr = localStorage.getItem('user');
     if (!userStr) {
@@ -13,7 +13,6 @@ export async function getTodayAndTomorrowAppointments(): Promise<{ appointments:
     }
 
     // Get today's and tomorrow's date in IST
-    const istNow = utcToZonedTime(new Date(), TIMEZONE);
     const istToday = startOfToday();
     const istTomorrow = addDays(istToday, 1);
 
@@ -52,9 +51,10 @@ export async function getTodayAndTomorrowAppointments(): Promise<{ appointments:
       };
     });
 
-    return { appointments: mappedAppointments as Appointment[], error: null };
-  } catch (error) {
+    return { appointments: mappedAppointments as BookingDetails[], error: null };
+  } catch (error: unknown) {
     console.error('Error fetching appointments:', error);
-    return { appointments: [], error: error.message };
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    return { appointments: [], error: errorMessage };
   }
-}
+} 

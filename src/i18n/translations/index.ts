@@ -1,7 +1,7 @@
 import { commonTranslations } from './common';
 import { navigationTranslations } from './navigation';
 import { homeTranslations } from './home';
-import { appointmentTranslations } from './appointment';
+import { appointmentTranslations } from '../../components/appointment/i18n/translations/appointment';
 import { servicesTranslations } from './services';
 import { mrAppointmentTranslations } from './mr-appointment';
 import { aboutTranslations } from './about';

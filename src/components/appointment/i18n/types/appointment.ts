@@ -59,4 +59,4 @@ export interface AppointmentTranslations {
       mask: string;
     };
   };
-}
+} 

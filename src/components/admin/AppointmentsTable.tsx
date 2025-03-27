@@ -1,10 +1,10 @@
 import { Calendar, Clock, MapPin, Phone, User as UserIcon } from 'lucide-react';
-import { Appointment } from '../../types';
+import { BookingDetails } from '../../types';
 import { format, isToday } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 
 interface AppointmentsTableProps {
-  appointments: Appointment[];
+  appointments: BookingDetails[];
 }
 
 const TIMEZONE = 'Asia/Kolkata';

@@ -1,7 +1,7 @@
 import { CommonTranslations } from './common';
 import { NavigationTranslations } from './navigation';
 import { HomeTranslations } from './home';
-import { AppointmentTranslations } from './appointment';
+import { AppointmentTranslations } from '../../components/appointment/i18n/types/appointment';
 import { ServicesTranslations } from './services';
 import { MRAppointmentTranslations } from './mr-appointment';
 import { AboutTranslations } from './about';
@@ -23,7 +23,7 @@ export interface LanguageContent {
 export * from './common';
 export * from './navigation';
 export * from './home';
-export * from './appointment';
+export * from '../../components/appointment/i18n/types/appointment';
 export * from './services';
 export * from './mr-appointment';
 export * from './about';
