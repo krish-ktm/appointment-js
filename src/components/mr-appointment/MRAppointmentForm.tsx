@@ -1,6 +1,5 @@
 import { Building2, Users, Phone, Briefcase, AlertCircle } from 'lucide-react';
-import { MRForm, TimeSlot } from './types';
-import { MRTimeSlotSelector } from './TimeSlotSelector';
+import { MRForm } from './types';
 import { useState } from 'react';
 
 interface MRAppointmentFormTranslations {
@@ -18,12 +17,11 @@ interface MRAppointmentFormTranslations {
 interface MRAppointmentFormProps {
   form: MRForm;
   onChange: (form: MRForm) => void;
-  timeSlots: TimeSlot[];
   t: MRAppointmentFormTranslations;
   errors?: Record<string, string>;
 }
 
-export function MRAppointmentForm({ form, onChange, timeSlots, t, errors }: MRAppointmentFormProps) {
+export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFormProps) {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const handleBlur = (field: string) => {
@@ -148,16 +146,6 @@ export function MRAppointmentForm({ form, onChange, timeSlots, t, errors }: MRAp
           )}
         </div>
       </div>
-
-      {form.appointment_date && (
-        <MRTimeSlotSelector
-          slots={timeSlots}
-          selectedTime={form.appointment_time}
-          onSelectTime={(time) => onChange({ ...form, appointment_time: time })}
-          t={t}
-          error={showError('appointment_time') ? errors?.appointment_time : undefined}
-        />
-      )}
     </div>
   );
 }

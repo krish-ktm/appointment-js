@@ -12,6 +12,7 @@ import { MRAppointmentConfirmation } from './MRAppointmentConfirmation';
 import { useTranslation } from '../../i18n/useTranslation';
 import { validateMRAppointment } from '../../utils/mrAppointments';
 import { fetchTimeSlots } from './MRTimeSlotFetcher';
+import { MRTimeSlotSelector } from './TimeSlotSelector';
 
 interface MRAppointmentDetails {
   id: string;
@@ -199,24 +200,38 @@ export function MRAppointment() {
             </div>
 
             <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="lg:order-2">
+              <div className="grid grid-cols-1 gap-6">
+                {/* Form Fields */}
+                <div className="order-1">
                   <MRAppointmentForm 
                     form={form}
                     onChange={setForm}
-                    timeSlots={timeSlots}
                     t={t.mrAppointment.form}
                     errors={errors as Record<string, string>}
                   />
                 </div>
 
-                <div className="lg:order-1">
+                {/* Calendar */}
+                <div className="order-2">
                   <MRAppointmentCalendar
                     key={calendarKey}
                     selectedDate={form.appointment_date}
                     onDateChange={(date) => setForm({ ...form, appointment_date: date, appointment_time: undefined })}
                   />
                 </div>
+
+                {/* Time Selection */}
+                {form.appointment_date && (
+                  <div className="order-3">
+                    <MRTimeSlotSelector
+                      slots={timeSlots}
+                      selectedTime={form.appointment_time}
+                      onSelectTime={(time) => setForm({ ...form, appointment_time: time })}
+                      t={t.mrAppointment.form}
+                      error={errors?.appointment_time}
+                    />
+                  </div>
+                )}
               </div>
 
               <button
