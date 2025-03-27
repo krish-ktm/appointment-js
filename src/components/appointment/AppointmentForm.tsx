@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Calendar, MapPin, Phone, User, Clock } from 'lucide-react';
+import { Calendar, MapPin, Phone, User, Clock, AlertCircle } from 'lucide-react';
 import { AppointmentForm as AppointmentFormType, TimeSlot } from '../../types';
 import { FormField } from './FormField';
 import { TimeSlotSelector } from './TimeSlotSelector';
@@ -36,6 +36,7 @@ export function AppointmentForm({
   tomorrow.setDate(today.getDate() + 1);
 
   const [rules, setRules] = useState<any[]>([]);
+  const [showAllRules, setShowAllRules] = useState(false);
 
   useEffect(() => {
     loadRules();
@@ -74,6 +75,8 @@ export function AppointmentForm({
     return `${dayName}, ${monthName} ${day}, ${year}`;
   };
 
+  const displayedRules = showAllRules ? rules : rules.slice(0, 2);
+
   return (
     <div>
       <motion.div
@@ -92,20 +95,41 @@ export function AppointmentForm({
 
       {/* Appointment Rules */}
       {rules.length > 0 && (
-        <div className="mb-6 bg-green-100 rounded-xl p-4">
-          <div className="space-y-3">
-            {rules.map((rule) => (
-              <div key={rule.id}>
-                <h4 className="font-medium text-gray-900 mb-1">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-4 sm:mb-6 space-y-2"
+        >
+          {rules.length > 2 && (
+            <div className="flex justify-end mb-2">
+              <button
+                onClick={() => setShowAllRules(!showAllRules)}
+                className="text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors"
+              >
+                {showAllRules ? 'Show Less' : 'Show All'}
+              </button>
+            </div>
+          )}
+          {displayedRules.map((rule, index) => (
+            <motion.div
+              key={rule.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="bg-blue-50/50 rounded-lg p-2.5 border border-blue-100 hover:shadow-sm hover:border-blue-200 transition-all duration-300"
+            >
+              <div>
+                <h4 className="text-sm font-medium text-gray-900">
                   {rule.title[language]}
                 </h4>
-                <p className="text-gray-600">
+                <p className="text-xs text-gray-600 mt-0.5 leading-relaxed">
                   {rule.content[language]}
                 </p>
               </div>
-            ))}
-          </div>
-        </div>
+            </motion.div>
+          ))}
+        </motion.div>
       )}
 
       {success && (
@@ -253,4 +277,4 @@ export function AppointmentForm({
       </form>
     </div>
   );
-} 
+}
