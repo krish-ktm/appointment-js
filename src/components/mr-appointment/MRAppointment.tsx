@@ -30,6 +30,7 @@ export function MRAppointment() {
   const [appointmentDetails, setAppointmentDetails] = useState<MRAppointmentDetails | null>(null);
   const [calendarKey, setCalendarKey] = useState(0);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+  const [errors, setErrors] = useState<FormErrors>({});
   const [form, setForm] = useState<MRForm>({
     mr_name: '',
     company_name: '',
@@ -85,22 +86,49 @@ export function MRAppointment() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setErrors({});
+
+    // Validate form
+    const newErrors: FormErrors = {};
+    
+    if (!form.mr_name?.trim()) {
+      newErrors.mr_name = "Medical Representative Name is required";
+    }
+    
+    if (!form.company_name?.trim()) {
+      newErrors.company_name = "Company Name is required";
+    }
+    
+    if (!form.division_name?.trim()) {
+      newErrors.division_name = "Division Name is required";
+    }
+    
+    if (!form.contact_no) {
+      newErrors.contact_no = "Contact Number is required";
+    } else if (!/^\d{10}$/.test(form.contact_no)) {
+      newErrors.contact_no = "Please enter a valid 10-digit phone number";
+    }
+
+    if (!form.appointment_date) {
+      newErrors.appointment_date = "Please select an appointment date";
+    }
+
+    if (!form.appointment_time) {
+      newErrors.appointment_time = "Please select a time slot";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setLoading(false);
+      return;
+    }
 
     try {
-      if (!form.appointment_date) {
-        throw new Error(t.mrAppointment.form.dateRequired);
-      }
-
-      if (!form.appointment_time) {
-        throw new Error(t.mrAppointment.form.timeSlotRequired);
-      }
-
-      // Validate phone number (10 digits)
-      if (!/^\d{10}$/.test(form.contact_no)) {
-        throw new Error(t.mrAppointment.form.invalidPhone);
-      }
-
       // Validate appointment date
+      if (!form.appointment_date) {
+        throw new Error("Please select an appointment date");
+      }
+      
       const { isValid, error: validationError } = await validateMRAppointment(form.appointment_date);
       if (!isValid) {
         throw new Error(validationError);
@@ -109,7 +137,7 @@ export function MRAppointment() {
       // Check if the selected time slot is still available
       const currentSlot = timeSlots.find(slot => slot.time === form.appointment_time);
       if (!currentSlot) {
-        throw new Error(t.mrAppointment.form.timeSlotRequired);
+        throw new Error("Please select a time slot");
       }
       
       if (currentSlot.currentBookings !== undefined && 
@@ -125,7 +153,7 @@ export function MRAppointment() {
           company_name: form.company_name,
           division_name: form.division_name,
           contact_no: form.contact_no,
-          appointment_date: format(form.appointment_date, 'yyyy-MM-dd'),
+          appointment_date: form.appointment_date ? format(form.appointment_date, 'yyyy-MM-dd') : '',
           appointment_time: form.appointment_time
         })
         .select()
@@ -178,6 +206,7 @@ export function MRAppointment() {
                     onChange={setForm}
                     timeSlots={timeSlots}
                     t={t.mrAppointment.form}
+                    errors={errors as Record<string, string>}
                   />
                 </div>
 
@@ -218,4 +247,13 @@ export function MRAppointment() {
       <Footer />
     </div>
   );
+}
+
+interface FormErrors {
+  mr_name?: string;
+  company_name?: string;
+  division_name?: string;
+  contact_no?: string;
+  appointment_date?: string;
+  appointment_time?: string;
 }

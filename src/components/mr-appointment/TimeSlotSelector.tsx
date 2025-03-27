@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Clock } from 'lucide-react';
+import { Clock, AlertCircle } from 'lucide-react';
 import { TimeSlot } from './types';
 
 interface TimeSlotTranslations {
@@ -14,9 +14,10 @@ interface MRTimeSlotSelectorProps {
   selectedTime: string | undefined;
   onSelectTime: (time: string) => void;
   t: TimeSlotTranslations;
+  error?: string;
 }
 
-export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t }: MRTimeSlotSelectorProps) {
+export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error }: MRTimeSlotSelectorProps) {
   if (!slots.length) {
     return (
       <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 text-center">
@@ -34,6 +35,13 @@ export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t }: MRT
         </div>
         <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
       </div>
+
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-600 flex items-center gap-2">
+          <AlertCircle className="h-4 w-4 flex-shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
 
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
         {slots.map((slot, index) => {
