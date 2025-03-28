@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'react-hot-toast';
-import { Edit2, Trash2, Save, X, Plus } from 'lucide-react';
+import { Edit2, Trash2, Save, X, Plus, AlertCircle } from 'lucide-react';
+import clsx from 'clsx';
 
 interface ImageDownloadRule {
   id: string;
@@ -143,184 +144,228 @@ export default function ImageDownloadRules({ type }: ImageDownloadRulesProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="min-h-[400px] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <p className="text-sm text-gray-500">Loading rules...</p>
+        </div>
       </div>
     );
   }
 
+  const FormInput = ({ label, value, onChange, type = 'text', className = '', ...props }: any) => (
+    <div className={className}>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        {label}
+      </label>
+      <input
+        type={type}
+        value={value}
+        onChange={onChange}
+        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+        {...props}
+      />
+    </div>
+  );
+
+  const FormTextarea = ({ label, value, onChange, className = '', ...props }: any) => (
+    <div className={className}>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        {label}
+      </label>
+      <textarea
+        value={value}
+        onChange={onChange}
+        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+        {...props}
+      />
+    </div>
+  );
+
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-        <h3 className="text-lg font-medium text-gray-900">
-          Image Download Rules for {type === 'patient' ? 'Regular Appointments' : 'MR Appointments'}
-        </h3>
-        <button
-          onClick={() => setShowAddNew(true)}
-          className="flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-800"
-        >
-          <Plus size={16} /> Add New Rule
-        </button>
+    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-200 bg-white">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-xl font-semibold text-gray-900">
+              Image Download Rules
+            </h3>
+            <p className="text-sm text-gray-500 mt-1">
+              {type === 'patient' ? 'Regular Appointments' : 'MR Appointments'}
+            </p>
+          </div>
+          <button
+            onClick={() => setShowAddNew(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transform active:scale-95 transition-all duration-200"
+          >
+            <Plus size={18} /> Add Rule
+          </button>
+        </div>
       </div>
 
-      <div className="divide-y divide-gray-200">
+      <div className="divide-y divide-gray-100">
         {rules.length === 0 && !showAddNew && (
-          <div className="px-6 py-8 text-center text-gray-500">
-            No rules found. Click "Add New Rule" to create one.
+          <div className="px-6 py-12 text-center">
+            <div className="flex flex-col items-center gap-3">
+              <AlertCircle size={24} className="text-gray-400" />
+              <div>
+                <p className="text-gray-600 font-medium">No rules found</p>
+                <p className="text-sm text-gray-500 mt-1">Click "Add Rule" to create your first rule</p>
+              </div>
+            </div>
           </div>
         )}
 
         {rules.map(rule => (
-          <div key={rule.id} className="px-6 py-4">
+          <div key={rule.id} className={clsx(
+            "px-6 py-6 transition-all duration-300 ease-in-out transform",
+            editingId === rule.id ? "bg-blue-50" : "hover:bg-gray-50"
+          )}>
             {editingId === rule.id ? (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Title (English)
-                  </label>
-                  <input
-                    type="text"
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormInput
+                    label="Title (English)"
                     value={editingRule?.title?.en || ''}
                     onChange={(e) => setEditingRule(prev => prev ? {
                       ...prev,
                       title: { ...(prev.title || {}), en: e.target.value }
                     } : null)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Title (Gujarati)
-                  </label>
-                  <input
-                    type="text"
+                  <FormInput
+                    label="Title (Gujarati)"
                     value={editingRule?.title?.gu || ''}
                     onChange={(e) => setEditingRule(prev => prev ? {
                       ...prev,
                       title: { ...(prev.title || {}), gu: e.target.value }
                     } : null)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Content (English) - Use markdown format with "-" for bullet points
-                  </label>
-                  <textarea
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormTextarea
+                    label="Content (English)"
                     value={editingRule?.content?.en || ''}
                     onChange={(e) => setEditingRule(prev => prev ? {
                       ...prev,
                       content: { ...(prev.content || {}), en: e.target.value }
                     } : null)}
                     rows={4}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  ></textarea>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Content (Gujarati) - Use markdown format with "-" for bullet points
-                  </label>
-                  <textarea
+                    placeholder="Use markdown format with '-' for bullet points"
+                  />
+                  <FormTextarea
+                    label="Content (Gujarati)"
                     value={editingRule?.content?.gu || ''}
                     onChange={(e) => setEditingRule(prev => prev ? {
                       ...prev,
                       content: { ...(prev.content || {}), gu: e.target.value }
                     } : null)}
                     rows={4}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  ></textarea>
+                    placeholder="Use markdown format with '-' for bullet points"
+                  />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Display Order
-                  </label>
-                  <input
+
+                <div className="flex items-center gap-6">
+                  <FormInput
+                    label="Display Order"
                     type="number"
                     value={editingRule?.order || 0}
                     onChange={(e) => setEditingRule(prev => prev ? {
                       ...prev,
                       order: parseInt(e.target.value) || 0
                     } : null)}
-                    className="w-36 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-36"
                   />
+
+                  <div className="flex items-center mt-6">
+                    <input
+                      type="checkbox"
+                      id={`active-${rule.id}`}
+                      checked={editingRule?.is_active || false}
+                      onChange={(e) => setEditingRule(prev => prev ? {
+                        ...prev,
+                        is_active: e.target.checked
+                      } : null)}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded transition-all duration-200"
+                    />
+                    <label htmlFor={`active-${rule.id}`} className="ml-2 text-sm text-gray-700">
+                      Active
+                    </label>
+                  </div>
                 </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id={`active-${rule.id}`}
-                    checked={editingRule?.is_active || false}
-                    onChange={(e) => setEditingRule(prev => prev ? {
-                      ...prev,
-                      is_active: e.target.checked
-                    } : null)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
-                  <label htmlFor={`active-${rule.id}`} className="ml-2 block text-sm text-gray-700">
-                    Active
-                  </label>
-                </div>
-                <div className="flex gap-2 justify-end pt-2">
+
+                <div className="flex gap-3 justify-end pt-2">
                   <button
                     onClick={handleCancelEdit}
-                    className="px-3 py-1.5 text-sm border border-gray-300 rounded-md hover:bg-gray-50 flex items-center gap-1"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 active:bg-gray-100 transform active:scale-95 transition-all duration-200"
                   >
-                    <X size={16} /> Cancel
+                    Cancel
                   </button>
                   <button
                     onClick={handleSaveEdit}
-                    className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-1"
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 active:bg-blue-800 transform active:scale-95 transition-all duration-200"
                   >
-                    <Save size={16} /> Save
+                    Save Changes
                   </button>
                 </div>
               </div>
             ) : (
               <div>
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h4 className="font-medium text-gray-900">
-                      {rule.title?.en || 'Important Notes'}
-                    </h4>
-                    <p className="text-sm text-gray-500">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3">
+                      <h4 className="text-lg font-medium text-gray-900">
+                        {rule.title?.en || 'Important Notes'}
+                      </h4>
+                      <div className="flex items-center gap-2">
+                        <span className={clsx(
+                          "text-xs px-2 py-1 rounded-full font-medium transition-all duration-200",
+                          rule.is_active 
+                            ? "bg-green-100 text-green-700" 
+                            : "bg-gray-100 text-gray-600"
+                        )}>
+                          {rule.is_active ? 'Active' : 'Inactive'}
+                        </span>
+                        <span className="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700 font-medium">
+                          Order: {rule.order}
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">
                       {rule.title?.gu || 'મહત્વપૂર્ણ નોંધ'}
                     </p>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${rule.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
-                      {rule.is_active ? 'Active' : 'Inactive'}
-                    </span>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
-                      Order: {rule.order}
-                    </span>
+                  <div className="flex items-center gap-2 ml-4">
+                    <button
+                      onClick={() => handleEdit(rule)}
+                      className="p-2 text-gray-500 hover:text-blue-600 rounded-lg hover:bg-blue-50 transform active:scale-90 transition-all duration-200"
+                      title="Edit"
+                    >
+                      <Edit2 size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(rule.id)}
+                      className="p-2 text-gray-500 hover:text-red-600 rounded-lg hover:bg-red-50 transform active:scale-90 transition-all duration-200"
+                      title="Delete"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                  <div>
-                    <h5 className="text-xs font-medium text-gray-500 mb-1">English Content</h5>
-                    <div className="text-sm text-gray-700 whitespace-pre-line bg-gray-50 p-3 rounded-md">
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <h5 className="text-sm font-medium text-gray-700">English Content</h5>
+                    <div className="text-sm text-gray-600 whitespace-pre-line bg-gray-50 p-4 rounded-lg border border-gray-100 transition-all duration-200 hover:border-gray-200">
                       {rule.content?.en || 'No content'}
                     </div>
                   </div>
-                  <div>
-                    <h5 className="text-xs font-medium text-gray-500 mb-1">Gujarati Content</h5>
-                    <div className="text-sm text-gray-700 whitespace-pre-line bg-gray-50 p-3 rounded-md">
+                  <div className="space-y-2">
+                    <h5 className="text-sm font-medium text-gray-700">Gujarati Content</h5>
+                    <div className="text-sm text-gray-600 whitespace-pre-line bg-gray-50 p-4 rounded-lg border border-gray-100 transition-all duration-200 hover:border-gray-200">
                       {rule.content?.gu || 'No content'}
                     </div>
                   </div>
-                </div>
-                <div className="flex justify-end gap-2">
-                  <button
-                    onClick={() => handleEdit(rule)}
-                    className="p-1.5 text-gray-500 hover:text-blue-600 rounded-md hover:bg-blue-50"
-                  >
-                    <Edit2 size={16} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(rule.id)}
-                    className="p-1.5 text-gray-500 hover:text-red-600 rounded-md hover:bg-red-50"
-                  >
-                    <Trash2 size={16} />
-                  </button>
                 </div>
               </div>
             )}
@@ -328,111 +373,92 @@ export default function ImageDownloadRules({ type }: ImageDownloadRulesProps) {
         ))}
 
         {showAddNew && (
-          <div className="px-6 py-4 space-y-4 bg-blue-50">
+          <div className="px-6 py-6 bg-blue-50 space-y-6 animate-fadeIn">
             <div className="flex justify-between items-center">
-              <h3 className="font-medium text-gray-900">Add New Rule</h3>
+              <h3 className="text-lg font-medium text-gray-900">Add New Rule</h3>
               <button
                 onClick={() => setShowAddNew(false)}
-                className="p-1 text-gray-400 hover:text-gray-600 rounded-full"
+                className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-blue-100 transform active:scale-90 transition-all duration-200"
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Title (English)
-              </label>
-              <input
-                type="text"
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormInput
+                label="Title (English)"
                 value={newRule.title?.en || ''}
                 onChange={(e) => setNewRule(prev => ({
                   ...prev,
                   title: { ...(prev.title || {}), en: e.target.value }
                 }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Title (Gujarati)
-              </label>
-              <input
-                type="text"
+              <FormInput
+                label="Title (Gujarati)"
                 value={newRule.title?.gu || ''}
                 onChange={(e) => setNewRule(prev => ({
                   ...prev,
                   title: { ...(prev.title || {}), gu: e.target.value }
                 }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Content (English) - Use markdown format with "-" for bullet points
-              </label>
-              <textarea
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormTextarea
+                label="Content (English)"
                 value={newRule.content?.en || ''}
                 onChange={(e) => setNewRule(prev => ({
                   ...prev,
                   content: { ...(prev.content || {}), en: e.target.value }
                 }))}
                 rows={4}
-                placeholder="- Please arrive 10 minutes before your appointment time
-- Bring your previous medical records
-- Wear a mask during your visit"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              ></textarea>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Content (Gujarati) - Use markdown format with "-" for bullet points
-              </label>
-              <textarea
+                placeholder="- Please arrive 10 minutes before your appointment time&#10;- Bring your previous medical records&#10;- Wear a mask during your visit"
+              />
+              <FormTextarea
+                label="Content (Gujarati)"
                 value={newRule.content?.gu || ''}
                 onChange={(e) => setNewRule(prev => ({
                   ...prev,
                   content: { ...(prev.content || {}), gu: e.target.value }
                 }))}
                 rows={4}
-                placeholder="- કૃપા કરી તમારી એપોઈન્ટમેન્ટના સમયથી 10 મિનિટ પહેલા આવો
-- તમારા અગાઉના મેડિકલ રેકોર્ડ્સ લાવો
-- તમારી મુલાકાત દરમિયાન માસ્ક પહેરો"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              ></textarea>
+                placeholder="- કૃપા કરી તમારી એપોઈન્ટમેન્ટના સમયથી 10 મિનિટ પહેલા આવો&#10;- તમારા અગાઉના મેડિકલ રેકોર્ડ્સ લાવો&#10;- તમારી મુલાકાત દરમિયાન માસ્ક પહેરો"
+              />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Display Order
-              </label>
-              <input
+
+            <div className="flex items-center gap-6">
+              <FormInput
+                label="Display Order"
                 type="number"
                 value={newRule.order || 1}
                 onChange={(e) => setNewRule(prev => ({
                   ...prev,
                   order: parseInt(e.target.value) || 1
                 }))}
-                className="w-36 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-36"
               />
+
+              <div className="flex items-center mt-6">
+                <input
+                  type="checkbox"
+                  id="new-active"
+                  checked={newRule.is_active || false}
+                  onChange={(e) => setNewRule(prev => ({
+                    ...prev,
+                    is_active: e.target.checked
+                  }))}
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded transition-all duration-200"
+                />
+                <label htmlFor="new-active" className="ml-2 text-sm text-gray-700">
+                  Active
+                </label>
+              </div>
             </div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="new-active"
-                checked={newRule.is_active || false}
-                onChange={(e) => setNewRule(prev => ({
-                  ...prev,
-                  is_active: e.target.checked
-                }))}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label htmlFor="new-active" className="ml-2 block text-sm text-gray-700">
-                Active
-              </label>
-            </div>
-            <div className="flex justify-end">
+
+            <div className="flex justify-end pt-2">
               <button
                 onClick={handleAddNew}
-                className="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 active:bg-blue-800 transform active:scale-95 transition-all duration-200"
               >
                 Add Rule
               </button>
@@ -442,4 +468,4 @@ export default function ImageDownloadRules({ type }: ImageDownloadRulesProps) {
       </div>
     </div>
   );
-} 
+}

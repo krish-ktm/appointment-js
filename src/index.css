@@ -14,13 +14,43 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Optimize scrolling container */
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+/* Performance optimizations */
 .scroll-container {
   contain: content;
   content-visibility: auto;
 }
 
-/* Optimize fixed elements */
 .fixed-element {
   contain: layout style paint;
   will-change: transform;
@@ -40,7 +70,7 @@ body {
   }
 }
 
-/* Reduce motion when requested */
+/* Accessibility - Reduce motion */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -132,7 +162,7 @@ body {
     @apply border-gray-400;
   }
 
-  /* Desktop Calendar Day Content */
+  /* Calendar Day Content */
   .mr-calendar-day {
     @apply w-full h-full flex flex-col items-center pt-2 [contain:content];
   }
@@ -166,19 +196,16 @@ body {
     @apply absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full;
   }
 
-  .mr-calendar-day-mobile__indicator--available {
-    @apply bg-green-500;
-  }
-
-  .mr-calendar-day-mobile__indicator--full {
-    @apply bg-red-500;
-  }
-
-  .mr-calendar-day__indicator--available {
+  /* Status Indicators */
+  .mr-calendar-day-mobile__indicator--available,
+  .mr-calendar-day__indicator--available,
+  .mr-calendar__legend-dot--available {
     @apply bg-green-500 shadow-[0_1px_2px_0_rgb(34_197_94_/_0.2)];
   }
 
-  .mr-calendar-day__indicator--full {
+  .mr-calendar-day-mobile__indicator--full,
+  .mr-calendar-day__indicator--full,
+  .mr-calendar__legend-dot--full {
     @apply bg-red-500 shadow-[0_1px_2px_0_rgb(239_68_68_/_0.2)];
   }
 
@@ -195,34 +222,7 @@ body {
     @apply w-2 h-2 rounded-full transition-all duration-200;
   }
 
-  .mr-calendar__legend-dot--available {
-    @apply bg-green-500 shadow-[0_1px_2px_0_rgb(34_197_94_/_0.2)];
-  }
-
-  .mr-calendar__legend-dot--full {
-    @apply bg-red-500 shadow-[0_1px_2px_0_rgb(239_68_68_/_0.2)];
-  }
-
   .mr-calendar__legend-dot--disabled {
     @apply bg-gray-300 shadow-[0_1px_2px_0_rgb(209_213_219_/_0.2)];
   }
-}
-
-/* Add these animation classes at the end of the file */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from { transform: translateY(10%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out forwards;
-}
-
-.animate-slide-up {
-  animation: slideUp 0.3s ease-out forwards;
 }
