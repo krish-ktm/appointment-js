@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { formatMarkdown } from '../../utils/markdown';
 
 interface AppointmentFormProps {
   form: AppointmentFormType;
@@ -123,9 +124,12 @@ export function AppointmentForm({
                 <h4 className="text-sm font-medium text-gray-900">
                   {rule.title[language]}
                 </h4>
-                <p className="text-xs text-gray-600 mt-0.5 leading-relaxed">
-                  {rule.content[language]}
-                </p>
+                <div 
+                  className="prose prose-sm max-w-none text-xs text-gray-600 mt-0.5 leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-li:my-0 prose-p:my-0.5"
+                  dangerouslySetInnerHTML={{ 
+                    __html: formatMarkdown(rule.content[language]) 
+                  }}
+                />
               </div>
             </motion.div>
           ))}

@@ -6,8 +6,34 @@ export default {
       transitionProperty: {
         'height': 'height',
         'spacing': 'margin, padding',
-      }
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: '100%',
+            color: 'inherit',
+            a: {
+              color: '#2563eb',
+              '&:hover': {
+                color: '#1d4ed8',
+              },
+            },
+            strong: {
+              color: 'inherit',
+            },
+            code: {
+              color: '#1e293b',
+              backgroundColor: '#f1f5f9',
+              borderRadius: '0.25rem',
+              paddingLeft: '0.25rem',
+              paddingRight: '0.25rem',
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 };

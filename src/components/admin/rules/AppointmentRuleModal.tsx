@@ -194,4 +194,4 @@ export default function AppointmentRuleModal({ isOpen, onClose, onSuccess, rule,
       </div>
     </div>
   );
-} 
+}
