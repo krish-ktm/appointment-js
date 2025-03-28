@@ -1,11 +1,59 @@
 import { createHeaderSection, createBookingDetails, createImportantNotes } from './components';
 import { AppointmentDetails, PatientDetails, MRDetails } from './types';
+import { supabase } from '../../lib/supabase';
+import { useLanguage } from '../../i18n/LanguageContext';
 
-export function createPatientTemplate(
+async function getDownloadRules(type: 'patient' | 'mr', language: 'en' | 'gu') {
+  try {
+    const { data, error } = await supabase
+      .from('image_download_rules')
+      .select('title, content')
+      .eq('type', type)
+      .eq('is_active', true)
+      .order('order', { ascending: true });
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      return {
+        title: type === 'patient' ? 'Important Notes' : 'Important Notes',
+        items: type === 'patient' 
+          ? ['Please arrive 10 minutes before your appointment time', 'Bring your previous medical records', 'Wear a mask during your visit']
+          : ['Please arrive 10 minutes before your appointment time', 'Bring your company ID card and visiting card', 'Wear a mask during your visit']
+      };
+    }
+
+    // Get the first active rule
+    const rule = data[0];
+    const title = rule.title[language] || rule.title.en;
+    const content = rule.content[language] || rule.content.en;
+
+    // Convert markdown list to array
+    const items = content.split('\n')
+      .filter(line => line.trim().startsWith('-'))
+      .map(line => line.trim().substring(1).trim());
+
+    return { title, items };
+  } catch (error) {
+    console.error('Error fetching download rules:', error);
+    // Return default rules if there's an error
+    return {
+      title: type === 'patient' ? 'Important Notes' : 'Important Notes',
+      items: type === 'patient' 
+        ? ['Please arrive 10 minutes before your appointment time', 'Bring your previous medical records', 'Wear a mask during your visit']
+        : ['Please arrive 10 minutes before your appointment time', 'Bring your company ID card and visiting card', 'Wear a mask during your visit']
+    };
+  }
+}
+
+export async function createPatientTemplate(
   appointmentDetails: AppointmentDetails & PatientDetails,
   formattedDate: string,
   translations: any
 ) {
+  const { language } = useLanguage();
+  const rules = await getDownloadRules('patient', language);
+
   const container = document.createElement('div');
   container.style.width = '800px';
   container.style.backgroundColor = '#ffffff';
@@ -42,25 +90,21 @@ export function createPatientTemplate(
           </div>
         </div>
       </div>
-      ${createImportantNotes({
-        title: translations.confirmation.notes.title,
-        items: [
-          translations.confirmation.notes.arrival,
-          translations.confirmation.notes.records,
-          translations.confirmation.notes.mask
-        ]
-      })}
+      ${createImportantNotes(rules)}
     </div>
   `;
 
   return container;
 }
 
-export function createMRTemplate(
+export async function createMRTemplate(
   appointmentDetails: AppointmentDetails & MRDetails,
   formattedDate: string,
   translations: any
 ) {
+  const { language } = useLanguage();
+  const rules = await getDownloadRules('mr', language);
+
   const container = document.createElement('div');
   container.style.width = '800px';
   container.style.backgroundColor = '#ffffff';
@@ -97,14 +141,7 @@ export function createMRTemplate(
           </div>
         </div>
       </div>
-      ${createImportantNotes({
-        title: translations.confirmation.notes.title,
-        items: [
-          translations.confirmation.notes.arrival,
-          translations.confirmation.notes.id,
-          translations.confirmation.notes.mask
-        ]
-      })}
+      ${createImportantNotes(rules)}
     </div>
   `;
 
