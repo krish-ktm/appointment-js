@@ -2,8 +2,9 @@ import { Check, Calendar, Building2, Users, Phone, Briefcase, X, Download, Clock
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { downloadAppointmentImage } from '../../utils/imageDownload';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MRAppointmentTranslations } from '../../i18n/types/mr-appointment';
+import { supabase } from '../../lib/supabase';
 
 const TIMEZONE = 'Asia/Kolkata';
 
@@ -27,6 +28,49 @@ interface MRAppointmentConfirmationProps {
 
 export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnother, t }: MRAppointmentConfirmationProps) {
   const [downloading, setDownloading] = useState(false);
+  const [customRulesText, setCustomRulesText] = useState<string | null>(null);
+  
+  // Determine language from translations
+  const language = t.form.days.monday === 'સોમવાર' ? 'gu' : 'en';
+
+  useEffect(() => {
+    // Fetch custom rules text from the database
+    const fetchCustomRules = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('image_download_rules')
+          .select('content')
+          .eq('type', 'mr')
+          .eq('is_active', true)
+          .order('order', { ascending: true })
+          .limit(1)
+          .single();
+
+        if (error) throw error;
+        
+        if (data && data.content && data.content[language]) {
+          // Parse content from the content field which contains markdown
+          const contentText = data.content[language] as string;
+          // Find the rule about company ID (usually the second item)
+          const ruleLines = contentText.split('\n')
+            .map((line: string) => line.trim())
+            .filter((line: string) => line.startsWith('-'))
+            .map((line: string) => line.substring(1).trim());
+          
+          // Use the second rule if it exists, otherwise use the whole content
+          if (ruleLines.length >= 2) {
+            setCustomRulesText(ruleLines[1]);
+          } else if (ruleLines.length === 1) {
+            setCustomRulesText(ruleLines[0]);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching MR appointment image rules:', error);
+      }
+    };
+
+    fetchCustomRules();
+  }, [language]);
 
   const formatDate = (dateStr: string) => {
     const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
@@ -41,7 +85,19 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
     if (downloading) return;
     setDownloading(true);
     try {
-      await downloadAppointmentImage(appointment, 'mr', t);
+      // Ensure appointment data has the proper structure for the download function
+      const appointmentWithDetails = {
+        ...appointment,
+        // Explicitly set fields for MRDetails type
+        mr_name: appointment.mr_name,
+        company_name: appointment.company_name,
+        division_name: appointment.division_name,
+        contact_no: appointment.contact_no
+      };
+      
+      await downloadAppointmentImage(appointmentWithDetails, 'mr', t);
+    } catch (error) {
+      console.error('Error downloading image:', error);
     } finally {
       setDownloading(false);
     }
@@ -159,7 +215,7 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
                 <h4 className="font-medium mb-2">{t.confirmation.notes.title}</h4>
                 <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm">
                   <li>{t.confirmation.notes.arrival}</li>
-                  <li>{t.confirmation.notes.id}</li>
+                  <li>{customRulesText || t.confirmation.notes.id}</li>
                   <li>{t.confirmation.notes.mask}</li>
                 </ul>
               </div>

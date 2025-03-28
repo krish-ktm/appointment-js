@@ -1,11 +1,11 @@
-import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Calendar, Clock, User, Phone, MapPin, X, Download } from 'lucide-react';
 import { BookingDetails } from '../../types';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../../i18n/useTranslation';
 import { downloadAppointmentImage } from '../../utils/imageDownload';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '../../lib/supabase';
 
 const TIMEZONE = 'Asia/Kolkata';
 
@@ -16,8 +16,48 @@ interface BookingConfirmationProps {
 }
 
 export function BookingConfirmation({ booking, onClose, onScheduleAnother }: BookingConfirmationProps) {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [downloading, setDownloading] = useState(false);
+  const [customRulesText, setCustomRulesText] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Fetch custom rules text from the database
+    const fetchCustomRules = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('image_download_rules')
+          .select('content')
+          .eq('type', 'patient')
+          .eq('is_active', true)
+          .order('order', { ascending: true })
+          .limit(1)
+          .single();
+
+        if (error) throw error;
+        
+        if (data && data.content && data.content[language]) {
+          // Parse content from the content field which contains markdown
+          const contentText = data.content[language] as string;
+          // Find the rule about medical records (usually the second item)
+          const ruleLines = contentText.split('\n')
+            .map((line: string) => line.trim())
+            .filter((line: string) => line.startsWith('-'))
+            .map((line: string) => line.substring(1).trim());
+          
+          // Use the second rule if it exists, otherwise use the whole content
+          if (ruleLines.length >= 2) {
+            setCustomRulesText(ruleLines[1]);
+          } else if (ruleLines.length === 1) {
+            setCustomRulesText(ruleLines[0]);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching appointment image rules:', error);
+      }
+    };
+
+    fetchCustomRules();
+  }, [language]);
 
   const formatDate = (dateStr: string) => {
     const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
@@ -32,7 +72,18 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother }: Boo
     if (downloading) return;
     setDownloading(true);
     try {
-      await downloadAppointmentImage(booking, 'patient', t.appointment);
+      // Ensure booking contains all fields required for PatientDetails
+      const bookingWithDetails = {
+        ...booking,
+        name: booking.name,
+        phone: booking.phone,
+        age: booking.age,
+        city: booking.city
+      };
+      
+      await downloadAppointmentImage(bookingWithDetails, 'patient', t.appointment);
+    } catch (error) {
+      console.error('Error downloading image:', error);
     } finally {
       setDownloading(false);
     }
@@ -151,7 +202,7 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother }: Boo
                 <h4 className="font-medium mb-2">{t.appointment.confirmation.notes.title}</h4>
                 <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm">
                   <li>{t.appointment.confirmation.notes.arrival}</li>
-                  <li>{t.appointment.confirmation.notes.records}</li>
+                  <li>{customRulesText || t.appointment.confirmation.notes.records}</li>
                   <li>{t.appointment.confirmation.notes.mask}</li>
                 </ul>
               </div>

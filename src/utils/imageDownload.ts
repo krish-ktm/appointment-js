@@ -1,14 +1,14 @@
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { createPatientTemplate, createMRTemplate } from './imageDownload/templates';
-import { AppointmentDetails } from './imageDownload/types';
+import { AppointmentDetails, PatientDetails, MRDetails } from './imageDownload/types';
 
 const TIMEZONE = 'Asia/Kolkata';
 
 export async function downloadAppointmentImage(
-  appointmentDetails: AppointmentDetails,
+  appointmentDetails: AppointmentDetails & (PatientDetails | MRDetails),
   type: 'patient' | 'mr',
-  translations: any
+  translations: Record<string, any>
 ) {
   try {
     // Format date
@@ -19,10 +19,26 @@ export async function downloadAppointmentImage(
     const year = format(appointmentDate, 'yyyy');
     const formattedDate = `${dayName}, ${monthName} ${day}, ${year}`;
 
+    // Determine language from translations
+    const language = translations.form.days.monday === 'સોમવાર' ? 'gu' : 'en';
+
     // Create template based on appointment type
-    const container = type === 'patient'
-      ? createPatientTemplate(appointmentDetails, formattedDate, translations)
-      : createMRTemplate(appointmentDetails, formattedDate, translations);
+    let container;
+    if (type === 'patient') {
+      container = await createPatientTemplate(
+        appointmentDetails as AppointmentDetails & PatientDetails, 
+        formattedDate, 
+        translations,
+        language
+      );
+    } else {
+      container = await createMRTemplate(
+        appointmentDetails as AppointmentDetails & MRDetails, 
+        formattedDate, 
+        translations,
+        language
+      );
+    }
 
     // Use html2canvas to convert the div to an image
     const html2canvas = (await import('html2canvas')).default;
@@ -50,7 +66,7 @@ export async function downloadAppointmentImage(
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error generating appointment image:', error);
     throw new Error('Failed to generate appointment image');
   }
