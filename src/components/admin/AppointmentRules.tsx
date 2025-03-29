@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -50,6 +50,59 @@ interface FormCheckboxProps {
   className?: string;
 }
 
+// Memoized form components to prevent unnecessary re-renders
+const FormInput = memo(({ label, value, onChange, type = 'text', className = '', ...props }: FormInputProps) => (
+  <div className={className}>
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      {label}
+    </label>
+    <input
+      type={type}
+      value={value}
+      onChange={onChange}
+      className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+      {...props}
+    />
+  </div>
+));
+
+const FormTextarea = memo(({ label, value, onChange, className = '', rows = 3, ...props }: FormTextareaProps) => (
+  <div className={className}>
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      {label}
+    </label>
+    <textarea
+      value={value}
+      onChange={onChange}
+      className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+      rows={rows}
+      {...props}
+    />
+    <div className="mt-1 text-xs text-gray-500">
+      Supports markdown formatting: **bold**, *italic*, [link](url), - list items
+    </div>
+  </div>
+));
+
+const FormCheckbox = memo(({ label, checked, onChange, className = '', ...props }: FormCheckboxProps) => (
+  <div className={`flex items-center ${className}`}>
+    <input
+      type="checkbox"
+      checked={checked}
+      onChange={onChange}
+      className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+      {...props}
+    />
+    <label className="ml-2 block text-sm text-gray-700">
+      {label}
+    </label>
+  </div>
+));
+
+FormInput.displayName = 'FormInput';
+FormTextarea.displayName = 'FormTextarea';
+FormCheckbox.displayName = 'FormCheckbox';
+
 export default function AppointmentRules() {
   const [rules, setRules] = useState<Rule[]>([]);
   const [loading, setLoading] = useState(true);
@@ -70,11 +123,7 @@ export default function AppointmentRules() {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const { language } = useLanguage();
 
-  useEffect(() => {
-    loadRules();
-  }, []);
-
-  const loadRules = async () => {
+  const loadRules = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('appointment_rules')
@@ -89,7 +138,11 @@ export default function AppointmentRules() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadRules();
+  }, [loadRules]);
 
   const handleDelete = async (id: string) => {
     try {
@@ -108,15 +161,15 @@ export default function AppointmentRules() {
     }
   };
 
-  const handleEdit = (rule: Rule) => {
+  const handleEdit = useCallback((rule: Rule) => {
     setEditingId(rule.id);
     setEditingRule({ ...rule });
-  };
+  }, []);
 
-  const handleCancelEdit = () => {
+  const handleCancelEdit = useCallback(() => {
     setEditingId(null);
     setEditingRule(null);
-  };
+  }, []);
 
   const handleSaveEdit = async () => {
     if (!editingRule) return;
@@ -245,53 +298,30 @@ export default function AppointmentRules() {
     }
   };
 
-  const FormInput = ({ label, value, onChange, type = 'text', className = '', ...props }: FormInputProps) => (
-    <div className={className}>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
-        {label}
-      </label>
-      <input
-        type={type}
-        value={value}
-        onChange={onChange}
-        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-        {...props}
-      />
-    </div>
-  );
-
-  const FormTextarea = ({ label, value, onChange, className = '', rows = 3, ...props }: FormTextareaProps) => (
-    <div className={className}>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
-        {label}
-      </label>
-      <textarea
-        value={value}
-        onChange={onChange}
-        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-        rows={rows}
-        {...props}
-      />
-      <div className="mt-1 text-xs text-gray-500">
-        Supports markdown formatting: **bold**, *italic*, [link](url), - list items
-      </div>
-    </div>
-  );
-
-  const FormCheckbox = ({ label, checked, onChange, className = '', ...props }: FormCheckboxProps) => (
-    <div className={`flex items-center ${className}`}>
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={onChange}
-        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-        {...props}
-      />
-      <label className="ml-2 block text-sm text-gray-700">
-        {label}
-      </label>
-    </div>
-  );
+  const handleEditFieldChange = useCallback((
+    field: keyof Rule,
+    value: any,
+    language?: keyof MultilingualContent
+  ) => {
+    setEditingRule(prev => {
+      if (!prev) return null;
+      
+      if (language && (field === 'title' || field === 'content')) {
+        return {
+          ...prev,
+          [field]: {
+            ...prev[field],
+            [language]: value
+          }
+        };
+      }
+      
+      return {
+        ...prev,
+        [field]: value
+      };
+    });
+  }, []);
 
   if (loading) {
     return (
@@ -461,21 +491,13 @@ export default function AppointmentRules() {
                   <FormInput
                     label="Title (English)"
                     value={editingRule?.title.en || ''}
-                    onChange={(e) => 
-                      setEditingRule(prev => prev ? {
-                        ...prev,
-                        title: { ...prev.title, en: e.target.value }
-                      } : null)}
+                    onChange={(e) => handleEditFieldChange('title', e.target.value, 'en')}
                     required
                   />
                   <FormInput
                     label="Title (Gujarati)"
                     value={editingRule?.title.gu || ''}
-                    onChange={(e) => 
-                      setEditingRule(prev => prev ? {
-                        ...prev,
-                        title: { ...prev.title, gu: e.target.value }
-                      } : null)}
+                    onChange={(e) => handleEditFieldChange('title', e.target.value, 'gu')}
                     required
                   />
                 </div>
@@ -484,22 +506,14 @@ export default function AppointmentRules() {
                   <FormTextarea
                     label="Content (English)"
                     value={editingRule?.content.en || ''}
-                    onChange={(e) => 
-                      setEditingRule(prev => prev ? {
-                        ...prev,
-                        content: { ...prev.content, en: e.target.value }
-                      } : null)}
+                    onChange={(e) => handleEditFieldChange('content', e.target.value, 'en')}
                     rows={4}
                     required
                   />
                   <FormTextarea
                     label="Content (Gujarati)"
                     value={editingRule?.content.gu || ''}
-                    onChange={(e) => 
-                      setEditingRule(prev => prev ? {
-                        ...prev,
-                        content: { ...prev.content, gu: e.target.value }
-                      } : null)}
+                    onChange={(e) => handleEditFieldChange('content', e.target.value, 'gu')}
                     rows={4}
                     required
                   />
@@ -510,21 +524,13 @@ export default function AppointmentRules() {
                     label="Display Order"
                     type="number"
                     value={editingRule?.display_order || 0}
-                    onChange={(e) => 
-                      setEditingRule(prev => prev ? {
-                        ...prev,
-                        display_order: parseInt(e.target.value)
-                      } : null)}
+                    onChange={(e) => handleEditFieldChange('display_order', parseInt(e.target.value))}
                     min={0}
                   />
                   <FormCheckbox
                     label="Active"
                     checked={editingRule?.is_active || false}
-                    onChange={(e) => 
-                      setEditingRule(prev => prev ? {
-                        ...prev,
-                        is_active: e.target.checked
-                      } : null)}
+                    onChange={(e) => handleEditFieldChange('is_active', e.target.checked)}
                     className="mt-7"
                   />
                 </div>
