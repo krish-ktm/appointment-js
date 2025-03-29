@@ -20,6 +20,7 @@ export function LandingPage() {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
+  const [loadingSlots, setLoadingSlots] = useState(false);
   const [success, setSuccess] = useState(false);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [bookingDetails, setBookingDetails] = useState<BookingDetailsType | null>(null);
@@ -47,8 +48,17 @@ export function LandingPage() {
   useEffect(() => {
     const loadTimeSlots = async () => {
       if (form.date) {
-        const slots = await generateTimeSlots(form.date);
-        setTimeSlots(slots);
+        setLoadingSlots(true);
+        try {
+          const slots = await generateTimeSlots(form.date);
+          setTimeSlots(slots);
+        } catch (error: unknown) {
+          console.error('Error loading time slots:', error);
+          toast.error('Failed to load available time slots');
+          setTimeSlots([]);
+        } finally {
+          setLoadingSlots(false);
+        }
       } else {
         setTimeSlots([]);
       }
@@ -133,6 +143,7 @@ export function LandingPage() {
         handleSubmit={handleSubmit}
         success={success}
         loading={bookingLoading}
+        loadingSlots={loadingSlots}
         t={t.home.hero}
       />
       

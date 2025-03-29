@@ -19,6 +19,7 @@ interface AppointmentFormProps {
   onSubmit: (e: React.FormEvent) => void;
   success: boolean;
   loading: boolean;
+  loadingSlots?: boolean;
 }
 
 const TIMEZONE = 'Asia/Kolkata';
@@ -29,7 +30,8 @@ export function AppointmentForm({
   timeSlots,
   onSubmit,
   success,
-  loading
+  loading,
+  loadingSlots = false
 }: AppointmentFormProps) {
   const { t, language } = useTranslation();
   const today = new Date();
@@ -211,6 +213,7 @@ export function AppointmentForm({
                 onSelectTime={(time) => setForm({ ...form, timeSlot: time })}
                 label={t.appointment.form.timeSlot}
                 t={t.appointment.form}
+                loading={loadingSlots}
               />
             </div>
           </div>

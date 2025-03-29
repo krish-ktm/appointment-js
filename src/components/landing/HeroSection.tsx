@@ -12,10 +12,20 @@ interface HeroSectionProps {
   handleSubmit: (e: React.FormEvent) => void;
   success: boolean;
   loading: boolean;
+  loadingSlots?: boolean;
   t: any;
 }
 
-export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, loading, t }: HeroSectionProps) {
+export function HeroSection({ 
+  form, 
+  setForm, 
+  timeSlots, 
+  handleSubmit, 
+  success, 
+  loading, 
+  loadingSlots = false,
+  t 
+}: HeroSectionProps) {
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-blue-50/50 to-white will-change-transform">
       <div 
@@ -110,6 +120,7 @@ export function HeroSection({ form, setForm, timeSlots, handleSubmit, success, l
                   onSubmit={handleSubmit}
                   success={success}
                   loading={loading}
+                  loadingSlots={loadingSlots}
                 />
               </div>
             </div>
