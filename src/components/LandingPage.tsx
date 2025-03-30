@@ -10,7 +10,6 @@ import { HeroSection } from './landing/HeroSection';
 import { ServicesSection } from './landing/ServicesSection';
 import { NoticeBoard } from './landing/NoticeBoard';
 import { StatsSection } from './landing/StatsSection';
-import { DoctorMessage } from './DoctorMessage';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../i18n/useTranslation';
@@ -163,7 +162,6 @@ export function LandingPage() {
         />
       )}
 
-      <DoctorMessage />
       <Footer />
     </div>
   );

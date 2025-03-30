@@ -19,6 +19,8 @@ import { ServicesPage } from './components/ServicesPage';
 import { LanguageProvider } from './i18n/LanguageContext';
 import { AppointmentPage } from './components/appointment/AppointmentPage';
 import { LanguageSelectionModal } from './components/LanguageSelectionModal';
+import { DoctorMessageProvider } from './contexts/DoctorMessageContext';
+import { DoctorMessage } from './components/DoctorMessage';
 
 // Scroll to top component
 function ScrollToTop() {
@@ -29,6 +31,18 @@ function ScrollToTop() {
   }, [pathname]);
 
   return null;
+}
+
+// Component to conditionally render DoctorMessage only on front-end pages
+function ConditionalDoctorMessage() {
+  const { pathname } = useLocation();
+  const isAdminPage = pathname.startsWith('/admin') || pathname === '/login';
+  
+  if (isAdminPage) {
+    return null;
+  }
+  
+  return <DoctorMessage />;
 }
 
 function App() {
@@ -44,32 +58,35 @@ function App() {
   return (
     <Router>
       <LanguageProvider>
-        <ScrollToTop />
-        <LanguageSelectionModal 
-          isOpen={showLanguageModal} 
-          onClose={() => setShowLanguageModal(false)} 
-        />
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/mr-appointment" element={<MRAppointment />} />
-          <Route path="/appointment" element={<AppointmentPage />} />
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="appointments" element={<AppointmentManager />} />
-            <Route path="appointment-settings" element={<AppointmentSettings />} />
-            <Route path="mr-appointments" element={<MRAppointmentManager />} />
-            <Route path="mr-settings" element={<MRAppointmentManagement />} />
-            <Route path="notices" element={<NoticeManager />} />
-            <Route path="messages" element={<MessageManager />} />
-            <Route path="users" element={<UsersManager />} />
-            <Route path="clinic-closure" element={<ClinicClosurePage />} />
-          </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-        <Toaster position="top-right" />
+        <DoctorMessageProvider>
+          <ScrollToTop />
+          <LanguageSelectionModal 
+            isOpen={showLanguageModal} 
+            onClose={() => setShowLanguageModal(false)} 
+          />
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/mr-appointment" element={<MRAppointment />} />
+            <Route path="/appointment" element={<AppointmentPage />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="appointments" element={<AppointmentManager />} />
+              <Route path="appointment-settings" element={<AppointmentSettings />} />
+              <Route path="mr-appointments" element={<MRAppointmentManager />} />
+              <Route path="mr-settings" element={<MRAppointmentManagement />} />
+              <Route path="notices" element={<NoticeManager />} />
+              <Route path="messages" element={<MessageManager />} />
+              <Route path="users" element={<UsersManager />} />
+              <Route path="clinic-closure" element={<ClinicClosurePage />} />
+            </Route>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+          <ConditionalDoctorMessage />
+          <Toaster position="top-right" />
+        </DoctorMessageProvider>
       </LanguageProvider>
     </Router>
   );

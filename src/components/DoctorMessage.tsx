@@ -1,45 +1,11 @@
-import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '../lib/supabase';
 import { MessageCircle, X, Sparkles } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
-
-interface DoctorMessage {
-  id: string;
-  message_en: string;
-  message_gu: string;
-  active: boolean;
-  created_at: string;
-}
+import { useDoctorMessage } from '../contexts/DoctorMessageContext';
 
 export function DoctorMessage() {
-  const [message, setMessage] = useState<DoctorMessage | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [isVisible, setIsVisible] = useState(true);
+  const { message, loading, isVisible, setIsVisible } = useDoctorMessage();
   const { language } = useLanguage();
-
-  useEffect(() => {
-    loadMessage();
-  }, []);
-
-  const loadMessage = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('doctor_messages')
-        .select('*')
-        .eq('active', true)
-        .order('created_at', { ascending: false })
-        .limit(1);
-
-      if (error) throw error;
-      
-      setMessage(data && data.length > 0 ? data[0] : null);
-    } catch (error) {
-      console.error('Error loading doctor message:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const getMessageText = () => {
     if (!message) return '';
