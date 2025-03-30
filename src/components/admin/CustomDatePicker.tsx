@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isToday, isSameDay, isBefore, isAfter, getDay } from 'date-fns';
 
@@ -23,17 +23,17 @@ export function CustomDatePicker({
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectionStart, setSelectionStart] = useState<Date | null>(null);
 
-  // This helps us reset the selection state when the parent component changes the dates
-  useEffect(() => {
-    setIsSelecting(false);
-    setSelectionStart(null);
-  }, [selectedDates.length]);
+  const handleMonthChange = (newMonth: Date) => {
+    setCurrentMonth(newMonth);
+    // Don't trigger onChange when changing months
+  };
 
   const renderHeader = () => {
     return (
       <div className="flex items-center justify-between mb-4">
         <button
-          onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+          type="button" // Prevent form submission
+          onClick={() => handleMonthChange(subMonths(currentMonth, 1))}
           className="p-2 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
           disabled={isBefore(subMonths(currentMonth, 1), subMonths(minDate, 1))}
           aria-label="Previous month"
@@ -44,7 +44,8 @@ export function CustomDatePicker({
           {format(currentMonth, 'MMMM yyyy')}
         </h2>
         <button
-          onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+          type="button" // Prevent form submission
+          onClick={() => handleMonthChange(addMonths(currentMonth, 1))}
           className="p-2 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
           disabled={isAfter(addMonths(currentMonth, 1), addMonths(maxDate, 1))}
           aria-label="Next month"
@@ -83,7 +84,13 @@ export function CustomDatePicker({
     ));
 
     const handleDateClick = (day: Date) => {
-      if (disableEditMode) return;
+      if (disableEditMode) {
+        // In edit mode, just select the single date
+        onChange([day]);
+        setIsSelecting(false);
+        setSelectionStart(null);
+        return;
+      }
       
       // If we're selecting a range
       if (isSelecting && selectionStart) {
@@ -103,8 +110,7 @@ export function CustomDatePicker({
         setSelectionStart(null);
       } 
       // Start selecting a range
-      else if (!isSelecting && !selectionStart) {
-        // If shift key is held, start range selection
+      else {
         setIsSelecting(true);
         setSelectionStart(day);
         onChange([day]); // Initially select just this day
@@ -138,8 +144,9 @@ export function CustomDatePicker({
       const dayDisabled = isDisabled(day);
       
       return (
-        <div
+        <button
           key={`day-${index}`}
+          type="button" // Prevent form submission
           className={`relative h-10 w-10 flex items-center justify-center text-sm rounded-full 
             ${!dayDisabled && 'cursor-pointer hover:bg-blue-50 transition-colors'} 
             ${daySelected ? 'bg-blue-600 text-white hover:bg-blue-600' : ''} 
@@ -147,9 +154,10 @@ export function CustomDatePicker({
             ${dayDisabled ? 'text-gray-300 cursor-not-allowed' : 'text-gray-800'} 
             ${isCurrentDay && !daySelected ? 'font-bold' : ''}`}
           onClick={() => !dayDisabled && handleDateClick(day)}
+          disabled={dayDisabled}
         >
           {format(day, 'd')}
-        </div>
+        </button>
       );
     });
 
@@ -187,11 +195,11 @@ export function CustomDatePicker({
       {renderCells()}
       <div className="mt-4 text-xs text-gray-500 italic">
         {disableEditMode ? (
-          'Edit mode only allows changing the reason for the selected date.'
+          'Edit mode only allows selecting a different date.'
         ) : (
           'Click to select a date. Click and select another date to create a range.'
         )}
       </div>
     </div>
   );
-} 
+}

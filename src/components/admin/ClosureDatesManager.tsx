@@ -15,6 +15,7 @@ interface ClosureDate {
 }
 
 const TIMEZONE = 'Asia/Kolkata';
+const DEFAULT_REASON = 'Clinic Closed';
 
 export function ClosureDatesManager() {
   const [closureDates, setClosureDates] = useState<ClosureDate[]>([]);
@@ -23,9 +24,6 @@ export function ClosureDatesManager() {
   const [editingDate, setEditingDate] = useState<ClosureDate | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [selectedDates, setSelectedDates] = useState<Date[]>([new Date()]);
-  const [form, setForm] = useState({
-    reason: ''
-  });
 
   useEffect(() => {
     loadClosureDates();
@@ -80,7 +78,7 @@ export function ClosureDatesManager() {
           .from('clinic_closure_dates')
           .update({
             date: dateStr,
-            reason: form.reason,
+            reason: DEFAULT_REASON,
             created_by: user.id
           })
           .eq('id', editingDate.id);
@@ -93,7 +91,7 @@ export function ClosureDatesManager() {
         // Create an array of dates to insert
         const datesToInsert = selectedDates.map(date => ({
           date: format(date, 'yyyy-MM-dd'),
-          reason: form.reason,
+          reason: DEFAULT_REASON,
           created_by: user.id
         }));
 
@@ -126,7 +124,6 @@ export function ClosureDatesManager() {
 
       // Reset state
       setSelectedDates([new Date()]);
-      setForm({ reason: '' });
       setShowForm(false);
       setEditingDate(null);
       loadClosureDates();
@@ -177,7 +174,6 @@ export function ClosureDatesManager() {
   useEffect(() => {
     if (editingDate) {
       setSelectedDates([new Date(editingDate.date)]);
-      setForm({ reason: editingDate.reason });
     }
   }, [editingDate]);
 
@@ -220,7 +216,6 @@ export function ClosureDatesManager() {
             setShowForm(false);
             setEditingDate(null);
             setSelectedDates([new Date()]);
-            setForm({ reason: '' });
           }}
         >
           <div className="w-full h-full flex items-center justify-center p-4">
@@ -241,7 +236,6 @@ export function ClosureDatesManager() {
                         setShowForm(false);
                         setEditingDate(null);
                         setSelectedDates([new Date()]);
-                        setForm({ reason: '' });
                       }}
                       className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                     >
@@ -261,20 +255,6 @@ export function ClosureDatesManager() {
                     disableEditMode={editingDate !== null}
                   />
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Reason
-                    </label>
-                    <input
-                      type="text"
-                      value={form.reason}
-                      onChange={(e) => setForm({ ...form, reason: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                      placeholder="Enter reason for closure"
-                      required
-                    />
-                  </div>
-
                   <div className="flex justify-end gap-3 pt-4">
                     <button
                       type="button"
@@ -282,7 +262,6 @@ export function ClosureDatesManager() {
                         setShowForm(false);
                         setEditingDate(null);
                         setSelectedDates([new Date()]);
-                        setForm({ reason: '' });
                       }}
                       className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg"
                     >
@@ -368,7 +347,6 @@ export function ClosureDatesManager() {
                               onClick={() => {
                                 setEditingDate(date);
                                 setSelectedDates([new Date(date.date)]);
-                                setForm({ reason: date.reason });
                                 setShowForm(true);
                               }}
                               className="p-1.5 rounded-lg hover:bg-white/50 transition-colors"
