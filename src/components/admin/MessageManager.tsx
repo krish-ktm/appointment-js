@@ -150,7 +150,7 @@ export function MessageManager() {
   return (
     <div className="space-y-6 px-4 sm:px-0">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Doctor's Messages</h2>
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Flash Message</h2>
         <button
           onClick={() => setShowForm(true)}
           className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors gap-2"

@@ -88,13 +88,13 @@ export function AdminDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <StatCard 
           icon={MessageCircle} 
-          label="Doctor Messages" 
+          label="Flash Message" 
           value={stats.totalMessages}
           onClick={() => navigate('/admin/messages')}
         />
         <StatCard 
           icon={Bell} 
-          label="Active Notices" 
+          label="Announcements" 
           value={stats.totalNotices}
           onClick={() => navigate('/admin/notices')}
         />

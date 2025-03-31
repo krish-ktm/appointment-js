@@ -98,8 +98,8 @@ export function AdminLayout() {
     {
       name: 'Communication',
       items: [
-        { name: 'Notice Board', href: '/admin/notices', icon: Bell },
-        { name: 'Doctor Messages', href: '/admin/messages', icon: MessageCircle }
+        { name: 'Announcements', href: '/admin/notices', icon: Bell },
+        { name: 'Flash Message', href: '/admin/messages', icon: MessageCircle }
       ]
     },
     {
