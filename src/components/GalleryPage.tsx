@@ -4,60 +4,43 @@ import { ResponsiveHeader } from './headers/ResponsiveHeader';
 import { Footer } from './Footer';
 import { useTranslation } from '../i18n/useTranslation';
 import { Camera, Building2, Users, Layout } from 'lucide-react';
+import { galleryImages, categories } from '../config/gallery';
 
-const galleryImages = [
-  {
-    url: '/gallery/doctor-office.JPG',
-    title: "Doctor's Office",
-    description: "Dr. Jemish A. Patel's consultation room equipped with modern amenities",
-    category: 'office'
+// Hero section translations
+const heroText = {
+  en: {
+    badge: "Clinic Gallery",
+    title: "Take a Tour of Our Clinic",
+    description: "Explore our modern facilities and comfortable environment designed for your care"
   },
-  {
-    url: '/gallery/waiting-area.JPG',
-    title: "Patient Waiting Area",
-    description: "Comfortable waiting area with modern design and informative displays",
-    category: 'interior'
-  },
-  {
-    url: '/gallery/reception.JPG',
-    title: "Reception Area",
-    description: "Modern reception desk with a welcoming atmosphere",
-    category: 'interior'
-  },
-  {
-    url: '/gallery/building.jpeg',
-    title: "Clinic Building",
-    description: "Shubham Skin & Laser Clinic building exterior",
-    category: 'exterior'
-  },
-  {
-    url: '/gallery/interior-1.JPG',
-    title: "Interior View",
-    description: "Modern clinic interior with aesthetic design",
-    category: 'interior'
-  },
-  {
-    url: '/gallery/interior-2.JPG',
-    title: "Treatment Area",
-    description: "Well-equipped treatment area with modern facilities",
-    category: 'interior'
+  gu: {
+    badge: "ક્લિનિક ગેલેરી",
+    title: "અમારી ક્લિનિકની મુલાકાત લો",
+    description: "તમારી સંભાળ માટે ડિઝાઇન કરેલી અમારી આધુનિક સુવિધાઓ અને આરામદાયક વાતાવરણની ઝલક જુઓ"
   }
-];
+};
 
 export function GalleryPage() {
-  const { t } = useTranslation();
+  const { language } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   const filteredImages = selectedCategory === 'all' 
     ? galleryImages 
     : galleryImages.filter(img => img.category === selectedCategory);
 
-  const categories = [
-    { id: 'all', label: 'All Photos', icon: Camera },
-    { id: 'office', label: "Doctor's Office", icon: Users },
-    { id: 'interior', label: 'Interior Views', icon: Layout },
-    { id: 'exterior', label: 'Exterior View', icon: Building2 }
-  ];
+  const categoryList = categories[language];
+  const getCategoryIcon = (id: string) => {
+    switch(id) {
+      case 'all': return Camera;
+      case 'office': return Users;
+      case 'interior': return Layout;
+      case 'exterior': return Building2;
+      default: return Camera;
+    }
+  };
+
+  // Get hero text based on current language
+  const hero = heroText[language];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50/50 to-white">
@@ -73,7 +56,7 @@ export function GalleryPage() {
               className="inline-flex items-center bg-blue-50 px-4 py-2 rounded-full mb-4"
             >
               <Camera className="h-4 w-4 text-blue-600 mr-2" />
-              <span className="text-sm font-medium text-blue-600">Clinic Gallery</span>
+              <span className="text-sm font-medium text-blue-600">{hero.badge}</span>
             </motion.div>
             
             <motion.h1
@@ -81,7 +64,7 @@ export function GalleryPage() {
               animate={{ opacity: 1, y: 0 }}
               className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6"
             >
-              Take a Tour of Our Clinic
+              {hero.title}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -89,14 +72,14 @@ export function GalleryPage() {
               transition={{ delay: 0.1 }}
               className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4 sm:px-0"
             >
-              Explore our modern facilities and comfortable environment designed for your care
+              {hero.description}
             </motion.p>
           </div>
 
           {/* Category Filter */}
           <div className="flex flex-wrap justify-center gap-3 mb-8">
-            {categories.map(category => {
-              const Icon = category.icon;
+            {categoryList.map(category => {
+              const Icon = getCategoryIcon(category.id);
               return (
                 <button
                   key={category.id}
@@ -127,16 +110,17 @@ export function GalleryPage() {
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
                     src={image.url}
-                    alt={image.title}
+                    alt={image.title[language]}
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
                   />
                 </div>
                 <div className="p-4">
                   <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                    {image.title}
+                    {image.title[language]}
                   </h3>
                   <p className="text-sm text-gray-600">
-                    {image.description}
+                    {image.description[language]}
                   </p>
                 </div>
               </motion.div>
