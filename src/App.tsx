@@ -14,6 +14,7 @@ import { UsersManager } from './components/admin/UsersManager';
 import { ClinicClosurePage } from './components/admin/ClinicClosurePage';
 import { LandingPage } from './components/LandingPage';
 import { AboutPage } from './components/AboutPage';
+import { GalleryPage } from './components/GalleryPage';
 import { MRAppointment } from './components/mr-appointment/MRAppointment';
 import { ServicesPage } from './components/ServicesPage';
 import { LanguageProvider } from './i18n/LanguageContext';
@@ -67,6 +68,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/mr-appointment" element={<MRAppointment />} />

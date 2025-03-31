@@ -144,6 +144,17 @@ export function DesktopHeader() {
                 }`}></span>
               </Link>
               <Link
+                to="/gallery"
+                className={`relative py-2 transition-colors group ${
+                  isActive('/gallery') ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <span className="relative z-10">{t.navigation.gallery}</span>
+                <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 rounded-full transition-transform origin-left ${
+                  isActive('/gallery') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                }`}></span>
+              </Link>
+              <Link
                 to="/appointment"
                 className={`relative py-2 transition-colors group ${
                   isActive('/appointment') ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
