@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { useTranslation } from '../../i18n/useTranslation';
+import { formatMarkdown } from '../../utils/markdown';
 
 interface NoticeBoardProps {
   notices: Notice[];
@@ -110,11 +111,12 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
                         </h3>
 
                         {notice.content && (
-                          <div className="prose prose-blue max-w-none">
-                            <p className="text-gray-600 leading-relaxed">
-                              {getLocalizedContent(notice.content)}
-                            </p>
-                          </div>
+                          <div 
+                            className="prose prose-blue max-w-none"
+                            dangerouslySetInnerHTML={{ 
+                              __html: formatMarkdown(getLocalizedContent(notice.content)) 
+                            }}
+                          />
                         )}
                       </div>
                     </motion.div>
