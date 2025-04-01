@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Star, Award, Shield, Calendar } from 'lucide-react';
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 
 interface HeroSectionProps {
   t: {
@@ -18,39 +18,97 @@ interface HeroSectionProps {
 
 interface AnimatedComponentProps {
   children: React.ReactNode;
-  initial?: any;
-  animate?: any;
-  transition?: any;
+  initial?: Record<string, number>;
+  animate?: Record<string, number>;
+  transition?: Record<string, unknown>;
   className?: string;
   style?: React.CSSProperties;
 }
 
-export function HeroSection({ t, disableAnimations = false }: HeroSectionProps) {
+// Create memoized features to prevent re-renders
+const MemoizedFeature = memo(({ feature, index }: { 
+  feature: { 
+    icon: React.ElementType; 
+    text: string; 
+    color: string; 
+  }; 
+  index: number; 
+}) => {
+  const Icon = feature.icon;
+  
+  return (
+    <div key={index} className="relative p-1">
+      <div className="relative bg-white/10 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/20">
+        <div className="flex items-center gap-3">
+          <Icon className={`h-5 w-5 ${feature.color}`} />
+          <span className="text-sm font-medium text-white">
+            {feature.text}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// Main component wrapped with memo for optimization
+export const HeroSection = memo(({ t, disableAnimations = false }: HeroSectionProps) => {
   // Helper function to conditionally wrap a component with motion
-  const AnimatedComponent: React.FC<AnimatedComponentProps> = ({ 
-    children, 
-    initial = { opacity: 0, y: 20 }, 
-    animate = { opacity: 1, y: 0 },
-    transition = {}, 
-    className = "",
-    ...props
-  }) => {
-    if (disableAnimations) {
-      return <div className={className} {...props}>{children}</div>;
+  const AnimatedComponent = useMemo(() => {
+    const Component: React.FC<AnimatedComponentProps> = ({ 
+      children, 
+      initial = { opacity: 0, y: 20 }, 
+      animate = { opacity: 1, y: 0 },
+      transition = { duration: 0.5 }, 
+      className = "",
+      ...props
+    }) => {
+      if (disableAnimations) {
+        return <div className={className} {...props}>{children}</div>;
+      }
+      
+      return (
+        <motion.div 
+          initial={initial} 
+          animate={animate}
+          transition={transition}
+          className={className}
+          {...props}
+        >
+          {children}
+        </motion.div>
+      );
+    };
+    return Component;
+  }, [disableAnimations]);
+
+  // Pre-compute features array to reduce re-rendering
+  const features = useMemo(() => [
+    {
+      icon: Star,
+      text: t.experience,
+      color: "text-emerald-400"
+    },
+    {
+      icon: Award,
+      text: t.advancedTreatments,
+      color: "text-amber-400"
+    },
+    {
+      icon: Shield,
+      text: t.expertCare,
+      color: "text-rose-400"
     }
-    
-    return (
-      <motion.div 
-        initial={initial} 
-        animate={animate}
-        transition={transition}
-        className={className}
-        {...props}
-      >
-        {children}
-      </motion.div>
-    );
-  };
+  ], [t.experience, t.advancedTreatments, t.expertCare]);
+  
+  // Pre-load images to ensure they're rendered immediately
+  React.useEffect(() => {
+    const preloadImage = (src: string) => {
+      const img = new Image();
+      img.src = src;
+    };
+    preloadImage('/gallery/doctor.png');
+    preloadImage('/gallery/doctor-office.JPG');
+  }, []);
 
   return (
     <div className="relative min-h-screen">
@@ -104,7 +162,7 @@ export function HeroSection({ t, disableAnimations = false }: HeroSectionProps) 
             </AnimatedComponent>
 
             <AnimatedComponent
-              transition={{ delay: 0.1 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
               className="text-lg sm:text-xl text-blue-100 mb-8 max-w-2xl mx-auto lg:mx-0"
             >
               {t.subtitle}
@@ -114,6 +172,7 @@ export function HeroSection({ t, disableAnimations = false }: HeroSectionProps) 
             <AnimatedComponent
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
               className="lg:hidden mb-8"
             >
               {disableAnimations ? (
@@ -122,6 +181,7 @@ export function HeroSection({ t, disableAnimations = false }: HeroSectionProps) 
                   alt="Doctor"
                   className="w-full max-w-md mx-auto"
                   style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
+                  loading="eager"
                 />
               ) : (
                 <motion.img
@@ -129,6 +189,7 @@ export function HeroSection({ t, disableAnimations = false }: HeroSectionProps) 
                   alt="Doctor"
                   className="w-full max-w-md mx-auto"
                   style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
+                  loading="eager"
                   animate={{
                     y: [0, -5, 0],
                   }}
@@ -142,39 +203,11 @@ export function HeroSection({ t, disableAnimations = false }: HeroSectionProps) 
             </AnimatedComponent>
 
             <AnimatedComponent
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
               className="flex flex-wrap justify-center lg:justify-start gap-4 mb-8"
             >
-              {[
-                {
-                  icon: Star,
-                  text: t.experience,
-                  color: "text-emerald-400"
-                },
-                {
-                  icon: Award,
-                  text: t.advancedTreatments,
-                  color: "text-amber-400"
-                },
-                {
-                  icon: Shield,
-                  text: t.expertCare,
-                  color: "text-rose-400"
-                }
-              ].map((feature, index) => (
-                <div 
-                  key={index} 
-                  className="relative p-1"
-                >
-                  <div className="relative bg-white/10 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/20">
-                    <div className="flex items-center gap-3">
-                      <feature.icon className={`h-5 w-5 ${feature.color}`} />
-                      <span className="text-sm font-medium text-white">
-                        {feature.text}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+              {features.map((feature, index) => (
+                <MemoizedFeature key={index} feature={feature} index={index} />
               ))}
             </AnimatedComponent>
           </div>
@@ -183,6 +216,7 @@ export function HeroSection({ t, disableAnimations = false }: HeroSectionProps) 
           <AnimatedComponent
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
             className="hidden lg:block relative"
             style={{ 
               width: '500px',
@@ -196,6 +230,7 @@ export function HeroSection({ t, disableAnimations = false }: HeroSectionProps) 
                   alt="Doctor"
                   className="max-h-[650px] object-contain"
                   style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
+                  loading="eager"
                 />
               </div>
             ) : (
@@ -216,6 +251,7 @@ export function HeroSection({ t, disableAnimations = false }: HeroSectionProps) 
                   alt="Doctor"
                   className="max-h-[650px] object-contain"
                   style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
+                  loading="eager"
                 />
               </motion.div>
             )}
@@ -224,4 +260,4 @@ export function HeroSection({ t, disableAnimations = false }: HeroSectionProps) 
       </div>
     </div>
   );
-}
+});
