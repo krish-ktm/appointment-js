@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { Star, Award, Users, Zap, FlaskRound as Flask, Microscope, ArrowRight } from 'lucide-react';
 import { background, text, border, gradients } from '../../theme/colors';
 import { Link } from 'react-router-dom';
@@ -28,7 +27,6 @@ interface ServiceTranslation {
 
 interface ServicesSectionProps {
   t: ServiceTranslation;
-  disableAnimations?: boolean;
 }
 
 interface ServiceItemProps {
@@ -38,45 +36,14 @@ interface ServiceItemProps {
     description: string;
     features: string[];
   };
-  index: number;
-  disableAnimations: boolean;
 }
 
 // Memoized Service Item component
-const ServiceItem = memo(({ service, index, disableAnimations }: ServiceItemProps) => {
+const ServiceItem = memo(({ service }: ServiceItemProps) => {
   const Icon = service.icon;
   
-  if (disableAnimations) {
-    return (
-      <div
-        className={`bg-white/80 rounded-2xl p-8 hover:shadow-lg transition-all duration-300 ${border.accent} ${border.accentHover} backdrop-blur-sm`}
-      >
-        <div className="bg-gradient-to-br from-violet-50 to-indigo-50/50 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
-          <Icon className="h-7 w-7 text-violet-500" />
-        </div>
-        <h3 className={`text-xl font-semibold ${text.primary} mb-3`}>
-          {service.title}
-        </h3>
-        <p className={`${text.secondary} mb-4`}>
-          {service.description}
-        </p>
-        <ul className="space-y-2">
-          {service.features.map((feature: string, featureIndex: number) => (
-            <li key={featureIndex} className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-violet-500"></span>
-              <span className="text-sm text-gray-600">{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.5 }}
+    <div
       className={`bg-white/80 rounded-2xl p-8 hover:shadow-lg transition-all duration-300 ${border.accent} ${border.accentHover} backdrop-blur-sm`}
     >
       <div className="bg-gradient-to-br from-violet-50 to-indigo-50/50 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
@@ -96,11 +63,11 @@ const ServiceItem = memo(({ service, index, disableAnimations }: ServiceItemProp
           </li>
         ))}
       </ul>
-    </motion.div>
+    </div>
   );
 });
 
-export const ServicesSection = memo(({ t, disableAnimations = false }: ServicesSectionProps) => {
+export const ServicesSection = memo(({ t }: ServicesSectionProps) => {
   // Pre-compute the services array to prevent recreation on re-render
   const services = useMemo(() => [
     {
@@ -145,72 +112,32 @@ export const ServicesSection = memo(({ t, disableAnimations = false }: ServicesS
     <div className={`py-20 bg-gradient-to-b ${background.light}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          {disableAnimations ? (
-            <h2 className={`text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
-              {t.title}
-            </h2>
-          ) : (
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className={`text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}
-            >
-              {t.title}
-            </motion.h2>
-          )}
+          <h2 className={`text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
+            {t.title}
+          </h2>
           
-          {disableAnimations ? (
-            <p className={`text-lg ${text.secondary} max-w-2xl mx-auto`}>
-              {t.subtitle}
-            </p>
-          ) : (
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className={`text-lg ${text.secondary} max-w-2xl mx-auto`}
-            >
-              {t.subtitle}
-            </motion.p>
-          )}
+          <p className={`text-lg ${text.secondary} max-w-2xl mx-auto`}>
+            {t.subtitle}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
+          {services.map((service) => (
             <ServiceItem
               key={service.title}
               service={service}
-              index={index}
-              disableAnimations={disableAnimations}
             />
           ))}
         </div>
 
         <div className="text-center mt-12">
-          {disableAnimations ? (
-            <Link
-              to="/services"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 transition-all duration-300 shadow-sm hover:shadow"
-            >
-              <span className="font-medium">{t.viewAll}</span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <Link
-                to="/services"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 transition-all duration-300 shadow-sm hover:shadow"
-              >
-                <span className="font-medium">{t.viewAll}</span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </motion.div>
-          )}
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 transition-all duration-300 shadow-sm hover:shadow"
+          >
+            <span className="font-medium">{t.viewAll}</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </div>
     </div>
