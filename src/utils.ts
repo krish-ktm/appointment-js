@@ -144,7 +144,7 @@ export const generateTimeSlots = async (date: string, retries = 3): Promise<Time
         }
 
         // Rule 1: At 9 AM IST, block all morning slots (9:30 AM to 12 PM)
-        if (istNow.getHours() >= 9 && slotTimeInIST.getHours() < 12) {
+        if (istNow.getHours() >= 9 && slotTimeInIST.getHours() <= 12) {
           return false;
         }
 
