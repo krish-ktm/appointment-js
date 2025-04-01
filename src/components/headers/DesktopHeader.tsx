@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Phone, Clock, MapPin, Globe } from 'lucide-react';
+import { Phone, Clock, MapPin, Globe, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../i18n/useTranslation';
 
@@ -95,7 +95,7 @@ export function DesktopHeader() {
           boxShadow: isScrolled ? '0 1px 3px 0 rgb(0 0 0 / 0.1)' : 'none',
         }}
         transition={{ duration: 0.3 }}
-        className="fixed w-full z-50 bg-white/95 backdrop-blur-sm"
+        className="fixed w-full z-50 bg-white"
       >
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -184,10 +184,11 @@ export function DesktopHeader() {
                 >
                   <Globe className="h-4 w-4" />
                   <span>{language === 'en' ? t.header.language.english : t.header.language.gujarati}</span>
+                  <ChevronDown className="h-3 w-3 opacity-70" />
                 </button>
 
                 {showLanguageMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1">
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-50">
                     <button
                       onClick={toggleLanguage}
                       className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
