@@ -22,14 +22,21 @@ export function HeroSection({ t }: HeroSectionProps) {
         className="absolute inset-0 bg-cover bg-center"
         style={{ 
           backgroundImage: 'url(/gallery/doctor-office.JPG)',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 to-blue-800/90" />
+      </div>
+
+      {/* Mobile-only fallback background (won't flicker on scroll) */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center lg:hidden"
+        style={{ 
+          backgroundImage: 'url(/gallery/doctor-office.JPG)',
           backgroundAttachment: 'scroll'
         }}
       >
-        <div className="absolute inset-0 bg-blue-900/95" />
-      </div>
-
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900 to-blue-800 opacity-90" />
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 to-blue-800/90" />
       </div>
 
       {/* Floating Shapes Animation */}
