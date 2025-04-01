@@ -1,5 +1,5 @@
 import { Calendar, Users, Star, Award } from 'lucide-react';
-import React, { memo } from 'react';
+import React from 'react';
 
 interface StatsSectionProps {
   t: {
@@ -25,8 +25,8 @@ interface StatCardProps {
   };
 }
 
-// Memoized stat card component
-const StatCard = memo(({ stat }: StatCardProps) => {
+// Regular stat card component
+const StatCard = ({ stat }: StatCardProps) => {
   const Icon = stat.icon;
   
   return (
@@ -58,9 +58,9 @@ const StatCard = memo(({ stat }: StatCardProps) => {
       </p>
     </div>
   );
-});
+};
 
-export const StatsSection = memo(({ t }: StatsSectionProps) => {
+export function StatsSection({ t }: StatsSectionProps) {
   const stats = [
     {
       name: t.yearsExperience,
@@ -107,4 +107,4 @@ export const StatsSection = memo(({ t }: StatsSectionProps) => {
       </div>
     </div>
   );
-});
+}

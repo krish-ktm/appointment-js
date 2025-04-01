@@ -1,7 +1,7 @@
 import { Star, Award, Users, Zap, FlaskRound as Flask, Microscope, ArrowRight } from 'lucide-react';
 import { background, text, border, gradients } from '../../theme/colors';
 import { Link } from 'react-router-dom';
-import React, { memo, useMemo } from 'react';
+import React from 'react';
 
 interface ServiceTranslation {
   title: string;
@@ -38,8 +38,8 @@ interface ServiceItemProps {
   };
 }
 
-// Memoized Service Item component
-const ServiceItem = memo(({ service }: ServiceItemProps) => {
+// Regular Service Item component
+const ServiceItem = ({ service }: ServiceItemProps) => {
   const Icon = service.icon;
   
   return (
@@ -65,11 +65,11 @@ const ServiceItem = memo(({ service }: ServiceItemProps) => {
       </ul>
     </div>
   );
-});
+};
 
-export const ServicesSection = memo(({ t }: ServicesSectionProps) => {
-  // Pre-compute the services array to prevent recreation on re-render
-  const services = useMemo(() => [
+export function ServicesSection({ t }: ServicesSectionProps) {
+  // Regular services array
+  const services = [
     {
       title: t.categories.treatments,
       icon: Star,
@@ -106,7 +106,7 @@ export const ServicesSection = memo(({ t }: ServicesSectionProps) => {
       description: t.lists.diagnostic[0],
       features: t.lists.diagnostic.slice(1)
     }
-  ], [t.categories, t.lists]);
+  ];
 
   return (
     <div className={`py-20 bg-gradient-to-b ${background.light}`}>
@@ -142,4 +142,4 @@ export const ServicesSection = memo(({ t }: ServicesSectionProps) => {
       </div>
     </div>
   );
-});
+}

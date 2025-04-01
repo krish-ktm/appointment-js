@@ -3,7 +3,7 @@ import { background, text, gradients } from '../../theme/colors';
 import { Bell } from 'lucide-react';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import { useEffect, memo } from 'react';
+import { useEffect } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { useTranslation } from '../../i18n/useTranslation';
@@ -14,8 +14,8 @@ interface NoticeBoardProps {
   loading: boolean;
 }
 
-// Create memoized components to prevent unnecessary re-renders
-const MemoizedNoticeItem = memo(({ 
+// Regular component for notice items
+const NoticeItem = ({ 
   notice, 
   formatDate, 
   getLocalizedContent 
@@ -69,9 +69,9 @@ const MemoizedNoticeItem = memo(({
       </div>
     </div>
   );
-});
+};
 
-export const NoticeBoard = memo(({ notices, loading }: NoticeBoardProps) => {
+export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
   const { language } = useTranslation();
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 5000, stopOnInteraction: false })
@@ -147,7 +147,7 @@ export const NoticeBoard = memo(({ notices, loading }: NoticeBoardProps) => {
             <div className="overflow-hidden rounded-2xl" ref={emblaRef}>
               <div className="flex">
                 {notices.map((notice) => (
-                  <MemoizedNoticeItem 
+                  <NoticeItem 
                     key={notice.id} 
                     notice={notice} 
                     formatDate={formatDate}
@@ -176,4 +176,4 @@ export const NoticeBoard = memo(({ notices, loading }: NoticeBoardProps) => {
       </div>
     </div>
   );
-});
+}

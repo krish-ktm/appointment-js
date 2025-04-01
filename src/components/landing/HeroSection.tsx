@@ -1,5 +1,5 @@
 import { Star, Award, Shield, Calendar } from 'lucide-react';
-import React, { memo, useMemo } from 'react';
+import React, { useEffect } from 'react';
 
 interface HeroSectionProps {
   t: {
@@ -14,8 +14,8 @@ interface HeroSectionProps {
   };
 }
 
-// Create memoized features to prevent re-renders
-const MemoizedFeature = memo(({ feature }: { 
+// Regular feature component
+const Feature = ({ feature }: { 
   feature: { 
     icon: React.ElementType; 
     text: string; 
@@ -36,12 +36,12 @@ const MemoizedFeature = memo(({ feature }: {
       </div>
     </div>
   );
-});
+};
 
-// Main component wrapped with memo for optimization
-export const HeroSection = memo(({ t }: HeroSectionProps) => {
-  // Pre-compute features array to reduce re-rendering
-  const features = useMemo(() => [
+// Main component as a regular function
+export function HeroSection({ t }: HeroSectionProps) {
+  // Regular features array
+  const features = [
     {
       icon: Star,
       text: t.experience,
@@ -57,10 +57,10 @@ export const HeroSection = memo(({ t }: HeroSectionProps) => {
       text: t.expertCare,
       color: "text-rose-400"
     }
-  ], [t.experience, t.advancedTreatments, t.expertCare]);
+  ];
   
   // Pre-load images to ensure they're rendered immediately
-  React.useEffect(() => {
+  useEffect(() => {
     const preloadImage = (src: string) => {
       const img = new Image();
       img.src = src;
@@ -133,7 +133,7 @@ export const HeroSection = memo(({ t }: HeroSectionProps) => {
 
             <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-8">
               {features.map((feature, index) => (
-                <MemoizedFeature key={index} feature={feature} />
+                <Feature key={index} feature={feature} />
               ))}
             </div>
           </div>
@@ -154,4 +154,4 @@ export const HeroSection = memo(({ t }: HeroSectionProps) => {
       </div>
     </div>
   );
-});
+}
