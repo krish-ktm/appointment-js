@@ -25,11 +25,11 @@ const Feature = ({ feature }: {
   const Icon = feature.icon;
   
   return (
-    <div className="relative p-1">
-      <div className="relative bg-white/10 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/20">
-        <div className="flex items-center gap-3">
-          <Icon className={`h-5 w-5 ${feature.color}`} />
-          <span className="text-sm font-medium text-white">
+    <div className="relative p-1 flex-shrink-0">
+      <div className="relative bg-white/10 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/20">
+        <div className="flex items-center gap-2">
+          <Icon className={`h-4 w-4 ${feature.color}`} />
+          <span className="text-xs font-medium text-white whitespace-nowrap">
             {feature.text}
           </span>
         </div>
@@ -104,7 +104,7 @@ export function HeroSection({ t }: HeroSectionProps) {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center pt-24 sm:pt-32 pb-12 sm:pb-20">
+        <div className="flex flex-col lg:flex-row items-center pt-24 sm:pt-32 pb-8 sm:pb-16">
           {/* Left Content */}
           <div className="flex-1 text-center lg:text-left lg:pr-12 mb-12 lg:mb-0">
             <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
@@ -131,7 +131,7 @@ export function HeroSection({ t }: HeroSectionProps) {
               />
             </div>
 
-            <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-8">
+            <div className="flex flex-row flex-wrap justify-center lg:justify-start gap-2 mb-8 overflow-x-auto">
               {features.map((feature, index) => (
                 <Feature key={index} feature={feature} />
               ))}

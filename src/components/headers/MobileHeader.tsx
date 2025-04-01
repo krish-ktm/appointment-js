@@ -25,7 +25,7 @@ export function MobileHeader() {
           <div className="flex items-center">
             <Link 
               to="/" 
-              className="text-base font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700"
+              className="text-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700"
             >
               {t.header.clinicName}
             </Link>
