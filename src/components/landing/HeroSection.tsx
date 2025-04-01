@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
-import { Building2, ArrowRight, Star, Award, Shield, Calendar } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Star, Award, Shield, Calendar } from 'lucide-react';
 
 interface HeroSectionProps {
   t: {
@@ -65,6 +64,28 @@ export function HeroSection({ t }: HeroSectionProps) {
               {t.subtitle}
             </motion.p>
 
+            {/* Doctor Image - Visible only on mobile */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="lg:hidden mb-8"
+            >
+              <motion.img
+                src="/gallery/doctor.png"
+                alt="Doctor"
+                className="w-full max-w-md mx-auto"
+                style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
+                animate={{
+                  y: [0, -5, 0],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -103,60 +124,37 @@ export function HeroSection({ t }: HeroSectionProps) {
                 </div>
               ))}
             </motion.div>
-
-            {/* Doctor Image - Visible only on mobile */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="lg:hidden mb-8"
-            >
-              <img
-                src="/gallery/doctor.png"
-                alt="Doctor"
-                className="w-full max-w-md mx-auto"
-                style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
-              />
-            </motion.div>
-
-            {/* MR Appointment Link */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="inline-block"
-            >
-              <Link
-                to="/mr-appointment"
-                className="group inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg hover:bg-white/20 border border-white/20 transition-all duration-300 text-sm"
-              >
-                <Building2 className="h-5 w-5" />
-                <span>{t.mrAppointmentCta}</span>
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
-              <p className="mt-2 text-xs text-blue-200">
-                {t.mrAppointmentNote}
-              </p>
-            </motion.div>
           </div>
 
           {/* Doctor Image - Visible only on desktop */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             className="hidden lg:block relative"
             style={{ 
               width: '500px',
               minHeight: '600px'
             }}
           >
-            <div className="absolute right-0 bottom-0" style={{ zIndex: 1 }}>
+            <motion.div 
+              className="absolute right-0 bottom-0"
+              style={{ zIndex: 1 }}
+              animate={{
+                y: [0, -8, 0],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
               <img
                 src="/gallery/doctor.png"
                 alt="Doctor"
                 className="max-h-[650px] object-contain"
                 style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
               />
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>
