@@ -17,23 +17,27 @@ interface HeroSectionProps {
 export function HeroSection({ t }: HeroSectionProps) {
   return (
     <div className="relative min-h-screen">
-      {/* Background Image with Overlay */}
+      {/* Background Image with Overlay - Desktop Only */}
       <div 
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 hidden lg:block"
         style={{ 
           backgroundImage: 'url(/gallery/doctor-office.JPG)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           backgroundAttachment: 'fixed'
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 to-blue-800/90" />
       </div>
 
-      {/* Mobile-only fallback background (won't flicker on scroll) */}
+      {/* Mobile-only background (optimized for better performance) */}
       <div 
-        className="absolute inset-0 bg-cover bg-center lg:hidden"
+        className="absolute inset-0 lg:hidden"
         style={{ 
           backgroundImage: 'url(/gallery/doctor-office.JPG)',
-          backgroundAttachment: 'scroll'
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 to-blue-800/90" />
