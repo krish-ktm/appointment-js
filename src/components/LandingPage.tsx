@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { supabase } from '../lib/supabase';
 import { Notice, AppointmentForm as AppointmentFormType, BookingDetails as BookingDetailsType, TimeSlot } from '../types';
 import { ResponsiveHeader } from './headers/ResponsiveHeader';
@@ -14,6 +14,13 @@ import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../i18n/useTranslation';
 import { AppointmentForm } from './appointment/AppointmentForm';
+import { motion, useReducedMotion } from 'framer-motion';
+import { useIsMobile } from '../hooks/useIsMobile';
+
+// Lazy load sections that are below the fold
+const LazyServicesSection = lazy(() => import('./landing/ServicesSection').then(module => ({ default: module.ServicesSection })));
+const LazyNoticeBoard = lazy(() => import('./landing/NoticeBoard').then(module => ({ default: module.NoticeBoard })));
+const LazyStatsSection = lazy(() => import('./landing/StatsSection').then(module => ({ default: module.StatsSection })));
 
 export function LandingPage() {
   const { t } = useTranslation();
@@ -24,6 +31,8 @@ export function LandingPage() {
   const [success, setSuccess] = useState(false);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [bookingDetails, setBookingDetails] = useState<BookingDetailsType | null>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const isMobile = useIsMobile();
   
   // Get today's date in IST
   const today = new Date();
@@ -123,18 +132,39 @@ export function LandingPage() {
 
       setSuccess(true);
       setBookingDetails(appointment);
-      // Reset form after successful booking
       setForm(initialForm);
-    } catch (error: Error | unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error('An unexpected error occurred');
-      }
+      
+      // Reload time slots to reflect the new booking
+      loadTimeSlots();
+    } catch (error) {
+      toast.error(error.message);
     } finally {
       setBookingLoading(false);
     }
   };
+
+  // Animation variants optimized for performance
+  const sectionVariants = {
+    hidden: { 
+      opacity: 0,
+      y: shouldReduceMotion ? 0 : 20 
+    },
+    visible: { 
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  // Loading placeholder for lazy-loaded sections
+  const LoadingPlaceholder = () => (
+    <div className="min-h-[400px] flex items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
@@ -143,7 +173,13 @@ export function LandingPage() {
       <HeroSection t={t.home.hero} />
       
       {/* Appointment Form Section */}
-      <div className="py-20 bg-gradient-to-b from-white to-gray-50">
+      <motion.div 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionVariants}
+        className="py-20 bg-gradient-to-b from-white to-gray-50"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
             <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700">
@@ -162,11 +198,41 @@ export function LandingPage() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
       
-      <ServicesSection t={t.services} />
-      <NoticeBoard notices={notices} loading={loading} />
-      <StatsSection t={t.home.stats} />
+      {/* Lazy load sections below the fold */}
+      <Suspense fallback={<LoadingPlaceholder />}>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={sectionVariants}
+        >
+          <LazyServicesSection t={t.services} />
+        </motion.div>
+      </Suspense>
+
+      <Suspense fallback={<LoadingPlaceholder />}>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={sectionVariants}
+        >
+          <LazyNoticeBoard notices={notices} loading={loading} />
+        </motion.div>
+      </Suspense>
+
+      <Suspense fallback={<LoadingPlaceholder />}>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={sectionVariants}
+        >
+          <LazyStatsSection t={t.home.stats} />
+        </motion.div>
+      </Suspense>
 
       {bookingDetails && (
         <BookingConfirmation
