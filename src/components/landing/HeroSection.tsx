@@ -116,10 +116,6 @@ export function HeroSection({ t }: HeroSectionProps) {
               {t.title}
             </div>
 
-            <div className="text-lg sm:text-xl text-blue-100 mb-8 max-w-2xl mx-auto lg:mx-0">
-              {t.subtitle}
-            </div>
-
             {/* Doctor Image - Visible only on mobile */}
             <div className="lg:hidden mb-8">
               <img
