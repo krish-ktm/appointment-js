@@ -4,7 +4,7 @@ import { background, text, gradients } from '../../theme/colors';
 import { Bell } from 'lucide-react';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { useTranslation } from '../../i18n/useTranslation';
@@ -13,13 +13,29 @@ import { formatMarkdown } from '../../utils/markdown';
 interface NoticeBoardProps {
   notices: Notice[];
   loading: boolean;
+  disableAnimations?: boolean;
 }
 
-export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
+export function NoticeBoard({ notices, loading, disableAnimations = false }: NoticeBoardProps) {
   const { language } = useTranslation();
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 5000, stopOnInteraction: false })
   ]);
+
+  useEffect(() => {
+    if (emblaApi) {
+      // Force a re-render when the slide changes
+      const onSelect = () => {
+        // We're intentionally not storing the current slide index
+        // since we're using emblaApi.selectedScrollSnap() directly
+        emblaApi.scrollTo(emblaApi.selectedScrollSnap());
+      };
+      emblaApi.on('select', onSelect);
+      return () => {
+        emblaApi.off('select', onSelect);
+      };
+    }
+  }, [emblaApi]);
 
   const formatDate = (dateStr: string | undefined) => {
     if (!dateStr) return '';
@@ -38,46 +54,70 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
     return content[language] || content.en; // Fallback to English if translation not available
   };
 
+  if (loading) {
+    return (
+      <div className="py-16 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="animate-pulse h-64 bg-gray-200 rounded-2xl"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (notices.length === 0) {
+    return null;
+  }
+
+  // Conditionally use motion or regular div based on disableAnimations
+  const AnimatedContainer = disableAnimations ? 'div' : motion.div;
+  const headerAnimation = disableAnimations ? {} : {
+    initial: { opacity: 0, y: 20 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true }
+  };
+
   return (
     <div className={`py-20 bg-gradient-to-b ${background.light} will-change-transform`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+          <AnimatedContainer
+            {...headerAnimation}
             className="inline-flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-full mb-4"
           >
             <Bell className="h-4 w-4 text-blue-600" />
             <span className="text-sm font-medium text-blue-600">Important Updates</span>
-          </motion.div>
+          </AnimatedContainer>
           <h2 className={`text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
             Latest Announcements
           </h2>
           <p className={`text-lg ${text.secondary} max-w-2xl mx-auto`}>
-            Stay informed about important updates, schedule changes, and announcements from Dr. Skin Care.
+            Stay informed about important updates, schedule changes, and announcements from our clinic.
           </p>
         </div>
 
         <div className="max-w-4xl mx-auto">
           {notices.length === 0 && !loading ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+            <AnimatedContainer
+              {...(disableAnimations ? {} : {
+                initial: { opacity: 0 },
+                animate: { opacity: 1 }
+              })}
               className="text-center py-12 bg-gray-50 rounded-2xl"
             >
               <Bell className="h-8 w-8 text-gray-400 mx-auto mb-3" />
               <p className={text.muted}>No announcements at the moment.</p>
-            </motion.div>
+            </AnimatedContainer>
           ) : (
             <div className="overflow-hidden rounded-2xl" ref={emblaRef}>
               <div className="flex">
-                {notices.map((notice, index) => (
+                {notices.map((notice) => (
                   <div key={notice.id} className="flex-[0_0_100%] min-w-0">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
+                    <AnimatedContainer
+                      {...(disableAnimations ? {} : {
+                        initial: { opacity: 0, y: 20 },
+                        whileInView: { opacity: 1, y: 0 },
+                        viewport: { once: true }
+                      })}
                       className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 mx-4"
                     >
                       {notice.images && notice.images.length > 0 && (
@@ -119,7 +159,7 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
                           />
                         )}
                       </div>
-                    </motion.div>
+                    </AnimatedContainer>
                   </div>
                 ))}
               </div>

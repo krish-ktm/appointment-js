@@ -15,9 +15,11 @@ import { utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../i18n/useTranslation';
 import { motion } from 'framer-motion';
 import { AppointmentForm } from './appointment/AppointmentForm';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export function LandingPage() {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
@@ -141,37 +143,56 @@ export function LandingPage() {
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <ResponsiveHeader />
       
-      <HeroSection t={t.home.hero} />
+      <HeroSection t={t.home.hero} disableAnimations={isMobile} />
       
       {/* Appointment Form Section */}
       <div className="py-20 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
-          >
-            <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700">
-              <h2 className="text-xl sm:text-2xl font-semibold text-white">{t.appointment.title}</h2>
+          {isMobile ? (
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+              <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700">
+                <h2 className="text-xl sm:text-2xl font-semibold text-white">{t.appointment.title}</h2>
+              </div>
+              <div className="p-4 sm:p-6">
+                <AppointmentForm
+                  form={form}
+                  setForm={setForm}
+                  timeSlots={timeSlots}
+                  onSubmit={handleSubmit}
+                  success={success}
+                  loading={bookingLoading}
+                  loadingSlots={loadingSlots}
+                />
+              </div>
             </div>
-            <div className="p-4 sm:p-6">
-              <AppointmentForm
-                form={form}
-                setForm={setForm}
-                timeSlots={timeSlots}
-                onSubmit={handleSubmit}
-                success={success}
-                loading={bookingLoading}
-                loadingSlots={loadingSlots}
-              />
-            </div>
-          </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
+            >
+              <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700">
+                <h2 className="text-xl sm:text-2xl font-semibold text-white">{t.appointment.title}</h2>
+              </div>
+              <div className="p-4 sm:p-6">
+                <AppointmentForm
+                  form={form}
+                  setForm={setForm}
+                  timeSlots={timeSlots}
+                  onSubmit={handleSubmit}
+                  success={success}
+                  loading={bookingLoading}
+                  loadingSlots={loadingSlots}
+                />
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
       
-      <ServicesSection t={t.services} />
-      <NoticeBoard notices={notices} loading={loading} />
-      <StatsSection t={t.home.stats} />
+      <ServicesSection t={t.services} disableAnimations={isMobile} />
+      <NoticeBoard notices={notices} loading={loading} disableAnimations={isMobile} />
+      <StatsSection t={t.home.stats} disableAnimations={isMobile} />
 
       {bookingDetails && (
         <BookingConfirmation

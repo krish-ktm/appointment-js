@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom';
 
 interface ServicesSectionProps {
   t: any; // Using any for now, but we should define proper type
+  disableAnimations?: boolean;
 }
 
-export function ServicesSection({ t }: ServicesSectionProps) {
+export function ServicesSection({ t, disableAnimations = false }: ServicesSectionProps) {
   const services = [
     {
       title: t.categories.treatments,
@@ -62,7 +63,31 @@ export function ServicesSection({ t }: ServicesSectionProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => {
             const Icon = service.icon;
-            return (
+            return disableAnimations ? (
+              <div
+                key={service.title}
+                className={`bg-white/80 rounded-2xl p-8 hover:shadow-lg transition-all duration-300 ${border.accent} ${border.accentHover} backdrop-blur-sm will-change-transform`}
+                style={{ contain: 'content' }}
+              >
+                <div className="bg-gradient-to-br from-violet-50 to-indigo-50/50 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
+                  <Icon className="h-7 w-7 text-violet-500" />
+                </div>
+                <h3 className={`text-xl font-semibold ${text.primary} mb-3`}>
+                  {service.title}
+                </h3>
+                <p className={`${text.secondary} mb-4`}>
+                  {service.description}
+                </p>
+                <ul className="space-y-2">
+                  {service.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-violet-500"></span>
+                      <span className="text-sm text-gray-600">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
               <motion.div
                 key={service.title}
                 initial={{ opacity: 0, y: 20 }}

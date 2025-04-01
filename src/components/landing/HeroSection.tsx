@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Star, Award, Shield, Calendar } from 'lucide-react';
+import React from 'react';
 
 interface HeroSectionProps {
   t: {
@@ -12,9 +13,45 @@ interface HeroSectionProps {
     mrAppointmentCta: string;
     mrAppointmentNote: string;
   };
+  disableAnimations?: boolean;
 }
 
-export function HeroSection({ t }: HeroSectionProps) {
+interface AnimatedComponentProps {
+  children: React.ReactNode;
+  initial?: any;
+  animate?: any;
+  transition?: any;
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+export function HeroSection({ t, disableAnimations = false }: HeroSectionProps) {
+  // Helper function to conditionally wrap a component with motion
+  const AnimatedComponent: React.FC<AnimatedComponentProps> = ({ 
+    children, 
+    initial = { opacity: 0, y: 20 }, 
+    animate = { opacity: 1, y: 0 },
+    transition = {}, 
+    className = "",
+    ...props
+  }) => {
+    if (disableAnimations) {
+      return <div className={className} {...props}>{children}</div>;
+    }
+    
+    return (
+      <motion.div 
+        initial={initial} 
+        animate={animate}
+        transition={transition}
+        className={className}
+        {...props}
+      >
+        {children}
+      </motion.div>
+    );
+  };
+
   return (
     <div className="relative min-h-screen">
       {/* Background Image with Overlay - Desktop Only */}
@@ -53,57 +90,58 @@ export function HeroSection({ t }: HeroSectionProps) {
         <div className="flex flex-col lg:flex-row items-center pt-24 sm:pt-32 pb-12 sm:pb-20">
           {/* Left Content */}
           <div className="flex-1 text-center lg:text-left lg:pr-12 mb-12 lg:mb-0">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <AnimatedComponent
               className="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6"
             >
               <Calendar className="h-5 w-5 text-blue-300 mr-2" />
               <span className="text-sm font-medium text-white">{t.doctorTitle}</span>
-            </motion.div>
+            </AnimatedComponent>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <AnimatedComponent
               className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
             >
               {t.title}
-            </motion.h1>
+            </AnimatedComponent>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <AnimatedComponent
               transition={{ delay: 0.1 }}
               className="text-lg sm:text-xl text-blue-100 mb-8 max-w-2xl mx-auto lg:mx-0"
             >
               {t.subtitle}
-            </motion.p>
+            </AnimatedComponent>
 
             {/* Doctor Image - Visible only on mobile */}
-            <motion.div
+            <AnimatedComponent
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="lg:hidden mb-8"
             >
-              <motion.img
-                src="/gallery/doctor.png"
-                alt="Doctor"
-                className="w-full max-w-md mx-auto"
-                style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
-                animate={{
-                  y: [0, -5, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-            </motion.div>
+              {disableAnimations ? (
+                <img
+                  src="/gallery/doctor.png"
+                  alt="Doctor"
+                  className="w-full max-w-md mx-auto"
+                  style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
+                />
+              ) : (
+                <motion.img
+                  src="/gallery/doctor.png"
+                  alt="Doctor"
+                  className="w-full max-w-md mx-auto"
+                  style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
+                  animate={{
+                    y: [0, -5, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+              )}
+            </AnimatedComponent>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <AnimatedComponent
               transition={{ delay: 0.2 }}
               className="flex flex-wrap justify-center lg:justify-start gap-4 mb-8"
             >
@@ -138,11 +176,11 @@ export function HeroSection({ t }: HeroSectionProps) {
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </AnimatedComponent>
           </div>
 
           {/* Doctor Image - Visible only on desktop */}
-          <motion.div
+          <AnimatedComponent
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="hidden lg:block relative"
@@ -151,26 +189,37 @@ export function HeroSection({ t }: HeroSectionProps) {
               minHeight: '600px'
             }}
           >
-            <motion.div 
-              className="absolute right-0 bottom-0"
-              style={{ zIndex: 1 }}
-              animate={{
-                y: [0, -8, 0],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            >
-              <img
-                src="/gallery/doctor.png"
-                alt="Doctor"
-                className="max-h-[650px] object-contain"
-                style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
-              />
-            </motion.div>
-          </motion.div>
+            {disableAnimations ? (
+              <div className="absolute right-0 bottom-0" style={{ zIndex: 1 }}>
+                <img
+                  src="/gallery/doctor.png"
+                  alt="Doctor"
+                  className="max-h-[650px] object-contain"
+                  style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
+                />
+              </div>
+            ) : (
+              <motion.div 
+                className="absolute right-0 bottom-0"
+                style={{ zIndex: 1 }}
+                animate={{
+                  y: [0, -8, 0],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                <img
+                  src="/gallery/doctor.png"
+                  alt="Doctor"
+                  className="max-h-[650px] object-contain"
+                  style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
+                />
+              </motion.div>
+            )}
+          </AnimatedComponent>
         </div>
       </div>
     </div>
