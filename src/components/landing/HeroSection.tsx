@@ -1,32 +1,21 @@
-import { AppointmentForm } from '../appointment/AppointmentForm';
-import { AppointmentFormType, TimeSlot } from '../../types';
-import { translations } from '../../translations';
-import { text } from '../../theme/colors';
-import { Link } from 'react-router-dom';
-import { Building2, ArrowRight, Star, Award, Shield, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Building2, ArrowRight, Star, Award, Shield, Calendar } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface HeroSectionProps {
-  form: AppointmentFormType;
-  setForm: (form: AppointmentFormType) => void;
-  timeSlots: TimeSlot[];
-  handleSubmit: (e: React.FormEvent) => void;
-  success: boolean;
-  loading: boolean;
-  loadingSlots?: boolean;
-  t: any;
+  t: {
+    title: string;
+    subtitle: string;
+    doctorTitle: string;
+    experience: string;
+    advancedTreatments: string;
+    expertCare: string;
+    mrAppointmentCta: string;
+    mrAppointmentNote: string;
+  };
 }
 
-export function HeroSection({ 
-  form, 
-  setForm, 
-  timeSlots, 
-  handleSubmit, 
-  success, 
-  loading, 
-  loadingSlots = false,
-  t 
-}: HeroSectionProps) {
+export function HeroSection({ t }: HeroSectionProps) {
   return (
     <div className="relative min-h-screen">
       {/* Background Image with Overlay */}
@@ -150,48 +139,24 @@ export function HeroSection({
             </motion.div>
           </div>
 
-          {/* Right Content - Appointment Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="lg:w-[600px] w-full"
-          >
-            <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-              <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700">
-                <h2 className="text-xl text-center sm:text-2xl font-semibold text-white">{t.title}</h2>
-              </div>
-              <div className="p-4 sm:p-6">
-                <AppointmentForm
-                  form={form}
-                  setForm={setForm}
-                  timeSlots={timeSlots}
-                  onSubmit={handleSubmit}
-                  success={success}
-                  loading={loading}
-                  loadingSlots={loadingSlots}
-                />
-              </div>
-            </div>
-          </motion.div>
-
           {/* Doctor Image - Visible only on desktop */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="hidden lg:block absolute -right-64 bottom-0"
+            className="hidden lg:block relative"
             style={{ 
-              width: '800px',
-              height: '900px',
-              zIndex: -1
+              width: '500px',
+              minHeight: '600px'
             }}
           >
-            <img
-              src="/gallery/doctor.png"
-              alt="Doctor"
-              className="w-full h-full object-contain"
-              style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
-            />
+            <div className="absolute right-0 bottom-0" style={{ zIndex: 1 }}>
+              <img
+                src="/gallery/doctor.png"
+                alt="Doctor"
+                className="max-h-[650px] object-contain"
+                style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
+              />
+            </div>
           </motion.div>
         </div>
       </div>

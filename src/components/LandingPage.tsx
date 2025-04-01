@@ -13,6 +13,8 @@ import { StatsSection } from './landing/StatsSection';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../i18n/useTranslation';
+import { motion } from 'framer-motion';
+import { AppointmentForm } from './appointment/AppointmentForm';
 
 export function LandingPage() {
   const { t } = useTranslation();
@@ -124,8 +126,12 @@ export function LandingPage() {
       setBookingDetails(appointment);
       // Reset form after successful booking
       setForm(initialForm);
-    } catch (error) {
-      toast.error(error.message);
+    } catch (error: Error | unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('An unexpected error occurred');
+      }
     } finally {
       setBookingLoading(false);
     }
@@ -135,16 +141,33 @@ export function LandingPage() {
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <ResponsiveHeader />
       
-      <HeroSection
-        form={form}
-        setForm={setForm}
-        timeSlots={timeSlots}
-        handleSubmit={handleSubmit}
-        success={success}
-        loading={bookingLoading}
-        loadingSlots={loadingSlots}
-        t={t.home.hero}
-      />
+      <HeroSection t={t.home.hero} />
+      
+      {/* Appointment Form Section */}
+      <div className="py-20 bg-gradient-to-b from-white to-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
+          >
+            <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700">
+              <h2 className="text-xl sm:text-2xl font-semibold text-white">{t.appointment.title}</h2>
+            </div>
+            <div className="p-4 sm:p-6">
+              <AppointmentForm
+                form={form}
+                setForm={setForm}
+                timeSlots={timeSlots}
+                onSubmit={handleSubmit}
+                success={success}
+                loading={bookingLoading}
+                loadingSlots={loadingSlots}
+              />
+            </div>
+          </motion.div>
+        </div>
+      </div>
       
       <ServicesSection t={t.services} />
       <NoticeBoard notices={notices} loading={loading} />
@@ -158,7 +181,6 @@ export function LandingPage() {
             setSuccess(false);
           }}
           onScheduleAnother={resetForm}
-          t={t.appointment}
         />
       )}
 
