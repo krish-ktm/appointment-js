@@ -4,7 +4,7 @@ import { background, text, gradients } from '../../theme/colors';
 import { Bell } from 'lucide-react';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import { useEffect } from 'react';
+import { useEffect, useMemo, memo } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { useTranslation } from '../../i18n/useTranslation';
@@ -16,18 +16,89 @@ interface NoticeBoardProps {
   disableAnimations?: boolean;
 }
 
+// Create memoized components to prevent unnecessary re-renders
+const MemoizedNoticeItem = memo(({ 
+  notice, 
+  formatDate, 
+  getLocalizedContent, 
+  disableAnimations 
+}: { 
+  notice: Notice; 
+  formatDate: (date?: string) => string;
+  getLocalizedContent: (content: string | { en: string; gu: string }) => string;
+  disableAnimations: boolean;
+}) => {
+  const AnimatedContainer = disableAnimations ? 'div' : motion.div;
+  
+  return (
+    <div className="flex-[0_0_100%] min-w-0">
+      <AnimatedContainer
+        {...(disableAnimations ? {} : {
+          initial: { opacity: 0, y: 20 },
+          animate: { opacity: 1, y: 0 }, // Using animate instead of whileInView
+          transition: { duration: 0.5 }
+        })}
+        className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 mx-4"
+      >
+        {notice.images && notice.images.length > 0 && (
+          <div className="relative w-full aspect-[2/1] overflow-hidden bg-gray-100">
+            <img
+              src={notice.images[0]}
+              alt={getLocalizedContent(notice.title)}
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        )}
+        
+        <div className="p-6">
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-blue-50 p-2 rounded-lg">
+                <Bell className="h-5 w-5 text-blue-500" />
+              </div>
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                New Update
+              </span>
+            </div>
+            <div className="text-sm text-gray-500">
+              {formatDate(notice.created_at)}
+            </div>
+          </div>
+
+          <h3 className="text-xl font-semibold text-gray-900 mb-3">
+            {getLocalizedContent(notice.title)}
+          </h3>
+
+          {notice.content && (
+            <div 
+              className="prose prose-blue max-w-none"
+              dangerouslySetInnerHTML={{ 
+                __html: formatMarkdown(getLocalizedContent(notice.content)) 
+              }}
+            />
+          )}
+        </div>
+      </AnimatedContainer>
+    </div>
+  );
+});
+
 export function NoticeBoard({ notices, loading, disableAnimations = false }: NoticeBoardProps) {
   const { language } = useTranslation();
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 5000, stopOnInteraction: false })
   ]);
 
+  // Prevent unnecessary re-renders
+  const AnimatedContainer = useMemo(() => 
+    disableAnimations ? 'div' : motion.div, 
+  [disableAnimations]);
+
   useEffect(() => {
     if (emblaApi) {
       // Force a re-render when the slide changes
       const onSelect = () => {
-        // We're intentionally not storing the current slide index
-        // since we're using emblaApi.selectedScrollSnap() directly
         emblaApi.scrollTo(emblaApi.selectedScrollSnap());
       };
       emblaApi.on('select', onSelect);
@@ -68,20 +139,18 @@ export function NoticeBoard({ notices, loading, disableAnimations = false }: Not
     return null;
   }
 
-  // Conditionally use motion or regular div based on disableAnimations
-  const AnimatedContainer = disableAnimations ? 'div' : motion.div;
-  const headerAnimation = disableAnimations ? {} : {
+  const headerAnimationProps = disableAnimations ? {} : {
     initial: { opacity: 0, y: 20 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true }
+    animate: { opacity: 1, y: 0 }, // Using animate instead of whileInView
+    transition: { duration: 0.5 }
   };
 
   return (
-    <div className={`py-20 bg-gradient-to-b ${background.light} will-change-transform`}>
+    <div className={`py-20 bg-gradient-to-b ${background.light}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <AnimatedContainer
-            {...headerAnimation}
+            {...headerAnimationProps}
             className="inline-flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-full mb-4"
           >
             <Bell className="h-4 w-4 text-blue-600" />
@@ -111,56 +180,13 @@ export function NoticeBoard({ notices, loading, disableAnimations = false }: Not
             <div className="overflow-hidden rounded-2xl" ref={emblaRef}>
               <div className="flex">
                 {notices.map((notice) => (
-                  <div key={notice.id} className="flex-[0_0_100%] min-w-0">
-                    <AnimatedContainer
-                      {...(disableAnimations ? {} : {
-                        initial: { opacity: 0, y: 20 },
-                        whileInView: { opacity: 1, y: 0 },
-                        viewport: { once: true }
-                      })}
-                      className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 mx-4"
-                    >
-                      {notice.images && notice.images.length > 0 && (
-                        <div className="relative w-full aspect-[2/1] overflow-hidden bg-gray-100">
-                          <img
-                            src={notice.images[0]}
-                            alt={getLocalizedContent(notice.title)}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                        </div>
-                      )}
-                      
-                      <div className="p-6">
-                        <div className="flex items-center justify-between gap-4 mb-4">
-                          <div className="flex items-center gap-3">
-                            <div className="bg-blue-50 p-2 rounded-lg">
-                              <Bell className="h-5 w-5 text-blue-500" />
-                            </div>
-                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
-                              New Update
-                            </span>
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {formatDate(notice.created_at)}
-                          </div>
-                        </div>
-
-                        <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                          {getLocalizedContent(notice.title)}
-                        </h3>
-
-                        {notice.content && (
-                          <div 
-                            className="prose prose-blue max-w-none"
-                            dangerouslySetInnerHTML={{ 
-                              __html: formatMarkdown(getLocalizedContent(notice.content)) 
-                            }}
-                          />
-                        )}
-                      </div>
-                    </AnimatedContainer>
-                  </div>
+                  <MemoizedNoticeItem 
+                    key={notice.id} 
+                    notice={notice} 
+                    formatDate={formatDate}
+                    getLocalizedContent={getLocalizedContent}
+                    disableAnimations={disableAnimations}
+                  />
                 ))}
               </div>
 
