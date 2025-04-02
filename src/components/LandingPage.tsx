@@ -202,15 +202,9 @@ export function LandingPage() {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div className="relative w-full h-[550px]">
-                <div className="absolute inset-0 bg-gradient-to-b from-indigo-700/20 to-blue-900/20 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-                  <img 
-                    src="/gallery/doctor.png" 
-                    alt="Doctor" 
-                    className="absolute bottom-0 right-0 max-h-[550px] object-contain z-10"
-                    style={{ filter: 'drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2))' }}
-                  />
+                <div className="absolute inset-0 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
                   <div 
-                    className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-overlay"
+                    className="absolute inset-0 bg-cover bg-center"
                     style={{ backgroundImage: 'url(/gallery/doctor-office.JPG)' }}
                   ></div>
                 </div>
