@@ -25,18 +25,17 @@ interface StatCardProps {
   };
 }
 
-// Regular stat card component
 const StatCard = ({ stat }: StatCardProps) => {
   const Icon = stat.icon;
   
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 relative overflow-hidden group">
+    <div className="bg-white rounded-2xl shadow-lg p-8 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
       <div 
         className={`absolute -right-12 -top-12 w-32 h-32 rounded-full opacity-10 bg-gradient-to-r ${stat.gradient}`} 
       />
       
       <div className="flex items-start">
-        <div className={`p-3 rounded-full mr-4 bg-gradient-to-r ${stat.gradient}`}>
+        <div className={`p-4 rounded-xl mr-4 bg-gradient-to-r ${stat.gradient}`}>
           <Icon className="h-6 w-6 text-white" />
         </div>
         
@@ -97,9 +96,9 @@ export function StatsSection({ t }: StatsSectionProps) {
   ];
 
   return (
-    <div className="py-20 bg-gradient-to-b from-gray-50 to-white">
+    <div className="py-24 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
             <StatCard key={index} stat={stat} />
           ))}

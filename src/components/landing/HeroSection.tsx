@@ -26,10 +26,10 @@ const Feature = ({ feature }: {
   
   return (
     <div className="relative p-1 flex-shrink-0">
-      <div className="relative bg-white/10 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/20">
+      <div className="relative bg-white/10 backdrop-blur-sm px-4 py-2.5 rounded-xl border border-white/20">
         <div className="flex items-center gap-2">
           <Icon className={`h-4 w-4 ${feature.color}`} />
-          <span className="text-xs font-medium text-white whitespace-nowrap">
+          <span className="text-sm font-medium text-white whitespace-nowrap">
             {feature.text}
           </span>
         </div>
@@ -38,9 +38,7 @@ const Feature = ({ feature }: {
   );
 };
 
-// Main component as a regular function
 export function HeroSection({ t }: HeroSectionProps) {
-  // Regular features array
   const features = [
     {
       icon: Star,
@@ -59,7 +57,6 @@ export function HeroSection({ t }: HeroSectionProps) {
     }
   ];
   
-  // Pre-load images to ensure they're rendered immediately
   useEffect(() => {
     const preloadImage = (src: string) => {
       const img = new Image();
@@ -70,7 +67,7 @@ export function HeroSection({ t }: HeroSectionProps) {
   }, []);
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-[90vh] flex items-center">
       {/* Background Image with Overlay - Desktop Only */}
       <div 
         className="absolute inset-0 hidden lg:block"
@@ -99,22 +96,26 @@ export function HeroSection({ t }: HeroSectionProps) {
 
       {/* Floating Shapes Animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute w-96 h-96 -top-48 -left-48 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute w-96 h-96 -bottom-48 -right-48 bg-blue-300/10 rounded-full blur-3xl" />
+        <div className="absolute w-96 h-96 -top-48 -left-48 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute w-96 h-96 -bottom-48 -right-48 bg-blue-300/10 rounded-full blur-3xl animate-pulse" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center pt-24 sm:pt-32 pb-8 sm:pb-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
           {/* Left Content */}
-          <div className="flex-1 text-center lg:text-left lg:pr-12 mb-12 lg:mb-0">
-            <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+          <div className="flex-1 text-center lg:text-left">
+            <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-8">
               <Calendar className="h-5 w-5 text-blue-300 mr-2" />
               <span className="text-sm font-medium text-white">{t.doctorTitle}</span>
             </div>
 
-            <div className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
               {t.title}
-            </div>
+            </h1>
+
+            <p className="text-lg sm:text-xl text-blue-100/90 mb-8 max-w-2xl mx-auto lg:mx-0">
+              {t.subtitle}
+            </p>
 
             {/* Doctor Image - Visible only on mobile */}
             <div className="lg:hidden mb-8">
@@ -127,20 +128,43 @@ export function HeroSection({ t }: HeroSectionProps) {
               />
             </div>
 
-            <div className="flex flex-row flex-wrap justify-center lg:justify-start gap-2 mb-8 overflow-x-auto">
+            <div className="flex flex-wrap justify-center lg:justify-start gap-3 mb-8">
               {features.map((feature, index) => (
                 <Feature key={index} feature={feature} />
               ))}
             </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <button
+                onClick={() => {
+                  const element = document.querySelector('.appointment-form-section');
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    window.location.href = '/#appointment-form';
+                  }
+                }}
+                className="px-8 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl text-lg font-medium"
+              >
+                Book Appointment
+              </button>
+              <a
+                href="/mr-appointment"
+                className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all duration-300 text-lg font-medium border border-white/20"
+              >
+                MR Appointment
+              </a>
+            </div>
           </div>
 
           {/* Doctor Image - Visible only on desktop */}
-          <div className="hidden lg:block relative" style={{ width: '500px', minHeight: '600px' }}>
-            <div className="absolute right-0 bottom-0" style={{ zIndex: 1 }}>
+          <div className="hidden lg:block relative flex-1" style={{ maxWidth: '600px' }}>
+            <div className="absolute inset-0 bg-gradient-to-b from-blue-600/20 to-transparent rounded-3xl blur-3xl" />
+            <div className="relative">
               <img
                 src="/gallery/doctor.png"
                 alt="Doctor"
-                className="max-h-[650px] object-contain"
+                className="w-full object-contain"
                 style={{ filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))' }}
                 loading="eager"
               />
