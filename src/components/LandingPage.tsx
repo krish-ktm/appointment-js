@@ -138,11 +138,26 @@ export function LandingPage() {
       <ResponsiveHeader />
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-900 to-blue-800 pt-16 pb-32 lg:pt-24 lg:pb-40">
-        {/* Background Elements */}
+      <section className="relative overflow-hidden pt-20 pb-32 lg:pt-28 lg:pb-40">
+        {/* Main Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+          style={{ 
+            backgroundImage: 'url(/gallery/building.jpeg)', 
+            filter: 'brightness(0.40) saturate(1.05)' 
+          }}
+        ></div>
+
+        {/* Neutral Dark Overlay */}
+        <div className="absolute inset-0 bg-gray-900/75"></div>
+        
+        {/* Background Elements - simplified */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="pointer-events-none absolute top-0 right-0 h-96 w-96 translate-x-1/4 -translate-y-1/4 rounded-full bg-blue-500 opacity-20 blur-3xl"></div>
-          <div className="pointer-events-none absolute bottom-0 left-0 h-96 w-96 -translate-x-1/4 translate-y-1/4 rounded-full bg-indigo-500 opacity-20 blur-3xl"></div>
+          {/* Single subtle glow element at the top right */}
+          <div className="pointer-events-none absolute top-0 right-0 h-96 w-96 translate-x-1/4 -translate-y-1/4 rounded-full bg-white opacity-10 blur-3xl"></div>
+          
+          {/* Pattern overlay - subtle grid */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] opacity-10"></div>
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
@@ -153,16 +168,16 @@ export function LandingPage() {
               animate="visible"
               variants={fadeInUp}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 bg-blue-700/50 backdrop-blur-sm border border-blue-600/30">
-                <Calendar className="h-4 w-4 text-blue-300" />
-                <span className="text-sm font-medium text-blue-100">Dr. Jemish A. Patel - MBBS, MD</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 bg-gray-700/50 backdrop-blur-sm border border-gray-600/30">
+                <Calendar className="h-4 w-4 text-gray-300" />
+                <span className="text-sm font-medium text-gray-200">Dr. Jemish A. Patel - MBBS, MD</span>
               </div>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                 Expert Dermatological Care for Your Skin Health
               </h1>
               
-              <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto lg:mx-0">
+              <p className="text-lg text-gray-200 mb-8 max-w-2xl mx-auto lg:mx-0">
                 Comprehensive skin treatments with advanced technology and personalized care plans
               </p>
               
@@ -170,9 +185,9 @@ export function LandingPage() {
                 {features.map((feature, index) => (
                   <div 
                     key={index} 
-                    className={`flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-sm border ${feature.borderColor}`}
+                    className="flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-sm border border-gray-600/30 bg-gray-700/40"
                   >
-                    <feature.icon className={`h-4 w-4 ${feature.color}`} />
+                    <feature.icon className="h-4 w-4 text-gray-300" />
                     <span className="text-sm font-medium text-white">{feature.title}</span>
                   </div>
                 ))}
@@ -181,14 +196,14 @@ export function LandingPage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link 
                   to="/appointment"
-                  className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 text-white font-medium flex items-center justify-center gap-2 hover:from-blue-500 hover:to-blue-600 transition-all shadow-lg hover:shadow-xl"
+                  className="px-6 py-3 rounded-lg bg-gradient-to-r from-gray-700 to-gray-800 text-white font-medium flex items-center justify-center gap-2 hover:from-gray-800 hover:to-gray-900 transition-all shadow-lg hover:shadow-xl"
                 >
                   Book Appointment
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link 
                   to="/mr-appointment"
-                  className="px-6 py-3 rounded-lg bg-blue-700/30 backdrop-blur-sm border border-blue-600/30 text-white font-medium flex items-center justify-center gap-2 hover:bg-blue-700/50 transition-all"
+                  className="px-6 py-3 rounded-lg bg-gray-700/40 backdrop-blur-sm border border-gray-600/30 text-white font-medium flex items-center justify-center gap-2 hover:bg-gray-700/60 transition-all"
                 >
                   Medical Representative Appointment
                 </Link>
