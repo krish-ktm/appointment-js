@@ -1,99 +1,132 @@
 import { motion } from 'framer-motion';
-import { Star, Award, Users, Zap, FlaskRound as Flask, Microscope, ArrowRight } from 'lucide-react';
-import { background, text, border, gradients } from '../../theme/colors';
+import { ArrowRight } from 'lucide-react';
+import { background, text, gradients } from '../../theme/colors';
 import { Link } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 interface ServicesSectionProps {
-  t: any; // Using any for now, but we should define proper type
+  t: any;
+}
+
+interface Service {
+  title: string;
+  description: string;
+  features: string[];
+  image: string;
 }
 
 export function ServicesSection({ t }: ServicesSectionProps) {
-  const services = [
+  const services: Service[] = [
     {
       title: t.categories.treatments,
-      icon: Star,
       description: t.lists.treatments[0],
-      features: t.lists.treatments.slice(1, 5)
+      features: t.lists.treatments.slice(1, 5),
+      image: "https://images.unsplash.com/photo-1612776572997-76cc42e058c3?q=80&w=1200"
     },
     {
       title: t.categories.facial,
-      icon: Award,
       description: t.lists.facial[0],
-      features: t.lists.facial.slice(1, 5)
+      features: t.lists.facial.slice(1, 5),
+      image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1200"
     },
     {
       title: t.categories.aesthetic,
-      icon: Users,
       description: t.lists.aesthetic[0],
-      features: t.lists.aesthetic.slice(1, 5)
+      features: t.lists.aesthetic.slice(1, 5),
+      image: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=1200"
     },
     {
       title: t.categories.surgical,
-      icon: Zap,
       description: t.lists.surgical[0],
-      features: t.lists.surgical.slice(1)
+      features: t.lists.surgical.slice(1),
+      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1200"
     },
     {
       title: t.categories.hair,
-      icon: Flask,
       description: t.lists.hair[0],
-      features: t.lists.hair.slice(1)
+      features: t.lists.hair.slice(1),
+      image: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?q=80&w=1200"
     },
     {
       title: t.categories.diagnostic,
-      icon: Microscope,
       description: t.lists.diagnostic[0],
-      features: t.lists.diagnostic.slice(1)
+      features: t.lists.diagnostic.slice(1),
+      image: "https://images.unsplash.com/photo-1579684288538-c76a2fab9617?q=80&w=1200"
     }
   ];
 
   return (
     <div className={`py-20 bg-gradient-to-b ${background.light} will-change-transform`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className={`text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
             {t.title}
           </h2>
-          <p className={`text-lg ${text.secondary} max-w-2xl mx-auto`}>
+          <p className={`text-lg ${text.secondary} max-w-2xl mx-auto px-4`}>
             {t.subtitle}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => {
-            const Icon = service.icon;
-            return (
-              <motion.div
-                key={service.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2 }}
-                className={`bg-white/80 rounded-2xl p-8 hover:shadow-lg transition-all duration-300 ${border.accent} ${border.accentHover} backdrop-blur-sm will-change-transform`}
-                style={{ contain: 'content' }}
-              >
-                <div className="bg-gradient-to-br from-violet-50 to-indigo-50/50 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
-                  <Icon className="h-7 w-7 text-violet-500" />
-                </div>
-                <h3 className={`text-xl font-semibold ${text.primary} mb-3`}>
-                  {service.title}
-                </h3>
-                <p className={`${text.secondary} mb-4`}>
-                  {service.description}
-                </p>
-                <ul className="space-y-2">
-                  {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-violet-500"></span>
-                      <span className="text-sm text-gray-600">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            );
-          })}
+        <div className="relative px-4 md:px-8">
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            spaceBetween={32}
+            slidesPerView="auto"
+            centeredSlides={false}
+            loop={true}
+            autoplay={{
+              delay: 4000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true
+            }}
+            pagination={{
+              clickable: true,
+              bulletActiveClass: 'bg-violet-600 w-4',
+              bulletClass: 'w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300 mx-1 cursor-pointer'
+            }}
+            className="!pb-12"
+          >
+            {services.map((service) => (
+              <SwiperSlide key={service.title} className="!w-[400px]">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden group">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C4532]/90 via-[#1C4532]/50 to-transparent" />
+                    
+                    {/* Content */}
+                    <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                      <div className="bg-white/10 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <div className="w-6 h-6 text-white">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M12 2v20M2 12h20" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                      </div>
+                      <h3 className="text-2xl font-semibold text-white mb-2">
+                        {service.title}
+                      </h3>
+                      <p className="text-white/80 text-sm line-clamp-2">
+                        {service.description}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center mt-12 px-4">
           <Link
             to="/services"
             className="inline-flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 transition-all duration-300 shadow-sm hover:shadow"
