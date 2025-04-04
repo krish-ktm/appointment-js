@@ -1,27 +1,70 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { Notice } from '../types';
+import { Notice, AppointmentForm as AppointmentFormType, BookingDetails as BookingDetailsType, TimeSlot } from '../types';
 import { ResponsiveHeader } from './headers/ResponsiveHeader';
 import { Footer } from './Footer';
-import { motion, useReducedMotion } from 'framer-motion';
+import { BookingConfirmation } from './appointment/BookingConfirmation';
+import { generateTimeSlots, validateBookingRequest } from '../utils';
+import { toast } from 'react-hot-toast';
+import { HeroSection } from './landing/HeroSection';
+import { ServicesSection } from './landing/ServicesSection';
+import { NoticeBoard } from './landing/NoticeBoard';
+import { StatsSection } from './landing/StatsSection';
+import { format } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 import { useTranslation } from '../i18n/useTranslation';
-import { Link } from 'react-router-dom';
-import { CheckCircle, Calendar, Clock, MapPin, Phone, Star, Shield, Award, ArrowRight } from 'lucide-react';
-
-// Lazy load sections that are below the fold
-const LazyServicesSection = lazy(() => import('./landing/ServicesSection').then(module => ({ default: module.ServicesSection })));
-const LazyNoticeBoard = lazy(() => import('./landing/NoticeBoard').then(module => ({ default: module.NoticeBoard })));
-const LazyTestimonialsSection = lazy(() => import('./landing/TestimonialsSection').then(module => ({ default: module.TestimonialsSection })));
 
 export function LandingPage() {
   const { t } = useTranslation();
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
-  const shouldReduceMotion = useReducedMotion();
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+  const [bookingDetails, setBookingDetails] = useState<BookingDetailsType | null>(null);
+  
+  // Get today's date in IST
+  const today = new Date();
+  const istToday = utcToZonedTime(today, 'Asia/Kolkata');
+  const istTodayStr = format(istToday, 'yyyy-MM-dd');
+
+  const initialForm = {
+    name: '',
+    phone: '',
+    age: '',
+    city: '',
+    date: istTodayStr,
+    timeSlot: ''
+  };
+
+  const [form, setForm] = useState<AppointmentFormType>(initialForm);
 
   useEffect(() => {
     loadNotices();
   }, []);
+
+  useEffect(() => {
+    const loadTimeSlots = async () => {
+      if (form.date) {
+        setLoadingSlots(true);
+        try {
+          const slots = await generateTimeSlots(form.date);
+          setTimeSlots(slots);
+        } catch (error: unknown) {
+          console.error('Error loading time slots:', error);
+          toast.error('Failed to load available time slots');
+          setTimeSlots([]);
+        } finally {
+          setLoadingSlots(false);
+        }
+      } else {
+        setTimeSlots([]);
+      }
+    };
+
+    loadTimeSlots();
+  }, [form.date]);
 
   const loadNotices = async () => {
     try {
@@ -40,326 +83,84 @@ export function LandingPage() {
     }
   };
 
-  // Animation variants
-  const fadeInUp = {
-    hidden: { 
-      opacity: 0,
-      y: shouldReduceMotion ? 0 : 30
-    },
-    visible: { 
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
+  const resetForm = () => {
+    setForm(initialForm);
+    setSuccess(false);
+    setBookingDetails(null);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBookingLoading(true);
+
+    try {
+      const { isValid, error } = await validateBookingRequest(
+        form.phone,
+        form.date,
+        form.timeSlot
+      );
+
+      if (!isValid) {
+        throw new Error(error);
       }
+
+      const { data: appointment, error: appointmentError } = await supabase
+        .from('appointments')
+        .insert({
+          name: form.name,
+          phone: form.phone,
+          age: parseInt(form.age),
+          city: form.city,
+          appointment_date: form.date,
+          appointment_time: form.timeSlot,
+          status: 'pending'
+        })
+        .select()
+        .single();
+
+      if (appointmentError) throw new Error(appointmentError.message);
+
+      setSuccess(true);
+      setBookingDetails(appointment);
+      // Reset form after successful booking
+      setForm(initialForm);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setBookingLoading(false);
     }
   };
 
-  // Loading placeholder
-  const LoadingPlaceholder = () => (
-    <div className="min-h-[300px] flex items-center justify-center">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-    </div>
-  );
-
-  // Features list for hero section
-  const features = [
-    {
-      icon: Star,
-      title: "14+ Years Experience",
-      color: "text-yellow-400 bg-yellow-100/10",
-      borderColor: "border-yellow-400/20"
-    },
-    {
-      icon: Shield,
-      title: "Expert Care",
-      color: "text-blue-400 bg-blue-100/10",
-      borderColor: "border-blue-400/20"
-    },
-    {
-      icon: Award,
-      title: "Advanced Treatments",
-      color: "text-emerald-400 bg-emerald-100/10",
-      borderColor: "border-emerald-400/20"
-    }
-  ];
-
-  // Clinic benefits
-  const benefits = [
-    {
-      icon: CheckCircle,
-      title: 'Expert Dermatology Care',
-      description: 'Specialized care for all skin conditions with personalized treatment plans'
-    },
-    {
-      icon: CheckCircle,
-      title: 'Advanced Treatment Options',
-      description: 'State-of-the-art procedures and equipment for optimal results'
-    },
-    {
-      icon: CheckCircle,
-      title: 'Patient-Centered Approach',
-      description: 'Compassionate care tailored to your unique needs and concerns'
-    },
-    {
-      icon: CheckCircle,
-      title: 'Comprehensive Skin Solutions',
-      description: 'From medical treatments to aesthetic procedures, all in one place'
-    }
-  ];
-
-  // Clinic info cards
-  const clinicInfo = [
-    {
-      icon: Calendar,
-      title: 'Convenient Appointment Scheduling',
-      description: 'Book your appointments easily online'
-    },
-    {
-      icon: Clock,
-      title: 'Extended Office Hours',
-      description: 'Morning and evening slots available'
-    },
-    {
-      icon: MapPin,
-      title: 'Central Location',
-      description: 'Easy to reach with nearby parking'
-    },
-    {
-      icon: Phone,
-      title: 'Direct Patient Support',
-      description: 'Quick response to all your queries'
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-white text-gray-800">
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <ResponsiveHeader />
       
-      {/* Hero Section */}
-      <section className="relative overflow-hidden pt-20 pb-32 lg:pt-28 lg:pb-40">
-        {/* Main Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
-          style={{ 
-            backgroundImage: 'url(/gallery/building.jpeg)', 
-            filter: 'brightness(0.40) saturate(1.05)' 
-          }}
-        ></div>
+      <HeroSection
+        form={form}
+        setForm={setForm}
+        timeSlots={timeSlots}
+        handleSubmit={handleSubmit}
+        success={success}
+        loading={bookingLoading}
+        loadingSlots={loadingSlots}
+        t={t.home.hero}
+      />
+      
+      <ServicesSection t={t.services} />
+      <NoticeBoard notices={notices} loading={loading} />
+      <StatsSection t={t.home.stats} />
 
-        {/* Neutral Dark Overlay */}
-        <div className="absolute inset-0 bg-gray-900/75"></div>
-        
-        {/* Background Elements - simplified */}
-        <div className="absolute inset-0 overflow-hidden">
-          {/* Single subtle glow element at the top right */}
-          <div className="pointer-events-none absolute top-0 right-0 h-96 w-96 translate-x-1/4 -translate-y-1/4 rounded-full bg-white opacity-10 blur-3xl"></div>
-          
-          {/* Pattern overlay - subtle grid */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] opacity-10"></div>
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <motion.div 
-              className="text-center lg:text-left"
-              initial="hidden"
-              animate="visible"
-              variants={fadeInUp}
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 bg-gray-700/50 backdrop-blur-sm border border-gray-600/30">
-                <Calendar className="h-4 w-4 text-gray-300" />
-                <span className="text-sm font-medium text-gray-200">Dr. Jemish A. Patel - MBBS, MD</span>
-              </div>
-              
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-                Expert Dermatological Care for Your Skin Health
-              </h1>
-              
-              <p className="text-lg text-gray-200 mb-8 max-w-2xl mx-auto lg:mx-0">
-                Comprehensive skin treatments with advanced technology and personalized care plans
-              </p>
-              
-              <div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-8">
-                {features.map((feature, index) => (
-                  <div 
-                    key={index} 
-                    className="flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-sm border border-gray-600/30 bg-gray-700/40"
-                  >
-                    <feature.icon className="h-4 w-4 text-gray-300" />
-                    <span className="text-sm font-medium text-white">{feature.title}</span>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Link 
-                  to="/appointment"
-                  className="px-6 py-3 rounded-lg bg-gradient-to-r from-gray-700 to-gray-800 text-white font-medium flex items-center justify-center gap-2 hover:from-gray-800 hover:to-gray-900 transition-all shadow-lg hover:shadow-xl"
-                >
-                  Book Appointment
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link 
-                  to="/mr-appointment"
-                  className="px-6 py-3 rounded-lg bg-gray-700/40 backdrop-blur-sm border border-gray-600/30 text-white font-medium flex items-center justify-center gap-2 hover:bg-gray-700/60 transition-all"
-                >
-                  Medical Representative Appointment
-                </Link>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              className="hidden lg:block relative"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <div className="relative w-full h-[550px]">
-                <div className="absolute inset-0 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{ backgroundImage: 'url(/gallery/doctor-office.JPG)' }}
-                  ></div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Clinic Benefits Section */}
-      <motion.section 
-        className="py-24 bg-gray-50"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={fadeInUp}
-      >
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Our Dermatology Clinic
-            </h2>
-            <p className="text-lg text-gray-600">
-              Providing exceptional dermatological care with a focus on patient satisfaction and clinical excellence
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {benefits.map((benefit, index) => (
-              <motion.div 
-                key={index}
-                className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex flex-col h-full"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <div className="p-3 bg-blue-50 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                  <benefit.icon className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{benefit.title}</h3>
-                <p className="text-gray-600 flex-grow">{benefit.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.section>
-      
-      {/* Services Overview */}
-      <Suspense fallback={<LoadingPlaceholder />}>
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeInUp}
-        >
-          <LazyServicesSection t={t?.services || {}} />
-        </motion.div>
-      </Suspense>
-      
-      {/* Call to Action */}
-      <motion.section 
-        className="py-24 bg-gradient-to-br from-blue-600 to-indigo-800 text-white relative overflow-hidden"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeInUp}
-      >
-        {/* Background shape */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-blue-400 opacity-20 blur-3xl"></div>
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-indigo-400 opacity-20 blur-3xl"></div>
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to Get Started?
-            </h2>
-            <p className="text-xl text-blue-100 mb-8">
-              Experience our expert dermatological care today
-            </p>
-            <Link
-              to="/appointment"
-              className="px-8 py-4 rounded-lg bg-white text-blue-700 font-medium text-lg hover:bg-blue-50 transition-colors shadow-lg"
-            >
-              Book an Appointment
-            </Link>
-          </div>
-        </div>
-      </motion.section>
-      
-      {/* Clinic Info Cards */}
-      <motion.section
-        className="py-24 bg-white"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeInUp}
-      >
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Clinic Information
-            </h2>
-            <p className="text-lg text-gray-600">
-              We strive to make your visit convenient and comfortable
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {clinicInfo.map((info, index) => (
-              <motion.div
-                key={index}
-                className="border border-gray-200 p-6 rounded-xl hover:shadow-md transition-shadow"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <div className="p-3 bg-blue-50 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                  <info.icon className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">{info.title}</h3>
-                <p className="text-gray-600">{info.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.section>
-      
-      {/* Testimonials Section */}
-      <Suspense fallback={<LoadingPlaceholder />}>
-        <LazyTestimonialsSection />
-      </Suspense>
-      
-      {/* Notices Section */}
-      <Suspense fallback={<LoadingPlaceholder />}>
-        <LazyNoticeBoard notices={notices} loading={loading} />
-      </Suspense>
+      {bookingDetails && (
+        <BookingConfirmation
+          booking={bookingDetails}
+          onClose={() => {
+            setBookingDetails(null);
+            setSuccess(false);
+          }}
+          onScheduleAnother={resetForm}
+          t={t.appointment}
+        />
+      )}
 
       <Footer />
     </div>

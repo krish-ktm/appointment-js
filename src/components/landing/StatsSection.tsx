@@ -1,106 +1,66 @@
-import { Calendar, Users, Star, Award } from 'lucide-react';
-import React from 'react';
+import { motion } from 'framer-motion';
+import { gradients, text } from '../../theme/colors';
 
 interface StatsSectionProps {
-  t: {
-    yearsExperience: string;
-    happyPatients: string;
-    treatments: string;
-    successRate: string;
-    experienceDesc: string;
-    patientsDesc: string;
-    treatmentsDesc: string;
-    successDesc: string;
-  };
+  t: any; // Using any for now, but we should define proper type
 }
-
-interface StatCardProps {
-  stat: {
-    name: string;
-    value: number;
-    icon: React.ElementType;
-    description: string;
-    suffix: string;
-    gradient: string;
-  };
-}
-
-const StatCard = ({ stat }: StatCardProps) => {
-  const Icon = stat.icon;
-  
-  return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
-      <div 
-        className={`absolute -right-12 -top-12 w-32 h-32 rounded-full opacity-10 bg-gradient-to-r ${stat.gradient}`} 
-      />
-      
-      <div className="flex items-start">
-        <div className={`p-4 rounded-xl mr-4 bg-gradient-to-r ${stat.gradient}`}>
-          <Icon className="h-6 w-6 text-white" />
-        </div>
-        
-        <div>
-          <div className="flex items-end">
-            <span className="text-4xl font-bold text-gray-900">
-              {stat.value}
-            </span>
-            <span className="text-xl font-bold text-gray-900 mb-1 ml-1">
-              {stat.suffix}
-            </span>
-          </div>
-          <p className="text-sm font-medium text-gray-500">{stat.name}</p>
-        </div>
-      </div>
-      
-      <p className="mt-4 text-sm text-gray-600">
-        {stat.description}
-      </p>
-    </div>
-  );
-};
 
 export function StatsSection({ t }: StatsSectionProps) {
-  const stats = [
-    {
-      name: t.yearsExperience,
-      value: 25,
-      icon: Calendar,
-      description: t.experienceDesc,
-      suffix: "+",
-      gradient: "from-blue-500 to-blue-700"
-    },
-    {
-      name: t.happyPatients,
-      value: 8500,
-      icon: Users,
-      description: t.patientsDesc,
-      suffix: "+",
-      gradient: "from-emerald-500 to-emerald-700"
-    },
-    {
-      name: t.treatments,
-      value: 12,
-      icon: Star,
-      description: t.treatmentsDesc,
-      suffix: "+",
-      gradient: "from-amber-500 to-amber-700"
-    },
-    {
-      name: t.successRate,
-      value: 98,
-      icon: Award,
-      description: t.successDesc,
-      suffix: "%",
-      gradient: "from-rose-500 to-rose-700"
-    }
-  ];
-
   return (
-    <div className="py-24 bg-gradient-to-b from-gray-50 to-white">
+    <div className={`py-20 bg-gradient-to-b ${gradients.primary.light} will-change-transform`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {stats.map((stat, index) => (
-            <StatCard key={index} stat={stat} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {[
+            { 
+              value: '14+', 
+              label: t.yearsExperience,
+              gradient: 'from-blue-600 to-blue-400',
+              description: t.experienceDesc
+            },
+            { 
+              value: '15k+', 
+              label: t.happyPatients,
+              gradient: 'from-emerald-600 to-emerald-400',
+              description: t.patientsDesc
+            },
+            { 
+              value: '50+', 
+              label: t.treatments,
+              gradient: 'from-violet-600 to-violet-400',
+              description: t.treatmentsDesc
+            },
+            { 
+              value: '99%', 
+              label: t.successRate,
+              gradient: 'from-amber-600 to-amber-400',
+              description: t.successDesc
+            }
+          ].map((stat, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="relative p-1.5"
+              style={{ willChange: 'transform', contain: 'content' }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-white/60 to-white/20 rounded-2xl blur-xl opacity-70"></div>
+              <div className="relative bg-gradient-to-r from-white/50 to-white/30 backdrop-blur-sm p-6 sm:p-8 rounded-xl border border-white/40 hover:border-white/60 transition-all duration-300 overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-x-[-100%] group-hover:translate-x-[100%]"></div>
+                <div className="relative z-10">
+                  <div className={`text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`}>
+                    {stat.value}
+                  </div>
+                  <div className={`${text.secondary} font-medium text-sm sm:text-base mb-2`}>
+                    {stat.label}
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    {stat.description}
+                  </p>
+                </div>
+                <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
