@@ -55,6 +55,7 @@ export function useAppointmentForm() {
     setForm(initialForm);
     setSuccess(false);
     setBookingDetails(null);
+    setTimeSlots([]); // Reset time slots
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -91,9 +92,7 @@ export function useAppointmentForm() {
       setSuccess(true);
       setBookingDetails(appointment);
       setForm(initialForm);
-      
-      // Reload time slots to reflect the new booking
-      loadTimeSlots();
+      setTimeSlots([]); // Reset time slots instead of reloading
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -104,6 +103,7 @@ export function useAppointmentForm() {
   const closeBookingDetails = () => {
     setBookingDetails(null);
     setSuccess(false);
+    setTimeSlots([]); // Reset time slots when closing booking details
   };
 
   return {
