@@ -1,0 +1,59 @@
+# Ignore admin-related files and directories
+
+# Admin directories
+admin/
+**/admin/
+*-admin/
+admin-*/
+**/admin-*/
+*-admin-*/
+
+# Admin configuration files
+*admin.config.*
+*admin.settings.*
+*admin.json
+*admin.yaml
+*admin.yml
+
+# Admin scripts and executables
+*admin.js
+*admin.ts
+*admin.sh
+*admin.bat
+*admin.cmd
+
+# Admin credentials and sensitive files
+admin.credentials
+admin.env
+admin.secrets
+admin.key
+admin.pem
+
+# Temporary admin files
+admin.tmp
+admin.temp
+admin.log
+admin.cache
+
+# Ignore i18n (internationalization) files and directories
+i18n/
+**/i18n/
+locales/
+**/locales/
+translations/
+**/translations/
+lang/
+**/lang/
+
+# i18n configuration and data files
+*.locale.*
+*.i18n.*
+*.translation.*
+*.lang.*
+*.po
+*.pot
+*.mo
+*.json.i18n
+**/i18n.json
+**/translations.json
+**/locales.json 
