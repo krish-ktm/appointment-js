@@ -59,24 +59,37 @@ export function ServicesSection({ t }: ServicesSectionProps) {
   ];
 
   return (
-    <div className={`py-20 bg-gradient-to-b ${background.light} will-change-transform`}>
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className={`text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
+    <div className={`py-16 sm:py-20 bg-gradient-to-b ${background.light} will-change-transform`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12 sm:mb-16">
+          <h2 className={`text-2xl sm:text-4xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
             {t.title}
           </h2>
-          <p className={`text-lg ${text.secondary} max-w-2xl mx-auto px-4`}>
+          <p className={`text-base sm:text-lg ${text.secondary} max-w-2xl mx-auto px-4`}>
             {t.subtitle}
           </p>
         </div>
 
-        <div className="relative px-4 md:px-8">
+        <div className="relative">
           <Swiper
             modules={[Autoplay, Pagination]}
             spaceBetween={32}
-            slidesPerView="auto"
-            centeredSlides={false}
+            centeredSlides={true}
             loop={true}
+            breakpoints={{
+              320: {
+                slidesPerView: 1.2,
+                spaceBetween: 16,
+              },
+              640: {
+                slidesPerView: 2.2,
+                spaceBetween: 24,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 32,
+              }
+            }}
             autoplay={{
               delay: 4000,
               disableOnInteraction: false,
@@ -90,21 +103,21 @@ export function ServicesSection({ t }: ServicesSectionProps) {
             className="!pb-12"
           >
             {services.map((service) => (
-              <SwiperSlide key={service.title} className="!w-[400px]">
+              <SwiperSlide key={service.title} className="!w-[280px] sm:!w-[340px] md:!w-[400px]">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden group">
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden group shadow-lg">
                     <img
                       src={service.image}
                       alt={service.title}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C4532]/90 via-[#1C4532]/50 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C4532]/95 via-[#1C4532]/50 to-transparent" />
                     
                     {/* Content */}
-                    <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                    <div className="absolute inset-0 p-4 sm:p-8 flex flex-col justify-end">
                       <div className="bg-white/10 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
                         <div className="w-6 h-6 text-white">
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -112,7 +125,7 @@ export function ServicesSection({ t }: ServicesSectionProps) {
                           </svg>
                         </div>
                       </div>
-                      <h3 className="text-2xl font-semibold text-white mb-2">
+                      <h3 className="text-xl sm:text-2xl font-semibold text-white mb-1 sm:mb-2">
                         {service.title}
                       </h3>
                       <p className="text-white/80 text-sm line-clamp-2">
@@ -126,10 +139,10 @@ export function ServicesSection({ t }: ServicesSectionProps) {
           </Swiper>
         </div>
 
-        <div className="text-center mt-12 px-4">
+        <div className="text-center mt-8 sm:mt-12 px-4">
           <Link
             to="/services"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 transition-all duration-300 shadow-sm hover:shadow"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 transition-all duration-300 shadow-sm hover:shadow"
           >
             <span className="font-medium">{t.viewAll}</span>
             <ArrowRight className="h-4 w-4" />

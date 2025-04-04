@@ -14,6 +14,29 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.swiper-pagination {
+  position: relative !important;
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background-color: #d1d5db;
+  border-radius: 9999px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.swiper-pagination-bullet-active {
+  width: 16px;
+  background-color: #7c3aed;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {

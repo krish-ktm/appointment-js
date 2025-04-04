@@ -6,6 +6,7 @@ import { Footer } from './Footer';
 import { HeroSection } from './landing/HeroSection';
 import { ServicesSection } from './landing/ServicesSection';
 import { NoticeBoard } from './landing/NoticeBoard';
+import { WhyChooseUs } from './landing/WhyChooseUs';
 import { StatsSection } from './landing/StatsSection';
 import { useTranslation } from '../i18n/useTranslation';
 
@@ -42,6 +43,7 @@ export function LandingPage() {
       <HeroSection t={t.home.hero} />
       
       <ServicesSection t={t.services} />
+      <WhyChooseUs t={t.whyChooseUs} />
       <NoticeBoard notices={notices} loading={loading} />
       <StatsSection t={t.home.stats} />
 
