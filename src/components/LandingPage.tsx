@@ -10,6 +10,7 @@ import { HowWeWork } from './landing/HowWeWork';
 import { WhyChooseUs } from './landing/WhyChooseUs';
 import { StatsSection } from './landing/StatsSection';
 import { Benefits } from './landing/Benefits';
+import { BeforeAfter } from './landing/BeforeAfter';
 import { useTranslation } from '../i18n/useTranslation';
 
 export function LandingPage() {
@@ -48,6 +49,7 @@ export function LandingPage() {
       <ServicesSection t={t.services} />
       <HowWeWork t={t.howWeWork} />
       <Benefits t={t.Benefits} />
+       <BeforeAfter t={t.BeforeAfter}/>
       <NoticeBoard notices={notices} loading={loading} />
       <StatsSection t={t.home.stats} />
 

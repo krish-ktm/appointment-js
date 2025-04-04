@@ -9,30 +9,49 @@ export function Benefits({ t }: BenefitsProps) {
   const benefits = [
     {
       title: "Expert Dermatologists",
-      description: "Our team consists of board-certified dermatologists with extensive experience",
-      icon: Users
+      description: "Our team consists board-certified dermatologists with experience",
+      icon: Users,
+      align: 'right'
     },
     {
       title: "Advanced Technology",
       description: "We use cutting-edge equipment and innovative techniques",
-      icon: Stethoscope
-    },
-    {
-      title: "High Safety Standards",
-      description: "Your safety is our priority. We adhere to strict hygiene and safety protocols",
-      icon: Shield
+      icon: Stethoscope,
+      align: 'right'
     },
     {
       title: "Personalized Care",
-      description: "Every treatment plan is tailored to your unique skin type and concerns",
-      icon: Leaf
+      description: "Every treatment plan is tailored to your unique skin type, concerns",
+      icon: Leaf,
+      align: 'right'
+    }
+  ];
+
+  const rightBenefits = [
+    {
+      title: "Comprehensive Services",
+      description: "From medical dermatology cosmetic enhancements, we offer a treatment",
+      icon: Shield,
+      align: 'left'
+    },
+    {
+      title: "High Safety Standards",
+      description: "Your safety is our priority. We adhere to strict hygiene protocols",
+      icon: Shield,
+      align: 'left'
+    },
+    {
+      title: "Comfortable Environment",
+      description: "Our clinic provides a welcoming and stress-free atmosphere",
+      icon: Users,
+      align: 'left'
     }
   ];
 
   return (
-    <section className="relative py-12 md:py-16 bg-[#2B5C4B] overflow-hidden">
+    <section className="min-h-screen bg-[#2B5C4B] relative overflow-hidden">
       {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-32 md:w-64 h-32 md:h-64 opacity-10">
+      <div className="absolute top-0 left-0 w-24 sm:w-48 h-24 sm:h-48 opacity-20">
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -40,7 +59,7 @@ export function Benefits({ t }: BenefitsProps) {
           className="w-full h-full border-[20px] md:border-[40px] border-white/20 rounded-full"
         />
       </div>
-      <div className="absolute bottom-0 right-0 w-48 md:w-96 h-48 md:h-96 opacity-10">
+      <div className="absolute bottom-0 right-0 w-32 sm:w-64 h-32 sm:h-64 opacity-20">
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -49,9 +68,9 @@ export function Benefits({ t }: BenefitsProps) {
         />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
         {/* Header */}
-        <div className="text-center mb-8 md:mb-12">
+        <div className="text-center mb-8 sm:mb-16">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -67,7 +86,7 @@ export function Benefits({ t }: BenefitsProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-2xl md:text-4xl font-marcellus text-white mb-3 md:mb-4"
+            className="text-2xl md:text-4xl font-serif text-white mb-3 md:mb-4"
           >
             Exceptional dermatology,<br className="hidden sm:block" /> every step of the way
           </motion.h2>
@@ -83,46 +102,67 @@ export function Benefits({ t }: BenefitsProps) {
           </motion.p>
         </div>
 
-        {/* Benefits Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 items-center">
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          {/* Left Benefits */}
+          <div className="lg:col-span-4 space-y-6 sm:space-y-8 order-2 lg:order-1">
+            {benefits.map((benefit, index) => (
+              <motion.div
+                key={benefit.title}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="flex flex-row-reverse lg:flex-row gap-4 items-start text-left lg:text-right"
+              >
+                <div className="flex-grow">
+                  <h3 className="text-lg sm:text-xl font-serif text-white mb-1 sm:mb-2">{benefit.title}</h3>
+                  <p className="text-white/70 text-xs sm:text-sm">{benefit.description}</p>
+                </div>
+                <div className="bg-white/10 p-2 sm:p-3 rounded-lg backdrop-blur-sm shrink-0">
+                  <benefit.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
           {/* Center Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="lg:col-start-2 row-span-2 order-first lg:order-none mb-6 md:mb-0"
-          >
-            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border-4 md:border-8 border-white/10 shadow-xl">
+          <div className="lg:col-span-4 relative order-1 lg:order-2 px-8 sm:px-12 md:px-0">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative aspect-[3/4] rounded-[100px] sm:rounded-[150px] overflow-hidden border-4 sm:border-8 border-white/10"
+            >
               <img
                 src="https://images.unsplash.com/photo-1595831004082-7d028af1387b?q=80&w=1974&auto=format&fit=crop"
                 alt="Dermatologist"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#2B5C4B]/50 to-transparent"></div>
-            </div>
-          </motion.div>
-
-          {/* Benefits List */}
-          {benefits.map((benefit, index) => (
-            <motion.div
-              key={benefit.title}
-              initial={{ opacity: 0, x: index < 2 ? -20 : 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 * index }}
-              className="relative group"
-            >
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border border-white/10 hover:bg-white/10 transition-colors">
-                <benefit.icon className="w-8 h-8 md:w-10 md:h-10 text-white/80 mb-3" />
-                <h3 className="text-lg md:text-xl font-marcellus text-white mb-1 md:mb-2">
-                  {benefit.title}
-                </h3>
-                <p className="text-white/70 text-sm md:text-base">
-                  {benefit.description}
-                </p>
-              </div>
             </motion.div>
-          ))}
+          </div>
+
+          {/* Right Benefits */}
+          <div className="lg:col-span-4 space-y-6 sm:space-y-8 order-3">
+            {rightBenefits.map((benefit, index) => (
+              <motion.div
+                key={benefit.title}
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="flex gap-4 items-start"
+              >
+                <div className="bg-white/10 p-2 sm:p-3 rounded-lg backdrop-blur-sm shrink-0">
+                  <benefit.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg sm:text-xl font-serif text-white mb-1 sm:mb-2">{benefit.title}</h3>
+                  <p className="text-white/70 text-xs sm:text-sm">{benefit.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
