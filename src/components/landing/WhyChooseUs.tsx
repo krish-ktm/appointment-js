@@ -15,61 +15,91 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
       title: "Personalized, compassionate care",
       description: "We believe that every patient is unique. That's why we take the time to understand your specific needs and tailor treatment plans.",
       color: "from-violet-500 to-purple-500",
-      bgColor: "bg-violet-50"
+      bgGlow: "bg-violet-500/20"
     },
     {
       icon: Stethoscope,
       title: "Comprehensive care for all skin needs",
       description: "Whether you're seeking medical dermatology, cosmetic treatments, or preventive care, we offer a comprehensive range of services.",
       color: "from-emerald-500 to-teal-500",
-      bgColor: "bg-emerald-50"
+      bgGlow: "bg-emerald-500/20"
     },
     {
       icon: Clock,
       title: "Advanced treatments & technology",
       description: "Our clinic is equipped with the latest technology and our team stays up-to-date with advanced treatment methods.",
       color: "from-blue-500 to-cyan-500",
-      bgColor: "bg-blue-50"
+      bgGlow: "bg-blue-500/20"
     }
   ];
 
   return (
-    <section className="py-16 sm:py-24 bg-gradient-to-b from-white to-gray-50/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Left Content */}
-          <div>
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs sm:text-sm font-medium mb-4 sm:mb-6"
-            >
-              <Shield className="w-4 h-4" />
-              Why Choose Us
-            </motion.span>
+    <section className="relative py-12 sm:py-16 overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50/50 to-white pointer-events-none" />
+      
+      {/* Decorative circles */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-br from-[#2B5C4B]/5 to-transparent rounded-full blur-3xl opacity-60 pointer-events-none" />
+      
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-start">
+          <div className="space-y-8 sm:space-y-10">
+            {/* Header Content */}
+            <div className="relative">
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm"
+              >
+                <Shield className="w-3.5 h-3.5" />
+                Why Choose Us
+              </motion.span>
 
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-2xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 leading-[1.2]"
-            >
-              Why choose us for all your dermatology needs
-            </motion.h2>
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 leading-[1.2] tracking-tight"
+              >
+                Why choose us for all your dermatology needs
+              </motion.h2>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="text-base sm:text-lg text-gray-600 mb-8 sm:mb-12 leading-relaxed"
-            >
-              We're dedicated to helping you achieve and maintain beautiful, healthy skin. Trust us to provide exceptional care tailored to you.
-            </motion.p>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-xl"
+              >
+                We're dedicated to helping you achieve and maintain beautiful, healthy skin. Trust us to provide exceptional care tailored to you.
+              </motion.p>
+            </div>
 
-            <div className="space-y-6 sm:space-y-8">
+            {/* Image - Shows between header and features on mobile */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="relative block lg:hidden"
+            >
+              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 border border-white/20">
+                <img
+                  src="https://images.unsplash.com/photo-1612776572997-76cc42e058c3?q=80&w=1200"
+                  alt="Dermatology Treatment"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent mix-blend-multiply" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#2B5C4B]/20 to-transparent mix-blend-overlay" />
+              </div>
+              <div className="absolute -bottom-6 -right-6 w-56 h-56 bg-[#2B5C4B]/10 rounded-full blur-2xl -z-10" />
+              <div className="absolute -top-6 -left-6 w-56 h-56 bg-[#2B5C4B]/10 rounded-full blur-2xl -z-10" />
+            </motion.div>
+
+            {/* Features */}
+            <div className="relative space-y-0">
               {features.map((feature, index) => (
                 <motion.div
                   key={feature.title}
@@ -77,21 +107,27 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 + index * 0.1 }}
-                  className="flex gap-4 sm:gap-6"
+                  className="group"
                 >
-                  <div className="flex-shrink-0">
-                    <div className={`w-12 sm:w-14 h-12 sm:h-14 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center shadow-lg shadow-gray-200/50 group-hover:shadow-xl transition-shadow duration-300`}>
-                      <feature.icon className="w-6 sm:w-7 h-6 sm:h-7 text-white" />
+                  <div className="flex gap-3 sm:gap-4 p-4 -mx-2 rounded-xl hover:bg-white/50 transition-colors duration-300">
+                    <div className="relative flex-shrink-0">
+                      <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br ${feature.color} flex items-center justify-center shadow-md shadow-gray-200/50 transition-all duration-300 group-hover:shadow-lg group-hover:scale-105`}>
+                        <feature.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                      </div>
+                      <div className={`absolute -inset-1 ${feature.bgGlow} rounded-xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-300`} />
+                    </div>
+                    <div>
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">
+                        {feature.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                        {feature.description}
+                      </p>
                     </div>
                   </div>
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-1 sm:mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
+                  {index < features.length - 1 && (
+                    <div className="h-px bg-gradient-to-r from-transparent via-gray-200/75 to-transparent mx-4 my-1" />
+                  )}
                 </motion.div>
               ))}
             </div>
@@ -100,28 +136,30 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
               to="/appointment"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#2B5C4B] text-white rounded-xl mt-8 sm:mt-12 hover:bg-[#234539] transition-colors shadow-lg shadow-[#2B5C4B]/10 hover:shadow-xl hover:shadow-[#2B5C4B]/20"
+              className="relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-[#2B5C4B] to-[#234539] text-white text-sm font-medium rounded-lg shadow-md shadow-[#2B5C4B]/10 hover:shadow-lg hover:shadow-[#2B5C4B]/20 transition-all duration-300 overflow-hidden group"
             >
-              Book an Appointment
-              <ArrowRight className="w-4 h-4" />
+              <span className="relative z-10">Book an Appointment</span>
+              <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#234539] to-[#2B5C4B] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </MotionLink>
           </div>
 
-          {/* Right Image */}
+          {/* Desktop Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="relative lg:ml-12 mt-8 lg:mt-0"
+            className="relative hidden lg:block lg:sticky lg:top-8"
           >
-            <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl shadow-gray-200/50">
+            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 border border-white/20">
               <img
                 src="https://images.unsplash.com/photo-1612776572997-76cc42e058c3?q=80&w=1200"
                 alt="Dermatology Treatment"
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent mix-blend-multiply" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#2B5C4B]/20 to-transparent mix-blend-overlay" />
             </div>
             <div className="absolute -bottom-8 -right-8 w-72 h-72 bg-[#2B5C4B]/10 rounded-full blur-3xl -z-10" />
             <div className="absolute -top-8 -left-8 w-72 h-72 bg-[#2B5C4B]/10 rounded-full blur-3xl -z-10" />
