@@ -32,7 +32,9 @@ export function useAppointmentForm() {
   const [form, setForm] = useState<AppointmentForm>(initialForm);
 
   useEffect(() => {
-    loadTimeSlots();
+    if (form.date) {
+      loadTimeSlots();
+    }
   }, [form.date]);
 
   const loadTimeSlots = async () => {
@@ -52,10 +54,16 @@ export function useAppointmentForm() {
   };
 
   const resetForm = () => {
+    // Reset form to initial state
     setForm(initialForm);
+    // Reset success state
     setSuccess(false);
+    // Reset booking details
     setBookingDetails(null);
-    setTimeSlots([]); // Reset time slots
+    // Reset time slots
+    setTimeSlots([]);
+    // Load time slots for the initial date
+    loadTimeSlots();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -91,8 +99,11 @@ export function useAppointmentForm() {
 
       setSuccess(true);
       setBookingDetails(appointment);
+      // Reset form and time slots
       setForm(initialForm);
-      setTimeSlots([]); // Reset time slots instead of reloading
+      setTimeSlots([]);
+      // Load fresh time slots for the initial date
+      loadTimeSlots();
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -101,9 +112,8 @@ export function useAppointmentForm() {
   };
 
   const closeBookingDetails = () => {
-    setBookingDetails(null);
-    setSuccess(false);
-    setTimeSlots([]); // Reset time slots when closing booking details
+    // Reset everything when closing the modal
+    resetForm();
   };
 
   return {

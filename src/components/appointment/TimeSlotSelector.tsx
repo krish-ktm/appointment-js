@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { AlertCircle } from 'lucide-react';
+import { Clock, AlertCircle } from 'lucide-react';
 import { TimeSlot } from '../../types';
 
 interface TimeSlotSelectorProps {
@@ -17,10 +17,20 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t, loa
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gray-50 border border-gray-200 rounded-xl p-3 sm:p-4 text-center"
+        className="bg-white rounded-xl p-4 border border-gray-200"
       >
-        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto mb-2"></div>
-        <p className="text-sm text-gray-600">Loading available time slots...</p>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 bg-blue-50 rounded-lg">
+            <Clock className="h-5 w-5 text-blue-600" />
+          </div>
+          <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
+        </div>
+        <div className="flex items-center justify-center py-8">
+          <div className="flex flex-col items-center gap-3">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p className="text-sm text-gray-600">Loading available time slots...</p>
+          </div>
+        </div>
       </motion.div>
     );
   }
@@ -32,13 +42,13 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t, loa
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-orange-50 border border-orange-200 rounded-xl p-3 sm:p-4 text-center"
+        className="bg-orange-50 border border-orange-200 rounded-xl p-4 text-center"
       >
-        <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-orange-500 mx-auto mb-2" />
-        <h3 className="text-sm sm:text-base font-medium text-orange-800 mb-1">
+        <AlertCircle className="h-6 w-6 text-orange-500 mx-auto mb-2" />
+        <h3 className="text-base font-medium text-orange-800 mb-1">
           {t.noSlots}
         </h3>
-        <p className="text-xs sm:text-sm text-orange-600">
+        <p className="text-sm text-orange-600">
           {timeSlots.length === 0 
             ? t.selectDate
             : t.noSlotsAvailable}
@@ -101,4 +111,4 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t, loa
       })}
     </div>
   );
-} 
+}
