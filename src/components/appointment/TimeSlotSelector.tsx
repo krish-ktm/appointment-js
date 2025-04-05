@@ -20,14 +20,14 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t, loa
         className="bg-white rounded-xl p-4 border border-gray-200"
       >
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-blue-50 rounded-lg">
-            <Clock className="h-5 w-5 text-blue-600" />
+          <div className="p-2 bg-[#2B5C4B]/10 rounded-lg">
+            <Clock className="h-5 w-5 text-[#2B5C4B]" />
           </div>
           <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
         </div>
         <div className="flex items-center justify-center py-8">
           <div className="flex flex-col items-center gap-3">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2B5C4B]"></div>
             <p className="text-sm text-gray-600">Loading available time slots...</p>
           </div>
         </div>
@@ -42,13 +42,13 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t, loa
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-orange-50 border border-orange-200 rounded-xl p-4 text-center"
+        className="bg-[#2B5C4B]/5 border border-[#2B5C4B]/10 rounded-xl p-4 text-center"
       >
-        <AlertCircle className="h-6 w-6 text-orange-500 mx-auto mb-2" />
-        <h3 className="text-base font-medium text-orange-800 mb-1">
+        <AlertCircle className="h-6 w-6 text-[#2B5C4B] mx-auto mb-2" />
+        <h3 className="text-base font-medium text-[#2B5C4B] mb-1">
           {t.noSlots}
         </h3>
-        <p className="text-sm text-orange-600">
+        <p className="text-sm text-[#2B5C4B]/80">
           {timeSlots.length === 0 
             ? t.selectDate
             : t.noSlotsAvailable}
@@ -65,7 +65,7 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t, loa
   });
 
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-1 sm:gap-1.5">
+    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-1.5 sm:gap-2">
       {sortedSlots.map((slot, index) => {
         const isUnavailable = slot.currentBookings >= slot.maxBookings;
         
@@ -79,21 +79,21 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t, loa
             disabled={isUnavailable}
             onClick={() => onSelectTime(slot.time)}
             className={`
-              relative p-1.5 sm:p-2 rounded-lg flex flex-col items-center justify-center border
+              relative p-2 sm:p-2.5 rounded-xl flex flex-col items-center justify-center border transition-all duration-300
               ${
                 selectedTime === slot.time
-                  ? 'bg-blue-50 border-blue-600 text-blue-700'
+                  ? 'bg-[#2B5C4B] border-[#2B5C4B] text-white shadow-lg shadow-[#2B5C4B]/10'
                   : isUnavailable
                   ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed'
-                  : 'bg-white border-gray-200 hover:border-blue-400 hover:bg-blue-50/50 text-gray-700'
+                  : 'bg-white border-gray-200 hover:border-[#2B5C4B]/30 hover:bg-[#2B5C4B]/5 text-gray-700'
               }
             `}
           >
-            <span className="text-[10px] sm:text-xs font-medium">{slot.time}</span>
+            <span className="text-[11px] sm:text-sm font-medium">{slot.time}</span>
             {!isUnavailable && (
-              <span className={`text-[8px] sm:text-[10px] ${
+              <span className={`text-[9px] sm:text-[10px] ${
                 selectedTime === slot.time 
-                  ? 'text-blue-600/80' 
+                  ? 'text-white/90' 
                   : 'text-gray-500'
               }`}>
                 {slot.maxBookings - slot.currentBookings} {t.slotsLeft}

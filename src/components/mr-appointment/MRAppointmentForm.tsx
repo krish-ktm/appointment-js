@@ -35,12 +35,12 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">
           {t.mrName} *
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Users className="h-5 w-5 text-gray-400" />
+            <Users className="h-5 w-5 text-[#2B5C4B]" />
           </div>
           <input
             type="text"
@@ -50,11 +50,11 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
             onBlur={() => handleBlur('mr_name')}
             className={`block w-full pl-10 pr-3 py-2.5 border ${
               showError('mr_name') ? 'border-red-300' : 'border-gray-200'
-            } rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-all duration-200 bg-white/50 hover:bg-white hover:border-gray-300`}
+            } rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-all duration-200 bg-white/50 hover:bg-white hover:border-[#2B5C4B]/30`}
             placeholder={t.mrName}
           />
           {showError('mr_name') && (
-            <div className="mt-1 text-sm text-red-600 flex items-center gap-1">
+            <div className="mt-1.5 text-sm text-red-600 flex items-center gap-1">
               <AlertCircle className="h-4 w-4" />
               <span>{errors?.mr_name}</span>
             </div>
@@ -63,12 +63,12 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">
           {t.companyName} *
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Building2 className="h-5 w-5 text-gray-400" />
+            <Building2 className="h-5 w-5 text-[#2B5C4B]" />
           </div>
           <input
             type="text"
@@ -78,11 +78,11 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
             onBlur={() => handleBlur('company_name')}
             className={`block w-full pl-10 pr-3 py-2.5 border ${
               showError('company_name') ? 'border-red-300' : 'border-gray-200'
-            } rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-all duration-200 bg-white/50 hover:bg-white hover:border-gray-300`}
+            } rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-all duration-200 bg-white/50 hover:bg-white hover:border-[#2B5C4B]/30`}
             placeholder={t.companyName}
           />
           {showError('company_name') && (
-            <div className="mt-1 text-sm text-red-600 flex items-center gap-1">
+            <div className="mt-1.5 text-sm text-red-600 flex items-center gap-1">
               <AlertCircle className="h-4 w-4" />
               <span>{errors?.company_name}</span>
             </div>
@@ -91,12 +91,12 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">
           {t.divisionName} *
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Briefcase className="h-5 w-5 text-gray-400" />
+            <Briefcase className="h-5 w-5 text-[#2B5C4B]" />
           </div>
           <input
             type="text"
@@ -106,11 +106,11 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
             onBlur={() => handleBlur('division_name')}
             className={`block w-full pl-10 pr-3 py-2.5 border ${
               showError('division_name') ? 'border-red-300' : 'border-gray-200'
-            } rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-all duration-200 bg-white/50 hover:bg-white hover:border-gray-300`}
+            } rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-all duration-200 bg-white/50 hover:bg-white hover:border-[#2B5C4B]/30`}
             placeholder={t.divisionName}
           />
           {showError('division_name') && (
-            <div className="mt-1 text-sm text-red-600 flex items-center gap-1">
+            <div className="mt-1.5 text-sm text-red-600 flex items-center gap-1">
               <AlertCircle className="h-4 w-4" />
               <span>{errors?.division_name}</span>
             </div>
@@ -119,12 +119,12 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">
           {t.contactNo} *
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Phone className="h-5 w-5 text-gray-400" />
+            <Phone className="h-5 w-5 text-[#2B5C4B]" />
           </div>
           <input
             type="tel"
@@ -135,11 +135,11 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
             onBlur={() => handleBlur('contact_no')}
             className={`block w-full pl-10 pr-3 py-2.5 border ${
               showError('contact_no') ? 'border-red-300' : 'border-gray-200'
-            } rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-all duration-200 bg-white/50 hover:bg-white hover:border-gray-300`}
+            } rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-all duration-200 bg-white/50 hover:bg-white hover:border-[#2B5C4B]/30`}
             placeholder={t.contactNo}
           />
           {showError('contact_no') && (
-            <div className="mt-1 text-sm text-red-600 flex items-center gap-1">
+            <div className="mt-1.5 text-sm text-red-600 flex items-center gap-1">
               <AlertCircle className="h-4 w-4" />
               <span>{errors?.contact_no}</span>
             </div>
