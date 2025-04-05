@@ -20,23 +20,7 @@ export function MobileHeader() {
 
   return (
     <header className="fixed w-full z-50">
-      {/* Top Info Bar */}
-      <div className="bg-[#2B5C4B]/5 backdrop-blur-sm px-4 py-2">
-        <div className="flex items-center justify-between gap-2 text-xs">
-          <a
-            href={`tel:${t.header.contact.phone}`}
-            className="flex items-center gap-1 text-[#2B5C4B]"
-          >
-            <Phone className="h-3 w-3" />
-            <span>{t.header.contact.phone}</span>
-          </a>
-          <div className="flex items-center gap-1 text-[#2B5C4B]">
-            <Clock className="h-3 w-3" />
-            <span>{t.header.contact.hours.weekday}</span>
-          </div>
-        </div>
-      </div>
-
+      
       {/* Main Header */}
       <div className="bg-white shadow-sm">
         <div className="px-4">
