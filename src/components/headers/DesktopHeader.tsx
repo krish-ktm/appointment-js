@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Phone, Clock, MapPin, Globe } from 'lucide-react';
+import { Phone, Clock, MapPin, Globe, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../i18n/useTranslation';
 
@@ -69,17 +69,17 @@ export function DesktopHeader() {
                 href={`tel:${t.header.contact.phone}`}
                 className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700 hover:bg-gray-100 transition-colors"
               >
-                <Phone className="h-4 w-4 text-blue-500" />
+                <Phone className="h-4 w-4 text-[#2B5C4B]" />
                 <span>{t.header.contact.phone}</span>
               </a>
-              <div className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700">
-                <Clock className="h-4 w-4 text-blue-500" />
+              <div className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-[#2B5C4B]">
+                <Clock className="h-4 w-4 text-[#2B5C4B]" />
                 <span>{t.header.contact.hours.weekday}</span>
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700">
-                <MapPin className="h-4 w-4 text-blue-500" />
+                <MapPin className="h-4 w-4 text-[#2B5C4B]" />
                 <span>{t.header.contact.address}</span>
               </div>
             </div>
@@ -102,7 +102,7 @@ export function DesktopHeader() {
             <div className="flex items-center">
               <Link 
                 to="/" 
-                className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700"
+                className="text-lg font-bold text-[#2B5C4B]"
               >
                 {t.header.clinicName}
               </Link>
@@ -110,77 +110,32 @@ export function DesktopHeader() {
 
             {/* Desktop Navigation */}
             <nav className="flex items-center gap-8">
-              <Link
-                to="/"
-                className={`relative py-2 transition-colors group ${
-                  isActive('/') ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <span className="relative z-10">{t.navigation.home}</span>
-                <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 rounded-full transition-transform origin-left ${
-                  isActive('/') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-                }`}></span>
-              </Link>
-              <Link
-                to="/about"
-                className={`relative py-2 transition-colors group ${
-                  isActive('/about') ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <span className="relative z-10">{t.navigation.about}</span>
-                <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 rounded-full transition-transform origin-left ${
-                  isActive('/about') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-                }`}></span>
-              </Link>
-              <Link
-                to="/services"
-                className={`relative py-2 transition-colors group ${
-                  isActive('/services') ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <span className="relative z-10">{t.navigation.services}</span>
-                <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 rounded-full transition-transform origin-left ${
-                  isActive('/services') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-                }`}></span>
-              </Link>
-              <Link
-                to="/gallery"
-                className={`relative py-2 transition-colors group ${
-                  isActive('/gallery') ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <span className="relative z-10">{t.navigation.gallery}</span>
-                <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 rounded-full transition-transform origin-left ${
-                  isActive('/gallery') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-                }`}></span>
-              </Link>
-              <Link
-                to="/appointment"
-                className={`relative py-2 transition-colors group ${
-                  isActive('/appointment') ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <span className="relative z-10">{t.navigation.appointment}</span>
-                <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 rounded-full transition-transform origin-left ${
-                  isActive('/appointment') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-                }`}></span>
-              </Link>
-              <Link
-                to="/mr-appointment"
-                className={`relative py-2 transition-colors group ${
-                  isActive('/mr-appointment') ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <span className="relative z-10">{t.navigation.mrAppointment}</span>
-                <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-blue-500 rounded-full transition-transform origin-left ${
-                  isActive('/mr-appointment') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-                }`}></span>
-              </Link>
+              {[
+                { path: '/', label: t.navigation.home },
+                { path: '/about', label: t.navigation.about },
+                { path: '/services', label: t.navigation.services },
+                { path: '/gallery', label: t.navigation.gallery },
+                { path: '/appointment', label: t.navigation.appointment },
+                { path: '/mr-appointment', label: t.navigation.mrAppointment }
+              ].map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`relative py-2 transition-colors group ${
+                    isActive(item.path) ? 'text-[#2B5C4B]' : 'text-gray-600 hover:text-[#2B5C4B]'
+                  }`}
+                >
+                  <span className="relative z-10">{item.label}</span>
+                  <span className={`absolute bottom-1.5 left-0 w-full h-0.5 bg-[#2B5C4B] rounded-full transition-transform origin-left ${
+                    isActive(item.path) ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                  }`}></span>
+                </Link>
+              ))}
 
               <div className="relative">
                 <button
                   onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-                  className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+                  className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-[#2B5C4B] transition-colors"
                 >
                   <Globe className="h-4 w-4" />
                   <span>{language === 'en' ? t.header.language.english : t.header.language.gujarati}</span>
@@ -190,13 +145,21 @@ export function DesktopHeader() {
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1">
                     <button
                       onClick={toggleLanguage}
-                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-[#2B5C4B]/5"
                     >
                       {language === 'en' ? t.header.language.gujarati : t.header.language.english}
                     </button>
                   </div>
                 )}
               </div>
+
+              <Link
+                to="/appointment"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-[#2B5C4B] text-white rounded-lg hover:bg-[#234539] transition-colors shadow-sm hover:shadow"
+              >
+                <Calendar className="h-4 w-4" />
+                <span>Book Now</span>
+              </Link>
             </nav>
           </div>
         </div>
