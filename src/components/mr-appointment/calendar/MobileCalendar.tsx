@@ -62,7 +62,7 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
           className={`p-2 rounded-lg transition-colors ${
             isPrevWeekDisabled
               ? 'text-gray-300 cursor-not-allowed'
-              : 'hover:bg-gray-100 text-gray-500'
+              : 'hover:bg-[#2B5C4B]/5 text-gray-500'
           }`}
         >
           <ChevronLeft className="h-5 w-5" />
@@ -73,7 +73,7 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
         <button
           onClick={handleNextWeek}
           type="button"
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          className="p-2 hover:bg-[#2B5C4B]/5 rounded-lg transition-colors"
         >
           <ChevronRight className="h-5 w-5 text-gray-500" />
         </button>
@@ -99,9 +99,9 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
               className={`
                 relative flex flex-col items-center justify-center p-2 rounded-lg transition-all min-h-[80px]
                 ${isSelected
-                  ? 'bg-blue-600 text-white shadow-sm'
+                  ? 'bg-[#2B5C4B] text-white shadow-lg shadow-[#2B5C4B]/10'
                   : isAvailable
-                    ? 'bg-white hover:bg-blue-50 text-gray-900'
+                    ? 'bg-white hover:bg-[#2B5C4B]/5 text-gray-900'
                     : 'bg-gray-50 text-gray-400 cursor-not-allowed opacity-50'
                 }
               `}
@@ -112,7 +112,7 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
               </span>
               
               {/* Date */}
-              <span className={`text-sm font-semibold mb-1 ${isToday(date) ? 'ring-2 ring-blue-500 rounded-full w-6 h-6 flex items-center justify-center' : ''}`}>
+              <span className={`text-sm font-semibold mb-1 ${isToday(date) ? 'ring-2 ring-[#2B5C4B] rounded-full w-6 h-6 flex items-center justify-center' : ''}`}>
                 {format(date, 'd')}
               </span>
 
@@ -129,7 +129,7 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
                   isFull
                     ? 'bg-red-500'
                     : bookingInfo.current === 0
-                      ? 'bg-green-500'
+                      ? 'bg-[#2B5C4B]'
                       : 'bg-yellow-500'
                 }`} />
               )}
@@ -141,7 +141,7 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
       {/* Legend */}
       <div className="flex items-center justify-center gap-4 mt-4 pt-4 border-t border-gray-100">
         <div className="flex items-center gap-1">
-          <span className="w-2 h-2 rounded-full bg-green-500" />
+          <span className="w-2 h-2 rounded-full bg-[#2B5C4B]" />
           <span className="text-xs text-gray-600">Available</span>
         </div>
         <div className="flex items-center gap-1">

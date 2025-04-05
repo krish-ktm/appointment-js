@@ -20,9 +20,10 @@ interface MRTimeSlotSelectorProps {
 export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error }: MRTimeSlotSelectorProps) {
   if (!slots.length) {
     return (
-      <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 text-center">
-        <p className="text-orange-800 font-medium">{t.noTimeSlots}</p>
-        <p className="text-sm text-orange-600 mt-1">{t.selectAnotherDate}</p>
+      <div className="bg-[#2B5C4B]/5 border border-[#2B5C4B]/10 rounded-xl p-4 text-center">
+        <AlertCircle className="h-6 w-6 text-[#2B5C4B] mx-auto mb-2" />
+        <p className="text-[#2B5C4B] font-medium">{t.noTimeSlots}</p>
+        <p className="text-sm text-[#2B5C4B]/80 mt-1">{t.selectAnotherDate}</p>
       </div>
     );
   }
@@ -30,8 +31,8 @@ export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error
   return (
     <div className="bg-white rounded-xl p-4 border border-gray-200">
       <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 bg-blue-50 rounded-lg">
-          <Clock className="h-5 w-5 text-blue-600" />
+        <div className="p-2 bg-[#2B5C4B]/10 rounded-lg">
+          <Clock className="h-5 w-5 text-[#2B5C4B]" />
         </div>
         <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
       </div>
@@ -58,12 +59,12 @@ export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error
               disabled={isUnavailable}
               onClick={() => onSelectTime(slot.time)}
               className={`
-                relative p-2 rounded-lg flex flex-col items-center justify-center border
+                relative p-2 rounded-lg flex flex-col items-center justify-center border transition-all duration-300
                 ${selectedTime === slot.time
-                  ? 'bg-blue-50 border-blue-600 text-blue-700'
+                  ? 'bg-[#2B5C4B] border-[#2B5C4B] text-white shadow-lg shadow-[#2B5C4B]/10'
                   : isUnavailable
                     ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed'
-                    : 'bg-white border-gray-200 hover:border-blue-400 hover:bg-blue-50/50 text-gray-700'
+                    : 'bg-white border-gray-200 hover:border-[#2B5C4B]/30 hover:bg-[#2B5C4B]/5 text-gray-700'
                 }
               `}
             >
@@ -71,11 +72,14 @@ export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error
               {!isUnavailable && slot.currentBookings !== undefined && (
                 <span className={`text-xs ${
                   selectedTime === slot.time 
-                    ? 'text-blue-600/80' 
+                    ? 'text-white/90' 
                     : 'text-gray-500'
                 }`}>
                   {slot.maxBookings - slot.currentBookings} {t.slotAvailable}
                 </span>
+              )}
+              {isUnavailable && (
+                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500" />
               )}
             </motion.button>
           );
@@ -83,4 +87,4 @@ export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error
       </div>
     </div>
   );
-} 
+}

@@ -85,15 +85,15 @@ export function DesktopCalendar({
         <div className="flex items-center gap-3 mb-4 pb-3 border-b border-gray-100">
           <div className={`p-2 rounded-lg transition-colors ${
             selectedDate 
-              ? 'bg-blue-600 text-white' 
-              : 'bg-blue-50 text-blue-600'
+              ? 'bg-[#2B5C4B] text-white' 
+              : 'bg-[#2B5C4B]/10 text-[#2B5C4B]'
           }`}>
             <Calendar className="h-5 w-5" />
           </div>
           <div>
             <p className={`text-sm font-medium ${
               selectedDate
-                ? 'text-blue-600'
+                ? 'text-[#2B5C4B]'
                 : 'text-gray-900'
             }`}>
               {selectedDate
