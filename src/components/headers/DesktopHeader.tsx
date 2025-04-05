@@ -137,10 +137,14 @@ export function DesktopHeader() {
                   className="relative w-16 h-8 rounded-full bg-gradient-to-r from-[#2B5C4B]/10 to-[#2B5C4B]/5 p-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 hover:from-[#2B5C4B]/15 hover:to-[#2B5C4B]/10 group"
                 >
                   <div
-                    className={`absolute top-1 w-6 h-6 rounded-full bg-gradient-to-br from-[#2B5C4B] to-[#234539] shadow-lg shadow-[#2B5C4B]/10 transition-all duration-300 group-hover:shadow-[#2B5C4B]/20 ${
+                    className={`absolute top-1 w-6 h-6 rounded-full bg-gradient-to-br from-[#2B5C4B] to-[#234539] shadow-lg shadow-[#2B5C4B]/10 transition-all duration-300 group-hover:shadow-[#2B5C4B]/20 flex items-center justify-center ${
                       language === 'en' ? 'translate-x-8' : 'translate-x-0'
                     }`}
-                  />
+                  >
+                    <span className="text-[10px] font-semibold text-white">
+                      {language === 'en' ? 'E' : 'ગુ'}
+                    </span>
+                  </div>
                   <div className="relative z-10 flex justify-between text-xs font-medium">
                     <span 
                       className={`pl-1.5 transition-colors duration-300 ${
