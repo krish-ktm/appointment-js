@@ -5,6 +5,7 @@ import { AppointmentForm } from './AppointmentForm';
 import { BookingConfirmation } from './BookingConfirmation';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useAppointmentForm } from '../../hooks/useAppointmentForm';
+import { Shield } from 'lucide-react';
 
 export function AppointmentPage() {
   const { t } = useTranslation();
@@ -21,21 +22,52 @@ export function AppointmentPage() {
   } = useAppointmentForm();
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50/50 to-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#2B5C4B]/5 to-white">
       <ResponsiveHeader />
       
-      <main className="flex-grow pt-20 sm:pt-32 pb-12">
+      <main className="flex-grow pt-24 sm:pt-32 pb-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Top Section */}
+          <div className="text-center mb-12 sm:mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm"
+            >
+              <Shield className="w-3.5 h-3.5" />
+              Book Appointment
+            </motion.div>
+            
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
+            >
+              Schedule Your Visit
+            </motion.h1>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto"
+            >
+              Choose your preferred date and time for a consultation with our expert dermatologist.
+            </motion.p>
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
           >
-            <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700">
-              <h1 className="text-xl sm:text-2xl font-semibold text-white">{t.appointment.title}</h1>
+            <div className="p-4 sm:p-6 bg-gradient-to-r from-[#2B5C4B] to-[#234539]">
+              <h2 className="text-xl sm:text-2xl font-semibold text-white">{t.appointment.title}</h2>
+              <p className="text-[#2B5C4B]-100 mt-1 text-sm sm:text-base text-white/80">{t.appointment.subtitle}</p>
             </div>
 
-            <div className="p-4 sm:p-6 space-y-6">
+            <div className="p-4 sm:p-6">
               <AppointmentForm
                 form={form}
                 setForm={setForm}
@@ -60,4 +92,4 @@ export function AppointmentPage() {
       <Footer />
     </div>
   );
-} 
+}
