@@ -1,69 +1,118 @@
 import { motion } from 'framer-motion';
-import { gradients, text } from '../../theme/colors';
+import { Shield } from 'lucide-react';
 
 interface StatsSectionProps {
-  t: any; // Using any for now, but we should define proper type
+  t: any;
 }
 
 export function StatsSection({ t }: StatsSectionProps) {
   return (
-    <div className={`py-20 bg-gradient-to-b ${gradients.primary.light} will-change-transform`}>
+    <section className="py-24 bg-gradient-to-b from-white to-gray-50/50 relative overflow-hidden">
+      {/* Decorative Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#2B5C4B]/5 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#2B5C4B]/5 rounded-full blur-3xl"></div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm"
+          >
+            <Shield className="w-3.5 h-3.5" />
+            Our Impact
+          </motion.span>
+          
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-2xl md:text-4xl font-serif text-[#1e3a5c] mb-3 md:mb-4"
+          >
+            Making a difference in dermatological care
+          </motion.h2>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto"
+          >
+            Our commitment to excellence reflects in our numbers and the trust our patients place in us
+          </motion.p>
+        </div>
+
+        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {[
             { 
               value: '14+', 
               label: t.yearsExperience,
               gradient: 'from-blue-600 to-blue-400',
-              description: t.experienceDesc
+              description: t.experienceDesc,
+              delay: 0
             },
             { 
               value: '15k+', 
               label: t.happyPatients,
               gradient: 'from-emerald-600 to-emerald-400',
-              description: t.patientsDesc
+              description: t.patientsDesc,
+              delay: 0.1
             },
             { 
               value: '50+', 
               label: t.treatments,
               gradient: 'from-violet-600 to-violet-400',
-              description: t.treatmentsDesc
+              description: t.treatmentsDesc,
+              delay: 0.2
             },
             { 
               value: '99%', 
               label: t.successRate,
               gradient: 'from-amber-600 to-amber-400',
-              description: t.successDesc
+              description: t.successDesc,
+              delay: 0.3
             }
           ].map((stat, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="relative p-1.5"
-              style={{ willChange: 'transform', contain: 'content' }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: stat.delay }}
+              className="group"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-white/60 to-white/20 rounded-2xl blur-xl opacity-70"></div>
-              <div className="relative bg-gradient-to-r from-white/50 to-white/30 backdrop-blur-sm p-6 sm:p-8 rounded-xl border border-white/40 hover:border-white/60 transition-all duration-300 overflow-hidden group">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-x-[-100%] group-hover:translate-x-[100%]"></div>
-                <div className="relative z-10">
+              <div className="relative p-6 md:p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+                
+                {/* Content */}
+                <div className="relative">
                   <div className={`text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`}>
                     {stat.value}
                   </div>
-                  <div className={`${text.secondary} font-medium text-sm sm:text-base mb-2`}>
+                  <div className="text-gray-900 font-medium text-sm sm:text-base mb-2">
                     {stat.label}
                   </div>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 leading-relaxed">
                     {stat.description}
                   </p>
                 </div>
-                <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+
+                {/* Decorative Elements */}
+                <div className="absolute top-0 right-0 -mt-2 -mr-2 w-24 h-24 bg-gradient-to-br from-gray-50 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-50 transition-opacity duration-500" />
+                <div className="absolute bottom-0 left-0 -mb-2 -ml-2 w-24 h-24 bg-gradient-to-tr from-gray-50 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-50 transition-opacity duration-500" />
               </div>
             </motion.div>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }
