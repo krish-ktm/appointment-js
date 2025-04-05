@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Phone, Clock, MapPin, Globe, Calendar } from 'lucide-react';
+import { Phone, Clock, MapPin, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../i18n/useTranslation';
 
@@ -10,7 +10,6 @@ export function DesktopHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
 
   useEffect(() => {
     const controlNavbar = () => {
@@ -43,7 +42,6 @@ export function DesktopHeader() {
 
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'gu' : 'en');
-    setShowLanguageMenu(false);
   };
 
   const isActive = (path: string) => {
@@ -132,26 +130,13 @@ export function DesktopHeader() {
                 </Link>
               ))}
 
-              <div className="relative">
-                <button
-                  onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-                  className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-[#2B5C4B] transition-colors"
-                >
-                  <Globe className="h-4 w-4" />
-                  <span>{language === 'en' ? t.header.language.english : t.header.language.gujarati}</span>
-                </button>
-
-                {showLanguageMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1">
-                    <button
-                      onClick={toggleLanguage}
-                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-[#2B5C4B]/5"
-                    >
-                      {language === 'en' ? t.header.language.gujarati : t.header.language.english}
-                    </button>
-                  </div>
-                )}
-              </div>
+              {/* Language Toggle */}
+              <button
+                onClick={toggleLanguage}
+                className="w-8 h-8 flex items-center justify-center bg-[#2B5C4B]/5 hover:bg-[#2B5C4B]/10 rounded-full transition-colors text-sm font-medium text-[#2B5C4B]"
+              >
+                {language === 'en' ? 'ગુ' : 'E'}
+              </button>
 
               <Link
                 to="/appointment"

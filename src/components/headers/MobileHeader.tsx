@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Globe, Calendar, Phone, Clock, MapPin } from 'lucide-react';
+import { Menu, X, Calendar, Phone, Clock, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../../i18n/useTranslation';
 
@@ -11,7 +11,6 @@ export function MobileHeader() {
 
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'gu' : 'en');
-    setIsMenuOpen(false);
   };
 
   const isActive = (path: string) => {
@@ -32,12 +31,14 @@ export function MobileHeader() {
             </Link>
 
             <div className="flex items-center gap-2">
+              {/* Language Toggle */}
               <button
                 onClick={toggleLanguage}
-                className="p-2 rounded-lg text-gray-600 hover:text-[#2B5C4B] hover:bg-[#2B5C4B]/5 transition-colors"
+                className="w-7 h-7 flex items-center justify-center bg-[#2B5C4B]/5 hover:bg-[#2B5C4B]/10 rounded-full transition-colors text-xs font-medium text-[#2B5C4B]"
               >
-                <Globe className="h-5 w-5" />
+                {language === 'en' ? 'ગુ' : 'E'}
               </button>
+
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="p-2 rounded-lg text-gray-600 hover:text-[#2B5C4B] hover:bg-[#2B5C4B]/5 transition-colors"
