@@ -36,6 +36,16 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
     <div className="py-20 bg-gradient-to-b from-[#2B5C4B]/5 to-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm"
+          >
+            <Bell className="w-3.5 h-3.5" />
+            Latest Updates
+          </motion.div>
+          
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -43,7 +53,7 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
             transition={{ delay: 0.1 }}
             className="text-2xl md:text-4xl font-serif text-[#1e3a5c] mb-3 md:mb-4"
           >
-            Latest Announcements
+            Important Announcements
           </motion.h2>
           
           <motion.p
@@ -53,7 +63,7 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
             transition={{ delay: 0.2 }}
             className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto"
           >
-            Stay informed about important updates, schedule changes, and announcements from our clinic.
+            Stay informed about clinic updates, special services, and important notices
           </motion.p>
         </div>
 
