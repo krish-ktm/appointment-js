@@ -33,7 +33,7 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
   };
 
   return (
-    <div className="space-y-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           {t.mrName} *
@@ -49,8 +49,8 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
             onChange={(e) => onChange({ ...form, mr_name: e.target.value })}
             onBlur={() => handleBlur('mr_name')}
             className={`block w-full pl-10 pr-3 py-2.5 border ${
-              showError('mr_name') ? 'border-red-300' : 'border-gray-300'
-            } rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500`}
+              showError('mr_name') ? 'border-red-300' : 'border-gray-200'
+            } rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-all duration-200 bg-white/50 hover:bg-white hover:border-gray-300`}
             placeholder={t.mrName}
           />
           {showError('mr_name') && (
@@ -77,8 +77,8 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
             onChange={(e) => onChange({ ...form, company_name: e.target.value })}
             onBlur={() => handleBlur('company_name')}
             className={`block w-full pl-10 pr-3 py-2.5 border ${
-              showError('company_name') ? 'border-red-300' : 'border-gray-300'
-            } rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500`}
+              showError('company_name') ? 'border-red-300' : 'border-gray-200'
+            } rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-all duration-200 bg-white/50 hover:bg-white hover:border-gray-300`}
             placeholder={t.companyName}
           />
           {showError('company_name') && (
@@ -105,8 +105,8 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
             onChange={(e) => onChange({ ...form, division_name: e.target.value })}
             onBlur={() => handleBlur('division_name')}
             className={`block w-full pl-10 pr-3 py-2.5 border ${
-              showError('division_name') ? 'border-red-300' : 'border-gray-300'
-            } rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500`}
+              showError('division_name') ? 'border-red-300' : 'border-gray-200'
+            } rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-all duration-200 bg-white/50 hover:bg-white hover:border-gray-300`}
             placeholder={t.divisionName}
           />
           {showError('division_name') && (
@@ -134,8 +134,8 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
             onChange={(e) => onChange({ ...form, contact_no: e.target.value })}
             onBlur={() => handleBlur('contact_no')}
             className={`block w-full pl-10 pr-3 py-2.5 border ${
-              showError('contact_no') ? 'border-red-300' : 'border-gray-300'
-            } rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500`}
+              showError('contact_no') ? 'border-red-300' : 'border-gray-200'
+            } rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-all duration-200 bg-white/50 hover:bg-white hover:border-gray-300`}
             placeholder={t.contactNo}
           />
           {showError('contact_no') && (

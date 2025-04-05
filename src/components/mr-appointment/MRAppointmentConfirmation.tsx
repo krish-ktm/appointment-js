@@ -5,6 +5,7 @@ import { downloadAppointmentImage } from '../../utils/imageDownload';
 import { useState, useEffect } from 'react';
 import { MRAppointmentTranslations } from '../../i18n/types/mr-appointment';
 import { supabase } from '../../lib/supabase';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const TIMEZONE = 'Asia/Kolkata';
 
@@ -30,11 +31,9 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
   const [downloading, setDownloading] = useState(false);
   const [customRulesText, setCustomRulesText] = useState<string | null>(null);
   
-  // Determine language from translations
   const language = t.form.days.monday === 'સોમવાર' ? 'gu' : 'en';
 
   useEffect(() => {
-    // Fetch custom rules text from the database
     const fetchCustomRules = async () => {
       try {
         const { data, error } = await supabase
@@ -49,15 +48,12 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
         if (error) throw error;
         
         if (data && data.content && data.content[language]) {
-          // Parse content from the content field which contains markdown
           const contentText = data.content[language] as string;
-          // Find the rule about company ID (usually the second item)
           const ruleLines = contentText.split('\n')
             .map((line: string) => line.trim())
             .filter((line: string) => line.startsWith('-'))
             .map((line: string) => line.substring(1).trim());
           
-          // Use the second rule if it exists, otherwise use the whole content
           if (ruleLines.length >= 2) {
             setCustomRulesText(ruleLines[1]);
           } else if (ruleLines.length === 1) {
@@ -85,10 +81,8 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
     if (downloading) return;
     setDownloading(true);
     try {
-      // Ensure appointment data has the proper structure for the download function
       const appointmentWithDetails = {
         ...appointment,
-        // Explicitly set fields for MRDetails type
         mr_name: appointment.mr_name,
         company_name: appointment.company_name,
         division_name: appointment.division_name,
@@ -104,108 +98,129 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
   };
 
   return (
-    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div 
-        className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 my-8 overflow-hidden transition-all duration-200 ease-out"
-        onClick={e => e.stopPropagation()}
-        style={{ maxHeight: '90vh' }}
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto"
+        onClick={onClose}
       >
-        {/* Success Header */}
-        <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 sm:p-6 relative">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="bg-white/10 rounded-xl p-2 sm:p-3">
-              <Check className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ type: "spring", duration: 0.5 }}
+          className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 my-8 overflow-hidden"
+          onClick={e => e.stopPropagation()}
+          style={{ maxHeight: '90vh' }}
+        >
+          {/* Success Header */}
+          <div className="bg-gradient-to-r from-[#2B5C4B] to-[#234539] text-white p-6 relative">
+            <div className="flex items-center gap-4">
+              <div className="bg-white/10 rounded-xl p-3">
+                <Check className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold">{t.confirmation.title}</h2>
+                <p className="text-[#2B5C4B]-100/80 text-sm mt-0.5">
+                  {t.confirmation.subtitle}
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-lg sm:text-xl font-semibold">{t.confirmation.title}</h2>
-              <p className="text-green-100 text-sm mt-0.5">
-                {t.confirmation.subtitle}
-              </p>
-            </div>
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 text-white/80 hover:text-white hover:bg-white/10 p-2 rounded-full transition-colors"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 text-white/80 hover:text-white hover:bg-white/10 p-2 rounded-full transition-colors"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
 
-        {/* Appointment Details */}
-        <div className="overflow-y-auto" style={{ maxHeight: 'calc(90vh - 16rem)' }}>
-          <div className="p-4 sm:p-6">
-            <div className="space-y-3 sm:space-y-4">
+          {/* Appointment Details */}
+          <div className="overflow-y-auto" style={{ maxHeight: 'calc(90vh - 16rem)' }}>
+            <div className="p-6 space-y-6">
               {/* Date and Time */}
-              <div className="bg-gray-50 rounded-xl p-3 sm:p-4 space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="bg-green-100 p-2 rounded-lg">
-                    <Calendar className="h-4 w-4 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">{t.confirmation.appointmentDate}</p>
-                    <p className="text-sm font-medium text-gray-900">
-                      {formatDate(appointment.appointment_date)}
-                    </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-50 rounded-xl p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-[#2B5C4B]/10 p-2 rounded-lg">
+                      <Calendar className="h-4 w-4 text-[#2B5C4B]" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">{t.confirmation.appointmentDate}</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        {formatDate(appointment.appointment_date)}
+                      </p>
+                    </div>
                   </div>
                 </div>
                 
                 {appointment.appointment_time && (
-                  <div className="flex items-center gap-3">
-                    <div className="bg-green-100 p-2 rounded-lg">
-                      <Clock className="h-4 w-4 text-green-600" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500">{t.confirmation.appointmentTime}</p>
-                      <p className="text-sm font-medium text-gray-900">
-                        {appointment.appointment_time}
-                      </p>
+                  <div className="bg-gray-50 rounded-xl p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-[#2B5C4B]/10 p-2 rounded-lg">
+                        <Clock className="h-4 w-4 text-[#2B5C4B]" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">{t.confirmation.appointmentTime}</p>
+                        <p className="text-sm font-medium text-gray-900">
+                          {appointment.appointment_time}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )}
               </div>
 
               {/* MR Details */}
-              <div className="bg-gray-50 rounded-xl p-3 sm:p-4 space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-100 p-2 rounded-lg">
-                    <Users className="h-4 w-4 text-blue-600" />
+              <div className="bg-gray-50 rounded-xl p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.confirmation.mrDetails}</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-[#2B5C4B]/10 p-2 rounded-lg">
+                        <Users className="h-4 w-4 text-[#2B5C4B]" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">{t.form.mrName}</p>
+                        <p className="text-sm font-medium text-gray-900">{appointment.mr_name}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="bg-[#2B5C4B]/10 p-2 rounded-lg">
+                        <Building2 className="h-4 w-4 text-[#2B5C4B]" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">{t.form.companyName}</p>
+                        <p className="text-sm font-medium text-gray-900">{appointment.company_name}</p>
+                      </div>
+                    </div>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">{t.confirmation.mrName}</p>
-                    <p className="text-sm font-medium text-gray-900">{appointment.mr_name}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-100 p-2 rounded-lg">
-                    <Building2 className="h-4 w-4 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">{t.confirmation.companyName}</p>
-                    <p className="text-sm font-medium text-gray-900">{appointment.company_name}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-100 p-2 rounded-lg">
-                    <Briefcase className="h-4 w-4 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">{t.confirmation.divisionName}</p>
-                    <p className="text-sm font-medium text-gray-900">{appointment.division_name}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-100 p-2 rounded-lg">
-                    <Phone className="h-4 w-4 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">{t.confirmation.contactNo}</p>
-                    <p className="text-sm font-medium text-gray-900">{appointment.contact_no}</p>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-[#2B5C4B]/10 p-2 rounded-lg">
+                        <Briefcase className="h-4 w-4 text-[#2B5C4B]" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">{t.form.divisionName}</p>
+                        <p className="text-sm font-medium text-gray-900">{appointment.division_name}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="bg-[#2B5C4B]/10 p-2 rounded-lg">
+                        <Phone className="h-4 w-4 text-[#2B5C4B]" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">{t.form.contactNo}</p>
+                        <p className="text-sm font-medium text-gray-900">{appointment.contact_no}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Booking ID */}
-              <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
+              <div className="bg-gray-50 rounded-xl p-4">
                 <p className="text-xs text-gray-500">{t.confirmation.bookingId}</p>
                 <p className="text-sm font-medium text-gray-900">#{appointment.id.slice(-8).toUpperCase()}</p>
               </div>
@@ -216,45 +231,43 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Actions - Fixed at bottom */}
-        <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4 sm:p-6">
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-            <div className="w-full sm:w-[140px]">
+          {/* Actions - Fixed at bottom */}
+          <div className="sticky bottom-0 bg-white border-t border-gray-100 p-6">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleDownload}
                 disabled={downloading}
-                className="w-full h-10 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 h-11 px-4 text-sm font-medium text-[#2B5C4B] hover:bg-[#2B5C4B]/5 border border-[#2B5C4B]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {downloading ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
-                    <span className="min-w-[80px]">Downloading...</span>
+                    <div className="w-4 h-4 border-2 border-[#2B5C4B]/30 border-t-[#2B5C4B] rounded-full animate-spin" />
+                    <span>Downloading...</span>
                   </>
                 ) : (
                   <>
                     <Download className="h-4 w-4 flex-shrink-0" />
-                    <span className="min-w-[80px]">Download</span>
+                    <span>Download</span>
                   </>
                 )}
               </button>
+              <button
+                onClick={onScheduleAnother}
+                className="flex-1 h-11 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors"
+              >
+                {t.confirmation.scheduleAnother}
+              </button>
+              <button
+                onClick={onClose}
+                className="flex-1 h-11 px-4 text-sm font-medium text-white bg-[#2B5C4B] rounded-xl hover:bg-[#234539] focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors"
+              >
+                {t.confirmation.done}
+              </button>
             </div>
-            <button
-              onClick={onScheduleAnother}
-              className="w-full sm:w-auto h-10 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors"
-            >
-              {t.confirmation.scheduleAnother}
-            </button>
-            <button
-              onClick={onClose}
-              className="w-full sm:w-auto h-10 px-4 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-colors"
-            >
-              {t.confirmation.done}
-            </button>
           </div>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }

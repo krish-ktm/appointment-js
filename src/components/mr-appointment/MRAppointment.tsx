@@ -13,6 +13,7 @@ import { useTranslation } from '../../i18n/useTranslation';
 import { validateMRAppointment } from '../../utils/mrAppointments';
 import { fetchTimeSlots } from './MRTimeSlotFetcher';
 import { MRTimeSlotSelector } from './TimeSlotSelector';
+import { Shield } from 'lucide-react';
 
 interface MRAppointmentDetails {
   id: string;
@@ -56,7 +57,6 @@ export function MRAppointment() {
       const slots = await fetchTimeSlots(form.appointment_date);
       setTimeSlots(slots);
       
-      // If current time slot is no longer available, reset it
       if (form.appointment_time) {
         const currentSlot = slots.find(slot => slot.time === form.appointment_time);
         if (!currentSlot || (currentSlot.currentBookings !== undefined && 
@@ -89,7 +89,6 @@ export function MRAppointment() {
     setLoading(true);
     setErrors({});
 
-    // Validate form
     const newErrors: FormErrors = {};
     
     if (!form.mr_name?.trim()) {
@@ -125,7 +124,6 @@ export function MRAppointment() {
     }
 
     try {
-      // Validate appointment date
       if (!form.appointment_date) {
         throw new Error("Please select an appointment date");
       }
@@ -135,7 +133,6 @@ export function MRAppointment() {
         throw new Error(validationError);
       }
 
-      // Check if the selected time slot is still available
       const currentSlot = timeSlots.find(slot => slot.time === form.appointment_time);
       if (!currentSlot) {
         throw new Error("Please select a time slot");
@@ -146,7 +143,6 @@ export function MRAppointment() {
         throw new Error(`This time slot is no longer available. Please select another time.`);
       }
 
-      // Create the appointment
       const { data: appointment, error } = await supabase
         .from('mr_appointments')
         .insert({
@@ -164,8 +160,6 @@ export function MRAppointment() {
 
       setAppointmentDetails(appointment);
       toast.success(t.mrAppointment.success);
-      
-      // Force calendar refresh by updating the key
       setCalendarKey(prev => prev + 1);
     } catch (error) {
       console.error('Error booking appointment:', error);
@@ -184,68 +178,97 @@ export function MRAppointment() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50/50 to-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#2B5C4B]/5 to-white">
       <ResponsiveHeader />
       
-      <main className="flex-grow pt-20 sm:pt-32 pb-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="flex-grow pt-24 sm:pt-32 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Top Section */}
+          <div className="text-center mb-12 sm:mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm"
+            >
+              <Shield className="w-3.5 h-3.5" />
+              Medical Representative
+            </motion.div>
+            
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
+            >
+              Schedule Your Visit
+            </motion.h1>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto"
+            >
+              Book your appointment with our expert dermatologist for product presentations and discussions.
+            </motion.p>
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
           >
-            <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700">
-              <h1 className="text-xl sm:text-2xl font-semibold text-white">{t.mrAppointment.title}</h1>
-              <p className="text-blue-100 mt-1 text-sm sm:text-base">{t.mrAppointment.subtitle}</p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-6">
-              <div className="grid grid-cols-1 gap-6">
-                {/* Form Fields */}
-                <div className="order-1">
-                  <MRAppointmentForm 
-                    form={form}
-                    onChange={setForm}
-                    t={t.mrAppointment.form}
-                    errors={errors as Record<string, string>}
-                  />
-                </div>
-
-                {/* Calendar */}
-                <div className="order-2">
-                  <MRAppointmentCalendar
-                    key={calendarKey}
-                    selectedDate={form.appointment_date}
-                    onDateChange={(date) => setForm({ ...form, appointment_date: date, appointment_time: undefined })}
-                  />
-                </div>
-
-                {/* Time Selection */}
-                {form.appointment_date && (
-                  <div className="order-3">
-                    <MRTimeSlotSelector
-                      slots={timeSlots}
-                      selectedTime={form.appointment_time}
-                      onSelectTime={(time) => setForm({ ...form, appointment_time: time })}
-                      t={t.mrAppointment.form}
-                      error={errors?.appointment_time}
-                    />
-                  </div>
-                )}
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+              <div className="p-4 sm:p-6 bg-gradient-to-r from-[#2B5C4B] to-[#234539]">
+                <h2 className="text-xl sm:text-2xl font-semibold text-white">{t.mrAppointment.title}</h2>
+                <p className="text-[#2B5C4B]-100 mt-1 text-sm sm:text-base text-white/80">{t.mrAppointment.subtitle}</p>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading || !form.appointment_date || !form.appointment_time}
-                className={`w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors ${
-                  loading || !form.appointment_date || !form.appointment_time 
-                    ? 'opacity-70 cursor-not-allowed' 
-                    : ''
-                }`}
-              >
-                {loading ? t.mrAppointment.form.submitting : t.mrAppointment.form.submit}
-              </button>
-            </form>
+              <form onSubmit={handleSubmit} className="p-4 sm:p-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Left Column - Form Fields */}
+                  <div className="space-y-6">
+                    <MRAppointmentForm 
+                      form={form}
+                      onChange={setForm}
+                      t={t.mrAppointment.form}
+                      errors={errors as Record<string, string>}
+                    />
+
+                    {/* Time Selection */}
+                    {form.appointment_date && (
+                      <MRTimeSlotSelector
+                        slots={timeSlots}
+                        selectedTime={form.appointment_time}
+                        onSelectTime={(time) => setForm({ ...form, appointment_time: time })}
+                        t={t.mrAppointment.form}
+                        error={errors?.appointment_time}
+                      />
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={loading || !form.appointment_date || !form.appointment_time}
+                      className={`w-full py-4 px-6 bg-[#2B5C4B] text-white rounded-xl font-medium hover:bg-[#234539] transition-all duration-200 ${
+                        loading || !form.appointment_date || !form.appointment_time 
+                          ? 'opacity-70 cursor-not-allowed' 
+                          : ''
+                      }`}
+                    >
+                      {loading ? t.mrAppointment.form.submitting : t.mrAppointment.form.submit}
+                    </button>
+                  </div>
+
+                  {/* Right Column - Calendar */}
+                  <div className="lg:border-l lg:border-gray-100 lg:pl-8">
+                    <MRAppointmentCalendar
+                      key={calendarKey}
+                      selectedDate={form.appointment_date}
+                      onDateChange={(date) => setForm({ ...form, appointment_date: date, appointment_time: undefined })}
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
           </motion.div>
         </div>
       </main>
