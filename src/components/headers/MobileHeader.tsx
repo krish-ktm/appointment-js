@@ -20,7 +20,6 @@ export function MobileHeader() {
 
   return (
     <header className="fixed w-full z-50">
-      
       {/* Main Header */}
       <div className="bg-white shadow-sm">
         <div className="px-4">
@@ -69,7 +68,6 @@ export function MobileHeader() {
                 { path: '/about', label: t.navigation.about },
                 { path: '/services', label: t.navigation.services },
                 { path: '/gallery', label: t.navigation.gallery },
-                { path: '/appointment', label: t.navigation.appointment },
                 { path: '/mr-appointment', label: t.navigation.mrAppointment }
               ].map((item) => (
                 <Link
