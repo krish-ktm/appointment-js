@@ -30,14 +30,40 @@ export function MobileHeader() {
               {t.header.clinicName}
             </Link>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               {/* Language Toggle */}
-              <button
-                onClick={toggleLanguage}
-                className="w-7 h-7 flex items-center justify-center bg-[#2B5C4B]/5 hover:bg-[#2B5C4B]/10 rounded-full transition-colors text-xs font-medium text-[#2B5C4B]"
-              >
-                {language === 'en' ? 'ગુ' : 'E'}
-              </button>
+              <div className="relative">
+                <button
+                  onClick={toggleLanguage}
+                  className="relative w-14 h-7 rounded-full bg-gradient-to-r from-[#2B5C4B]/10 to-[#2B5C4B]/5 p-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 hover:from-[#2B5C4B]/15 hover:to-[#2B5C4B]/10 group"
+                >
+                  <div
+                    className={`absolute top-1 w-5 h-5 rounded-full bg-gradient-to-br from-[#2B5C4B] to-[#234539] shadow-lg shadow-[#2B5C4B]/10 transition-all duration-300 group-hover:shadow-[#2B5C4B]/20 ${
+                      language === 'en' ? 'translate-x-7' : 'translate-x-0'
+                    }`}
+                  />
+                  <div className="relative z-10 flex justify-between text-[10px] font-medium">
+                    <span 
+                      className={`pl-1 transition-colors duration-300 ${
+                        language === 'gu' 
+                          ? 'text-[#2B5C4B] font-semibold' 
+                          : 'text-gray-500'
+                      }`}
+                    >
+                      ગુ
+                    </span>
+                    <span 
+                      className={`pr-1 transition-colors duration-300 ${
+                        language === 'en' 
+                          ? 'text-[#2B5C4B] font-semibold' 
+                          : 'text-gray-500'
+                      }`}
+                    >
+                      E
+                    </span>
+                  </div>
+                </button>
+              </div>
 
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
