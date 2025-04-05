@@ -132,45 +132,40 @@ export function DesktopHeader() {
 
               {/* Language Toggle */}
               <div className="relative">
-                <button
+                <motion.button
                   onClick={toggleLanguage}
-                  className="relative w-16 h-8 rounded-full bg-gradient-to-r from-[#2B5C4B]/10 to-[#2B5C4B]/5 p-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 hover:from-[#2B5C4B]/15 hover:to-[#2B5C4B]/10 group"
+                  whileTap={{ scale: 0.95 }}
+                  className="relative w-20 h-9 rounded-full bg-gray-100 p-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 hover:bg-gray-200 group"
                 >
-                  <div
-                    className={`absolute top-1 w-6 h-6 rounded-full bg-gradient-to-br from-[#2B5C4B] to-[#234539] shadow-lg shadow-[#2B5C4B]/10 transition-all duration-300 group-hover:shadow-[#2B5C4B]/20 flex items-center justify-center ${
-                      language === 'en' ? 'translate-x-8' : 'translate-x-0'
-                    }`}
+                  <motion.div
+                    animate={{
+                      x: language === 'en' ? 44 : 0,
+                    }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className="absolute top-1 left-1 w-7 h-7 rounded-full bg-gradient-to-br from-[#2B5C4B] to-[#234539] shadow-lg shadow-[#2B5C4B]/10 flex items-center justify-center"
                   >
-                    <span className="text-[10px] font-semibold text-white">
-                      {language === 'en' ? 'E' : 'ગુ'}
+                    <span className="text-[11px] font-semibold text-white">
+                      {language === 'en' ? 'En' : 'ગુ'}
                     </span>
-                  </div>
-                  <div className="relative z-10 flex justify-between text-xs font-medium">
-                    <span 
-                      className={`pl-1.5 transition-colors duration-300 ${
-                        language === 'gu' 
-                          ? 'text-[#2B5C4B] font-semibold' 
-                          : 'text-gray-500'
-                      }`}
-                    >
+                  </motion.div>
+                  <div className="relative z-10 flex justify-between px-2 text-xs font-medium h-full items-center">
+                    <span className={`transition-colors duration-300 ${
+                      language === 'gu' ? 'text-[#2B5C4B] font-semibold' : 'text-gray-400'
+                    }`}>
                       ગુ
                     </span>
-                    <span 
-                      className={`pr-1.5 transition-colors duration-300 ${
-                        language === 'en' 
-                          ? 'text-[#2B5C4B] font-semibold' 
-                          : 'text-gray-500'
-                      }`}
-                    >
-                      E
+                    <span className={`transition-colors duration-300 ${
+                      language === 'en' ? 'text-[#2B5C4B] font-semibold' : 'text-gray-400'
+                    }`}>
+                      En
                     </span>
                   </div>
-                </button>
+                </motion.button>
               </div>
 
               <Link
                 to="/appointment"
-                className="inline-flex items-center whitespace-nowrap px-3 py-1.5 bg-[#2B5C4B] text-white text-sm rounded-lg hover:bg-[#234539] transition-colors"
+                className="inline-flex items-center whitespace-nowrap px-4 py-2 bg-[#2B5C4B] text-white text-sm rounded-xl hover:bg-[#234539] transition-colors"
               >
                 <Calendar className="h-4 w-4 mr-1.5" />
                 Book Now
