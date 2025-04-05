@@ -13,68 +13,70 @@ export function AboutPage() {
       
       <main className="pt-24 sm:pt-32 pb-16 sm:pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Hero Section */}
-          <div className="relative overflow-hidden rounded-3xl bg-[#2B5C4B] mb-16">
-            <div className="absolute inset-0">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#2B5C4B] to-[#234539] mix-blend-multiply" />
-              <div className="absolute inset-0 bg-[#2B5C4B]/20" />
-            </div>
+          {/* Top Section */}
+          <div className="text-center mb-12 sm:mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm"
+            >
+              <Shield className="w-3.5 h-3.5" />
+              {t.about.experience}
+            </motion.div>
+            
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
+            >
+              {t.about.title}
+            </motion.h1>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4 sm:px-0"
+            >
+              {t.about.subtitle}
+            </motion.p>
 
-            <div className="relative">
-              <div className="p-8 sm:p-12 lg:p-16">
+            <div className="flex flex-wrap justify-center gap-3 mt-8">
+              {[
+                {
+                  icon: Star,
+                  text: t.about.qualification,
+                  color: "from-emerald-400 to-emerald-500"
+                },
+                {
+                  icon: Award,
+                  text: t.about.yearsExperience,
+                  color: "from-amber-400 to-amber-500"
+                },
+                {
+                  icon: Shield,
+                  text: t.about.specialization,
+                  color: "from-rose-400 to-rose-500"
+                }
+              ].map((feature, index) => (
                 <motion.div
+                  key={index}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="max-w-3xl mx-auto text-center space-y-6"
+                  transition={{ delay: 0.3 + index * 0.1 }}
+                  className="relative p-1"
                 >
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 text-white text-xs font-medium backdrop-blur-sm">
-                    <Shield className="w-3.5 h-3.5" />
-                    {t.about.experience}
-                  </div>
-
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
-                    {t.about.title}
-                  </h1>
-
-                  <p className="text-white/90 text-base sm:text-lg leading-relaxed">
-                    {t.about.subtitle}
-                  </p>
-
-                  <div className="flex flex-wrap justify-center gap-3">
-                    {[
-                      {
-                        icon: Star,
-                        text: t.about.qualification,
-                        color: "from-emerald-400 to-emerald-500"
-                      },
-                      {
-                        icon: Award,
-                        text: t.about.yearsExperience,
-                        color: "from-amber-400 to-amber-500"
-                      },
-                      {
-                        icon: Shield,
-                        text: t.about.specialization,
-                        color: "from-rose-400 to-rose-500"
-                      }
-                    ].map((feature, index) => (
-                      <div 
-                        key={index} 
-                        className="relative p-1"
-                      >
-                        <div className="relative bg-white/10 backdrop-blur-sm px-4 py-2 rounded-xl">
-                          <div className="flex items-center gap-3">
-                            <feature.icon className={`h-4 w-4 text-white`} />
-                            <span className="text-sm font-medium text-white">
-                              {feature.text}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                  <div className="relative bg-white shadow-sm border border-gray-100 px-4 py-2 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <feature.icon className="h-4 w-4 text-[#2B5C4B]" />
+                      <span className="text-sm font-medium text-gray-900">
+                        {feature.text}
+                      </span>
+                    </div>
                   </div>
                 </motion.div>
-              </div>
+              ))}
             </div>
           </div>
 

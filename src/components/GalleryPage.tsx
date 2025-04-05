@@ -31,61 +31,60 @@ export function GalleryPage() {
       
       <main className="pt-24 sm:pt-32 pb-16 sm:pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Hero Section */}
-          <div className="relative overflow-hidden rounded-3xl bg-[#2B5C4B] mb-16">
-            <div className="absolute inset-0">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#2B5C4B] to-[#234539] mix-blend-multiply" />
-              <div className="absolute inset-0 bg-[#2B5C4B]/20" />
+          {/* Top Section */}
+          <div className="text-center mb-12 sm:mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm"
+            >
+              <Shield className="w-3.5 h-3.5" />
+              Our Gallery
+            </motion.div>
+            
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
+            >
+              Take a Virtual Tour of Our Modern Clinic
+            </motion.h1>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4 sm:px-0"
+            >
+              Experience our state-of-the-art facilities and comfortable environment designed for your care and comfort.
+            </motion.p>
+
+            {/* Category Filter */}
+            <div className="flex flex-wrap justify-center gap-3 mt-8">
+              {categoryList.map((category, index) => {
+                const Icon = getCategoryIcon(category.id);
+                return (
+                  <motion.button
+                    key={category.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 + index * 0.1 }}
+                    onClick={() => setSelectedCategory(category.id)}
+                    className={`
+                      inline-flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300
+                      ${selectedCategory === category.id
+                        ? 'bg-[#2B5C4B] text-white shadow-lg shadow-[#2B5C4B]/10'
+                        : 'bg-white text-gray-600 hover:bg-[#2B5C4B]/5 border border-gray-200'
+                      }
+                    `}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span className="font-medium">{category.label}</span>
+                  </motion.button>
+                );
+              })}
             </div>
-
-            <div className="relative">
-              <div className="p-8 sm:p-12 lg:p-16">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="max-w-3xl mx-auto text-center space-y-6"
-                >
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 text-white text-xs font-medium backdrop-blur-sm">
-                    <Shield className="w-3.5 h-3.5" />
-                    Our Gallery
-                  </div>
-
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
-                    Take a Virtual Tour of Our Modern Clinic
-                  </h1>
-
-                  <p className="text-white/90 text-base sm:text-lg leading-relaxed">
-                    Experience our state-of-the-art facilities and comfortable environment designed for your care and comfort.
-                  </p>
-                </motion.div>
-              </div>
-            </div>
-          </div>
-
-          {/* Category Filter */}
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            {categoryList.map((category, index) => {
-              const Icon = getCategoryIcon(category.id);
-              return (
-                <motion.button
-                  key={category.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`
-                    inline-flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300
-                    ${selectedCategory === category.id
-                      ? 'bg-[#2B5C4B] text-white shadow-lg shadow-[#2B5C4B]/10'
-                      : 'bg-white text-gray-600 hover:bg-[#2B5C4B]/5 border border-gray-200'
-                    }
-                  `}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span className="font-medium">{category.label}</span>
-                </motion.button>
-              );
-            })}
           </div>
 
           {/* Gallery Grid */}
