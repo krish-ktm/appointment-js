@@ -1,171 +1,154 @@
 import { motion } from 'framer-motion';
-import { ResponsiveHeader } from './headers/ResponsiveHeader';
-import { Footer } from './Footer';
-import { Stethoscope, Zap, FlaskRound as Flask, Microscope, Scissors, Heart, Shield, ArrowRight } from 'lucide-react';
-import { useTranslation } from '../i18n/useTranslation';
+import { ArrowRight } from 'lucide-react';
+import { background, text, gradients } from '../../theme/colors';
 import { Link } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
-interface ServiceCategory {
-  title: string;
-  icon: any;
-  services: string[];
+interface ServicesSectionProps {
+  t: any;
 }
 
-export function ServicesPage() {
-  const { t } = useTranslation();
+interface Service {
+  title: string;
+  description: string;
+  features: string[];
+  image: string;
+}
 
-  const serviceCategories: ServiceCategory[] = [
+export function ServicesSection({ t }: ServicesSectionProps) {
+  const services: Service[] = [
     {
-      title: t.services.categories.treatments,
-      icon: Heart,
-      services: t.services.lists.treatments
+      title: t.categories.treatments,
+      description: t.lists.treatments[0],
+      features: t.lists.treatments.slice(1, 5),
+      image: "https://images.unsplash.com/photo-1612776572997-76cc42e058c3?q=80&w=1200"
     },
     {
-      title: t.services.categories.facial,
-      icon: Stethoscope,
-      services: t.services.lists.facial
+      title: t.categories.facial,
+      description: t.lists.facial[0],
+      features: t.lists.facial.slice(1, 5),
+      image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1200"
     },
     {
-      title: t.services.categories.aesthetic,
-      icon: Zap,
-      services: t.services.lists.aesthetic
+      title: t.categories.aesthetic,
+      description: t.lists.aesthetic[0],
+      features: t.lists.aesthetic.slice(1, 5),
+      image: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=1200"
     },
     {
-      title: t.services.categories.surgical,
-      icon: Scissors,
-      services: t.services.lists.surgical
+      title: t.categories.surgical,
+      description: t.lists.surgical[0],
+      features: t.lists.surgical.slice(1),
+      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1200"
     },
     {
-      title: t.services.categories.hair,
-      icon: Flask,
-      services: t.services.lists.hair
+      title: t.categories.hair,
+      description: t.lists.hair[0],
+      features: t.lists.hair.slice(1),
+      image: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?q=80&w=1200"
     },
     {
-      title: t.services.categories.diagnostic,
-      icon: Microscope,
-      services: t.services.lists.diagnostic
+      title: t.categories.diagnostic,
+      description: t.lists.diagnostic[0],
+      features: t.lists.diagnostic.slice(1),
+      image: "https://images.unsplash.com/photo-1579684288538-c76a2fab9617?q=80&w=1200"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#2B5C4B]/5 to-white">
-      <ResponsiveHeader />
-      
-      <main className="pt-24 sm:pt-32 pb-16 sm:pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Hero Section */}
-          <div className="text-center mb-12 sm:mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm"
-            >
-              <Shield className="w-3.5 h-3.5" />
-              {t.services.expertCare}
-            </motion.div>
-            
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
-            >
-              {t.services.title}
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4 sm:px-0"
-            >
-              {t.services.subtitle}
-            </motion.p>
-          </div>
+    <div className={`py-16 sm:py-20 bg-gradient-to-b ${background.light} will-change-transform`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12 sm:mb-16">
+          <h2 className={`text-2xl sm:text-4xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
+            {t.title}
+          </h2>
+          <p className={`text-base sm:text-lg ${text.secondary} max-w-2xl mx-auto px-4`}>
+            {t.subtitle}
+          </p>
+        </div>
 
-          {/* Services Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {serviceCategories.map((category, categoryIndex) => {
-              const Icon = category.icon;
-              return (
+        <div className="relative">
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            spaceBetween={32}
+            centeredSlides={true}
+            loop={true}
+            breakpoints={{
+              320: {
+                slidesPerView: 1.2,
+                spaceBetween: 16,
+              },
+              640: {
+                slidesPerView: 2.2,
+                spaceBetween: 24,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 32,
+              }
+            }}
+            autoplay={{
+              delay: 4000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true
+            }}
+            pagination={{
+              clickable: true,
+              bulletActiveClass: 'bg-violet-600 w-4',
+              bulletClass: 'w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300 mx-1 cursor-pointer'
+            }}
+            className="!pb-12"
+          >
+            {services.map((service) => (
+              <SwiperSlide key={service.title} className="!w-[280px] sm:!w-[340px] md:!w-[400px]">
                 <motion.div
-                  key={category.title}
                   initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: categoryIndex * 0.1 }}
-                  className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-[#2B5C4B]/20 transition-all duration-300"
+                  animate={{ opacity: 1, y: 0 }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#2B5C4B]/0 via-[#2B5C4B]/0 to-[#2B5C4B]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
-                  <div className="p-6 sm:p-8">
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="bg-[#2B5C4B]/5 p-3 rounded-xl group-hover:bg-[#2B5C4B]/10 transition-colors duration-300">
-                        <Icon className="h-6 w-6 text-[#2B5C4B]" />
-                      </div>
-                      <h2 className="text-xl font-semibold text-[#1e3a5c] group-hover:text-[#2B5C4B] transition-colors duration-300">
-                        {category.title}
-                      </h2>
-                    </div>
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden group shadow-lg">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C4532]/95 via-[#1C4532]/50 to-transparent" />
                     
-                    <ul className="space-y-3">
-                      {category.services.map((service, serviceIndex) => (
-                        <motion.li
-                          key={service}
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: categoryIndex * 0.1 + serviceIndex * 0.05 }}
-                          className="flex items-center gap-3"
-                        >
-                          <span className="h-1.5 w-1.5 rounded-full bg-[#2B5C4B]" />
-                          <span className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
-                            {service}
-                          </span>
-                        </motion.li>
-                      ))}
-                    </ul>
+                    {/* Content */}
+                    <div className="absolute inset-0 p-4 sm:p-8 flex flex-col justify-end">
+                      <div className="bg-white/10 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <div className="w-6 h-6 text-white">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M12 2v20M2 12h20" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                      </div>
+                      <h3 className="text-xl sm:text-2xl font-semibold text-white mb-1 sm:mb-2">
+                        {service.title}
+                      </h3>
+                      <p className="text-white/80 text-sm line-clamp-2">
+                        {service.description}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
-              );
-            })}
-          </div>
-
-          {/* CTA Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="mt-16 sm:mt-20"
-          >
-            <div className="bg-[#2B5C4B] rounded-2xl p-8 sm:p-12 relative overflow-hidden">
-              {/* Decorative Elements */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/5 rounded-full blur-3xl" />
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/5 rounded-full blur-3xl" />
-              </div>
-
-              <div className="relative">
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-                  {t.services.cta.title}
-                </h3>
-                <p className="text-white/80 text-base sm:text-lg mb-8 max-w-2xl">
-                  {t.services.cta.subtitle}
-                </p>
-                <Link
-                  to="/appointment"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#2B5C4B] rounded-xl hover:bg-gray-50 transition-colors shadow-lg shadow-black/10 font-medium group"
-                >
-                  {t.services.cta.button}
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-            </div>
-          </motion.div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
-      </main>
 
-      <Footer />
+        <div className="text-center mt-8 sm:mt-12 px-4">
+          <Link
+            to="/services"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 transition-all duration-300 shadow-sm hover:shadow"
+          >
+            <span className="font-medium">{t.viewAll}</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
