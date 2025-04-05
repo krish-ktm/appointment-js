@@ -22,7 +22,12 @@ export function AppointmentPage() {
   } = useAppointmentForm();
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#2B5C4B]/5 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#2B5C4B]/5 via-white to-[#2B5C4B]/5 relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#2B5C4B]/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#2B5C4B]/5 rounded-full blur-3xl" />
+      </div>
+
       <ResponsiveHeader />
       
       <main className="flex-grow pt-24 sm:pt-32 pb-12">
