@@ -51,7 +51,7 @@ export function DesktopHeader() {
   };
 
   return (
-    <header className="relative">
+    <header className="relative w-full">
       {/* Top Bar */}
       <motion.div 
         initial={{ y: 0 }}
@@ -62,7 +62,7 @@ export function DesktopHeader() {
         transition={{ duration: 0.3 }}
         className="fixed w-full z-40 bg-white border-b border-gray-100"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6">
           <div className="flex flex-wrap items-center justify-between gap-2 py-2">
             <div className="flex items-center gap-4 sm:gap-6">
               <a
@@ -97,7 +97,7 @@ export function DesktopHeader() {
         transition={{ duration: 0.3 }}
         className="fixed w-full z-50 bg-white/95 backdrop-blur-sm"
       >
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Link 
@@ -155,10 +155,10 @@ export function DesktopHeader() {
 
               <Link
                 to="/appointment"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#2B5C4B] text-white rounded-lg hover:bg-[#234539] transition-colors shadow-sm hover:shadow"
+                className="inline-flex items-center whitespace-nowrap px-3 py-1.5 bg-[#2B5C4B] text-white text-sm rounded-lg hover:bg-[#234539] transition-colors"
               >
-                <Calendar className="h-4 w-4" />
-                <span>Book Now</span>
+                <Calendar className="h-4 w-4 mr-1.5" />
+                Book Now
               </Link>
             </nav>
           </div>
