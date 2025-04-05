@@ -1,9 +1,6 @@
 import { motion } from 'framer-motion';
 import { Notice } from '../../types';
-import { background, text, gradients } from '../../theme/colors';
 import { Bell } from 'lucide-react';
-import { format } from 'date-fns';
-import { utcToZonedTime } from 'date-fns-tz';
 import { useState, useEffect } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
@@ -17,46 +14,47 @@ interface NoticeBoardProps {
 
 export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
   const { language } = useTranslation();
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 5000, stopOnInteraction: false })
   ]);
 
-  const formatDate = (dateStr: string | undefined) => {
-    if (!dateStr) return '';
-    try {
-      const date = utcToZonedTime(new Date(dateStr), 'Asia/Kolkata');
-      return format(date, 'MMM d, yyyy');
-    } catch (error) {
-      console.error('Error formatting date:', error);
-      return '';
-    }
-  };
+  useEffect(() => {
+    if (!emblaApi) return;
 
-  // Helper function to get content in current language
+    emblaApi.on('select', () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    });
+  }, [emblaApi]);
+
   const getLocalizedContent = (content: string | { en: string; gu: string }) => {
     if (typeof content === 'string') return content;
-    return content[language] || content.en; // Fallback to English if translation not available
+    return content[language] || content.en;
   };
 
   return (
-    <div className={`py-20 bg-gradient-to-b ${background.light} will-change-transform`}>
+    <div className="py-20 bg-gradient-to-b from-[#2B5C4B]/5 to-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <motion.div
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-full mb-4"
+            transition={{ delay: 0.1 }}
+            className="text-2xl md:text-4xl font-serif text-[#1e3a5c] mb-3 md:mb-4"
           >
-            <Bell className="h-4 w-4 text-blue-600" />
-            <span className="text-sm font-medium text-blue-600">Important Updates</span>
-          </motion.div>
-          <h2 className={`text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
             Latest Announcements
-          </h2>
-          <p className={`text-lg ${text.secondary} max-w-2xl mx-auto`}>
-            Stay informed about important updates, schedule changes, and announcements from Dr. Skin Care.
-          </p>
+          </motion.h2>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto"
+          >
+            Stay informed about important updates, schedule changes, and announcements from our clinic.
+          </motion.p>
         </div>
 
         <div className="max-w-4xl mx-auto">
@@ -64,77 +62,67 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-12 bg-gray-50 rounded-2xl"
+              className="text-center py-12 bg-[#2B5C4B]/5 rounded-2xl backdrop-blur-sm"
             >
-              <Bell className="h-8 w-8 text-gray-400 mx-auto mb-3" />
-              <p className={text.muted}>No announcements at the moment.</p>
+              <Bell className="h-8 w-8 text-[#2B5C4B] mx-auto mb-3" />
+              <p className="text-gray-600">No announcements at the moment.</p>
             </motion.div>
           ) : (
-            <div className="overflow-hidden rounded-2xl" ref={emblaRef}>
+            <div className="overflow-hidden" ref={emblaRef}>
               <div className="flex">
                 {notices.map((notice, index) => (
-                  <div key={notice.id} className="flex-[0_0_100%] min-w-0">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 mx-4"
-                    >
+                  <motion.div
+                    key={notice.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex-[0_0_100%] min-w-0 px-4"
+                  >
+                    <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-[#2B5C4B]/10 hover:shadow-xl transition-all duration-300">
                       {notice.images && notice.images.length > 0 && (
-                        <div className="relative w-full aspect-[2/1] overflow-hidden bg-gray-100">
+                        <div className="relative w-full aspect-[2/1] overflow-hidden">
                           <img
                             src={notice.images[0]}
                             alt={getLocalizedContent(notice.title)}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                             loading="lazy"
                           />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                         </div>
                       )}
                       
-                      <div className="p-6">
-                        <div className="flex items-center justify-between gap-4 mb-4">
-                          <div className="flex items-center gap-3">
-                            <div className="bg-blue-50 p-2 rounded-lg">
-                              <Bell className="h-5 w-5 text-blue-500" />
-                            </div>
-                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
-                              New Update
-                            </span>
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {formatDate(notice.created_at)}
-                          </div>
-                        </div>
-
-                        <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                      <div className="p-6 md:p-8">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-[#2B5C4B] transition-colors">
                           {getLocalizedContent(notice.title)}
                         </h3>
 
                         {notice.content && (
                           <div 
-                            className="prose prose-blue max-w-none"
+                            className="prose prose-sm md:prose-base prose-green max-w-none"
                             dangerouslySetInnerHTML={{ 
                               __html: formatMarkdown(getLocalizedContent(notice.content)) 
                             }}
                           />
                         )}
                       </div>
-                    </motion.div>
-                  </div>
+                    </div>
+                  </motion.div>
                 ))}
               </div>
 
-              {/* Dots */}
-              <div className="flex justify-center gap-2 mt-4">
+              {/* Carousel Navigation */}
+              <div className="flex justify-center gap-2 mt-8">
                 {notices.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => emblaApi?.scrollTo(index)}
                     className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      emblaApi?.selectedScrollSnap() === index
-                        ? 'bg-blue-600 w-4'
-                        : 'bg-gray-300 hover:bg-gray-400'
+                      selectedIndex === index
+                        ? 'bg-[#2B5C4B] w-4'
+                        : 'bg-[#2B5C4B]/20 hover:bg-[#2B5C4B]/40'
                     }`}
+                    aria-label={`Go to slide ${index + 1}`}
                   />
                 ))}
               </div>
