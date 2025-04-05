@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Linkedin, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { text, background } from '../theme/colors';
 import { useTranslation } from '../i18n/useTranslation';
 
 export function Footer() {
@@ -17,18 +16,25 @@ export function Footer() {
   };
 
   return (
-    <footer className={`bg-gradient-to-b ${background.light} border-t border-gray-100`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+    <footer className="relative bg-[#2B5C4B] text-white overflow-hidden">
+      {/* Decorative Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* About Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
           >
-            <h3 className="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-700 to-gray-900">
+            <h3 className="text-2xl font-bold mb-6 bg-clip-text text-white">
               {t.footer.clinicName}
             </h3>
-            <p className={`${text.secondary} leading-relaxed`}>
+            <p className="text-white/80 leading-relaxed text-sm">
               {t.footer.description}
             </p>
           </motion.div>
@@ -36,10 +42,11 @@ export function Footer() {
           {/* Quick Links */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            <h3 className={`text-lg font-semibold mb-6 ${text.primary}`}>{t.footer.quickLinks.title}</h3>
+            <h3 className="text-lg font-semibold mb-6 text-white">{t.footer.quickLinks.title}</h3>
             <ul className="space-y-3">
               {[
                 { label: t.footer.quickLinks.home, to: "/" },
@@ -52,17 +59,17 @@ export function Footer() {
                   {link.to ? (
                     <Link
                       to={link.to}
-                      className={`${text.secondary} hover:text-blue-600 transition-colors duration-200 flex items-center gap-2`}
+                      className="text-white/80 hover:text-white transition-colors duration-200 flex items-center gap-2 group text-sm"
                     >
-                      <span className="h-1 w-1 rounded-full bg-blue-500"></span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       {link.label}
                     </Link>
                   ) : (
                     <button
                       onClick={link.action}
-                      className={`${text.secondary} hover:text-blue-600 transition-colors duration-200 flex items-center gap-2`}
+                      className="text-white/80 hover:text-white transition-colors duration-200 flex items-center gap-2 group text-sm"
                     >
-                      <span className="h-1 w-1 rounded-full bg-blue-500"></span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       {link.label}
                     </button>
                   )}
@@ -74,34 +81,45 @@ export function Footer() {
           {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <h3 className={`text-lg font-semibold mb-6 ${text.primary}`}>{t.footer.contactInfo.title}</h3>
+            <h3 className="text-lg font-semibold mb-6 text-white">{t.footer.contactInfo.title}</h3>
             <ul className="space-y-4">
-              <li className={`flex items-center gap-3 ${text.secondary} hover:text-blue-600 transition-colors duration-200`}>
-                <div className="bg-blue-50 p-2 rounded-lg">
-                  <Phone className="h-4 w-4 text-blue-500" />
-                </div>
-                <span>{t.footer.contactInfo.phone}</span>
+              <li>
+                <a
+                  href={`tel:${t.footer.contactInfo.phone}`}
+                  className="flex items-center gap-3 text-white/80 hover:text-white transition-colors duration-200 group"
+                >
+                  <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors">
+                    <Phone className="h-4 w-4" />
+                  </div>
+                  <span className="text-sm">{t.footer.contactInfo.phone}</span>
+                </a>
               </li>
-              <li className={`flex items-center gap-3 ${text.secondary} hover:text-blue-600 transition-colors duration-200`}>
-                <div className="bg-blue-50 p-2 rounded-lg">
-                  <Mail className="h-4 w-4 text-blue-500" />
-                </div>
-                <span>{t.footer.contactInfo.email}</span>
+              <li>
+                <a
+                  href={`mailto:${t.footer.contactInfo.email}`}
+                  className="flex items-center gap-3 text-white/80 hover:text-white transition-colors duration-200 group"
+                >
+                  <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors">
+                    <Mail className="h-4 w-4" />
+                  </div>
+                  <span className="text-sm">{t.footer.contactInfo.email}</span>
+                </a>
               </li>
-              <li className={`flex items-center gap-3 ${text.secondary} hover:text-blue-600 transition-colors duration-200`}>
-                <div className="bg-blue-50 p-2 rounded-lg">
-                  <MapPin className="h-4 w-4 text-blue-500" />
+              <li className="flex items-center gap-3 text-white/80 group">
+                <div className="bg-white/10 p-2 rounded-lg">
+                  <MapPin className="h-4 w-4" />
                 </div>
-                <span>{t.footer.contactInfo.address}</span>
+                <span className="text-sm">{t.footer.contactInfo.address}</span>
               </li>
-              <li className={`flex items-center gap-3 ${text.secondary} hover:text-blue-600 transition-colors duration-200`}>
-                <div className="bg-blue-50 p-2 rounded-lg">
-                  <Clock className="h-4 w-4 text-blue-500" />
+              <li className="flex items-center gap-3 text-white/80 group">
+                <div className="bg-white/10 p-2 rounded-lg">
+                  <Clock className="h-4 w-4" />
                 </div>
-                <span>{t.footer.contactInfo.hours}</span>
+                <span className="text-sm">{t.footer.contactInfo.hours}</span>
               </li>
             </ul>
           </motion.div>
@@ -109,27 +127,30 @@ export function Footer() {
           {/* Social Links */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ delay: 0.3 }}
           >
-            <h3 className={`text-lg font-semibold mb-6 ${text.primary}`}>{t.footer.social.title}</h3>
-            <div className="flex gap-4">
+            <h3 className="text-lg font-semibold mb-6 text-white">{t.footer.social.title}</h3>
+            <div className="grid grid-cols-2 gap-4">
               {[
-                { icon: Facebook, color: "hover:bg-blue-600", href: "#" },
-                { icon: Twitter, color: "hover:bg-blue-400", href: "#" },
-                { icon: Instagram, color: "hover:bg-pink-600", href: "#" },
-                { icon: Linkedin, color: "hover:bg-blue-700", href: "#" }
+                { icon: Facebook, label: "Facebook", href: "#" },
+                { icon: Twitter, label: "Twitter", href: "#" },
+                { icon: Instagram, label: "Instagram", href: "#" },
+                { icon: Linkedin, label: "LinkedIn", href: "#" }
               ].map((social, index) => {
                 const Icon = social.icon;
                 return (
                   <motion.a
                     key={index}
                     href={social.href}
-                    className={`bg-blue-50 p-3 rounded-xl ${social.color} hover:text-white transition-colors duration-300`}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
+                    className="flex items-center gap-3 text-white/80 hover:text-white transition-colors duration-200 group"
+                    whileHover={{ x: 4 }}
                   >
-                    <Icon className="h-5 w-5 text-blue-500" />
+                    <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors">
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <span className="text-sm">{social.label}</span>
                   </motion.a>
                 );
               })}
@@ -139,11 +160,12 @@ export function Footer() {
 
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
           transition={{ delay: 0.4 }}
-          className="border-t border-gray-100 mt-16 pt-8 text-center"
+          className="border-t border-white/10 mt-16 pt-8 text-center"
         >
-          <p className={text.secondary}>
+          <p className="text-white/60 text-sm">
             {t.footer.copyright}
           </p>
         </motion.div>
