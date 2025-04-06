@@ -257,7 +257,7 @@ export function ContactPage() {
               </div>
               <div className="h-80 lg:h-96">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.7069132880295!2d72.65333107594439!3d23.03402901551698!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e873f2553abb9%3A0xd5e4acca2a55e32d!2sDr%20Jemish%20Skin%20Care!5e0!3m2!1sen!2sin!4v1712495293913!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3653.569965172857!2d72.38219340185242!3d23.606717556567656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDM2JzI0LjIiTiA3MsKwMjInNTUuOSJF!5e0!3m2!1sen!2sin!4v1712483240000!5m2!1sen!2sin"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
