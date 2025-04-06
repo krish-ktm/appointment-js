@@ -1,11 +1,15 @@
 import { motion } from 'framer-motion';
 import { Notice } from '../../types';
 import { Bell } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import useEmblaCarousel from 'embla-carousel-react';
-import Autoplay from 'embla-carousel-autoplay';
+import { useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
 import { useTranslation } from '../../i18n/useTranslation';
 import { formatMarkdown } from '../../utils/markdown';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 interface NoticeBoardProps {
   notices: Notice[];
@@ -14,18 +18,7 @@ interface NoticeBoardProps {
 
 export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
   const { language } = useTranslation();
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
-    Autoplay({ delay: 5000, stopOnInteraction: false })
-  ]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    emblaApi.on('select', () => {
-      setSelectedIndex(emblaApi.selectedScrollSnap());
-    });
-  }, [emblaApi]);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const getLocalizedContent = (content: string | { en: string; gu: string }) => {
     if (typeof content === 'string') return content;
@@ -78,16 +71,31 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
               <p className="text-gray-600">No announcements at the moment.</p>
             </motion.div>
           ) : (
-            <div className="overflow-hidden" ref={emblaRef}>
-              <div className="flex">
-                {notices.map((notice, index) => (
+            <Swiper
+              modules={[Autoplay, Pagination]}
+              spaceBetween={32}
+              slidesPerView={1}
+              loop={true}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              pagination={{
+                clickable: true,
+                bulletActiveClass: 'swiper-pagination-bullet-active bg-[#2B5C4B]',
+                bulletClass: 'swiper-pagination-bullet'
+              }}
+              onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+              className="pb-12"
+            >
+              {notices.map((notice, index) => (
+                <SwiperSlide key={notice.id}>
                   <motion.div
-                    key={notice.id}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="flex-[0_0_100%] min-w-0 px-4"
+                    className="px-4"
                   >
                     <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-[#2B5C4B]/10 hover:shadow-xl transition-all duration-300">
                       {notice.images && notice.images.length > 0 && (
@@ -118,25 +126,9 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
                       </div>
                     </div>
                   </motion.div>
-                ))}
-              </div>
-
-              {/* Carousel Navigation */}
-              <div className="flex justify-center gap-2 mt-8">
-                {notices.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => emblaApi?.scrollTo(index)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      selectedIndex === index
-                        ? 'bg-[#2B5C4B] w-4'
-                        : 'bg-[#2B5C4B]/20 hover:bg-[#2B5C4B]/40'
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           )}
         </div>
       </div>
