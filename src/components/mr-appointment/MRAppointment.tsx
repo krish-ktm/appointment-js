@@ -32,6 +32,7 @@ export function MRAppointment() {
   const [appointmentDetails, setAppointmentDetails] = useState<MRAppointmentDetails | null>(null);
   const [calendarKey, setCalendarKey] = useState(0);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+  const [loadingTimeSlots, setLoadingTimeSlots] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [form, setForm] = useState<MRForm>({
     mr_name: '',
@@ -53,6 +54,7 @@ export function MRAppointment() {
   const loadTimeSlots = async () => {
     if (!form.appointment_date) return;
     
+    setLoadingTimeSlots(true);
     try {
       const slots = await fetchTimeSlots(form.appointment_date);
       setTimeSlots(slots);
@@ -67,6 +69,8 @@ export function MRAppointment() {
     } catch (error) {
       console.error('Error loading time slots:', error);
       toast.error('Failed to load available time slots');
+    } finally {
+      setLoadingTimeSlots(false);
     }
   };
 
@@ -230,7 +234,7 @@ export function MRAppointment() {
 
               <form onSubmit={handleSubmit} className="p-4 sm:p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {/* Left Column - Form Fields */}
+                  {/* Left Column - Form Fields and Time Slots */}
                   <div className="space-y-6">
                     <MRAppointmentForm 
                       form={form}
@@ -239,28 +243,19 @@ export function MRAppointment() {
                       errors={errors as Record<string, string>}
                     />
 
-                    {/* Time Selection */}
-                    {form.appointment_date && (
-                      <MRTimeSlotSelector
-                        slots={timeSlots}
-                        selectedTime={form.appointment_time}
-                        onSelectTime={(time) => setForm({ ...form, appointment_time: time })}
-                        t={t.mrAppointment.form}
-                        error={errors?.appointment_time}
-                      />
-                    )}
-
-                    <button
-                      type="submit"
-                      disabled={loading || !form.appointment_date || !form.appointment_time}
-                      className={`w-full py-4 px-6 bg-[#2B5C4B] text-white rounded-xl font-medium hover:bg-[#234539] transition-all duration-200 ${
-                        loading || !form.appointment_date || !form.appointment_time 
-                          ? 'opacity-70 cursor-not-allowed' 
-                          : ''
-                      }`}
-                    >
-                      {loading ? t.mrAppointment.form.submitting : t.mrAppointment.form.submit}
-                    </button>
+                    {/* Time Selection - Desktop: Below form fields */}
+                    <div className="hidden lg:block">
+                      {form.appointment_date && (
+                        <MRTimeSlotSelector
+                          slots={timeSlots}
+                          selectedTime={form.appointment_time}
+                          onSelectTime={(time) => setForm({ ...form, appointment_time: time })}
+                          t={t.mrAppointment.form}
+                          error={errors?.appointment_time}
+                          loading={loadingTimeSlots}
+                        />
+                      )}
+                    </div>
                   </div>
 
                   {/* Right Column - Calendar */}
@@ -270,7 +265,36 @@ export function MRAppointment() {
                       selectedDate={form.appointment_date}
                       onDateChange={(date) => setForm({ ...form, appointment_date: date, appointment_time: undefined })}
                     />
+
+                    {/* Time Selection - Mobile: Below calendar */}
+                    <div className="lg:hidden mt-6">
+                      {form.appointment_date && (
+                        <MRTimeSlotSelector
+                          slots={timeSlots}
+                          selectedTime={form.appointment_time}
+                          onSelectTime={(time) => setForm({ ...form, appointment_time: time })}
+                          t={t.mrAppointment.form}
+                          error={errors?.appointment_time}
+                          loading={loadingTimeSlots}
+                        />
+                      )}
+                    </div>
                   </div>
+                </div>
+
+                {/* Submit Button */}
+                <div className="mt-8">
+                  <button
+                    type="submit"
+                    disabled={loading || !form.appointment_date || !form.appointment_time}
+                    className={`w-full py-4 px-6 bg-[#2B5C4B] text-white rounded-xl font-medium hover:bg-[#234539] transition-all duration-200 ${
+                      loading || !form.appointment_date || !form.appointment_time 
+                        ? 'opacity-70 cursor-not-allowed' 
+                        : ''
+                    }`}
+                  >
+                    {loading ? t.mrAppointment.form.submitting : t.mrAppointment.form.submit}
+                  </button>
                 </div>
               </form>
             </div>

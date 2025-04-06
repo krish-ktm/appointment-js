@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Clock, AlertCircle } from 'lucide-react';
+import { Clock, AlertCircle, Loader2 } from 'lucide-react';
 import { TimeSlot } from './types';
 
 interface TimeSlotTranslations {
@@ -15,15 +15,43 @@ interface MRTimeSlotSelectorProps {
   onSelectTime: (time: string) => void;
   t: TimeSlotTranslations;
   error?: string;
+  loading?: boolean;
 }
 
-export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error }: MRTimeSlotSelectorProps) {
+export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error, loading = false }: MRTimeSlotSelectorProps) {
+  if (loading) {
+    return (
+      <div className="bg-white rounded-xl p-4 border border-gray-200">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 bg-[#2B5C4B]/10 rounded-lg">
+            <Clock className="h-5 w-5 text-[#2B5C4B]" />
+          </div>
+          <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
+        </div>
+        <div className="flex items-center justify-center py-8 bg-[#2B5C4B]/5 rounded-lg">
+          <div className="flex items-center gap-3">
+            <Loader2 className="h-5 w-5 text-[#2B5C4B] animate-spin" />
+            <p className="text-[#2B5C4B] font-medium">Loading time slots...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!slots.length) {
     return (
-      <div className="bg-[#2B5C4B]/5 border border-[#2B5C4B]/10 rounded-xl p-4 text-center">
-        <AlertCircle className="h-6 w-6 text-[#2B5C4B] mx-auto mb-2" />
-        <p className="text-[#2B5C4B] font-medium">{t.noTimeSlots}</p>
-        <p className="text-sm text-[#2B5C4B]/80 mt-1">{t.selectAnotherDate}</p>
+      <div className="bg-white rounded-xl p-4 border border-gray-200">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 bg-[#2B5C4B]/10 rounded-lg">
+            <Clock className="h-5 w-5 text-[#2B5C4B]" />
+          </div>
+          <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
+        </div>
+        <div className="flex flex-col items-center justify-center py-8 bg-[#2B5C4B]/5 rounded-lg">
+          <AlertCircle className="h-6 w-6 text-[#2B5C4B] mb-2" />
+          <p className="text-[#2B5C4B] font-medium">{t.noTimeSlots}</p>
+          <p className="text-sm text-[#2B5C4B]/80 mt-1">{t.selectAnotherDate}</p>
+        </div>
       </div>
     );
   }
