@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Clock, AlertCircle } from 'lucide-react';
+import { Clock, AlertCircle, Loader2 } from 'lucide-react';
 import { TimeSlot } from '../../types';
 
 interface TimeSlotSelectorProps {
@@ -15,21 +15,13 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t, loa
   if (loading) {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-xl p-4 border border-gray-200"
+        className="bg-[#2B5C4B]/5 border border-[#2B5C4B]/10 rounded-xl p-6 text-center"
       >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-[#2B5C4B]/10 rounded-lg">
-            <Clock className="h-5 w-5 text-[#2B5C4B]" />
-          </div>
-          <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
-        </div>
-        <div className="flex items-center justify-center py-8">
-          <div className="flex flex-col items-center gap-3">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2B5C4B]"></div>
-            <p className="text-sm text-gray-600">Loading available time slots...</p>
-          </div>
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="h-6 w-6 text-[#2B5C4B] animate-spin" />
+          <p className="text-[#2B5C4B] font-medium">Loading available time slots...</p>
         </div>
       </motion.div>
     );

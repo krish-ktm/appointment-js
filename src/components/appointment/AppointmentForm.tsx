@@ -36,6 +36,7 @@ export function AppointmentForm({
   const { t, language } = useTranslation();
   const today = new Date();
   const tomorrow = new Date();
+  const [loadingTimeSlots, setLoadingTimeSlots] = useState(false);
   tomorrow.setDate(today.getDate() + 1);
 
   const [rules, setRules] = useState<any[]>([]);
@@ -64,7 +65,10 @@ export function AppointmentForm({
     if (date) {
       const istDate = utcToZonedTime(date, TIMEZONE);
       const formattedDate = format(istDate, 'yyyy-MM-dd');
+      setLoadingTimeSlots(true);
       setForm({ ...form, date: formattedDate, timeSlot: '' });
+      // Set loading to false after a short delay to prevent flickering
+      setTimeout(() => setLoadingTimeSlots(false), 500);
     }
   };
 
@@ -198,7 +202,7 @@ export function AppointmentForm({
                 onSelectTime={(time) => setForm({ ...form, timeSlot: time })}
                 label={t.appointment.form.timeSlot}
                 t={t.appointment.form}
-                loading={loadingSlots}
+                loading={loadingTimeSlots || loadingSlots}
               />
             </div>
           </div>
