@@ -31,25 +31,13 @@ export function useAppointmentForm() {
 
   const [form, setForm] = useState<AppointmentForm>(initialForm);
 
-  useEffect(() => {
-    if (form.date) {
-      loadTimeSlots();
-    }
-  }, [form.date]);
-
-  // Add a new effect to load time slots when form resets
-  useEffect(() => {
-    if (form.name === '' && form.phone === '' && form.date === istTodayStr) {
-      loadTimeSlots();
-    }
-  }, [form.name, form.phone, form.date]);
-
-  const loadTimeSlots = async () => {
-    if (!form.date) return;
+  const loadTimeSlots = async (dateStr?: string) => {
+    const dateToLoad = dateStr || form.date;
+    if (!dateToLoad) return;
     
     setLoadingSlots(true);
     try {
-      const slots = await generateTimeSlots(form.date);
+      const slots = await generateTimeSlots(dateToLoad);
       setTimeSlots(slots);
     } catch (error) {
       console.error('Error loading time slots:', error);
@@ -58,6 +46,20 @@ export function useAppointmentForm() {
     } finally {
       setLoadingSlots(false);
     }
+  };
+
+  // Load time slots when date changes
+  useEffect(() => {
+    if (form.date) {
+      loadTimeSlots(form.date);
+    }
+  }, [form.date]);
+
+  const resetForm = () => {
+    // First update the form state
+    setForm(initialForm);
+    // Then load time slots for the initial date
+    loadTimeSlots(initialForm.date);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -93,9 +95,7 @@ export function useAppointmentForm() {
 
       setSuccess(true);
       setBookingDetails(appointment);
-      setForm(initialForm);
-      setTimeSlots([]);
-      loadTimeSlots();
+      resetForm();
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -116,6 +116,7 @@ export function useAppointmentForm() {
     timeSlots,
     bookingDetails,
     handleSubmit,
-    closeBookingDetails
+    closeBookingDetails,
+    resetForm
   };
 }
