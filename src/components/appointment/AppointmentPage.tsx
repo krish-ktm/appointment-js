@@ -17,7 +17,6 @@ export function AppointmentPage() {
     timeSlots,
     bookingDetails,
     handleSubmit,
-    resetForm,
     closeBookingDetails
   } = useAppointmentForm();
 
@@ -30,8 +29,8 @@ export function AppointmentPage() {
 
       <ResponsiveHeader />
       
-      <main className="flex-grow pt-24 sm:pt-32 pb-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="flex-grow pt-24 sm:pt-32 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Top Section */}
           <div className="text-center mb-12 sm:mb-16">
             <motion.div
@@ -90,7 +89,6 @@ export function AppointmentPage() {
         <BookingConfirmation
           booking={bookingDetails}
           onClose={closeBookingDetails}
-          onScheduleAnother={resetForm}
         />
       )}
 

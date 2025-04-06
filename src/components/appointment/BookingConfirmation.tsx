@@ -13,10 +13,9 @@ const TIMEZONE = 'Asia/Kolkata';
 interface BookingConfirmationProps {
   booking: BookingDetails;
   onClose: () => void;
-  onScheduleAnother: () => void;
 }
 
-export function BookingConfirmation({ booking, onClose, onScheduleAnother }: BookingConfirmationProps) {
+export function BookingConfirmation({ booking, onClose }: BookingConfirmationProps) {
   const { t, language } = useTranslation();
   const [downloading, setDownloading] = useState(false);
   const [customRulesText, setCustomRulesText] = useState<string | null>(null);
@@ -228,12 +227,6 @@ export function BookingConfirmation({ booking, onClose, onScheduleAnother }: Boo
                   <span>Download</span>
                 </>
               )}
-            </button>
-            <button
-              onClick={onScheduleAnother}
-              className="flex-1 h-11 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors"
-            >
-              {t.appointment.confirmation.scheduleAnother}
             </button>
             <button
               onClick={onClose}

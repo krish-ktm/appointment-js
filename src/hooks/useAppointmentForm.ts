@@ -37,6 +37,13 @@ export function useAppointmentForm() {
     }
   }, [form.date]);
 
+  // Add a new effect to load time slots when form resets
+  useEffect(() => {
+    if (form.name === '' && form.phone === '' && form.date === istTodayStr) {
+      loadTimeSlots();
+    }
+  }, [form.name, form.phone, form.date]);
+
   const loadTimeSlots = async () => {
     if (!form.date) return;
     
@@ -51,19 +58,6 @@ export function useAppointmentForm() {
     } finally {
       setLoadingSlots(false);
     }
-  };
-
-  const resetForm = () => {
-    // Reset form to initial state
-    setForm(initialForm);
-    // Reset success state
-    setSuccess(false);
-    // Reset booking details
-    setBookingDetails(null);
-    // Reset time slots
-    setTimeSlots([]);
-    // Load time slots for the initial date
-    loadTimeSlots();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -99,10 +93,8 @@ export function useAppointmentForm() {
 
       setSuccess(true);
       setBookingDetails(appointment);
-      // Reset form and time slots
       setForm(initialForm);
       setTimeSlots([]);
-      // Load fresh time slots for the initial date
       loadTimeSlots();
     } catch (error) {
       toast.error(error.message);
@@ -112,8 +104,7 @@ export function useAppointmentForm() {
   };
 
   const closeBookingDetails = () => {
-    // Reset everything when closing the modal
-    resetForm();
+    setBookingDetails(null);
   };
 
   return {
@@ -125,7 +116,6 @@ export function useAppointmentForm() {
     timeSlots,
     bookingDetails,
     handleSubmit,
-    resetForm,
     closeBookingDetails
   };
 }
