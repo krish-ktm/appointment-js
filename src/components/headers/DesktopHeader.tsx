@@ -3,9 +3,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { Phone, Clock, MapPin, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../i18n/useTranslation';
+import { LanguageToggle } from './LanguageToggle';
 
 export function DesktopHeader() {
-  const { t, language, setLanguage } = useTranslation();
+  const { t } = useTranslation();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
@@ -39,10 +40,6 @@ export function DesktopHeader() {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, [lastScrollY]);
-
-  const toggleLanguage = () => {
-    setLanguage(language === 'en' ? 'gu' : 'en');
-  };
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -130,38 +127,7 @@ export function DesktopHeader() {
                 </Link>
               ))}
 
-              {/* Language Toggle */}
-              <div className="relative">
-                <motion.button
-                  onClick={toggleLanguage}
-                  whileTap={{ scale: 0.95 }}
-                  className="relative w-20 h-9 rounded-full bg-gray-100 p-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 hover:bg-gray-200 group"
-                >
-                  <motion.div
-                    animate={{
-                      x: language === 'en' ? 44 : 0,
-                    }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    className="absolute top-1 left-1 w-7 h-7 rounded-full bg-gradient-to-br from-[#2B5C4B] to-[#234539] shadow-lg shadow-[#2B5C4B]/10 flex items-center justify-center"
-                  >
-                    <span className="text-[11px] font-semibold text-white">
-                      {language === 'en' ? 'En' : 'ગુ'}
-                    </span>
-                  </motion.div>
-                  <div className="relative z-10 flex justify-between px-2 text-xs font-medium h-full items-center">
-                    <span className={`transition-colors duration-300 ${
-                      language === 'gu' ? 'text-[#2B5C4B] font-semibold' : 'text-gray-400'
-                    }`}>
-                      ગુ
-                    </span>
-                    <span className={`transition-colors duration-300 ${
-                      language === 'en' ? 'text-[#2B5C4B] font-semibold' : 'text-gray-400'
-                    }`}>
-                      En
-                    </span>
-                  </div>
-                </motion.button>
-              </div>
+              <LanguageToggle />
 
               <Link
                 to="/appointment"

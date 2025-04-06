@@ -28,7 +28,7 @@ export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error
           </div>
           <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
         </div>
-        <div className="flex items-center justify-center py-8 bg-[#2B5C4B]/5 rounded-lg">
+        <div className="flex items-center justify-center py-4 bg-[#2B5C4B]/5 rounded-lg">
           <div className="flex items-center gap-3">
             <Loader2 className="h-5 w-5 text-[#2B5C4B] animate-spin" />
             <p className="text-[#2B5C4B] font-medium">Loading time slots...</p>
@@ -47,7 +47,7 @@ export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error
           </div>
           <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
         </div>
-        <div className="flex flex-col items-center justify-center py-8 bg-[#2B5C4B]/5 rounded-lg">
+        <div className="flex flex-col items-center justify-center py-4 bg-[#2B5C4B]/5 rounded-lg">
           <AlertCircle className="h-6 w-6 text-[#2B5C4B] mb-2" />
           <p className="text-[#2B5C4B] font-medium">{t.noTimeSlots}</p>
           <p className="text-sm text-[#2B5C4B]/80 mt-1">{t.selectAnotherDate}</p>
