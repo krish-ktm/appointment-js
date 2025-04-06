@@ -3,6 +3,7 @@ export interface NavigationTranslations {
   about: string;
   services: string;
   gallery: string;
+  contact: string;
   appointment: string;
   mrAppointment: string;
 }

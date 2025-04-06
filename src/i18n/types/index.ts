@@ -7,6 +7,7 @@ import { MRAppointmentTranslations } from './mr-appointment';
 import { AboutTranslations } from './about';
 import { FooterTranslations } from './footer';
 import { HeaderTranslations } from './header';
+import { ContactTranslations } from './contact';
 
 export interface LanguageContent {
   common: CommonTranslations;
@@ -18,6 +19,7 @@ export interface LanguageContent {
   about: AboutTranslations;
   footer: FooterTranslations;
   header: HeaderTranslations;
+  contact: ContactTranslations;
 }
 
 export * from './common';
@@ -29,3 +31,4 @@ export * from './mr-appointment';
 export * from './about';
 export * from './footer';
 export * from './header';
+export * from './contact';

@@ -7,6 +7,7 @@ import { mrAppointmentTranslations } from './mr-appointment';
 import { aboutTranslations } from './about';
 import { footerTranslations } from './footer';
 import { headerTranslations } from './header';
+import { contactTranslations } from './contact';
 import { LanguageContent } from '../types';
 
 export const translations: Record<string, LanguageContent> = {
@@ -19,7 +20,8 @@ export const translations: Record<string, LanguageContent> = {
     mrAppointment: mrAppointmentTranslations.en,
     about: aboutTranslations.en,
     footer: footerTranslations.en,
-    header: headerTranslations.en
+    header: headerTranslations.en,
+    contact: contactTranslations.en
   },
   gu: {
     common: commonTranslations.gu,
@@ -30,6 +32,7 @@ export const translations: Record<string, LanguageContent> = {
     mrAppointment: mrAppointmentTranslations.gu,
     about: aboutTranslations.gu,
     footer: footerTranslations.gu,
-    header: headerTranslations.gu
+    header: headerTranslations.gu,
+    contact: contactTranslations.gu
   }
 };

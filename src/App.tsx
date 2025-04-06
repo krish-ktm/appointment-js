@@ -17,6 +17,7 @@ import { AboutPage } from './components/AboutPage';
 import { GalleryPage } from './components/GalleryPage';
 import { MRAppointment } from './components/mr-appointment/MRAppointment';
 import { ServicesPage } from './components/ServicesPage';
+import { ContactPage } from './components/ContactPage';
 import { LanguageProvider } from './i18n/LanguageContext';
 import { AppointmentPage } from './components/appointment/AppointmentPage';
 import { LanguageSelectionModal } from './components/LanguageSelectionModal';
@@ -69,6 +70,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/mr-appointment" element={<MRAppointment />} />
