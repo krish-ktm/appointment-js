@@ -6,6 +6,8 @@ export interface FooterTranslations {
     home: string;
     about: string;
     services: string;
+    gallery: string;
+    contact: string;
     bookAppointment: string;
     mrAppointment: string;
   };

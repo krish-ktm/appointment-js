@@ -10,6 +10,8 @@ export const footerTranslations: Record<string, FooterTranslations> = {
       home: "Home",
       about: "About Us",
       services: "Our Services",
+      gallery: "Gallery",
+      contact: "Contact Us",
       bookAppointment: "Book Appointment",
       mrAppointment: "MR Appointment"
     },
@@ -33,6 +35,8 @@ export const footerTranslations: Record<string, FooterTranslations> = {
       home: "હોમ",
       about: "અમારા વિશે",
       services: "અમારી સેવાઓ",
+      gallery: "ગેલેરી",
+      contact: "સંપર્ક કરો",
       bookAppointment: "એપોઈન્ટમેન્ટ બુક કરો",
       mrAppointment: "એમઆર એપોઈન્ટમેન્ટ"
     },

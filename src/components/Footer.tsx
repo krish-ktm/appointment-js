@@ -52,6 +52,8 @@ export function Footer() {
                 { label: t.footer.quickLinks.home, to: "/" },
                 { label: t.footer.quickLinks.about, to: "/about" },
                 { label: t.footer.quickLinks.services, to: "/services" },
+                { label: t.footer.quickLinks.gallery, to: "/gallery" },
+                { label: t.footer.quickLinks.contact, to: "/contact" },
                 { label: t.footer.quickLinks.bookAppointment, action: scrollToAppointmentForm },
                 { label: t.footer.quickLinks.mrAppointment, to: "/mr-appointment" }
               ].map((link, index) => (
