@@ -35,7 +35,7 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+        <label className="block text-sm font-medium text-gray-700 mb-1.5 font-sans">
           {t.mrName} *
         </label>
         <div className="relative">
@@ -54,7 +54,7 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
             placeholder={t.mrName}
           />
           {showError('mr_name') && (
-            <div className="mt-1.5 text-sm text-red-600 flex items-center gap-1">
+            <div className="mt-1.5 text-sm text-red-600 flex items-center gap-1 font-sans">
               <AlertCircle className="h-4 w-4" />
               <span>{errors?.mr_name}</span>
             </div>
@@ -63,7 +63,7 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+        <label className="block text-sm font-medium text-gray-700 mb-1.5 font-sans">
           {t.companyName} *
         </label>
         <div className="relative">
@@ -82,7 +82,7 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
             placeholder={t.companyName}
           />
           {showError('company_name') && (
-            <div className="mt-1.5 text-sm text-red-600 flex items-center gap-1">
+            <div className="mt-1.5 text-sm text-red-600 flex items-center gap-1 font-sans">
               <AlertCircle className="h-4 w-4" />
               <span>{errors?.company_name}</span>
             </div>
@@ -91,7 +91,7 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+        <label className="block text-sm font-medium text-gray-700 mb-1.5 font-sans">
           {t.divisionName} *
         </label>
         <div className="relative">
@@ -110,7 +110,7 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
             placeholder={t.divisionName}
           />
           {showError('division_name') && (
-            <div className="mt-1.5 text-sm text-red-600 flex items-center gap-1">
+            <div className="mt-1.5 text-sm text-red-600 flex items-center gap-1 font-sans">
               <AlertCircle className="h-4 w-4" />
               <span>{errors?.division_name}</span>
             </div>
@@ -119,7 +119,7 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+        <label className="block text-sm font-medium text-gray-700 mb-1.5 font-sans">
           {t.contactNo} *
         </label>
         <div className="relative">
@@ -139,7 +139,7 @@ export function MRAppointmentForm({ form, onChange, t, errors }: MRAppointmentFo
             placeholder={t.contactNo}
           />
           {showError('contact_no') && (
-            <div className="mt-1.5 text-sm text-red-600 flex items-center gap-1">
+            <div className="mt-1.5 text-sm text-red-600 flex items-center gap-1 font-sans">
               <AlertCircle className="h-4 w-4" />
               <span>{errors?.contact_no}</span>
             </div>

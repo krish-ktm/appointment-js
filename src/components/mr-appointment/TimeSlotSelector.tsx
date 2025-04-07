@@ -27,12 +27,12 @@ export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error
           <div className="p-2 bg-[#2B5C4B]/10 rounded-lg">
             <Clock className="h-5 w-5 text-[#2B5C4B]" />
           </div>
-          <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
+          <h3 className="font-medium text-gray-900 font-heading">{t.timeSlot}</h3>
         </div>
         <div className="flex items-center justify-center py-4 bg-[#2B5C4B]/5 rounded-lg">
           <div className="flex items-center gap-3">
             <Loader2 className="h-5 w-5 text-[#2B5C4B] animate-spin" />
-            <p className="text-[#2B5C4B] font-medium">{t.loadingSlots}</p>
+            <p className="text-[#2B5C4B] font-medium font-sans">{t.loadingSlots}</p>
           </div>
         </div>
       </div>
@@ -46,12 +46,12 @@ export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error
           <div className="p-2 bg-[#2B5C4B]/10 rounded-lg">
             <Clock className="h-5 w-5 text-[#2B5C4B]" />
           </div>
-          <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
+          <h3 className="font-medium text-gray-900 font-heading">{t.timeSlot}</h3>
         </div>
         <div className="flex flex-col items-center justify-center py-4 bg-[#2B5C4B]/5 rounded-lg">
           <AlertCircle className="h-6 w-6 text-[#2B5C4B] mb-2" />
-          <p className="text-[#2B5C4B] font-medium">{t.noTimeSlots}</p>
-          <p className="text-sm text-[#2B5C4B]/80 mt-1">{t.selectAnotherDate}</p>
+          <p className="text-[#2B5C4B] font-medium font-sans">{t.noTimeSlots}</p>
+          <p className="text-sm text-[#2B5C4B]/80 mt-1 font-sans">{t.selectAnotherDate}</p>
         </div>
       </div>
     );
@@ -63,11 +63,11 @@ export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error
         <div className="p-2 bg-[#2B5C4B]/10 rounded-lg">
           <Clock className="h-5 w-5 text-[#2B5C4B]" />
         </div>
-        <h3 className="font-medium text-gray-900">{t.timeSlot}</h3>
+        <h3 className="font-medium text-gray-900 font-heading">{t.timeSlot}</h3>
       </div>
 
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-600 flex items-center gap-2">
+        <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-600 flex items-center gap-2 font-sans">
           <AlertCircle className="h-4 w-4 flex-shrink-0" />
           <span>{error}</span>
         </div>
@@ -97,9 +97,9 @@ export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error
                 }
               `}
             >
-              <span className="text-sm font-medium">{slot.time}</span>
+              <span className="text-sm font-medium font-sans">{slot.time}</span>
               {!isUnavailable && slot.currentBookings !== undefined && (
-                <span className={`text-xs ${
+                <span className={`text-xs font-sans ${
                   selectedTime === slot.time 
                     ? 'text-white/90' 
                     : 'text-gray-500'

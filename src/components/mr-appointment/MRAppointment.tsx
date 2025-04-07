@@ -207,7 +207,7 @@ export function MRAppointment() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6 font-heading"
             >
               {t.mrAppointment.headerTitle}
             </motion.h1>
@@ -216,7 +216,7 @@ export function MRAppointment() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto"
+              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto font-sans"
             >
               {t.mrAppointment.headerSubtitle}
             </motion.p>
@@ -228,8 +228,8 @@ export function MRAppointment() {
           >
             <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
               <div className="p-4 sm:p-6 bg-gradient-to-r from-[#2B5C4B] to-[#234539]">
-                <h2 className="text-xl sm:text-2xl font-semibold text-white">{t.mrAppointment.title}</h2>
-                <p className="text-[#2B5C4B]-100 mt-1 text-sm sm:text-base text-white/80">{t.mrAppointment.subtitle}</p>
+                <h2 className="text-xl sm:text-2xl font-semibold text-white font-heading">{t.mrAppointment.title}</h2>
+                <p className="text-[#2B5C4B]-100 mt-1 text-sm sm:text-base text-white/80 font-sans">{t.mrAppointment.subtitle}</p>
               </div>
 
               <form onSubmit={handleSubmit} className="p-4 sm:p-6">
@@ -287,7 +287,7 @@ export function MRAppointment() {
                   <button
                     type="submit"
                     disabled={loading || !form.appointment_date || !form.appointment_time}
-                    className={`w-full py-4 px-6 bg-[#2B5C4B] text-white rounded-xl font-medium hover:bg-[#234539] transition-all duration-200 ${
+                    className={`w-full py-4 px-6 bg-[#2B5C4B] text-white rounded-xl font-medium hover:bg-[#234539] transition-all duration-200 font-sans ${
                       loading || !form.appointment_date || !form.appointment_time 
                         ? 'opacity-70 cursor-not-allowed' 
                         : ''

@@ -112,11 +112,11 @@ export function AppointmentForm({
               className="bg-[#2B5C4B]/5 rounded-lg p-2.5 border border-[#2B5C4B]/10 hover:shadow-sm hover:border-[#2B5C4B]/20 transition-all duration-300 mb-2 last:mb-0"
             >
               <div>
-                <h4 className="text-sm font-medium text-gray-900">
+                <h4 className="text-sm font-medium text-gray-900 font-heading">
                   {rule.title[language]}
                 </h4>
                 <div 
-                  className="prose prose-sm max-w-none text-xs text-gray-600 mt-0.5 leading-relaxed prose-a:text-[#2B5C4B] prose-a:no-underline hover:prose-a:underline prose-li:my-0 prose-p:my-0.5"
+                  className="prose prose-sm max-w-none text-xs text-gray-600 mt-0.5 leading-relaxed prose-a:text-[#2B5C4B] prose-a:no-underline hover:prose-a:underline prose-li:my-0 prose-p:my-0.5 font-sans"
                   dangerouslySetInnerHTML={{ 
                     __html: formatMarkdown(rule.content[language]) 
                   }}
@@ -135,9 +135,9 @@ export function AppointmentForm({
         >
           <div className="flex items-center justify-center gap-2 mb-1">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            <p className="font-medium">{t.appointment.form.success}</p>
+            <p className="font-medium font-sans">{t.appointment.form.success}</p>
           </div>
-          <p className="text-sm text-green-600">{t.appointment.form.successNote}</p>
+          <p className="text-sm text-green-600 font-sans">{t.appointment.form.successNote}</p>
         </motion.div>
       )}
 
@@ -150,7 +150,7 @@ export function AppointmentForm({
                 <div className="p-2 bg-[#2B5C4B]/10 rounded-lg">
                   <Calendar className="w-5 h-5 text-[#2B5C4B]" />
                 </div>
-                <h3 className="font-medium text-gray-900">{t.appointment.form.date}</h3>
+                <h3 className="font-medium text-gray-900 font-heading">{t.appointment.form.date}</h3>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 {[today, tomorrow].map((date) => {
@@ -172,10 +172,10 @@ export function AppointmentForm({
                           : 'bg-white border border-gray-200 text-gray-700 hover:border-[#2B5C4B]/30 hover:bg-[#2B5C4B]/5'
                       }`}
                     >
-                      <div className="text-sm font-medium mb-1">
+                      <div className="text-sm font-medium mb-1 font-sans">
                         {dayName}
                       </div>
-                      <div className={`text-xs ${form.date === dateStr ? 'text-white/90' : 'text-gray-500'}`}>
+                      <div className={`text-xs ${form.date === dateStr ? 'text-white/90' : 'text-gray-500'} font-sans`}>
                         {`${monthName} ${day}`}
                       </div>
                     </motion.button>
@@ -190,8 +190,8 @@ export function AppointmentForm({
                   <Clock className="w-5 h-5 text-[#2B5C4B]" />
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900">{t.appointment.form.timeSlot}</h3>
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <h3 className="font-medium text-gray-900 font-heading">{t.appointment.form.timeSlot}</h3>
+                  <p className="text-xs text-gray-500 mt-0.5 font-sans">
                     {t.appointment.form.showingSlots}: {formatSelectedDate(form.date)}
                   </p>
                 </div>
@@ -214,7 +214,7 @@ export function AppointmentForm({
                 <div className="p-2 bg-[#2B5C4B]/10 rounded-lg">
                   <User className="w-5 h-5 text-[#2B5C4B]" />
                 </div>
-                <h3 className="font-medium text-gray-900">{t.appointment.form.personalInfo}</h3>
+                <h3 className="font-medium text-gray-900 font-heading">{t.appointment.form.personalInfo}</h3>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <FormField
@@ -257,7 +257,7 @@ export function AppointmentForm({
               disabled={loading || !form.timeSlot}
               className={`w-full py-4 px-6 bg-[#2B5C4B] text-white rounded-xl font-medium hover:bg-[#234539] transition-all duration-200 ${
                 (loading || !form.timeSlot) ? 'opacity-70 cursor-not-allowed' : ''
-              }`}
+              } font-sans`}
             >
               {loading ? (
                 <div className="flex items-center justify-center gap-2">

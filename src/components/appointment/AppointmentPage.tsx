@@ -46,7 +46,7 @@ export function AppointmentPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6 font-heading"
             >
               {t.appointment.headerTitle}
             </motion.h1>
@@ -55,7 +55,7 @@ export function AppointmentPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto"
+              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto font-sans"
             >
               {t.appointment.headerSubtitle}
             </motion.p>
@@ -67,8 +67,8 @@ export function AppointmentPage() {
             className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
           >
             <div className="p-4 sm:p-6 bg-gradient-to-r from-[#2B5C4B] to-[#234539]">
-              <h2 className="text-xl sm:text-2xl font-semibold text-white">{t.appointment.title}</h2>
-              <p className="text-[#2B5C4B]-100 mt-1 text-sm sm:text-base text-white/80">{t.appointment.form.subtitle}</p>
+              <h2 className="text-xl sm:text-2xl font-semibold text-white font-heading">{t.appointment.title}</h2>
+              <p className="text-[#2B5C4B]-100 mt-1 text-sm sm:text-base text-white/80 font-sans">{t.appointment.form.subtitle}</p>
             </div>
 
             <div className="p-4 sm:p-6">

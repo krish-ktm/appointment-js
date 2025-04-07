@@ -27,7 +27,7 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t, loa
       >
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="h-6 w-6 text-[#2B5C4B] animate-spin" />
-          <p className="text-[#2B5C4B] font-medium">{t.loadingSlots}</p>
+          <p className="text-[#2B5C4B] font-medium font-sans">{t.loadingSlots}</p>
         </div>
       </motion.div>
     );
@@ -43,10 +43,10 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t, loa
         className="bg-[#2B5C4B]/5 border border-[#2B5C4B]/10 rounded-xl p-4 text-center"
       >
         <AlertCircle className="h-6 w-6 text-[#2B5C4B] mx-auto mb-2" />
-        <h3 className="text-base font-medium text-[#2B5C4B] mb-1">
+        <h3 className="text-base font-medium text-[#2B5C4B] mb-1 font-heading">
           {t.noSlots}
         </h3>
-        <p className="text-sm text-[#2B5C4B]/80">
+        <p className="text-sm text-[#2B5C4B]/80 font-sans">
           {timeSlots.length === 0 
             ? t.selectDate
             : t.noSlotsAvailable}
@@ -87,9 +87,9 @@ export function TimeSlotSelector({ timeSlots, selectedTime, onSelectTime, t, loa
               }
             `}
           >
-            <span className="text-[11px] sm:text-sm font-medium">{slot.time}</span>
+            <span className="text-[11px] sm:text-sm font-medium font-sans">{slot.time}</span>
             {!isUnavailable && (
-              <span className={`text-[9px] sm:text-[10px] ${
+              <span className={`text-[9px] sm:text-[10px] font-sans ${
                 selectedTime === slot.time 
                   ? 'text-white/90' 
                   : 'text-gray-500'

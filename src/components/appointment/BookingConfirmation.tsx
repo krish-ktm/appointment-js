@@ -123,8 +123,8 @@ export function BookingConfirmation({ booking, onClose, t }: BookingConfirmation
               <Check className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold">{t.confirmation.title}</h2>
-              <p className="text-white/80 text-sm mt-0.5">
+              <h2 className="text-xl font-semibold font-heading">{t.confirmation.title}</h2>
+              <p className="text-white/80 text-sm mt-0.5 font-sans">
                 {t.confirmation.subtitle}
               </p>
             </div>
@@ -148,8 +148,8 @@ export function BookingConfirmation({ booking, onClose, t }: BookingConfirmation
                     <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                   </div>
                   <div>
-                    <p className="text-[10px] sm:text-xs text-gray-500">{t.confirmation.date}</p>
-                    <p className="text-xs sm:text-sm font-medium text-gray-900">
+                    <p className="text-[10px] sm:text-xs text-gray-500 font-sans">{t.confirmation.date}</p>
+                    <p className="text-xs sm:text-sm font-medium text-gray-900 font-sans">
                       {formatDate(booking.appointment_date)}
                     </p>
                   </div>
@@ -161,8 +161,8 @@ export function BookingConfirmation({ booking, onClose, t }: BookingConfirmation
                     <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                   </div>
                   <div>
-                    <p className="text-[10px] sm:text-xs text-gray-500">{t.confirmation.time}</p>
-                    <p className="text-xs sm:text-sm font-medium text-gray-900">
+                    <p className="text-[10px] sm:text-xs text-gray-500 font-sans">{t.confirmation.time}</p>
+                    <p className="text-xs sm:text-sm font-medium text-gray-900 font-sans">
                       {booking.appointment_time}
                     </p>
                   </div>
@@ -172,7 +172,7 @@ export function BookingConfirmation({ booking, onClose, t }: BookingConfirmation
 
             {/* Patient Details */}
             <div className="bg-[#2B5C4B]/5 rounded-xl p-4 sm:p-6">
-              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-4">{t.confirmation.patientDetails}</h3>
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-4 font-heading">{t.confirmation.patientDetails}</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="flex items-center gap-2 sm:gap-3 mb-4">
@@ -180,8 +180,8 @@ export function BookingConfirmation({ booking, onClose, t }: BookingConfirmation
                       <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-gray-500">{t.form.name}</p>
-                      <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.name}</p>
+                      <p className="text-[10px] sm:text-xs text-gray-500 font-sans">{t.form.name}</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-900 font-sans">{booking.name}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 sm:gap-3">
@@ -189,8 +189,8 @@ export function BookingConfirmation({ booking, onClose, t }: BookingConfirmation
                       <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-gray-500">{t.form.phone}</p>
-                      <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.phone}</p>
+                      <p className="text-[10px] sm:text-xs text-gray-500 font-sans">{t.form.phone}</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-900 font-sans">{booking.phone}</p>
                     </div>
                   </div>
                 </div>
@@ -200,8 +200,8 @@ export function BookingConfirmation({ booking, onClose, t }: BookingConfirmation
                       <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-gray-500">{t.form.age}</p>
-                      <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.age}</p>
+                      <p className="text-[10px] sm:text-xs text-gray-500 font-sans">{t.form.age}</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-900 font-sans">{booking.age}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 sm:gap-3">
@@ -209,8 +209,8 @@ export function BookingConfirmation({ booking, onClose, t }: BookingConfirmation
                       <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-gray-500">{t.form.city}</p>
-                      <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.city}</p>
+                      <p className="text-[10px] sm:text-xs text-gray-500 font-sans">{t.form.city}</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-900 font-sans">{booking.city}</p>
                     </div>
                   </div>
                 </div>
@@ -219,8 +219,8 @@ export function BookingConfirmation({ booking, onClose, t }: BookingConfirmation
 
             {/* Booking ID */}
             <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4">
-              <p className="text-[10px] sm:text-xs text-gray-500">{t.confirmation.bookingId}</p>
-              <p className="text-xs sm:text-sm font-medium text-gray-900">#{booking.id.slice(-8).toUpperCase()}</p>
+              <p className="text-[10px] sm:text-xs text-gray-500 font-sans">{t.confirmation.bookingId}</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-900 font-sans">#{booking.id.slice(-8).toUpperCase()}</p>
             </div>
             
             {/* Hidden div to prevent linter errors for variables used in image download */}
@@ -236,7 +236,7 @@ export function BookingConfirmation({ booking, onClose, t }: BookingConfirmation
             <button
               onClick={handleDownload}
               disabled={downloading}
-              className="flex-1 h-14 sm:h-10 px-6 sm:px-4 text-[#2B5C4B] hover:bg-[#2B5C4B]/5 border border-[#2B5C4B]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 h-14 sm:h-10 px-6 sm:px-4 text-[#2B5C4B] hover:bg-[#2B5C4B]/5 border border-[#2B5C4B]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed font-sans"
             >
               {downloading ? (
                 <>
@@ -252,7 +252,7 @@ export function BookingConfirmation({ booking, onClose, t }: BookingConfirmation
             </button>
             <button
               onClick={onClose}
-              className="flex-1 h-14 sm:h-10 py-2 px-6 sm:px-4 text-white bg-[#2B5C4B] rounded-xl hover:bg-[#234539] focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors"
+              className="flex-1 h-14 sm:h-10 px-6 sm:px-4 text-white bg-[#2B5C4B] rounded-xl hover:bg-[#234539] focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors shadow-sm hover:shadow font-sans"
             >
               Done
             </button>
