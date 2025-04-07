@@ -17,7 +17,8 @@ import {
   LayoutDashboard,
   ChevronRight,
   ChevronUp,
-  Clock
+  Clock,
+  MessageSquare
 } from 'lucide-react';
 
 interface NavigationGroup {
@@ -25,7 +26,7 @@ interface NavigationGroup {
   items: {
     name: string;
     href: string;
-    icon: any;
+    icon: React.ComponentType<{ className?: string }>;
   }[];
 }
 
@@ -56,7 +57,11 @@ export function AdminLayout() {
 
       setIsLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('Authentication error occurred');
+      }
       navigate('/login');
     }
   };
@@ -99,7 +104,8 @@ export function AdminLayout() {
       name: 'Communication',
       items: [
         { name: 'Announcements', href: '/admin/notices', icon: Bell },
-        { name: 'Flash Message', href: '/admin/messages', icon: MessageCircle }
+        { name: 'Flash Message', href: '/admin/messages', icon: MessageCircle },
+        { name: 'Contact Messages', href: '/admin/contact-messages', icon: MessageSquare }
       ]
     },
     {

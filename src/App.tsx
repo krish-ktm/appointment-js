@@ -6,6 +6,7 @@ import { AdminLayout } from './components/admin/AdminLayout';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { NoticeManager } from './components/admin/NoticeManager';
 import { MessageManager } from './components/admin/MessageManager';
+import { ContactMessagesManager } from './components/admin/ContactMessagesManager';
 import { AppointmentManager } from './components/admin/appointments/AppointmentManager';
 import { AppointmentSettings } from './components/admin/appointments/AppointmentSettings';
 import { MRAppointmentManager } from './components/admin/MRAppointmentManager';
@@ -83,6 +84,7 @@ function App() {
               <Route path="mr-settings" element={<MRAppointmentManagement />} />
               <Route path="notices" element={<NoticeManager />} />
               <Route path="messages" element={<MessageManager />} />
+              <Route path="contact-messages" element={<ContactMessagesManager />} />
               <Route path="users" element={<UsersManager />} />
               <Route path="clinic-closure" element={<ClinicClosurePage />} />
             </Route>
