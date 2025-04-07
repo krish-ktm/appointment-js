@@ -3,6 +3,7 @@ import { ResponsiveHeader } from './headers/ResponsiveHeader';
 import { Footer } from './Footer';
 import { Clock, MapPin, Phone, Award, Star, Shield, Calendar, CheckCircle2, Building2, Users, Stethoscope } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
+import { Link } from 'react-router-dom';
 
 export function AboutPage() {
   const { t } = useTranslation();
@@ -85,6 +86,73 @@ export function AboutPage() {
             </div>
           </div>
 
+          {/* Doctor Profile Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-16"
+          >
+            <div className="p-6 sm:p-8 bg-gradient-to-r from-[#2B5C4B] to-[#234539]">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/20">
+                  <img
+                    src="/doctor-profile.jpg"
+                    alt="Dr. Jemish A. Patel"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="text-center md:text-left">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                    {t.about.doctorName}
+                  </h2>
+                  <p className="text-white/90 text-lg mb-2">
+                    {t.about.doctorQualification}
+                  </p>
+                  <p className="text-white/80">
+                    {t.about.doctorSpecialization}
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="p-6 sm:p-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                    {t.about.expertise.title}
+                  </h3>
+                  <ul className="space-y-3">
+                    {t.about.expertise.items.map((item, index) => (
+                      <li key={index} className="flex items-center gap-3">
+                        <CheckCircle2 className="h-5 w-5 text-[#2B5C4B]" />
+                        <span className="text-gray-700">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                    {t.about.education.title}
+                  </h3>
+                  <ul className="space-y-4">
+                    {t.about.education.items.map((item, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <div className="bg-[#2B5C4B]/5 p-2 rounded-lg mt-1">
+                          <Award className="h-4 w-4 text-[#2B5C4B]" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">{item.degree}</p>
+                          <p className="text-sm text-gray-600">{item.institution}</p>
+                          <p className="text-sm text-gray-500">{item.year}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
           {/* Clinic Information */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -100,56 +168,15 @@ export function AboutPage() {
               </p>
             </div>
             
-            <div className="p-6 sm:p-8 space-y-8">
-              {/* Contact & Location */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="space-y-6">
-                  <div className="flex items-center gap-4">
-                    <div className="bg-[#2B5C4B]/5 p-3 rounded-xl">
-                      <MapPin className="h-6 w-6 text-[#2B5C4B]" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">{t.about.location}</p>
-                      <p className="text-base text-gray-900">{t.about.address}</p>
-                    </div>
-                  </div>
-                  <a
-                    href="tel:+917947131573"
-                    className="flex items-center gap-4 hover:bg-gray-50 p-2 rounded-lg transition-colors"
-                  >
-                    <div className="bg-[#2B5C4B]/5 p-3 rounded-xl">
-                      <Phone className="h-6 w-6 text-[#2B5C4B]" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">{t.about.contact}</p>
-                      <p className="text-base text-gray-900">{t.about.phone}</p>
-                    </div>
-                  </a>
-                </div>
-
-                <div>
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-[#2B5C4B]/5 p-3 rounded-xl">
-                      <Clock className="h-6 w-6 text-[#2B5C4B]" />
-                    </div>
-                    <p className="font-medium text-gray-900">{t.about.openingHours}</p>
-                  </div>
-                  <div className="space-y-2 text-gray-600">
-                    <p>{t.about.weekdayHours}</p>
-                    <p>{t.about.saturdayHours}</p>
-                    <p>{t.about.sundayHours}</p>
-                  </div>
-                </div>
-              </div>
-
+            <div className="p-6 sm:p-8">
               {/* Amenities */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.about.amenities}</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <h3 className="text-lg font-semibold text-gray-900 mb-6">{t.about.amenities}</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {t.about.amenitiesList.map((amenity, index) => (
-                    <div key={index} className="flex items-center gap-2">
+                    <div key={index} className="flex items-center gap-3 p-4 bg-[#2B5C4B]/5 rounded-xl">
                       <CheckCircle2 className="h-5 w-5 text-[#2B5C4B] flex-shrink-0" />
-                      <span className="text-gray-600">{amenity}</span>
+                      <span className="text-gray-700">{amenity}</span>
                     </div>
                   ))}
                 </div>
@@ -170,20 +197,22 @@ export function AboutPage() {
               <p className="text-white/90 text-base sm:text-lg mb-8 max-w-2xl mx-auto">
                 {t.about.cta.description}
               </p>
-              <button
-                onClick={() => {
-                  const element = document.querySelector('.appointment-form-section');
-                  if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                  } else {
-                    window.location.href = '/#appointment-form';
-                  }
-                }}
-                className="inline-flex items-center justify-center px-6 py-3 bg-white text-[#2B5C4B] rounded-xl hover:bg-gray-50 transition-colors shadow-sm hover:shadow text-base sm:text-lg font-medium gap-2 group"
-              >
-                {t.about.cta.button}
-                <Calendar className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  to="/appointment"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-white text-[#2B5C4B] rounded-xl hover:bg-gray-50 transition-colors shadow-sm hover:shadow text-base sm:text-lg font-medium gap-2 group"
+                >
+                  {t.about.cta.bookButton}
+                  <Calendar className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-colors text-base sm:text-lg font-medium gap-2 group border border-white/30"
+                >
+                  {t.about.cta.contactButton}
+                  <Phone className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
             </div>
           </motion.div>
         </div>

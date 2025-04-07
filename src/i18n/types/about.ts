@@ -5,7 +5,28 @@ export interface AboutTranslations {
   qualification: string;
   yearsExperience: string;
   specialization: string;
-  expertise: string;
+  
+  // New doctor profile section
+  doctorName: string;
+  doctorQualification: string;
+  doctorSpecialization: string;
+  
+  // Expanded expertise section
+  expertise: {
+    title: string;
+    items: string[];
+  };
+  
+  // Education section
+  education: {
+    title: string;
+    items: {
+      degree: string;
+      institution: string;
+      year: string;
+    }[];
+  };
+  
   clinicName: string;
   clinicDescription: string;
   location: string;
@@ -18,9 +39,12 @@ export interface AboutTranslations {
   sundayHours: string;
   amenities: string;
   amenitiesList: string[];
+  
+  // Updated CTA section
   cta: {
     title: string;
     description: string;
-    button: string;
+    bookButton: string;
+    contactButton: string;
   };
 }
