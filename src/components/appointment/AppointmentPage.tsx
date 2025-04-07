@@ -89,6 +89,7 @@ export function AppointmentPage() {
         <BookingConfirmation
           booking={bookingDetails}
           onClose={closeBookingDetails}
+          t={t.appointment}
         />
       )}
 

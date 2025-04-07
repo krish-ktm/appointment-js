@@ -2,19 +2,35 @@ import { Check, Calendar, Clock, User, Phone, MapPin, X, Download } from 'lucide
 import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import { BookingDetails } from '../../types';
+import { downloadAppointmentImage } from '../../utils/imageDownload';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { downloadAppointmentImage } from '../../utils/imageDownload';
 
 const TIMEZONE = 'Asia/Kolkata';
+
+interface BookingDetails {
+  id: string;
+  name: string;
+  phone: string;
+  age: number;
+  city: string;
+  appointment_date: string;
+  appointment_time: string;
+  created_at: string;
+}
 
 interface BookingConfirmationProps {
   booking: BookingDetails;
   onClose: () => void;
+  t: any;
 }
 
-export function BookingConfirmation({ booking, onClose }: BookingConfirmationProps) {
+export function BookingConfirmation({ booking, onClose, t }: BookingConfirmationProps) {
+  // Add safety check for translations
+  if (!t || !t.confirmation) {
+    return null;
+  }
+
   const [downloading, setDownloading] = useState(false);
   const [customRulesText, setCustomRulesText] = useState<string | null>(null);
 
@@ -55,8 +71,8 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
 
   const formatDate = (dateStr: string) => {
     const date = utcToZonedTime(new Date(dateStr), TIMEZONE);
-    const dayName = format(date, 'EEEE');
-    const monthName = format(date, 'MMMM');
+    const dayName = t.form.days[format(date, 'EEEE').toLowerCase() as keyof typeof t.form.days];
+    const monthName = t.form.months[format(date, 'MMMM').toLowerCase() as keyof typeof t.form.months];
     const day = format(date, 'd');
     const year = format(date, 'yyyy');
     return `${dayName}, ${monthName} ${day}, ${year}`;
@@ -66,7 +82,7 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
     if (downloading) return;
     setDownloading(true);
     try {
-      const bookingWithDetails = {
+      const appointmentWithDetails = {
         ...booking,
         name: booking.name,
         phone: booking.phone,
@@ -74,7 +90,11 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
         city: booking.city
       };
       
-      await downloadAppointmentImage(bookingWithDetails, 'patient', {});
+      // Pass the entire translations object
+      await downloadAppointmentImage(appointmentWithDetails, 'patient', {
+        confirmation: t.confirmation,
+        form: t.form
+      });
     } catch (error) {
       console.error('Error downloading image:', error);
     } finally {
@@ -103,9 +123,9 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
               <Check className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold">Booking Confirmed!</h2>
+              <h2 className="text-xl font-semibold">{t.confirmation.title}</h2>
               <p className="text-white/80 text-sm mt-0.5">
-                Your appointment has been successfully booked
+                {t.confirmation.subtitle}
               </p>
             </div>
           </div>
@@ -117,7 +137,7 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
           </button>
         </div>
 
-        {/* Appointment Details - Scrollable Area */}
+        {/* Appointment Details */}
         <div className="overflow-y-auto flex-grow">
           <div className="p-4 sm:p-6 space-y-4">
             {/* Date & Time */}
@@ -128,7 +148,7 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
                     <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                   </div>
                   <div>
-                    <p className="text-[10px] sm:text-xs text-gray-500">Date</p>
+                    <p className="text-[10px] sm:text-xs text-gray-500">{t.confirmation.date}</p>
                     <p className="text-xs sm:text-sm font-medium text-gray-900">
                       {formatDate(booking.appointment_date)}
                     </p>
@@ -141,7 +161,7 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
                     <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                   </div>
                   <div>
-                    <p className="text-[10px] sm:text-xs text-gray-500">Time</p>
+                    <p className="text-[10px] sm:text-xs text-gray-500">{t.confirmation.time}</p>
                     <p className="text-xs sm:text-sm font-medium text-gray-900">
                       {booking.appointment_time}
                     </p>
@@ -152,7 +172,7 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
 
             {/* Patient Details */}
             <div className="bg-[#2B5C4B]/5 rounded-xl p-4 sm:p-6">
-              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-4">Patient Details</h3>
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-4">{t.confirmation.patientDetails}</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="flex items-center gap-2 sm:gap-3 mb-4">
@@ -160,7 +180,7 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
                       <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-gray-500">Name</p>
+                      <p className="text-[10px] sm:text-xs text-gray-500">{t.form.name}</p>
                       <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.name}</p>
                     </div>
                   </div>
@@ -169,7 +189,7 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
                       <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-gray-500">Phone</p>
+                      <p className="text-[10px] sm:text-xs text-gray-500">{t.form.phone}</p>
                       <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.phone}</p>
                     </div>
                   </div>
@@ -180,7 +200,7 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
                       <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-gray-500">Age</p>
+                      <p className="text-[10px] sm:text-xs text-gray-500">{t.form.age}</p>
                       <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.age}</p>
                     </div>
                   </div>
@@ -189,7 +209,7 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
                       <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-gray-500">City</p>
+                      <p className="text-[10px] sm:text-xs text-gray-500">{t.form.city}</p>
                       <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.city}</p>
                     </div>
                   </div>
@@ -199,7 +219,7 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
 
             {/* Booking ID */}
             <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4">
-              <p className="text-[10px] sm:text-xs text-gray-500">Booking ID</p>
+              <p className="text-[10px] sm:text-xs text-gray-500">{t.confirmation.bookingId}</p>
               <p className="text-xs sm:text-sm font-medium text-gray-900">#{booking.id.slice(-8).toUpperCase()}</p>
             </div>
             
