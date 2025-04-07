@@ -110,20 +110,20 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{ type: "spring", duration: 0.5 }}
-          className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 my-8 overflow-hidden"
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+          className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-auto overflow-hidden"
           onClick={e => e.stopPropagation()}
-          style={{ maxHeight: '90vh' }}
+          style={{ maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}
         >
           {/* Success Header */}
-          <div className="bg-gradient-to-r from-[#2B5C4B] to-[#234539] text-white p-6 relative">
+          <div className="relative bg-gradient-to-br from-[#2B5C4B] to-[#234539] p-4 sm:p-6 text-white">
             <div className="flex items-center gap-4">
               <div className="bg-white/10 rounded-xl p-3">
-                <Check className="h-6 w-6 text-white" />
+                <Check className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold">{t.confirmation.title}</h2>
-                <p className="text-[#2B5C4B]-100/80 text-sm mt-0.5">
+                <h2 className="text-lg sm:text-xl font-semibold">{t.confirmation.title}</h2>
+                <p className="text-sm text-white/80 mt-0.5">
                   {t.confirmation.subtitle}
                 </p>
               </div>
@@ -132,23 +132,23 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
               onClick={onClose}
               className="absolute top-4 right-4 text-white/80 hover:text-white hover:bg-white/10 p-2 rounded-full transition-colors"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
           </div>
 
           {/* Appointment Details */}
-          <div className="overflow-y-auto" style={{ maxHeight: 'calc(90vh - 16rem)' }}>
-            <div className="p-6 space-y-6">
+          <div className="overflow-y-auto flex-grow">
+            <div className="p-4 sm:p-6 space-y-4">
               {/* Date and Time */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-[#2B5C4B]/10 p-2 rounded-lg">
-                      <Calendar className="h-4 w-4 text-[#2B5C4B]" />
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
+                      <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500">{t.confirmation.appointmentDate}</p>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-[10px] sm:text-xs text-gray-500">{t.confirmation.appointmentDate}</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-900">
                         {formatDate(appointment.appointment_date)}
                       </p>
                     </div>
@@ -156,14 +156,14 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
                 </div>
                 
                 {appointment.appointment_time && (
-                  <div className="bg-gray-50 rounded-xl p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="bg-[#2B5C4B]/10 p-2 rounded-lg">
-                        <Clock className="h-4 w-4 text-[#2B5C4B]" />
+                  <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
+                        <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">{t.confirmation.appointmentTime}</p>
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-[10px] sm:text-xs text-gray-500">{t.confirmation.appointmentTime}</p>
+                        <p className="text-xs sm:text-sm font-medium text-gray-900">
                           {appointment.appointment_time}
                         </p>
                       </div>
@@ -173,46 +173,46 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
               </div>
 
               {/* MR Details */}
-              <div className="bg-gray-50 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.confirmation.mrDetails}</h3>
+              <div className="bg-[#2B5C4B]/5 rounded-xl p-4 sm:p-6">
+                <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-4">{t.confirmation.mrDetails}</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="bg-[#2B5C4B]/10 p-2 rounded-lg">
-                        <Users className="h-4 w-4 text-[#2B5C4B]" />
+                    <div className="flex items-center gap-2 sm:gap-3 mb-4">
+                      <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
+                        <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">{t.form.mrName}</p>
-                        <p className="text-sm font-medium text-gray-900">{appointment.mr_name}</p>
+                        <p className="text-[10px] sm:text-xs text-gray-500">{t.form.mrName}</p>
+                        <p className="text-xs sm:text-sm font-medium text-gray-900">{appointment.mr_name}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="bg-[#2B5C4B]/10 p-2 rounded-lg">
-                        <Building2 className="h-4 w-4 text-[#2B5C4B]" />
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
+                        <Building2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">{t.form.companyName}</p>
-                        <p className="text-sm font-medium text-gray-900">{appointment.company_name}</p>
+                        <p className="text-[10px] sm:text-xs text-gray-500">{t.form.companyName}</p>
+                        <p className="text-xs sm:text-sm font-medium text-gray-900">{appointment.company_name}</p>
                       </div>
                     </div>
                   </div>
                   <div>
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="bg-[#2B5C4B]/10 p-2 rounded-lg">
-                        <Briefcase className="h-4 w-4 text-[#2B5C4B]" />
+                    <div className="flex items-center gap-2 sm:gap-3 mb-4">
+                      <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
+                        <Briefcase className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">{t.form.divisionName}</p>
-                        <p className="text-sm font-medium text-gray-900">{appointment.division_name}</p>
+                        <p className="text-[10px] sm:text-xs text-gray-500">{t.form.divisionName}</p>
+                        <p className="text-xs sm:text-sm font-medium text-gray-900">{appointment.division_name}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="bg-[#2B5C4B]/10 p-2 rounded-lg">
-                        <Phone className="h-4 w-4 text-[#2B5C4B]" />
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
+                        <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">{t.form.contactNo}</p>
-                        <p className="text-sm font-medium text-gray-900">{appointment.contact_no}</p>
+                        <p className="text-[10px] sm:text-xs text-gray-500">{t.form.contactNo}</p>
+                        <p className="text-xs sm:text-sm font-medium text-gray-900">{appointment.contact_no}</p>
                       </div>
                     </div>
                   </div>
@@ -220,9 +220,9 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
               </div>
 
               {/* Booking ID */}
-              <div className="bg-gray-50 rounded-xl p-4">
-                <p className="text-xs text-gray-500">{t.confirmation.bookingId}</p>
-                <p className="text-sm font-medium text-gray-900">#{appointment.id.slice(-8).toUpperCase()}</p>
+              <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4">
+                <p className="text-[10px] sm:text-xs text-gray-500">{t.confirmation.bookingId}</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-900">#{appointment.id.slice(-8).toUpperCase()}</p>
               </div>
               
               {/* Hidden div to prevent linter errors for variables used in image download */}
@@ -233,34 +233,34 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
           </div>
 
           {/* Actions - Fixed at bottom */}
-          <div className="sticky bottom-0 bg-white border-t border-gray-100 p-6">
+          <div className="border-t border-gray-100 p-4 sm:p-6 flex-shrink-0">
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleDownload}
                 disabled={downloading}
-                className="flex-1 h-11 px-4 text-sm font-medium text-[#2B5C4B] hover:bg-[#2B5C4B]/5 border border-[#2B5C4B]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 h-14 sm:h-10 py-2 px-6 sm:px-4 text-[#2B5C4B] hover:bg-[#2B5C4B]/5 border border-[#2B5C4B]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {downloading ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-[#2B5C4B]/30 border-t-[#2B5C4B] rounded-full animate-spin" />
+                    <div className="w-5 h-5 sm:w-4 sm:h-4 border-2 border-[#2B5C4B]/30 border-t-[#2B5C4B] rounded-full animate-spin" />
                     <span>Downloading...</span>
                   </>
                 ) : (
                   <>
-                    <Download className="h-4 w-4 flex-shrink-0" />
+                    <Download className="h-10 sm:h-4 w-5 sm:w-4 flex-shrink-0" />
                     <span>Download</span>
                   </>
                 )}
               </button>
               <button
                 onClick={onScheduleAnother}
-                className="flex-1 h-11 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors"
+                className="flex-1 h-14 sm:h-10 py-2 px-6 sm:px-4 text-gray-700 hover:bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors"
               >
                 {t.confirmation.scheduleAnother}
               </button>
               <button
                 onClick={onClose}
-                className="flex-1 h-11 px-4 text-sm font-medium text-white bg-[#2B5C4B] rounded-xl hover:bg-[#234539] focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors"
+                className="flex-1 h-14 sm:h-10 py-2 px-6 sm:px-4 text-white bg-[#2B5C4B] rounded-xl hover:bg-[#234539] focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors"
               >
                 {t.confirmation.done}
               </button>
