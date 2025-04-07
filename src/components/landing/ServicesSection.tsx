@@ -8,7 +8,29 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 interface ServicesSectionProps {
-  t: any;
+  t: {
+    title: string;
+    subtitle: string;
+    viewAll: string;
+    categories: {
+      treatments: string;
+      facial: string;
+      aesthetic: string;
+      surgical: string;
+      hair: string;
+      diagnostic: string;
+      [key: string]: string;
+    };
+    lists: {
+      treatments: string[];
+      facial: string[];
+      aesthetic: string[];
+      surgical: string[];
+      hair: string[];
+      diagnostic: string[];
+      [key: string]: string[];
+    };
+  };
 }
 
 interface Service {
@@ -62,10 +84,10 @@ export function ServicesSection({ t }: ServicesSectionProps) {
     <div className={`py-16 sm:py-20 bg-gradient-to-b ${background.light} will-change-transform`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 sm:mb-16">
-          <h2 className={`text-2xl sm:text-4xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary}`}>
+          <h2 className={`text-2xl sm:text-4xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary} font-heading`}>
             {t.title}
           </h2>
-          <p className={`text-base sm:text-lg ${text.secondary} max-w-2xl mx-auto px-4`}>
+          <p className={`text-base sm:text-lg ${text.secondary} max-w-2xl mx-auto px-4 font-sans`}>
             {t.subtitle}
           </p>
         </div>
@@ -125,10 +147,10 @@ export function ServicesSection({ t }: ServicesSectionProps) {
                           </svg>
                         </div>
                       </div>
-                      <h3 className="text-xl sm:text-2xl font-semibold text-white mb-1 sm:mb-2">
+                      <h3 className="text-xl sm:text-2xl font-semibold text-white mb-1 sm:mb-2 font-heading">
                         {service.title}
                       </h3>
-                      <p className="text-white/80 text-sm line-clamp-2">
+                      <p className="text-white/80 text-sm line-clamp-2 font-sans">
                         {service.description}
                       </p>
                     </div>
@@ -142,7 +164,7 @@ export function ServicesSection({ t }: ServicesSectionProps) {
         <div className="text-center mt-4 sm:mt-6 px-4">
           <Link
             to="/services"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#2B5C4B] text-white rounded-xl hover:bg-[#234539] transition-all duration-300 shadow-sm hover:shadow"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#2B5C4B] text-white rounded-xl hover:bg-[#234539] transition-all duration-300 shadow-sm hover:shadow font-sans"
           >
             <span className="font-medium">{t.viewAll}</span>
             <ArrowRight className="h-4 w-4" />

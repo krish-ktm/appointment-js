@@ -44,7 +44,7 @@ export function StatsSection({ t }: StatsSectionProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-2xl md:text-4xl font-serif text-[#1e3a5c] mb-3 md:mb-4"
+            className="text-2xl md:text-4xl font-heading text-[#1e3a5c] mb-3 md:mb-4"
           >
             {t?.title || "Making a difference in dermatological care"}
           </motion.h2>
@@ -54,7 +54,7 @@ export function StatsSection({ t }: StatsSectionProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto"
+            className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto font-sans"
           >
             {t?.subtitle || "Our commitment to excellence reflects in our numbers and the trust our patients place in us"}
           </motion.p>
@@ -106,13 +106,13 @@ export function StatsSection({ t }: StatsSectionProps) {
                 
                 {/* Content */}
                 <div className="relative">
-                  <div className={`text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`}>
+                  <div className={`text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent font-heading`}>
                     {stat.value}
                   </div>
-                  <div className="text-gray-900 font-medium text-sm sm:text-base mb-2">
+                  <div className="text-gray-900 font-medium text-sm sm:text-base mb-2 font-heading">
                     {stat.label}
                   </div>
-                  <p className="text-xs text-gray-500 leading-relaxed">
+                  <p className="text-xs text-gray-500 leading-relaxed font-sans">
                     {stat.description}
                   </p>
                 </div>

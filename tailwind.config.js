@@ -3,6 +3,11 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        'primary': ['Marcellus', 'serif'],
+        'sans': ['Inter', 'sans-serif'],
+        'heading': ['Marcellus', 'serif'],
+      },
       transitionProperty: {
         'height': 'height',
         'spacing': 'margin, padding',

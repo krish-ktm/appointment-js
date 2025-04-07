@@ -39,25 +39,25 @@ export function HeroSection({ t }: HeroSectionProps) {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-6 md:space-y-8"
               >
-                <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white leading-[1.2]">
+                <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white leading-[1.2] font-heading">
                   {t.title || "Comprehensive care for your skin's health and beauty"}
                 </h1>
 
-                <p className="text-base md:text-lg text-white/80 leading-relaxed max-w-xl">
+                <p className="text-base md:text-lg text-white/80 leading-relaxed max-w-xl font-sans">
                   {t.subtitle || "At our clinic, we believe in creating personalized solutions that drive real-world impact. From advanced treatments to cutting-edge care."}
                 </p>
 
                 <div className="flex flex-wrap gap-4">
                   <Link
                     to="/services"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all duration-300 text-base font-medium group border border-white/30 backdrop-blur-sm"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all duration-300 text-base font-medium group border border-white/30 backdrop-blur-sm font-sans"
                   >
                     {t.viewServices || "View Our Services"}
                     <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Link>
                   <Link
                     to="/appointment"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-white text-[#2B5C4B] rounded-xl hover:bg-white/90 transition-all duration-300 text-base font-medium shadow-lg shadow-black/10"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-white text-[#2B5C4B] rounded-xl hover:bg-white/90 transition-all duration-300 text-base font-medium shadow-lg shadow-black/10 font-sans"
                   >
                     {t.bookAppointment || "Book Appointment"}
                   </Link>

@@ -108,7 +108,7 @@ export function Benefits({ t }: BenefitsProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-2xl md:text-4xl font-serif text-white mb-3 md:mb-4"
+            className="text-2xl md:text-4xl font-heading text-white mb-3 md:mb-4"
           >
             {t?.title || "Exceptional dermatology, every step of the way"}
           </motion.h2>
@@ -118,7 +118,7 @@ export function Benefits({ t }: BenefitsProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-white/80 text-sm md:text-base max-w-2xl mx-auto"
+            className="text-white/80 text-sm md:text-base max-w-2xl mx-auto font-sans"
           >
             {t?.subtitle || "Experience personalized care, advanced treatments, and visible results with our expert dermatology services."}
           </motion.p>
@@ -138,8 +138,8 @@ export function Benefits({ t }: BenefitsProps) {
                 className="flex flex-row-reverse lg:flex-row gap-4 items-start text-left lg:text-right"
               >
                 <div className="flex-grow">
-                  <h3 className="text-lg sm:text-xl font-serif text-white mb-1 sm:mb-2">{benefit.title}</h3>
-                  <p className="text-white/70 text-xs sm:text-sm">{benefit.description}</p>
+                  <h3 className="text-lg sm:text-xl font-heading text-white mb-1 sm:mb-2">{benefit.title}</h3>
+                  <p className="text-white/70 text-xs sm:text-sm font-sans">{benefit.description}</p>
                 </div>
                 <div className="bg-white/10 p-2 sm:p-3 rounded-lg backdrop-blur-sm shrink-0">
                   <benefit.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
@@ -179,8 +179,8 @@ export function Benefits({ t }: BenefitsProps) {
                   <benefit.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg sm:text-xl font-serif text-white mb-1 sm:mb-2">{benefit.title}</h3>
-                  <p className="text-white/70 text-xs sm:text-sm">{benefit.description}</p>
+                  <h3 className="text-lg sm:text-xl font-heading text-white mb-1 sm:mb-2">{benefit.title}</h3>
+                  <p className="text-white/70 text-xs sm:text-sm font-sans">{benefit.description}</p>
                 </div>
               </motion.div>
             ))}

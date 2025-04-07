@@ -51,7 +51,7 @@ export function NoticeBoard({ notices, loading, t }: NoticeBoardProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-2xl md:text-4xl font-serif text-[#1e3a5c] mb-3 md:mb-4"
+            className="text-2xl md:text-4xl font-heading text-[#1e3a5c] mb-3 md:mb-4"
           >
             {translations.title || "Important Announcements"}
           </motion.h2>
@@ -61,7 +61,7 @@ export function NoticeBoard({ notices, loading, t }: NoticeBoardProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto"
+            className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto font-sans"
           >
             {translations.subtitle || "Stay informed about clinic updates, special services, and important notices"}
           </motion.p>
@@ -75,7 +75,7 @@ export function NoticeBoard({ notices, loading, t }: NoticeBoardProps) {
               className="text-center py-12 bg-[#2B5C4B]/5 rounded-2xl backdrop-blur-sm"
             >
               <Bell className="h-8 w-8 text-[#2B5C4B] mx-auto mb-3" />
-              <p className="text-gray-600">{translations.noAnnouncements || "No announcements at the moment."}</p>
+              <p className="text-gray-600 font-sans">{translations.noAnnouncements || "No announcements at the moment."}</p>
             </motion.div>
           ) : (
             <Swiper
@@ -118,7 +118,7 @@ export function NoticeBoard({ notices, loading, t }: NoticeBoardProps) {
                       )}
                       
                       <div className="p-6 md:p-8">
-                        <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-[#2B5C4B] transition-colors">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-[#2B5C4B] transition-colors font-heading">
                           {getLocalizedContent(notice.title)}
                         </h3>
 

@@ -77,7 +77,7 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 leading-[1.2] tracking-tight"
+                className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 leading-[1.2] tracking-tight font-heading"
               >
                 {t?.title || "Why choose us for all your dermatology needs"}
               </motion.h2>
@@ -87,7 +87,7 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-xl"
+                className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-xl font-sans"
               >
                 {t?.subtitle || "We're dedicated to helping you achieve and maintain beautiful, healthy skin. Trust us to provide exceptional care tailored to you."}
               </motion.p>
@@ -133,10 +133,10 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
                       <div className={`absolute -inset-1 ${feature.bgGlow} rounded-xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-300`} />
                     </div>
                     <div>
-                      <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 font-heading">
                         {feature.title}
                       </h3>
-                      <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                      <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-sans">
                         {feature.description}
                       </p>
                     </div>
@@ -152,7 +152,7 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
               to="/appointment"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-[#2B5C4B] to-[#234539] text-white text-sm font-medium rounded-lg shadow-md shadow-[#2B5C4B]/10 hover:shadow-lg hover:shadow-[#2B5C4B]/20 transition-all duration-300 overflow-hidden group"
+              className="relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-[#2B5C4B] to-[#234539] text-white text-sm font-medium rounded-lg shadow-md shadow-[#2B5C4B]/10 hover:shadow-lg hover:shadow-[#2B5C4B]/20 transition-all duration-300 overflow-hidden group font-sans"
             >
               <span className="relative z-10">{t?.cta || "Book an Appointment"}</span>
               <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />

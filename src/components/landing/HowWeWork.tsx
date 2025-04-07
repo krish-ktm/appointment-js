@@ -60,11 +60,11 @@ export function HowWeWork({ t }: HowWeWorkProps) {
                 {t?.badge || "How We Work"}
               </span>
 
-              <h2 className="text-3xl md:text-4xl font-marcellus text-emerald-900 leading-tight mb-4 md:mb-6">
+              <h2 className="text-3xl md:text-4xl font-heading text-emerald-900 leading-tight mb-4 md:mb-6">
                 {t?.title || "How we work: a commitment to your skin health"}
               </h2>
 
-              <p className="text-gray-600 text-base md:text-lg leading-relaxed mb-8 md:mb-16 max-w-xl">
+              <p className="text-gray-600 text-base md:text-lg leading-relaxed mb-8 md:mb-16 max-w-xl font-sans">
                 {t?.subtitle || "We're dedicated to helping you achieve and maintain beautiful, healthy skin. Trust us to provide exceptional care tailored to you."}
               </p>
 
@@ -79,14 +79,14 @@ export function HowWeWork({ t }: HowWeWorkProps) {
                     className="group relative"
                   >
                     <div className="flex gap-4 md:gap-8 items-start">
-                      <div className="text-3xl md:text-4xl font-marcellus text-emerald-800/40 font-light">
+                      <div className="text-3xl md:text-4xl font-heading text-emerald-800/40 font-light">
                         {step.number}
                       </div>
                       <div>
-                        <h3 className="text-xl md:text-2xl font-marcellus text-emerald-900 mb-2 md:mb-3 group-hover:text-emerald-700 transition-colors">
+                        <h3 className="text-xl md:text-2xl font-heading text-emerald-900 mb-2 md:mb-3 group-hover:text-emerald-700 transition-colors">
                           {step.title}
                         </h3>
-                        <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+                        <p className="text-gray-600 text-sm md:text-base leading-relaxed font-sans">
                           {step.description}
                         </p>
                       </div>
@@ -114,10 +114,10 @@ export function HowWeWork({ t }: HowWeWorkProps) {
               />
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 lg:p-10 z-20">
                 <div className="bg-white/10 backdrop-blur-md rounded-lg md:rounded-xl lg:rounded-2xl p-4 md:p-6 lg:p-8 border border-white/20">
-                  <h4 className="text-xl md:text-2xl lg:text-3xl font-marcellus text-white mb-2 md:mb-3 lg:mb-4">
+                  <h4 className="text-xl md:text-2xl lg:text-3xl font-heading text-white mb-2 md:mb-3 lg:mb-4">
                     {t?.contactTitle || "Have Questions? We're Here to Help You!"}
                   </h4>
-                  <p className="text-xs md:text-sm lg:text-base text-white/80 mb-3 md:mb-4 lg:mb-6">
+                  <p className="text-xs md:text-sm lg:text-base text-white/80 mb-3 md:mb-4 lg:mb-6 font-sans">
                     {t?.contactSubtitle || "Schedule your consultation today and take the first step towards healthier skin."}
                   </p>
                   <a

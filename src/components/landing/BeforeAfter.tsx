@@ -57,10 +57,10 @@ export function BeforeAfter({ t }: BeforeAfterProps) {
             <Shield className="w-3.5 h-3.5" />
             {t?.badge || "Why Choose Us"}
           </span>
-          <h1 className="font-marcellus text-[32px] leading-tight text-[#1e3a5c] sm:text-4xl lg:text-5xl max-w-3xl mx-auto mb-4">
+          <h1 className="font-heading text-[32px] leading-tight text-[#1e3a5c] sm:text-4xl lg:text-5xl max-w-3xl mx-auto mb-4">
             {t?.title || "Before & after: witness the power of dermatology"}
           </h1>
-          <p className="text-gray-600 max-w-xl mx-auto text-base">
+          <p className="text-gray-600 max-w-xl mx-auto text-base font-sans">
             {t?.subtitle || "See the remarkable transformations for yourself—our 'Before & After' gallery highlights the powerful impact of dermatological treatments."}
           </p>
         </div>
