@@ -97,10 +97,10 @@ export function ServicesSection({ t }: ServicesSectionProps) {
             }}
             pagination={{
               clickable: true,
-              bulletActiveClass: 'bg-violet-600 w-4',
+              bulletActiveClass: 'bg-[#2B5C4B] w-4',
               bulletClass: 'w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300 mx-1 cursor-pointer'
             }}
-            className="!pb-12"
+            className="!pb-8"
           >
             {services.map((service) => (
               <SwiperSlide key={service.title} className="!w-[280px] sm:!w-[340px] md:!w-[400px]">
@@ -139,10 +139,10 @@ export function ServicesSection({ t }: ServicesSectionProps) {
           </Swiper>
         </div>
 
-        <div className="text-center mt-8 sm:mt-12 px-4">
+        <div className="text-center mt-4 sm:mt-6 px-4">
           <Link
             to="/services"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl hover:bg-violet-700 transition-all duration-300 shadow-sm hover:shadow"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#2B5C4B] text-white rounded-xl hover:bg-[#234539] transition-all duration-300 shadow-sm hover:shadow"
           >
             <span className="font-medium">{t.viewAll}</span>
             <ArrowRight className="h-4 w-4" />

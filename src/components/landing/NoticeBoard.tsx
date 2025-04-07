@@ -82,8 +82,8 @@ export function NoticeBoard({ notices, loading }: NoticeBoardProps) {
               }}
               pagination={{
                 clickable: true,
-                bulletActiveClass: 'swiper-pagination-bullet-active bg-[#2B5C4B]',
-                bulletClass: 'swiper-pagination-bullet'
+                bulletActiveClass: 'bg-[#2B5C4B] w-4',
+                bulletClass: 'w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300 mx-1 cursor-pointer'
               }}
               onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
               className="pb-12"

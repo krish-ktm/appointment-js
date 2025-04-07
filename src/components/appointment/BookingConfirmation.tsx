@@ -216,23 +216,23 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
             <button
               onClick={handleDownload}
               disabled={downloading}
-              className="flex-1 h-14 px-6 text-[#2B5C4B] hover:bg-[#2B5C4B]/5 border border-[#2B5C4B]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 h-14 sm:h-10 px-6 sm:px-4 text-[#2B5C4B] hover:bg-[#2B5C4B]/5 border border-[#2B5C4B]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {downloading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-[#2B5C4B]/30 border-t-[#2B5C4B] rounded-full animate-spin" />
+                  <div className="w-5 h-5 sm:w-4 sm:h-4 border-2 border-[#2B5C4B]/30 border-t-[#2B5C4B] rounded-full animate-spin" />
                   <span>Downloading...</span>
                 </>
               ) : (
                 <>
-                  <Download className="h-10 w-5 flex-shrink-0" />
+                  <Download className="h-10 sm:h-4 w-5 sm:w-4 flex-shrink-0" />
                   <span>Download</span>
                 </>
               )}
             </button>
             <button
               onClick={onClose}
-              className="flex-1 h-14 py-2 px-6 text-white bg-[#2B5C4B] rounded-xl hover:bg-[#234539] focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors"
+              className="flex-1 h-14 sm:h-10 py-2 px-6 sm:px-4 text-white bg-[#2B5C4B] rounded-xl hover:bg-[#234539] focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors"
             >
               Done
             </button>
