@@ -3,12 +3,18 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
 interface HeroSectionProps {
-  t: any;
+  t: {
+    title?: string;
+    subtitle?: string;
+    viewServices?: string;
+    bookAppointment?: string;
+    [key: string]: unknown;
+  };
 }
 
 export function HeroSection({ t }: HeroSectionProps) {
   return (
-    <div className="container mx-auto md:px-4 pt-16 md:pt-28 lg:pt-32">
+    <div className="container mx-auto md:px-4 pt-14 md:pt-28 lg:pt-32">
       <div className="md:rounded-[2rem] bg-[#2B5C4B] overflow-hidden relative">
         {/* Decorative Elements */}
         <div className="absolute inset-0 pointer-events-none">
