@@ -21,8 +21,7 @@ export const howWeWorkTranslations = {
       }
     ],
     contactTitle: "Have Questions? We're Here to Help You!",
-    contactSubtitle: "Schedule your consultation today and take the first step towards healthier skin.",
-    contactPhone: "(123) 456 789"
+    contactSubtitle: "Schedule your consultation today and take the first step towards healthier skin."
   },
   gu: {
     badge: "અમે કેવી રીતે કામ કરીએ છીએ",
@@ -46,7 +45,6 @@ export const howWeWorkTranslations = {
       }
     ],
     contactTitle: "પ્રશ્નો છે? અમે તમને મદદ કરવા માટે અહીં છીએ!",
-    contactSubtitle: "આજે જ તમારી કન્સલ્ટેશન શેડ્યૂલ કરો અને વધુ સ્વસ્થ ત્વચા તરફ પ્રથમ પગલું ભરો.",
-    contactPhone: "(૧૨૩) ૪૫૬ ૭૮૯"
+    contactSubtitle: "આજે જ તમારી કન્સલ્ટેશન શેડ્યૂલ કરો અને વધુ સ્વસ્થ ત્વચા તરફ પ્રથમ પગલું ભરો."
   }
 }; 

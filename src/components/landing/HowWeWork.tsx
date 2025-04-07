@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import { Phone, ArrowRight, Shield } from 'lucide-react';
+import { businessInfo, getFormattedPhone } from '../../config/business';
+import { useTranslation } from '../../i18n/useTranslation';
 
 interface HowWeWorkProps {
   t?: {
@@ -13,11 +15,13 @@ interface HowWeWorkProps {
     }[];
     contactTitle?: string;
     contactSubtitle?: string;
-    contactPhone?: string;
   };
 }
 
 export function HowWeWork({ t }: HowWeWorkProps) {
+  const { language } = useTranslation();
+  const phoneNumber = getFormattedPhone(language as 'en' | 'gu');
+  
   const defaultSteps = [
     {
       number: "01",
@@ -106,23 +110,23 @@ export function HowWeWork({ t }: HowWeWorkProps) {
               <img
                 src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=2940&h=3500"
                 alt="Dermatology Treatment"
-                className="w-full h-[400px] md:h-[700px] object-cover"
+                className="w-full h-[300px] md:h-[500px] lg:h-[700px] object-cover"
               />
-              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-20">
-                <div className="bg-white/10 backdrop-blur-md rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/20">
-                  <h4 className="text-2xl md:text-3xl font-marcellus text-white mb-3 md:mb-4">
+              <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 lg:p-10 z-20">
+                <div className="bg-white/10 backdrop-blur-md rounded-lg md:rounded-xl lg:rounded-2xl p-4 md:p-6 lg:p-8 border border-white/20">
+                  <h4 className="text-xl md:text-2xl lg:text-3xl font-marcellus text-white mb-2 md:mb-3 lg:mb-4">
                     {t?.contactTitle || "Have Questions? We're Here to Help You!"}
                   </h4>
-                  <p className="text-sm md:text-base text-white/80 mb-4 md:mb-6">
+                  <p className="text-xs md:text-sm lg:text-base text-white/80 mb-3 md:mb-4 lg:mb-6">
                     {t?.contactSubtitle || "Schedule your consultation today and take the first step towards healthier skin."}
                   </p>
                   <a
-                    href="tel:(123) 456 789"
-                    className="inline-flex items-center gap-2 md:gap-3 text-base md:text-lg text-white hover:text-emerald-200 transition-colors group"
+                    href={`tel:${businessInfo.contact.phone}`}
+                    className="inline-flex items-center gap-2 md:gap-3 text-sm md:text-base lg:text-lg text-white hover:text-emerald-200 transition-colors group"
                   >
-                    <Phone className="w-5 h-5 md:w-6 md:h-6" />
-                    {t?.contactPhone || "(123) 456 789"}
-                    <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                    <Phone className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+                    {phoneNumber}
+                    <ArrowRight className="w-3 h-3 md:w-4 md:h-4 transform group-hover:translate-x-1 transition-transform" />
                   </a>
                 </div>
               </div>
