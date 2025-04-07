@@ -21,6 +21,53 @@ import {
   MessageSquare
 } from 'lucide-react';
 
+// Custom scrollbar styles
+const scrollbarStyles = `
+  /* Hide scrollbar by default but reserve the space */
+  .custom-scrollbar {
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: transparent transparent; /* For Firefox */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+  }
+
+  /* Hide scrollbar arrows */
+  .custom-scrollbar::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  /* Show scrollbar on hover and when scrolling (active) */
+  .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.3);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:active {
+    background-color: rgba(107, 114, 128, 0.5);
+  }
+
+  /* For Firefox */
+  .custom-scrollbar:hover {
+    scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+  }
+
+  .custom-scrollbar:active {
+    scrollbar-color: rgba(107, 114, 128, 0.5) transparent;
+  }
+`;
+
 interface NavigationGroup {
   name: string;
   items: {
@@ -135,15 +182,18 @@ export function AdminLayout() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Inject custom scrollbar styles */}
+      <style>{scrollbarStyles}</style>
+      
       {/* Desktop sidebar */}
       <div 
         className={`hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col transition-all duration-300 ease-in-out ${
           isSidebarCollapsed ? 'lg:w-20' : 'lg:w-72'
         }`}
       >
-        <div className="flex flex-col flex-grow bg-white border-r border-gray-200">
-          {/* Sidebar Header */}
-          <div className="flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200">
+        <div className="flex flex-col h-full bg-white border-r border-gray-200">
+          {/* Sidebar Header - Fixed at top */}
+          <div className="flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200 flex-shrink-0">
             <h1 className={`font-bold text-gray-900 transition-all duration-300 ${
               isSidebarCollapsed ? 'text-lg' : 'text-xl'
             }`}>
@@ -159,9 +209,9 @@ export function AdminLayout() {
             </button>
           </div>
 
-          {/* Navigation */}
-          <div className="flex flex-col flex-grow px-3 py-4 overflow-y-auto">
-            <nav className="flex-1 space-y-1">
+          {/* Scrollable Navigation Area */}
+          <div className="flex-1 overflow-y-auto py-4 px-3 custom-scrollbar">
+            <nav className="space-y-1">
               {navigationGroups.map((group) => (
                 <div key={group.name} className="mb-2">
                   {!isSidebarCollapsed && (
@@ -206,41 +256,41 @@ export function AdminLayout() {
                 </div>
               ))}
             </nav>
+          </div>
 
-            {/* User Profile */}
-            <div className="mt-auto border-t border-gray-100">
-              <div className={`transition-all duration-300 ${
-                isSidebarCollapsed ? 'text-center' : ''
-              }`}>
-                <div className="flex items-center group cursor-pointer p-2 rounded-xl hover:bg-gray-50 transition-colors">
-                  <div className="flex-shrink-0">
-                    <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-400 flex items-center justify-center shadow-lg">
-                      <span className="text-sm font-medium text-white">
-                        {currentUser?.name.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                  </div>
-                  <div className={`ml-3 transition-all duration-300 ${
-                    isSidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100'
-                  }`}>
-                    <p className="text-sm font-medium text-gray-900">{currentUser?.name}</p>
-                    <p className="text-xs text-gray-500">{currentUser?.role}</p>
+          {/* User Profile - Fixed at bottom */}
+          <div className="border-t border-gray-100 p-4 bg-white flex-shrink-0">
+            <div className={`transition-all duration-300 ${
+              isSidebarCollapsed ? 'text-center' : ''
+            }`}>
+              <div className="flex items-center group cursor-pointer p-2 rounded-xl hover:bg-gray-50 transition-colors">
+                <div className="flex-shrink-0">
+                  <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-400 flex items-center justify-center shadow-lg">
+                    <span className="text-sm font-medium text-white">
+                      {currentUser?.name.charAt(0).toUpperCase()}
+                    </span>
                   </div>
                 </div>
-                <button
-                  onClick={handleLogout}
-                  className={`mt-2 flex items-center px-3 py-2 text-sm font-medium text-red-600 rounded-xl hover:bg-red-50 transition-colors w-full ${
-                    isSidebarCollapsed ? 'justify-center' : ''
-                  }`}
-                >
-                  <LogOut className={`h-4 w-4 ${isSidebarCollapsed ? '' : 'mr-2'}`} />
-                  <span className={`transition-all duration-300 ${
-                    isSidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100'
-                  }`}>
-                    Logout
-                  </span>
-                </button>
+                <div className={`ml-3 transition-all duration-300 ${
+                  isSidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100'
+                }`}>
+                  <p className="text-sm font-medium text-gray-900">{currentUser?.name}</p>
+                  <p className="text-xs text-gray-500">{currentUser?.role}</p>
+                </div>
               </div>
+              <button
+                onClick={handleLogout}
+                className={`mt-2 flex items-center px-3 py-2 text-sm font-medium text-red-600 rounded-xl hover:bg-red-50 transition-colors w-full ${
+                  isSidebarCollapsed ? 'justify-center' : ''
+                }`}
+              >
+                <LogOut className={`h-4 w-4 ${isSidebarCollapsed ? '' : 'mr-2'}`} />
+                <span className={`transition-all duration-300 ${
+                  isSidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100'
+                }`}>
+                  Logout
+                </span>
+              </button>
             </div>
           </div>
         </div>
@@ -297,7 +347,7 @@ export function AdminLayout() {
 
         {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="bg-white border-t border-gray-200">
+          <div className="bg-white border-t border-gray-200 max-h-[70vh] overflow-y-auto custom-scrollbar">
             <nav className="px-4 py-3">
               {navigationGroups.map((group) => (
                 <div key={group.name} className="mb-4">
