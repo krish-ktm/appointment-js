@@ -14,6 +14,7 @@ import { beforeAfterTranslations } from './beforeAfter';
 import { benefitsTranslations } from './benefits';
 import { noticeBoardTranslations } from './noticeBoard';
 import { galleryTranslations } from './gallery';
+import { doctorMessageTranslations } from './doctorMessage';
 import { LanguageContent } from '../types';
 
 export const translations: Record<string, LanguageContent> = {
@@ -28,6 +29,7 @@ export const translations: Record<string, LanguageContent> = {
     footer: footerTranslations.en,
     header: headerTranslations.en,
     contact: contactTranslations.en,
+    doctorMessage: doctorMessageTranslations.en,
     whyChooseUs: whyChooseUsTranslations.en,
     howWeWork: howWeWorkTranslations.en,
     BeforeAfter: beforeAfterTranslations.en,
@@ -46,6 +48,7 @@ export const translations: Record<string, LanguageContent> = {
     footer: footerTranslations.gu,
     header: headerTranslations.gu,
     contact: contactTranslations.gu,
+    doctorMessage: doctorMessageTranslations.gu,
     whyChooseUs: whyChooseUsTranslations.gu,
     howWeWork: howWeWorkTranslations.gu,
     BeforeAfter: beforeAfterTranslations.gu,

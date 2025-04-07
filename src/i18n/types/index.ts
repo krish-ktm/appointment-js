@@ -8,6 +8,7 @@ import { AboutTranslations } from './about';
 import { FooterTranslations } from './footer';
 import { HeaderTranslations } from './header';
 import { ContactTranslations } from './contact';
+import { DoctorMessageTranslations } from './doctorMessage';
 
 export interface LanguageContent {
   common: CommonTranslations;
@@ -20,6 +21,7 @@ export interface LanguageContent {
   footer: FooterTranslations;
   header: HeaderTranslations;
   contact: ContactTranslations;
+  doctorMessage: DoctorMessageTranslations;
   BeforeAfter?: {
     badge?: string;
     title?: string;
@@ -80,3 +82,4 @@ export * from './about';
 export * from './footer';
 export * from './header';
 export * from './contact';
+export * from './doctorMessage';

@@ -1,11 +1,13 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Sparkles, Bell } from 'lucide-react';
+import { X, Sparkles, Bell } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useDoctorMessage } from '../contexts/DoctorMessageContext';
+import { useTranslation } from '../i18n/useTranslation';
 
 export function DoctorMessage() {
   const { message, loading, isVisible, setIsVisible } = useDoctorMessage();
   const { language } = useLanguage();
+  const { t } = useTranslation();
 
   const getMessageText = () => {
     if (!message) return '';
@@ -77,7 +79,7 @@ export function DoctorMessage() {
                       transition={{ delay: 0.2 }}
                     >
                       <h3 className="text-sm font-medium text-white mb-1 flex items-center gap-2">
-                        Important Notice
+                        {t.doctorMessage.title}
                         <motion.div
                           animate={{
                             rotate: [0, 10, -10, 0],
