@@ -70,7 +70,7 @@ export function ContactPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6 font-heading"
             >
               {t.contact.title}
             </motion.h1>
@@ -79,7 +79,7 @@ export function ContactPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto"
+              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto font-sans"
             >
               {t.contact.subtitle}
             </motion.p>
@@ -94,8 +94,8 @@ export function ContactPage() {
             >
               <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                 <div className="p-6 bg-gradient-to-r from-[#2B5C4B] to-[#234539]">
-                  <h2 className="text-xl font-semibold text-white">{t.contact.contactInfo.title}</h2>
-                  <p className="text-white/80 mt-1">{t.contact.contactInfo.subtitle}</p>
+                  <h2 className="text-xl font-semibold text-white font-heading">{t.contact.contactInfo.title}</h2>
+                  <p className="text-white/80 mt-1 font-sans">{t.contact.contactInfo.subtitle}</p>
                 </div>
                 
                 <div className="p-6 space-y-6">
@@ -107,8 +107,8 @@ export function ContactPage() {
                       <Phone className="h-6 w-6 text-[#2B5C4B]" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">{t.contact.contactInfo.phone.label}</p>
-                      <p className="font-medium text-gray-900">{businessInfo.contact.phone}</p>
+                      <p className="text-sm text-gray-500 font-sans">{t.contact.contactInfo.phone.label}</p>
+                      <p className="font-medium text-gray-900 font-sans">{businessInfo.contact.phone}</p>
                     </div>
                   </a>
 
@@ -120,8 +120,8 @@ export function ContactPage() {
                       <Mail className="h-6 w-6 text-[#2B5C4B]" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">{t.contact.contactInfo.email.label}</p>
-                      <p className="font-medium text-gray-900">{businessInfo.contact.email}</p>
+                      <p className="text-sm text-gray-500 font-sans">{t.contact.contactInfo.email.label}</p>
+                      <p className="font-medium text-gray-900 font-sans">{businessInfo.contact.email}</p>
                     </div>
                   </a>
 
@@ -130,8 +130,8 @@ export function ContactPage() {
                       <MapPin className="h-6 w-6 text-[#2B5C4B]" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">{t.contact.contactInfo.address.label}</p>
-                      <p className="font-medium text-gray-900">{businessInfo.contact.address}</p>
+                      <p className="text-sm text-gray-500 font-sans">{t.contact.contactInfo.address.label}</p>
+                      <p className="font-medium text-gray-900 font-sans">{businessInfo.contact.address}</p>
                     </div>
                   </div>
 
@@ -140,12 +140,12 @@ export function ContactPage() {
                       <Clock className="h-6 w-6 text-[#2B5C4B]" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">{t.contact.contactInfo.hours.label}</p>
-                      <p className="font-medium text-gray-900">
+                      <p className="text-sm text-gray-500 font-sans">{t.contact.contactInfo.hours.label}</p>
+                      <p className="font-medium text-gray-900 font-sans">
                         Mon-Fri: {businessInfo.hours.weekday.morning} | {businessInfo.hours.weekday.evening}
                       </p>
-                      <p className="font-medium text-gray-900">Sat: {businessInfo.hours.saturday}</p>
-                      <p className="font-medium text-gray-900">Sun: {businessInfo.hours.sunday}</p>
+                      <p className="font-medium text-gray-900 font-sans">Sat: {businessInfo.hours.saturday}</p>
+                      <p className="font-medium text-gray-900 font-sans">Sun: {businessInfo.hours.sunday}</p>
                     </div>
                   </div>
                 </div>
@@ -160,13 +160,13 @@ export function ContactPage() {
             >
               <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                 <div className="p-6 bg-gradient-to-r from-[#2B5C4B] to-[#234539]">
-                  <h2 className="text-xl font-semibold text-white">{t.contact.form.title}</h2>
-                  <p className="text-white/80 mt-1">{t.contact.form.subtitle}</p>
+                  <h2 className="text-xl font-semibold text-white font-heading">{t.contact.form.title}</h2>
+                  <p className="text-white/80 mt-1 font-sans">{t.contact.form.subtitle}</p>
                 </div>
                 
                 <form onSubmit={handleSubmit} className="p-6 space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1 font-sans">
                       {t.contact.form.name.label}
                     </label>
                     <input
@@ -174,13 +174,13 @@ export function ContactPage() {
                       required
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      className="block w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-colors"
+                      className="block w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-colors font-sans"
                       placeholder={t.contact.form.name.placeholder}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1 font-sans">
                       {t.contact.form.email.label}
                     </label>
                     <input
@@ -188,13 +188,13 @@ export function ContactPage() {
                       required
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      className="block w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-colors"
+                      className="block w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-colors font-sans"
                       placeholder={t.contact.form.email.placeholder}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1 font-sans">
                       {t.contact.form.phone.label}
                     </label>
                     <input
@@ -202,13 +202,13 @@ export function ContactPage() {
                       required
                       value={form.phone}
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                      className="block w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-colors"
+                      className="block w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-colors font-sans"
                       placeholder={t.contact.form.phone.placeholder}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1 font-sans">
                       {t.contact.form.message.label}
                     </label>
                     <textarea
@@ -216,7 +216,7 @@ export function ContactPage() {
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
                       rows={4}
-                      className="block w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-colors resize-none"
+                      className="block w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] transition-colors resize-none font-sans"
                       placeholder={t.contact.form.message.placeholder}
                     />
                   </div>
@@ -224,7 +224,7 @@ export function ContactPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3 px-6 bg-[#2B5C4B] text-white rounded-xl hover:bg-[#234539] transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="w-full py-3 px-6 bg-[#2B5C4B] text-white rounded-xl hover:bg-[#234539] transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed font-sans"
                   >
                     {loading ? (
                       <>
@@ -252,8 +252,8 @@ export function ContactPage() {
           >
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
               <div className="p-6 bg-gradient-to-r from-[#2B5C4B] to-[#234539]">
-                <h2 className="text-xl font-semibold text-white">{t.contact.map.title}</h2>
-                <p className="text-white/80 mt-1">{t.contact.map.subtitle}</p>
+                <h2 className="text-xl font-semibold text-white font-heading">{t.contact.map.title}</h2>
+                <p className="text-white/80 mt-1 font-sans">{t.contact.map.subtitle}</p>
               </div>
               <div className="h-80 lg:h-96">
                 <iframe

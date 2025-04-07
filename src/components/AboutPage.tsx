@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { ResponsiveHeader } from './headers/ResponsiveHeader';
 import { Footer } from './Footer';
-import { Clock, MapPin, Phone, Award, Star, Shield, Calendar, CheckCircle2, Building2, Users, Stethoscope } from 'lucide-react';
+import { Award, Star, Shield, Calendar, CheckCircle2, Phone } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 import { Link } from 'react-router-dom';
 
@@ -34,7 +34,7 @@ export function AboutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6 font-heading"
             >
               {t.about.title}
             </motion.h1>
@@ -43,7 +43,7 @@ export function AboutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4 sm:px-0"
+              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4 sm:px-0 font-sans"
             >
               {t.about.subtitle}
             </motion.p>
@@ -76,7 +76,7 @@ export function AboutPage() {
                   <div className="relative bg-white shadow-sm border border-gray-100 px-4 py-2 rounded-xl">
                     <div className="flex items-center gap-3">
                       <feature.icon className="h-4 w-4 text-[#2B5C4B]" />
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-gray-900 font-sans">
                         {feature.text}
                       </span>
                     </div>
@@ -102,13 +102,13 @@ export function AboutPage() {
                   />
                 </div>
                 <div className="text-center md:text-left">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 font-heading">
                     {t.about.doctorName}
                   </h2>
-                  <p className="text-white/90 text-lg mb-2">
+                  <p className="text-white/90 text-lg mb-2 font-sans">
                     {t.about.doctorQualification}
                   </p>
-                  <p className="text-white/80">
+                  <p className="text-white/80 font-sans">
                     {t.about.doctorSpecialization}
                   </p>
                 </div>
@@ -118,20 +118,20 @@ export function AboutPage() {
             <div className="p-6 sm:p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4 font-heading">
                     {t.about.expertise.title}
                   </h3>
                   <ul className="space-y-3">
                     {t.about.expertise.items.map((item, index) => (
                       <li key={index} className="flex items-center gap-3">
                         <CheckCircle2 className="h-5 w-5 text-[#2B5C4B]" />
-                        <span className="text-gray-700">{item}</span>
+                        <span className="text-gray-700 font-sans">{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4 font-heading">
                     {t.about.education.title}
                   </h3>
                   <ul className="space-y-4">
@@ -141,9 +141,9 @@ export function AboutPage() {
                           <Award className="h-4 w-4 text-[#2B5C4B]" />
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">{item.degree}</p>
-                          <p className="text-sm text-gray-600">{item.institution}</p>
-                          <p className="text-sm text-gray-500">{item.year}</p>
+                          <p className="font-medium text-gray-900 font-heading">{item.degree}</p>
+                          <p className="text-sm text-gray-600 font-sans">{item.institution}</p>
+                          <p className="text-sm text-gray-500 font-sans">{item.year}</p>
                         </div>
                       </li>
                     ))}
@@ -160,10 +160,10 @@ export function AboutPage() {
             className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-16"
           >
             <div className="p-6 sm:p-8 bg-gradient-to-r from-[#2B5C4B] to-[#234539]">
-              <h2 className="text-xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">
+              <h2 className="text-xl sm:text-3xl font-bold text-white mb-1 sm:mb-2 font-heading">
                 {t.about.clinicName}
               </h2>
-              <p className="text-sm sm:text-base text-white/90">
+              <p className="text-sm sm:text-base text-white/90 font-sans">
                 {t.about.clinicDescription}
               </p>
             </div>
@@ -171,12 +171,12 @@ export function AboutPage() {
             <div className="p-6 sm:p-8">
               {/* Amenities */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-6">{t.about.amenities}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-6 font-heading">{t.about.amenities}</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {t.about.amenitiesList.map((amenity, index) => (
                     <div key={index} className="flex items-center gap-3 p-4 bg-[#2B5C4B]/5 rounded-xl">
                       <CheckCircle2 className="h-5 w-5 text-[#2B5C4B] flex-shrink-0" />
-                      <span className="text-gray-700">{amenity}</span>
+                      <span className="text-gray-700 font-sans">{amenity}</span>
                     </div>
                   ))}
                 </div>
@@ -191,23 +191,23 @@ export function AboutPage() {
             className="text-center"
           >
             <div className="bg-[#2B5C4B] rounded-2xl p-8 sm:p-12">
-              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 font-heading">
                 {t.about.cta.title}
               </h3>
-              <p className="text-white/90 text-base sm:text-lg mb-8 max-w-2xl mx-auto">
+              <p className="text-white/90 text-base sm:text-lg mb-8 max-w-2xl mx-auto font-sans">
                 {t.about.cta.description}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   to="/appointment"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-white text-[#2B5C4B] rounded-xl hover:bg-gray-50 transition-colors shadow-sm hover:shadow text-base sm:text-lg font-medium gap-2 group"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-white text-[#2B5C4B] rounded-xl hover:bg-gray-50 transition-colors shadow-sm hover:shadow text-base sm:text-lg font-medium gap-2 group font-sans"
                 >
                   {t.about.cta.bookButton}
                   <Calendar className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link
                   to="/contact"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-colors text-base sm:text-lg font-medium gap-2 group border border-white/30"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-colors text-base sm:text-lg font-medium gap-2 group border border-white/30 font-sans"
                 >
                   {t.about.cta.contactButton}
                   <Phone className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

@@ -4,10 +4,11 @@ import { Footer } from './Footer';
 import { Stethoscope, Zap, FlaskRound as Flask, Microscope, Scissors, Heart, Shield, ArrowRight } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 import { Link } from 'react-router-dom';
+import { LucideIcon } from 'lucide-react';
 
 interface ServiceCategory {
   title: string;
-  icon: any;
+  icon: LucideIcon;
   services: string[];
 }
 
@@ -73,7 +74,7 @@ export function ServicesPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6 font-heading"
             >
               {t.services.title}
             </motion.h1>
@@ -81,7 +82,7 @@ export function ServicesPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4 sm:px-0"
+              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4 sm:px-0 font-sans"
             >
               {t.services.subtitle}
             </motion.p>
@@ -107,7 +108,7 @@ export function ServicesPage() {
                       <div className="bg-[#2B5C4B]/5 p-3 rounded-xl group-hover:bg-[#2B5C4B]/10 transition-colors duration-300">
                         <Icon className="h-6 w-6 text-[#2B5C4B]" />
                       </div>
-                      <h2 className="text-xl font-semibold text-[#1e3a5c] group-hover:text-[#2B5C4B] transition-colors duration-300">
+                      <h2 className="text-xl font-semibold text-[#1e3a5c] group-hover:text-[#2B5C4B] transition-colors duration-300 font-heading">
                         {category.title}
                       </h2>
                     </div>
@@ -123,7 +124,7 @@ export function ServicesPage() {
                           className="flex items-center gap-3"
                         >
                           <span className="h-1.5 w-1.5 rounded-full bg-[#2B5C4B]" />
-                          <span className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
+                          <span className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300 font-sans">
                             {service}
                           </span>
                         </motion.li>
@@ -151,15 +152,15 @@ export function ServicesPage() {
               </div>
 
               <div className="relative">
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 font-heading">
                   {t.services.cta.title}
                 </h3>
-                <p className="text-white/80 text-base sm:text-lg mb-8 max-w-2xl">
+                <p className="text-white/80 text-base sm:text-lg mb-8 max-w-2xl font-sans">
                   {t.services.cta.subtitle}
                 </p>
                 <Link
                   to="/appointment"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#2B5C4B] rounded-xl hover:bg-gray-50 transition-colors shadow-lg shadow-black/10 font-medium group"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#2B5C4B] rounded-xl hover:bg-gray-50 transition-colors shadow-lg shadow-black/10 font-medium group font-sans"
                 >
                   {t.services.cta.button}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

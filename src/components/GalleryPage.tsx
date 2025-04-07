@@ -51,7 +51,7 @@ export function GalleryPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6 font-heading"
             >
               {t.gallery?.title || "Take a Virtual Tour of Our Modern Clinic"}
             </motion.h1>
@@ -60,7 +60,7 @@ export function GalleryPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4 sm:px-0"
+              className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4 sm:px-0 font-sans"
             >
               {t.gallery?.subtitle || "Experience our state-of-the-art facilities and comfortable environment designed for your care and comfort."}
             </motion.p>
@@ -77,7 +77,7 @@ export function GalleryPage() {
                     transition={{ delay: 0.3 + index * 0.1 }}
                     onClick={() => setSelectedCategory(category.id)}
                     className={`
-                      inline-flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300
+                      inline-flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300 font-sans
                       ${selectedCategory === category.id
                         ? 'bg-[#2B5C4B] text-white shadow-lg shadow-[#2B5C4B]/10'
                         : 'bg-white text-gray-600 hover:bg-[#2B5C4B]/5 border border-gray-200'
@@ -114,10 +114,10 @@ export function GalleryPage() {
                 
                 <div className="absolute inset-x-0 bottom-0 p-6">
                   <div className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
-                    <h3 className="text-xl font-semibold text-white mb-2">
+                    <h3 className="text-xl font-semibold text-white mb-2 font-heading">
                       {image.title[language]}
                     </h3>
-                    <p className="text-white/90 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                    <p className="text-white/90 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 font-sans">
                       {image.description[language]}
                     </p>
                   </div>
