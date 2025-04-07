@@ -20,11 +20,12 @@ export function MobileHeader() {
       <div className="bg-white shadow-sm">
         <div className="px-4">
           <div className="flex justify-between items-center h-14">
-            <Link 
-              to="/" 
-              className="text-base font-bold text-[#2B5C4B]"
-            >
-              {t.header.clinicName}
+            <Link to="/" className="block">
+              <img 
+                src="/shubham-logo.png" 
+                alt="Shubham Skin & Laser Clinic" 
+                className="h-10 w-auto"
+              />
             </Link>
 
             <div className="flex items-center gap-3">
@@ -83,7 +84,7 @@ export function MobileHeader() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Calendar className="h-5 w-5" />
-                Book Appointment
+                Book Now
               </Link>
             </div>
 

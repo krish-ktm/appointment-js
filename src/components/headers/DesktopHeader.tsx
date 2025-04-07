@@ -95,11 +95,12 @@ export function DesktopHeader() {
         <div className="w-full px-4 sm:px-6">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <Link 
-                to="/" 
-                className="text-lg font-bold text-[#2B5C4B]"
-              >
-                {t.header.clinicName}
+              <Link to="/" className="block">
+                <img 
+                  src="/shubham-logo.png" 
+                  alt="Shubham Skin & Laser Clinic" 
+                  className="h-12 w-auto"
+                />
               </Link>
             </div>
 
