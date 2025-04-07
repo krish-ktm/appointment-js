@@ -8,7 +8,7 @@ interface HeroSectionProps {
 
 export function HeroSection({ t }: HeroSectionProps) {
   return (
-    <div className="container mx-auto md:px-4 pt-16 md:pt-28 lg:pt-32 mb-12 sm:mb-16 lg:mb-20">
+    <div className="container mx-auto md:px-4 pt-16 md:pt-28 lg:pt-32">
       <div className="md:rounded-[2rem] bg-[#2B5C4B] overflow-hidden relative">
         {/* Decorative Elements */}
         <div className="absolute inset-0 pointer-events-none">
@@ -64,10 +64,10 @@ export function HeroSection({ t }: HeroSectionProps) {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="relative block lg:block mb-12 lg:mb-0"
+              className="relative block lg:block"
             >
               <img
-                src="https://t3.ftcdn.net/jpg/06/86/67/50/360_F_686675090_RiGX4mnam2uOTITQWNNrGRRU7LO4eMzL.jpg"
+                src="/hero-img-1.png"
                 alt="Beautiful woman"
                 className="w-full lg:max-w-[120%] object-contain relative z-10"
               />
