@@ -67,7 +67,7 @@ export function MobileHeader() {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors ${
+                  className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors font-sans ${
                     isActive(item.path) 
                       ? 'bg-[#2B5C4B]/5 text-[#2B5C4B]' 
                       : 'text-gray-600 hover:text-[#2B5C4B] hover:bg-[#2B5C4B]/5'
@@ -80,7 +80,7 @@ export function MobileHeader() {
 
               <Link
                 to="/appointment"
-                className="flex items-center gap-2 px-3 py-2 mt-4 bg-[#2B5C4B] text-white rounded-lg hover:bg-[#234539] transition-colors text-base font-medium"
+                className="flex items-center gap-2 px-3 py-2 mt-4 bg-[#2B5C4B] text-white rounded-lg hover:bg-[#234539] transition-colors text-base font-medium font-sans"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Calendar className="h-5 w-5" />
@@ -91,7 +91,7 @@ export function MobileHeader() {
             {/* Contact Info */}
             <div className="mt-4 px-4 py-3 bg-[#2B5C4B]/5">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm text-[#2B5C4B]">
+                <div className="flex items-center gap-2 text-sm text-[#2B5C4B] font-sans">
                   <MapPin className="h-4 w-4 flex-shrink-0" />
                   <span>{t.header.contact.address}</span>
                 </div>

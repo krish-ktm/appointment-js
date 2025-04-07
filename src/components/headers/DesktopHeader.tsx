@@ -62,18 +62,18 @@ export function DesktopHeader() {
             <div className="flex items-center gap-4 sm:gap-6">
               <a
                 href={`tel:${t.header.contact.phone}`}
-                className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700 hover:bg-gray-100 transition-colors"
+                className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700 hover:bg-gray-100 transition-colors font-sans"
               >
                 <Phone className="h-4 w-4 text-[#2B5C4B]" />
                 <span>{t.header.contact.phone}</span>
               </a>
-              <div className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-[#2B5C4B]">
+              <div className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-[#2B5C4B] font-sans">
                 <Clock className="h-4 w-4 text-[#2B5C4B]" />
                 <span>{t.header.contact.hours.weekday}</span>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700">
+              <div className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-gray-700 font-sans">
                 <MapPin className="h-4 w-4 text-[#2B5C4B]" />
                 <span>{t.header.contact.address}</span>
               </div>
@@ -117,7 +117,7 @@ export function DesktopHeader() {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`relative py-2 transition-colors group ${
+                  className={`relative py-2 transition-colors group font-sans ${
                     isActive(item.path) ? 'text-[#2B5C4B]' : 'text-gray-600 hover:text-[#2B5C4B]'
                   }`}
                 >
@@ -132,7 +132,7 @@ export function DesktopHeader() {
 
               <Link
                 to="/appointment"
-                className="inline-flex items-center whitespace-nowrap px-4 py-2 bg-[#2B5C4B] text-white text-sm rounded-xl hover:bg-[#234539] transition-colors"
+                className="inline-flex items-center whitespace-nowrap px-4 py-2 bg-[#2B5C4B] text-white text-sm rounded-xl hover:bg-[#234539] transition-colors font-sans"
               >
                 <Calendar className="h-4 w-4 mr-1.5" />
                 {t.header.bookNow}

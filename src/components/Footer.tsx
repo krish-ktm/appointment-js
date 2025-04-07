@@ -31,10 +31,10 @@ export function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-2xl font-bold mb-6 bg-clip-text text-white">
+            <h3 className="text-2xl font-bold mb-6 bg-clip-text text-white font-heading">
               {t.footer.clinicName}
             </h3>
-            <p className="text-white/80 leading-relaxed text-sm">
+            <p className="text-white/80 leading-relaxed text-sm font-sans">
               {t.footer.description}
             </p>
           </motion.div>
@@ -46,7 +46,7 @@ export function Footer() {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            <h3 className="text-lg font-semibold mb-6 text-white">{t.footer.quickLinks.title}</h3>
+            <h3 className="text-lg font-semibold mb-6 text-white font-heading">{t.footer.quickLinks.title}</h3>
             <ul className="space-y-3">
               {[
                 { label: t.footer.quickLinks.home, to: "/" },
@@ -61,7 +61,7 @@ export function Footer() {
                   {link.to ? (
                     <Link
                       to={link.to}
-                      className="text-white/80 hover:text-white transition-colors duration-200 flex items-center gap-2 group text-sm"
+                      className="text-white/80 hover:text-white transition-colors duration-200 flex items-center gap-2 group text-sm font-sans"
                     >
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       {link.label}
@@ -69,7 +69,7 @@ export function Footer() {
                   ) : (
                     <button
                       onClick={link.action}
-                      className="text-white/80 hover:text-white transition-colors duration-200 flex items-center gap-2 group text-sm"
+                      className="text-white/80 hover:text-white transition-colors duration-200 flex items-center gap-2 group text-sm font-sans"
                     >
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       {link.label}
@@ -87,41 +87,41 @@ export function Footer() {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <h3 className="text-lg font-semibold mb-6 text-white">{t.footer.contactInfo.title}</h3>
+            <h3 className="text-lg font-semibold mb-6 text-white font-heading">{t.footer.contactInfo.title}</h3>
             <ul className="space-y-4">
               <li>
                 <a
                   href={`tel:${t.footer.contactInfo.phone}`}
-                  className="flex items-center gap-3 text-white/80 hover:text-white transition-colors duration-200 group"
+                  className="flex items-center gap-3 text-white/80 hover:text-white transition-colors duration-200 group font-sans"
                 >
                   <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors">
                     <Phone className="h-4 w-4" />
                   </div>
-                  <span className="text-sm">{t.footer.contactInfo.phone}</span>
+                  <span className="text-sm font-sans">{t.footer.contactInfo.phone}</span>
                 </a>
               </li>
               <li>
                 <a
                   href={`mailto:${t.footer.contactInfo.email}`}
-                  className="flex items-center gap-3 text-white/80 hover:text-white transition-colors duration-200 group"
+                  className="flex items-center gap-3 text-white/80 hover:text-white transition-colors duration-200 group font-sans"
                 >
                   <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors">
                     <Mail className="h-4 w-4" />
                   </div>
-                  <span className="text-sm">{t.footer.contactInfo.email}</span>
+                  <span className="text-sm font-sans">{t.footer.contactInfo.email}</span>
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-white/80 group">
+              <li className="flex items-center gap-3 text-white/80 group font-sans">
                 <div className="bg-white/10 p-2 rounded-lg">
                   <MapPin className="h-4 w-4" />
                 </div>
-                <span className="text-sm">{t.footer.contactInfo.address}</span>
+                <span className="text-sm font-sans">{t.footer.contactInfo.address}</span>
               </li>
-              <li className="flex items-center gap-3 text-white/80 group">
+              <li className="flex items-center gap-3 text-white/80 group font-sans">
                 <div className="bg-white/10 p-2 rounded-lg">
                   <Clock className="h-4 w-4" />
                 </div>
-                <span className="text-sm">{t.footer.contactInfo.hours}</span>
+                <span className="text-sm font-sans">{t.footer.contactInfo.hours}</span>
               </li>
             </ul>
           </motion.div>
@@ -133,7 +133,7 @@ export function Footer() {
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
           >
-            <h3 className="text-lg font-semibold mb-6 text-white">{t.footer.social.title}</h3>
+            <h3 className="text-lg font-semibold mb-6 text-white font-heading">{t.footer.social.title}</h3>
             <div className="grid grid-cols-2 gap-4">
               {[
                 { icon: Facebook, label: "Facebook", href: "#" },
@@ -146,13 +146,13 @@ export function Footer() {
                   <motion.a
                     key={index}
                     href={social.href}
-                    className="flex items-center gap-3 text-white/80 hover:text-white transition-colors duration-200 group"
+                    className="flex items-center gap-3 text-white/80 hover:text-white transition-colors duration-200 group font-sans"
                     whileHover={{ x: 4 }}
                   >
                     <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors">
                       <Icon className="h-4 w-4" />
                     </div>
-                    <span className="text-sm">{social.label}</span>
+                    <span className="text-sm font-sans">{social.label}</span>
                   </motion.a>
                 );
               })}
@@ -167,7 +167,7 @@ export function Footer() {
           transition={{ delay: 0.4 }}
           className="border-t border-white/10 mt-16 pt-8 text-center"
         >
-          <p className="text-white/60 text-sm">
+          <p className="text-white/60 text-sm font-sans">
             {t.footer.copyright}
           </p>
         </motion.div>
