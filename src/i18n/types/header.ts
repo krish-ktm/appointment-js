@@ -1,5 +1,6 @@
 export interface HeaderTranslations {
   clinicName: string;
+  bookNow: string;
   contact: {
     phone: string;
     address: string;

@@ -63,6 +63,11 @@ export interface LanguageContent {
       description: string;
     }[];
   };
+  gallery?: {
+    badge?: string;
+    title?: string;
+    subtitle?: string;
+  };
 }
 
 export * from './common';

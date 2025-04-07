@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Calendar, Phone, Clock, MapPin } from 'lucide-react';
+import { Menu, X, Calendar, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../../i18n/useTranslation';
 import { LanguageToggle } from './LanguageToggle';
@@ -84,7 +84,7 @@ export function MobileHeader() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Calendar className="h-5 w-5" />
-                Book Now
+                {t.header.bookNow}
               </Link>
             </div>
 

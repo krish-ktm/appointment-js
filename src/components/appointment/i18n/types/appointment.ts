@@ -1,5 +1,8 @@
 export interface AppointmentTranslations {
   title: string;
+  badge?: string;
+  headerTitle?: string;
+  headerSubtitle?: string;
   form: {
     subtitle: string;
     name: string;

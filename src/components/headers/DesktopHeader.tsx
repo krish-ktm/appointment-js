@@ -136,7 +136,7 @@ export function DesktopHeader() {
                 className="inline-flex items-center whitespace-nowrap px-4 py-2 bg-[#2B5C4B] text-white text-sm rounded-xl hover:bg-[#234539] transition-colors"
               >
                 <Calendar className="h-4 w-4 mr-1.5" />
-                Book Now
+                {t.header.bookNow}
               </Link>
             </nav>
           </div>

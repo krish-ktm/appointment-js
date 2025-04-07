@@ -1,6 +1,9 @@
 export interface MRAppointmentTranslations {
   title: string;
   subtitle: string;
+  badge?: string;
+  headerTitle?: string;
+  headerSubtitle?: string;
   success: string;
   form: {
     mrName: string;

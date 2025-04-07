@@ -7,7 +7,7 @@ import { Camera, Building2, Users, Layout, Shield } from 'lucide-react';
 import { galleryImages, categories } from '../config/gallery';
 
 export function GalleryPage() {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   const filteredImages = selectedCategory === 'all' 
@@ -44,7 +44,7 @@ export function GalleryPage() {
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm"
             >
               <Shield className="w-3.5 h-3.5" />
-              Our Gallery
+              {t.gallery?.badge || "Our Gallery"}
             </motion.div>
             
             <motion.h1
@@ -53,7 +53,7 @@ export function GalleryPage() {
               transition={{ delay: 0.1 }}
               className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
             >
-              Take a Virtual Tour of Our Modern Clinic
+              {t.gallery?.title || "Take a Virtual Tour of Our Modern Clinic"}
             </motion.h1>
             
             <motion.p
@@ -62,7 +62,7 @@ export function GalleryPage() {
               transition={{ delay: 0.2 }}
               className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4 sm:px-0"
             >
-              Experience our state-of-the-art facilities and comfortable environment designed for your care and comfort.
+              {t.gallery?.subtitle || "Experience our state-of-the-art facilities and comfortable environment designed for your care and comfort."}
             </motion.p>
 
             {/* Category Filter */}

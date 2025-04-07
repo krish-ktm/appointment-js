@@ -200,7 +200,7 @@ export function MRAppointment() {
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm"
             >
               <Shield className="w-3.5 h-3.5" />
-              Medical Representative
+              {t.mrAppointment.badge}
             </motion.div>
             
             <motion.h1
@@ -209,7 +209,7 @@ export function MRAppointment() {
               transition={{ delay: 0.1 }}
               className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
             >
-              Schedule Your Visit
+              {t.mrAppointment.headerTitle}
             </motion.h1>
             
             <motion.p
@@ -218,7 +218,7 @@ export function MRAppointment() {
               transition={{ delay: 0.2 }}
               className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto"
             >
-              Book your appointment with our expert dermatologist for product presentations and discussions.
+              {t.mrAppointment.headerSubtitle}
             </motion.p>
           </div>
 

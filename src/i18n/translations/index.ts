@@ -13,6 +13,7 @@ import { howWeWorkTranslations } from './howWeWork';
 import { beforeAfterTranslations } from './beforeAfter';
 import { benefitsTranslations } from './benefits';
 import { noticeBoardTranslations } from './noticeBoard';
+import { galleryTranslations } from './gallery';
 import { LanguageContent } from '../types';
 
 export const translations: Record<string, LanguageContent> = {
@@ -31,7 +32,8 @@ export const translations: Record<string, LanguageContent> = {
     howWeWork: howWeWorkTranslations.en,
     BeforeAfter: beforeAfterTranslations.en,
     Benefits: benefitsTranslations.en,
-    noticeBoard: noticeBoardTranslations.en
+    noticeBoard: noticeBoardTranslations.en,
+    gallery: galleryTranslations.en
   },
   gu: {
     common: commonTranslations.gu,
@@ -48,6 +50,7 @@ export const translations: Record<string, LanguageContent> = {
     howWeWork: howWeWorkTranslations.gu,
     BeforeAfter: beforeAfterTranslations.gu,
     Benefits: benefitsTranslations.gu,
-    noticeBoard: noticeBoardTranslations.gu
+    noticeBoard: noticeBoardTranslations.gu,
+    gallery: galleryTranslations.gu
   }
 };

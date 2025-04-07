@@ -5,6 +5,9 @@ export const mrAppointmentTranslations: Record<string, MRAppointmentTranslations
   en: {
     title: `MR Appointment at ${businessInfo.name}`,
     subtitle: `Schedule your meeting with ${businessInfo.doctor.name}`,
+    badge: "Medical Representative",
+    headerTitle: "Schedule Your Visit",
+    headerSubtitle: "Book your appointment with our expert dermatologist for product presentations and discussions.",
     success: "Appointment booked successfully",
     form: {
       mrName: "MR Name",
@@ -76,6 +79,9 @@ export const mrAppointmentTranslations: Record<string, MRAppointmentTranslations
   gu: {
     title: "શુભમ સ્કિન એન્ડ લેસર ક્લિનિક - એમઆર એપોઈન્ટમેન્ટ",
     subtitle: `${getFormattedDoctorInfo('gu').name} સાથે તમારી મીટિંગ શેડ્યૂલ કરો`,
+    badge: "મેડિકલ રિપ્રેઝન્ટેટિવ",
+    headerTitle: "તમારી મુલાકાત શેડ્યૂલ કરો",
+    headerSubtitle: "પ્રોડક્ટ પ્રેઝન્ટેશન અને ચર્ચા માટે અમારા નિષ્ણાત ડર્મેટોલોજિસ્ટ સાથે તમારી એપોઈન્ટમેન્ટ બુક કરો.",
     success: "એપોઈન્ટમેન્ટ સફળતાપૂર્વક બુક થઈ ગઈ છે",
     form: {
       mrName: "એમઆર નામ",

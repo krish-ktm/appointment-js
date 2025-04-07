@@ -4,6 +4,9 @@ import { businessInfo, getFormattedDoctorInfo } from '../../../../config/busines
 export const appointmentTranslations: Record<string, AppointmentTranslations> = {
   en: {
     title: "Book Your Appointment",
+    badge: "Book Appointment",
+    headerTitle: "Schedule Your Visit",
+    headerSubtitle: "Choose your preferred date and time for a consultation with our expert dermatologist.",
     form: {
       subtitle: `Schedule your appointment with ${businessInfo.doctor.name}`,
       name: "Full Name",
@@ -66,6 +69,9 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
   },
   gu: {
     title: "તમારી એપોઈન્ટમેન્ટ બુક કરો",
+    badge: "એપોઈન્ટમેન્ટ બુક કરો",
+    headerTitle: "તમારી મુલાકાત શેડ્યૂલ કરો",
+    headerSubtitle: "અમારા નિષ્ણાત ડર્મેટોલોજિસ્ટ સાથે પરામર્શ માટે તમારી પસંદગીની તારીખ અને સમય પસંદ કરો.",
     form: {
       subtitle: `${getFormattedDoctorInfo('gu').name} સાથે તમારી એપોઈન્ટમેન્ટ શેડ્યૂલ કરો`,
       name: "પૂરું નામ",

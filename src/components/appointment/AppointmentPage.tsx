@@ -39,7 +39,7 @@ export function AppointmentPage() {
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm"
             >
               <Shield className="w-3.5 h-3.5" />
-              Book Appointment
+              {t.appointment.badge}
             </motion.div>
             
             <motion.h1
@@ -48,7 +48,7 @@ export function AppointmentPage() {
               transition={{ delay: 0.1 }}
               className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5c] mb-4 sm:mb-6"
             >
-              Schedule Your Visit
+              {t.appointment.headerTitle}
             </motion.h1>
             
             <motion.p
@@ -57,7 +57,7 @@ export function AppointmentPage() {
               transition={{ delay: 0.2 }}
               className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto"
             >
-              Choose your preferred date and time for a consultation with our expert dermatologist.
+              {t.appointment.headerSubtitle}
             </motion.p>
           </div>
 
@@ -68,7 +68,7 @@ export function AppointmentPage() {
           >
             <div className="p-4 sm:p-6 bg-gradient-to-r from-[#2B5C4B] to-[#234539]">
               <h2 className="text-xl sm:text-2xl font-semibold text-white">{t.appointment.title}</h2>
-              <p className="text-[#2B5C4B]-100 mt-1 text-sm sm:text-base text-white/80">{t.appointment.subtitle}</p>
+              <p className="text-[#2B5C4B]-100 mt-1 text-sm sm:text-base text-white/80">{t.appointment.form.subtitle}</p>
             </div>
 
             <div className="p-4 sm:p-6">
