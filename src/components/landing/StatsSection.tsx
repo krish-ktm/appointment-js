@@ -2,7 +2,19 @@ import { motion } from 'framer-motion';
 import { Shield } from 'lucide-react';
 
 interface StatsSectionProps {
-  t: any;
+  t?: {
+    badge?: string;
+    title?: string;
+    subtitle?: string;
+    yearsExperience?: string;
+    happyPatients?: string;
+    treatments?: string;
+    successRate?: string;
+    experienceDesc?: string;
+    patientsDesc?: string;
+    treatmentsDesc?: string;
+    successDesc?: string;
+  };
 }
 
 export function StatsSection({ t }: StatsSectionProps) {
@@ -24,7 +36,7 @@ export function StatsSection({ t }: StatsSectionProps) {
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm"
           >
             <Shield className="w-3.5 h-3.5" />
-            Our Impact
+            {t?.badge || "Our Impact"}
           </motion.span>
           
           <motion.h2
@@ -34,7 +46,7 @@ export function StatsSection({ t }: StatsSectionProps) {
             transition={{ delay: 0.1 }}
             className="text-2xl md:text-4xl font-serif text-[#1e3a5c] mb-3 md:mb-4"
           >
-            Making a difference in dermatological care
+            {t?.title || "Making a difference in dermatological care"}
           </motion.h2>
           
           <motion.p
@@ -44,7 +56,7 @@ export function StatsSection({ t }: StatsSectionProps) {
             transition={{ delay: 0.2 }}
             className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto"
           >
-            Our commitment to excellence reflects in our numbers and the trust our patients place in us
+            {t?.subtitle || "Our commitment to excellence reflects in our numbers and the trust our patients place in us"}
           </motion.p>
         </div>
 
@@ -53,30 +65,30 @@ export function StatsSection({ t }: StatsSectionProps) {
           {[
             { 
               value: '14+', 
-              label: t.yearsExperience,
+              label: t?.yearsExperience || "Years Experience",
               gradient: 'from-blue-600 to-blue-400',
-              description: t.experienceDesc,
+              description: t?.experienceDesc || "Trusted expertise in dermatology",
               delay: 0
             },
             { 
               value: '15k+', 
-              label: t.happyPatients,
+              label: t?.happyPatients || "Happy Patients",
               gradient: 'from-emerald-600 to-emerald-400',
-              description: t.patientsDesc,
+              description: t?.patientsDesc || "Satisfied with our care",
               delay: 0.1
             },
             { 
               value: '50+', 
-              label: t.treatments,
+              label: t?.treatments || "Treatments",
               gradient: 'from-violet-600 to-violet-400',
-              description: t.treatmentsDesc,
+              description: t?.treatmentsDesc || "Advanced procedures available",
               delay: 0.2
             },
             { 
               value: '99%', 
-              label: t.successRate,
+              label: t?.successRate || "Success Rate",
               gradient: 'from-amber-600 to-amber-400',
-              description: t.successDesc,
+              description: t?.successDesc || "Proven treatment outcomes",
               delay: 0.3
             }
           ].map((stat, index) => (

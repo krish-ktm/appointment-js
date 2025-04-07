@@ -10,6 +10,9 @@ export interface HomeTranslations {
     mrAppointmentNote: string;
   };
   stats: {
+    badge: string;
+    title: string;
+    subtitle: string;
     yearsExperience: string;
     happyPatients: string;
     treatments: string;

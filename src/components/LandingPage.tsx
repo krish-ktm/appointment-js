@@ -43,15 +43,15 @@ export function LandingPage() {
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <ResponsiveHeader />
       
-      <HeroSection t={t.home.hero} />
+      <HeroSection t={t.home?.hero} />
       
       <WhyChooseUs t={t.whyChooseUs} />
       <ServicesSection t={t.services} />
       <HowWeWork t={t.howWeWork} />
       <Benefits t={t.Benefits} />
-       <BeforeAfter t={t.BeforeAfter}/>
-      <NoticeBoard notices={notices} loading={loading} />
-      <StatsSection t={t.home.stats} />
+      <BeforeAfter t={t.BeforeAfter}/>
+      <NoticeBoard notices={notices} loading={loading} t={t.noticeBoard} />
+      <StatsSection t={t.home?.stats} />
 
       <Footer />
     </div>

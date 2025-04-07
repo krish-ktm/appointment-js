@@ -14,6 +14,9 @@ export const homeTranslations: Record<string, HomeTranslations> = {
       mrAppointmentNote: "For pharmaceutical and medical device representatives"
     },
     stats: {
+      badge: "Our Impact",
+      title: "Making a difference in dermatological care",
+      subtitle: "Our commitment to excellence reflects in our numbers and the trust our patients place in us",
       yearsExperience: "Years Experience",
       happyPatients: "Happy Patients",
       treatments: "Treatments",
@@ -36,6 +39,9 @@ export const homeTranslations: Record<string, HomeTranslations> = {
       mrAppointmentNote: "ફાર્માસ્યુટિકલ અને મેડિકલ ડિવાઇસ પ્રતિનિધિઓ માટે"
     },
     stats: {
+      badge: "અમારી અસર",
+      title: "ડર્મેટોલોજિકલ સંભાળમાં તફાવત લાવવો",
+      subtitle: "શ્રેષ્ઠતા પ્રત્યેની અમારી પ્રતિબદ્ધતા અમારા આંકડાઓમાં અને દર્દીઓ અમારા પર મૂકે છે તે વિશ્વાસમાં પ્રતિબિંબિત થાય છે",
       yearsExperience: "વર્ષનો અનુભવ",
       experienceDesc: "ડર્મેટોલોજીમાં વિશ્વસનીય નિપુણતા",
       happyPatients: "ખુશ દર્દીઓ",

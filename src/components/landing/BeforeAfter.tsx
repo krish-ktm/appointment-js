@@ -2,6 +2,14 @@ import React from 'react';
 import ReactCompareImage from 'react-compare-image';
 import { Shield } from 'lucide-react';
 
+interface BeforeAfterProps {
+  t?: {
+    badge?: string;
+    title?: string;
+    subtitle?: string;
+  };
+}
+
 const beforeAfterData = [
   {
     id: 1,
@@ -40,20 +48,20 @@ function BeforeAfterCard({ before, after }: { before: string; after: string }) {
   );
 }
 
-export function BeforeAfter() {
+export function BeforeAfter({ t }: BeforeAfterProps) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-[1200px] mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm">
             <Shield className="w-3.5 h-3.5" />
-            Why Choose Us
+            {t?.badge || "Why Choose Us"}
           </span>
           <h1 className="font-marcellus text-[32px] leading-tight text-[#1e3a5c] sm:text-4xl lg:text-5xl max-w-3xl mx-auto mb-4">
-            Before & after: witness the power of dermatology
+            {t?.title || "Before & after: witness the power of dermatology"}
           </h1>
           <p className="text-gray-600 max-w-xl mx-auto text-base">
-            See the remarkable transformations for yourself—our 'Before & After' gallery highlights the powerful impact of dermatological treatments.
+            {t?.subtitle || "See the remarkable transformations for yourself—our 'Before & After' gallery highlights the powerful impact of dermatological treatments."}
           </p>
         </div>
 

@@ -3,13 +3,22 @@ import { Shield, Stethoscope, Clock, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface WhyChooseUsProps {
-  t: any;
+  t?: {
+    badge?: string;
+    title?: string;
+    subtitle?: string;
+    features?: {
+      title: string;
+      description: string;
+    }[];
+    cta?: string;
+  };
 }
 
 const MotionLink = motion(Link);
 
 export function WhyChooseUs({ t }: WhyChooseUsProps) {
-  const features = [
+  const defaultFeatures = [
     {
       icon: Shield,
       title: "Personalized, compassionate care",
@@ -33,6 +42,13 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
     }
   ];
 
+  // Map translations to features if available
+  const features = defaultFeatures.map((feature, index) => ({
+    ...feature,
+    title: t?.features && index < t.features.length ? t.features[index].title : feature.title,
+    description: t?.features && index < t.features.length ? t.features[index].description : feature.description
+  }));
+
   return (
     <section className="relative py-12 sm:py-16 overflow-hidden">
       {/* Background gradient */}
@@ -53,7 +69,7 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm"
               >
                 <Shield className="w-3.5 h-3.5" />
-                Why Choose Us
+                {t?.badge || "Why Choose Us"}
               </motion.span>
 
               <motion.h2
@@ -63,7 +79,7 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
                 transition={{ delay: 0.1 }}
                 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 leading-[1.2] tracking-tight"
               >
-                Why choose us for all your dermatology needs
+                {t?.title || "Why choose us for all your dermatology needs"}
               </motion.h2>
 
               <motion.p
@@ -73,7 +89,7 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
                 transition={{ delay: 0.2 }}
                 className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-xl"
               >
-                We're dedicated to helping you achieve and maintain beautiful, healthy skin. Trust us to provide exceptional care tailored to you.
+                {t?.subtitle || "We're dedicated to helping you achieve and maintain beautiful, healthy skin. Trust us to provide exceptional care tailored to you."}
               </motion.p>
             </div>
 
@@ -138,7 +154,7 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
               whileTap={{ scale: 0.98 }}
               className="relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-[#2B5C4B] to-[#234539] text-white text-sm font-medium rounded-lg shadow-md shadow-[#2B5C4B]/10 hover:shadow-lg hover:shadow-[#2B5C4B]/20 transition-all duration-300 overflow-hidden group"
             >
-              <span className="relative z-10">Book an Appointment</span>
+              <span className="relative z-10">{t?.cta || "Book an Appointment"}</span>
               <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
               <div className="absolute inset-0 bg-gradient-to-br from-[#234539] to-[#2B5C4B] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </MotionLink>

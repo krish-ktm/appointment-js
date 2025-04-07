@@ -8,6 +8,11 @@ import { aboutTranslations } from './about';
 import { footerTranslations } from './footer';
 import { headerTranslations } from './header';
 import { contactTranslations } from './contact';
+import { whyChooseUsTranslations } from './whyChooseUs';
+import { howWeWorkTranslations } from './howWeWork';
+import { beforeAfterTranslations } from './beforeAfter';
+import { benefitsTranslations } from './benefits';
+import { noticeBoardTranslations } from './noticeBoard';
 import { LanguageContent } from '../types';
 
 export const translations: Record<string, LanguageContent> = {
@@ -21,7 +26,12 @@ export const translations: Record<string, LanguageContent> = {
     about: aboutTranslations.en,
     footer: footerTranslations.en,
     header: headerTranslations.en,
-    contact: contactTranslations.en
+    contact: contactTranslations.en,
+    whyChooseUs: whyChooseUsTranslations.en,
+    howWeWork: howWeWorkTranslations.en,
+    BeforeAfter: beforeAfterTranslations.en,
+    Benefits: benefitsTranslations.en,
+    noticeBoard: noticeBoardTranslations.en
   },
   gu: {
     common: commonTranslations.gu,
@@ -33,6 +43,11 @@ export const translations: Record<string, LanguageContent> = {
     about: aboutTranslations.gu,
     footer: footerTranslations.gu,
     header: headerTranslations.gu,
-    contact: contactTranslations.gu
+    contact: contactTranslations.gu,
+    whyChooseUs: whyChooseUsTranslations.gu,
+    howWeWork: howWeWorkTranslations.gu,
+    BeforeAfter: beforeAfterTranslations.gu,
+    Benefits: benefitsTranslations.gu,
+    noticeBoard: noticeBoardTranslations.gu
   }
 };

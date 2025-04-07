@@ -2,11 +2,23 @@ import { motion } from 'framer-motion';
 import { Phone, ArrowRight, Shield } from 'lucide-react';
 
 interface HowWeWorkProps {
-  t: any;
+  t?: {
+    badge?: string;
+    title?: string;
+    subtitle?: string;
+    steps?: {
+      number: string;
+      title: string;
+      description: string;
+    }[];
+    contactTitle?: string;
+    contactSubtitle?: string;
+    contactPhone?: string;
+  };
 }
 
 export function HowWeWork({ t }: HowWeWorkProps) {
-  const steps = [
+  const defaultSteps = [
     {
       number: "01",
       title: "Personalized Consultation",
@@ -24,6 +36,9 @@ export function HowWeWork({ t }: HowWeWorkProps) {
     }
   ];
 
+  // Map translations to steps if available
+  const steps = t?.steps || defaultSteps;
+
   return (
     <section className="py-12 md:py-24 bg-gradient-to-b from-white to-emerald-50/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,15 +53,15 @@ export function HowWeWork({ t }: HowWeWorkProps) {
             >
               <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2B5C4B]/5 text-[#2B5C4B] text-xs font-medium mb-3 sm:mb-4 backdrop-blur-sm">
                 <Shield className="w-3.5 h-3.5" />
-                How We Work
+                {t?.badge || "How We Work"}
               </span>
 
               <h2 className="text-3xl md:text-4xl font-marcellus text-emerald-900 leading-tight mb-4 md:mb-6">
-                How we work: a commitment to your skin health
+                {t?.title || "How we work: a commitment to your skin health"}
               </h2>
 
               <p className="text-gray-600 text-base md:text-lg leading-relaxed mb-8 md:mb-16 max-w-xl">
-                We're dedicated to helping you achieve and maintain beautiful, healthy skin. Trust us to provide exceptional care tailored to you.
+                {t?.subtitle || "We're dedicated to helping you achieve and maintain beautiful, healthy skin. Trust us to provide exceptional care tailored to you."}
               </p>
 
               <div className="space-y-8 md:space-y-12">
@@ -96,17 +111,17 @@ export function HowWeWork({ t }: HowWeWorkProps) {
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-20">
                 <div className="bg-white/10 backdrop-blur-md rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/20">
                   <h4 className="text-2xl md:text-3xl font-marcellus text-white mb-3 md:mb-4">
-                    Have Questions? We're Here to Help You!
+                    {t?.contactTitle || "Have Questions? We're Here to Help You!"}
                   </h4>
                   <p className="text-sm md:text-base text-white/80 mb-4 md:mb-6">
-                    Schedule your consultation today and take the first step towards healthier skin.
+                    {t?.contactSubtitle || "Schedule your consultation today and take the first step towards healthier skin."}
                   </p>
                   <a
                     href="tel:(123) 456 789"
                     className="inline-flex items-center gap-2 md:gap-3 text-base md:text-lg text-white hover:text-emerald-200 transition-colors group"
                   >
                     <Phone className="w-5 h-5 md:w-6 md:h-6" />
-                    (123) 456 789
+                    {t?.contactPhone || "(123) 456 789"}
                     <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                   </a>
                 </div>

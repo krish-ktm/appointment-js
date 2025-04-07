@@ -2,11 +2,19 @@ import { motion } from 'framer-motion';
 import { Users, Stethoscope, Shield, Leaf } from 'lucide-react';
 
 interface BenefitsProps {
-  t: any;
+  t?: {
+    badge?: string;
+    title?: string;
+    subtitle?: string;
+    benefits?: {
+      title: string;
+      description: string;
+    }[];
+  };
 }
 
 export function Benefits({ t }: BenefitsProps) {
-  const benefits = [
+  const defaultBenefits = [
     {
       title: "Expert Dermatologists",
       description: "Our team consists board-certified dermatologists with experience",
@@ -27,7 +35,7 @@ export function Benefits({ t }: BenefitsProps) {
     }
   ];
 
-  const rightBenefits = [
+  const defaultRightBenefits = [
     {
       title: "Comprehensive Services",
       description: "From medical dermatology cosmetic enhancements, we offer a treatment",
@@ -47,6 +55,20 @@ export function Benefits({ t }: BenefitsProps) {
       align: 'left'
     }
   ];
+
+  // Map translations to benefits if available
+  const allDefaultBenefits = [...defaultBenefits, ...defaultRightBenefits];
+  
+  const mappedBenefits = t?.benefits ? 
+    allDefaultBenefits.map((benefit, index) => ({
+      ...benefit,
+      title: t.benefits && index < t.benefits.length ? t.benefits[index].title : benefit.title,
+      description: t.benefits && index < t.benefits.length ? t.benefits[index].description : benefit.description
+    })) 
+    : allDefaultBenefits;
+    
+  const benefits = mappedBenefits.slice(0, 3);
+  const rightBenefits = mappedBenefits.slice(3);
 
   return (
     <section className="min-h-screen bg-[#2B5C4B] relative overflow-hidden">
@@ -78,7 +100,7 @@ export function Benefits({ t }: BenefitsProps) {
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 text-white text-xs font-medium mb-3 backdrop-blur-sm"
           >
             <Shield className="w-3.5 h-3.5" />
-            Our Benefits
+            {t?.badge || "Our Benefits"}
           </motion.span>
           
           <motion.h2
@@ -88,7 +110,7 @@ export function Benefits({ t }: BenefitsProps) {
             transition={{ delay: 0.1 }}
             className="text-2xl md:text-4xl font-serif text-white mb-3 md:mb-4"
           >
-            Exceptional dermatology,<br className="hidden sm:block" /> every step of the way
+            {t?.title || "Exceptional dermatology, every step of the way"}
           </motion.h2>
           
           <motion.p
@@ -98,7 +120,7 @@ export function Benefits({ t }: BenefitsProps) {
             transition={{ delay: 0.2 }}
             className="text-white/80 text-sm md:text-base max-w-2xl mx-auto"
           >
-            Experience personalized care, advanced treatments, and visible results with our expert dermatology services.
+            {t?.subtitle || "Experience personalized care, advanced treatments, and visible results with our expert dermatology services."}
           </motion.p>
         </div>
 

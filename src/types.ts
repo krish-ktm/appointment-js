@@ -89,7 +89,7 @@ export interface Translations {
   bookingDate: string;
   bookingTime: string;
   close: string;
-  landing: {
+  landing?: {
     hero: {
       title: string;
       subtitle: string;
@@ -127,5 +127,48 @@ export interface Translations {
         button: string;
       };
     };
+  };
+  BeforeAfter?: {
+    badge: string;
+    title: string;
+    subtitle: string;
+  };
+  noticeBoard?: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    noAnnouncements: string;
+  };
+  whyChooseUs?: {
+    badge?: string;
+    title?: string;
+    subtitle?: string;
+    features?: {
+      title: string;
+      description: string;
+    }[];
+    cta?: string;
+  };
+  howWeWork?: {
+    badge?: string;
+    title?: string;
+    subtitle?: string;
+    steps?: {
+      number: string;
+      title: string;
+      description: string;
+    }[];
+    contactTitle?: string;
+    contactSubtitle?: string;
+    contactPhone?: string;
+  };
+  Benefits?: {
+    badge?: string;
+    title?: string;
+    subtitle?: string;
+    benefits?: {
+      title: string;
+      description: string;
+    }[];
   };
 }
