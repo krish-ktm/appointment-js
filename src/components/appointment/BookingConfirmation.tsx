@@ -1,8 +1,8 @@
 import { Check, Calendar, Clock, User, Phone, MapPin, X, Download } from 'lucide-react';
-import { BookingDetails } from '../../types';
+import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import { motion, AnimatePresence } from 'framer-motion';
+import { BookingDetails } from '../../types';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { downloadAppointmentImage } from '../../utils/imageDownload';
@@ -94,15 +94,16 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
         className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-auto overflow-hidden"
         onClick={e => e.stopPropagation()}
+        style={{ maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}
       >
         {/* Success Header */}
-        <div className="relative bg-gradient-to-br from-[#2B5C4B] to-[#234539] p-4 sm:p-6 text-white">
+        <div className="relative bg-gradient-to-br from-[#2B5C4B] to-[#234539] p-4 sm:p-6 text-white flex-shrink-0">
           <div className="flex items-center gap-4">
             <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-              <Check className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+              <Check className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h2 className="text-lg sm:text-xl font-semibold">Booking Confirmed!</h2>
+              <h2 className="text-xl font-semibold">Booking Confirmed!</h2>
               <p className="text-white/80 text-sm mt-0.5">
                 Your appointment has been successfully booked
               </p>
@@ -110,110 +111,112 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
           </div>
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white/80 hover:text-white hover:bg-white/10 p-1.5 sm:p-2 rounded-full transition-colors"
+            className="absolute top-4 right-4 text-white/80 hover:text-white hover:bg-white/10 p-2 rounded-full transition-colors"
           >
-            <X className="h-4 w-4 sm:h-5 sm:w-5" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Appointment Details */}
-        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-          {/* Date & Time */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4">
-              <div className="flex items-center gap-2 sm:gap-3">
-                <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
-                  <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
-                </div>
-                <div>
-                  <p className="text-[10px] sm:text-xs text-gray-500">Date</p>
-                  <p className="text-xs sm:text-sm font-medium text-gray-900">
-                    {formatDate(booking.appointment_date)}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4">
-              <div className="flex items-center gap-2 sm:gap-3">
-                <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
-                  <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
-                </div>
-                <div>
-                  <p className="text-[10px] sm:text-xs text-gray-500">Time</p>
-                  <p className="text-xs sm:text-sm font-medium text-gray-900">
-                    {booking.appointment_time}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Patient Details */}
-          <div className="bg-[#2B5C4B]/5 rounded-xl p-4 sm:p-6">
-            <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-4">Patient Details</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <div className="flex items-center gap-2 sm:gap-3 mb-4">
-                  <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
-                    <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] sm:text-xs text-gray-500">Name</p>
-                    <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.name}</p>
-                  </div>
-                </div>
+        {/* Appointment Details - Scrollable Area */}
+        <div className="overflow-y-auto flex-grow">
+          <div className="p-4 sm:p-6 space-y-4">
+            {/* Date & Time */}
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
-                    <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
+                    <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                   </div>
                   <div>
-                    <p className="text-[10px] sm:text-xs text-gray-500">Phone</p>
-                    <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.phone}</p>
+                    <p className="text-[10px] sm:text-xs text-gray-500">Date</p>
+                    <p className="text-xs sm:text-sm font-medium text-gray-900">
+                      {formatDate(booking.appointment_date)}
+                    </p>
                   </div>
                 </div>
               </div>
-              <div>
-                <div className="flex items-center gap-2 sm:gap-3 mb-4">
-                  <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
-                    <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] sm:text-xs text-gray-500">Age</p>
-                    <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.age}</p>
-                  </div>
-                </div>
+              <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
-                    <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
+                    <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                   </div>
                   <div>
-                    <p className="text-[10px] sm:text-xs text-gray-500">City</p>
-                    <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.city}</p>
+                    <p className="text-[10px] sm:text-xs text-gray-500">Time</p>
+                    <p className="text-xs sm:text-sm font-medium text-gray-900">
+                      {booking.appointment_time}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Booking ID */}
-          <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4">
-            <p className="text-[10px] sm:text-xs text-gray-500">Booking ID</p>
-            <p className="text-xs sm:text-sm font-medium text-gray-900">#{booking.id.slice(-8).toUpperCase()}</p>
-          </div>
-          
-          {/* Hidden div to prevent linter errors for variables used in image download */}
-          <div style={{ display: 'none' }}>
-            {customRulesText}
+            {/* Patient Details */}
+            <div className="bg-[#2B5C4B]/5 rounded-xl p-4 sm:p-6">
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-4">Patient Details</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="flex items-center gap-2 sm:gap-3 mb-4">
+                    <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
+                      <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] sm:text-xs text-gray-500">Name</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.name}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
+                      <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] sm:text-xs text-gray-500">Phone</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.phone}</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 sm:gap-3 mb-4">
+                    <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
+                      <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] sm:text-xs text-gray-500">Age</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.age}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
+                      <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] sm:text-xs text-gray-500">City</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-900">{booking.city}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Booking ID */}
+            <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4">
+              <p className="text-[10px] sm:text-xs text-gray-500">Booking ID</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-900">#{booking.id.slice(-8).toUpperCase()}</p>
+            </div>
+            
+            {/* Hidden div to prevent linter errors for variables used in image download */}
+            <div style={{ display: 'none' }}>
+              {customRulesText}
+            </div>
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="border-t border-gray-100 p-4 sm:p-6">
+        {/* Actions - Fixed at bottom */}
+        <div className="border-t border-gray-100 p-4 sm:p-6 flex-shrink-0">
           <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={handleDownload}
               disabled={downloading}
-              className="flex-1 h-12 sm:h-14 px-6 sm:px-8 text-sm sm:text-base font-medium text-[#2B5C4B] hover:bg-[#2B5C4B]/5 border border-[#2B5C4B]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 h-14 px-6 text-[#2B5C4B] hover:bg-[#2B5C4B]/5 border border-[#2B5C4B]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {downloading ? (
                 <>
@@ -222,14 +225,14 @@ export function BookingConfirmation({ booking, onClose }: BookingConfirmationPro
                 </>
               ) : (
                 <>
-                  <Download className="h-9 w-5 flex-shrink-0" />
+                  <Download className="h-10 w-5 flex-shrink-0" />
                   <span>Download</span>
                 </>
               )}
             </button>
             <button
               onClick={onClose}
-              className="flex-1 h-16 sm:h-18 px-6 sm:px-8 text-sm sm:text-base font-medium text-white bg-[#2B5C4B] rounded-xl hover:bg-[#234539] focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors"
+              className="flex-1 h-14 py-2 px-6 text-white bg-[#2B5C4B] rounded-xl hover:bg-[#234539] focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors"
             >
               Done
             </button>
