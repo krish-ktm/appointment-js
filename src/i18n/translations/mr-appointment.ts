@@ -16,8 +16,9 @@ export const mrAppointmentTranslations: Record<string, MRAppointmentTranslations
       contactNo: "Contact Number",
       appointmentDate: "Appointment Date",
       timeSlot: "Appointment Time",
-      slotAvailable: "available",
-      slotsAvailable: "slots available",
+      slotAvailable: "left",
+      slotsAvailable: "slots left",
+      loadingSlots: "Loading time slots...",
       noTimeSlots: "No time slots available",
       selectAnotherDate: "Please select another date",
       timeSlotRequired: "Please select an appointment time",
@@ -31,6 +32,12 @@ export const mrAppointmentTranslations: Record<string, MRAppointmentTranslations
       availableWeekdays: "Appointments available on weekdays only",
       availableDates: "Available dates",
       unavailableDates: "Weekends & past dates (not available)",
+      calendarLegend: {
+        available: "Available",
+        full: "Full",
+        notAvailable: "Not available",
+        filling: "Filling"
+      },
       days: {
         sunday: "Sunday",
         monday: "Monday",
@@ -90,8 +97,9 @@ export const mrAppointmentTranslations: Record<string, MRAppointmentTranslations
       contactNo: "સંપર્ક નંબર",
       appointmentDate: "એપોઈન્ટમેન્ટની તારીખ",
       timeSlot: "એપોઈન્ટમેન્ટનો સમય",
-      slotAvailable: "ઉપલબ્ધ",
-      slotsAvailable: "સ્લોટ્સ ઉપલબ્ધ",
+      slotAvailable: "બાકી",
+      slotsAvailable: "સ્લોટ્સ બાકી",
+      loadingSlots: "સમય સ્લોટ્સ લોડ થઈ રહ્યા છે...",
       noTimeSlots: "કોઈ સમય સ્લોટ ઉપલબ્ધ નથી",
       selectAnotherDate: "કૃપા કરીને બીજી તારીખ પસંદ કરો",
       timeSlotRequired: "કૃપા કરી એપોઈન્ટમેન્ટનો સમય પસંદ કરો",
@@ -105,6 +113,12 @@ export const mrAppointmentTranslations: Record<string, MRAppointmentTranslations
       availableWeekdays: "એપોઈન્ટમેન્ટ માત્ર કામકાજના દિવસોમાં ઉપલબ્ધ",
       availableDates: "ઉપલબ્ધ તારીખો",
       unavailableDates: "સપ્તાહના અંત અને ભૂતકાળની તારીખો (ઉપલબ્ધ નથી)",
+      calendarLegend: {
+        available: "ઉપલબ્ધ",
+        full: "ભરાઈ ગયું",
+        notAvailable: "ઉપલબ્ધ નથી",
+        filling: "ભરાઈ રહ્યું છે"
+      },
       days: {
         sunday: "રવિવાર",
         monday: "સોમવાર",

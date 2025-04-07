@@ -27,6 +27,7 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
       personalInfo: "Personal Information",
       showingSlots: "Showing slots for",
       slotsLeft: "left",
+      loadingSlots: "Loading available time slots...",
       days: {
         sunday: "Sunday",
         monday: "Monday",
@@ -92,6 +93,7 @@ export const appointmentTranslations: Record<string, AppointmentTranslations> = 
       personalInfo: "વ્યક્તિગત માહિતી",
       showingSlots: "આ તારીખ માટે ઉપલબ્ધ સમય",
       slotsLeft: "બાકી",
+      loadingSlots: "ઉપલબ્ધ સમય સ્લોટ્સ લોડ થઈ રહ્યા છે...",
       days: {
         sunday: "રવિવાર",
         monday: "સોમવાર",

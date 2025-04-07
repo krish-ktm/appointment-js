@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import { Calendar } from 'lucide-react';
@@ -9,7 +9,19 @@ interface DesktopCalendarProps {
   isDateDisabled: (date: Date) => boolean;
   dateBookings: Record<string, { current: number; max: number }>;
   maxDate: Date;
-  t: any;
+  t: {
+    days: Record<string, string>;
+    months: Record<string, string>;
+    appointmentDate: string;
+    selectDate: string;
+    availableWeekdays: string;
+    slotAvailable: string;
+    calendarLegend: {
+      available: string;
+      full: string;
+      notAvailable: string;
+    };
+  };
 }
 
 export function DesktopCalendar({
@@ -30,7 +42,6 @@ export function DesktopCalendar({
 
   const renderDayContents = (day: number, date: Date) => {
     const dateStr = format(date, 'yyyy-MM-dd');
-    const dayName = format(date, 'EEEE');
     const isDisabled = isDateDisabled(date);
     const bookingInfo = dateBookings[dateStr];
     const hasSlots = bookingInfo !== undefined;
@@ -43,13 +54,13 @@ export function DesktopCalendar({
           <>
             {isFull ? (
               <>
-                <span className="mr-calendar-day__slots text-red-500">Full</span>
+                <span className="mr-calendar-day__slots text-red-500">{t.calendarLegend.full}</span>
                 <span className="mr-calendar-day__indicator mr-calendar-day__indicator--full" />
               </>
             ) : (
               <>
                 <span className="mr-calendar-day__slots">
-                  {bookingInfo.max - bookingInfo.current} slots
+                  {bookingInfo.max - bookingInfo.current} {t.slotAvailable}
                 </span>
                 <span className="mr-calendar-day__indicator mr-calendar-day__indicator--available" />
               </>
@@ -126,15 +137,15 @@ export function DesktopCalendar({
         <div className="mr-calendar__legend">
           <div className="mr-calendar__legend-item">
             <span className="mr-calendar__legend-dot mr-calendar__legend-dot--available"></span>
-            <span>Available</span>
+            <span>{t.calendarLegend.available}</span>
           </div>
           <div className="mr-calendar__legend-item">
             <span className="mr-calendar__legend-dot mr-calendar__legend-dot--full"></span>
-            <span>Full</span>
+            <span>{t.calendarLegend.full}</span>
           </div>
           <div className="mr-calendar__legend-item">
             <span className="mr-calendar__legend-dot mr-calendar__legend-dot--disabled"></span>
-            <span>Not available</span>
+            <span>{t.calendarLegend.notAvailable}</span>
           </div>
         </div>
       </div>

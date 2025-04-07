@@ -23,6 +23,7 @@ export interface AppointmentTranslations {
     personalInfo: string;
     showingSlots: string;
     slotsLeft: string;
+    loadingSlots: string;
     days: {
       sunday: string;
       monday: string;

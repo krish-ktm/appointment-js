@@ -14,6 +14,7 @@ export interface MRAppointmentTranslations {
     timeSlot: string;
     slotAvailable: string;
     slotsAvailable: string;
+    loadingSlots: string;
     noTimeSlots: string;
     selectAnotherDate: string;
     timeSlotRequired: string;
@@ -27,6 +28,12 @@ export interface MRAppointmentTranslations {
     availableWeekdays: string;
     availableDates: string;
     unavailableDates: string;
+    calendarLegend: {
+      available: string;
+      full: string;
+      notAvailable: string;
+      filling: string;
+    };
     days: {
       sunday: string;
       monday: string;

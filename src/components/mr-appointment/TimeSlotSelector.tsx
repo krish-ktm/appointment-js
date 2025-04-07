@@ -7,6 +7,7 @@ interface TimeSlotTranslations {
   slotAvailable: string;
   noTimeSlots: string;
   selectAnotherDate: string;
+  loadingSlots: string;
 }
 
 interface MRTimeSlotSelectorProps {
@@ -31,7 +32,7 @@ export function MRTimeSlotSelector({ slots, selectedTime, onSelectTime, t, error
         <div className="flex items-center justify-center py-4 bg-[#2B5C4B]/5 rounded-lg">
           <div className="flex items-center gap-3">
             <Loader2 className="h-5 w-5 text-[#2B5C4B] animate-spin" />
-            <p className="text-[#2B5C4B] font-medium">Loading time slots...</p>
+            <p className="text-[#2B5C4B] font-medium">{t.loadingSlots}</p>
           </div>
         </div>
       </div>

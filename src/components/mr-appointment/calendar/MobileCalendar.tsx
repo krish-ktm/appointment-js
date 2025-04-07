@@ -8,7 +8,15 @@ interface MobileCalendarProps {
   onDateChange: (date: Date) => void;
   isDateDisabled: (date: Date) => boolean;
   dateBookings: Record<string, { current: number; max: number }>;
-  t: any;
+  t: {
+    days: Record<string, string>;
+    slotAvailable: string;
+    calendarLegend?: {
+      available: string;
+      filling: string;
+      full: string;
+    };
+  };
 }
 
 const TIMEZONE = 'Asia/Kolkata';
@@ -119,7 +127,7 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
               {/* Slots Available */}
               {isAvailable && hasSlots && (
                 <span className={`text-[10px] ${isSelected ? 'text-white/90' : 'text-gray-500'}`}>
-                  {bookingInfo.max - bookingInfo.current} slots
+                  {bookingInfo.max - bookingInfo.current} {t.slotAvailable}
                 </span>
               )}
 
@@ -142,15 +150,15 @@ export function MobileCalendar({ selectedDate, onDateChange, isDateDisabled, dat
       <div className="flex items-center justify-center gap-4 mt-4 pt-4 border-t border-gray-100">
         <div className="flex items-center gap-1">
           <span className="w-2 h-2 rounded-full bg-[#2B5C4B]" />
-          <span className="text-xs text-gray-600">Available</span>
+          <span className="text-xs text-gray-600">{t.calendarLegend?.available || 'Available'}</span>
         </div>
         <div className="flex items-center gap-1">
           <span className="w-2 h-2 rounded-full bg-yellow-500" />
-          <span className="text-xs text-gray-600">Filling</span>
+          <span className="text-xs text-gray-600">{t.calendarLegend?.filling || 'Filling'}</span>
         </div>
         <div className="flex items-center gap-1">
           <span className="w-2 h-2 rounded-full bg-red-500" />
-          <span className="text-xs text-gray-600">Full</span>
+          <span className="text-xs text-gray-600">{t.calendarLegend?.full || 'Full'}</span>
         </div>
       </div>
     </div>
