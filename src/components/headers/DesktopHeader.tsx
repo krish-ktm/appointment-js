@@ -112,7 +112,6 @@ export function DesktopHeader() {
                 { path: '/services', label: t.navigation.services },
                 { path: '/gallery', label: t.navigation.gallery },
                 { path: '/contact', label: t.navigation.contact },
-                { path: '/appointment', label: t.navigation.appointment },
                 { path: '/mr-appointment', label: t.navigation.mrAppointment }
               ].map((item) => (
                 <Link
