@@ -80,7 +80,9 @@ export const mrAppointmentTranslations: Record<string, MRAppointmentTranslations
         mask: "Wear a mask during your visit"
       },
       scheduleAnother: "Schedule Another",
-      done: "Done"
+      done: "Done",
+      download: "Download",
+      downloading: "Downloading..."
     }
   },
   gu: {
@@ -161,7 +163,9 @@ export const mrAppointmentTranslations: Record<string, MRAppointmentTranslations
         mask: "તમારી મુલાકાત દરમિયાન માસ્ક પહેરો"
       },
       scheduleAnother: "બીજી એપોઈન્ટમેન્ટ",
-      done: "પૂર્ણ"
+      done: "પૂર્ણ",
+      download: "ડાઉનલોડ",
+      downloading: "ડાઉનલોડ થઈ રહ્યું છે..."
     }
   }
 };

@@ -77,5 +77,7 @@ export interface MRAppointmentTranslations {
     };
     scheduleAnother: string;
     done: string;
+    download: string;
+    downloading: string;
   };
 }

@@ -70,7 +70,7 @@ export function createHeaderSection(title: string, subtitle: string) {
   `;
 }
 
-export function createBookingDetails(appointmentDetails: AppointmentDetails, formattedDate: string, translations: any) {
+export function createBookingDetails(appointmentDetails: AppointmentDetails, formattedDate: string, translations: Record<string, Record<string, string | any>>) {
   return `
     <div style="
       background: white;
@@ -106,7 +106,7 @@ export function createBookingDetails(appointmentDetails: AppointmentDetails, for
           border-radius: 12px;
           border: 1px solid rgba(43, 92, 75, 0.05);
         ">
-          <p style="color: #4B5563; font-size: 12px; margin: 0 0 4px 0;">${translations.confirmation.date}</p>
+          <p style="color: #4B5563; font-size: 12px; margin: 0 0 4px 0;">${translations.confirmation.date || translations.confirmation.appointmentDate}</p>
           <p style="color: #1F2937; font-size: 14px; font-weight: 500; margin: 0;">${formattedDate}</p>
         </div>
         <div style="
@@ -115,7 +115,7 @@ export function createBookingDetails(appointmentDetails: AppointmentDetails, for
           border-radius: 12px;
           border: 1px solid rgba(43, 92, 75, 0.05);
         ">
-          <p style="color: #4B5563; font-size: 12px; margin: 0 0 4px 0;">${translations.confirmation.time}</p>
+          <p style="color: #4B5563; font-size: 12px; margin: 0 0 4px 0;">${translations.confirmation.time || translations.confirmation.appointmentTime}</p>
           <p style="color: #1F2937; font-size: 14px; font-weight: 500; margin: 0;">${appointmentDetails.appointment_time}</p>
         </div>
       </div>
