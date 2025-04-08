@@ -63,11 +63,11 @@ export const aboutTranslations: Record<string, AboutTranslations> = {
     amenities: "Amenities & Accessibility",
     amenitiesList: [
       "Wheelchair accessible entrance",
-      "Wheelchair accessible restroom",
       "Gender-neutral restroom",
       "Modern equipment",
       "Comfortable waiting area",
-      "Digital payment accepted"
+      "Digital payment accepted",
+      "Lift availability"
     ],
     cta: {
       title: "Ready to Transform Your Skin Health?",
@@ -137,11 +137,11 @@ export const aboutTranslations: Record<string, AboutTranslations> = {
     amenities: "સુવિધાઓ અને પ્રવેશક્ષમતા",
     amenitiesList: [
       "વ્હીલચેર પ્રવેશક્ષમ પ્રવેશદ્વાર",
-      "વ્હીલચેર પ્રવેશક્ષમ રેસ્ટરૂમ",
       "જેન્ડર-ન્યૂટ્રલ રેસ્ટરૂમ",
       "આધુનિક ઉપકરણો",
       "આરામદાયક વેઇટિંગ એરિયા",
-      "ડિજિટલ પેમેન્ટ સ્વીકાર્ય"
+      "ડિજિટલ પેમેન્ટ સ્વીકાર્ય",
+      "લિફ્ટ ઉપલબ્ધતા"
     ],
     cta: {
       title: "તમારી ત્વચાના સ્વાસ્થ્યને બદલવા માટે તૈયાર છો?",

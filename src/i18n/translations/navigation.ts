@@ -1,10 +1,9 @@
 import { NavigationTranslations } from '../types/navigation';
-import { businessInfo } from '../../config/business';
 
 export const navigationTranslations: Record<string, NavigationTranslations> = {
   en: {
     home: "Home",
-    about: `About ${businessInfo.doctor.name}`,
+    about: "About Us",
     services: "Our Services",
     gallery: "Gallery",
     contact: "Contact Us",
@@ -13,7 +12,7 @@ export const navigationTranslations: Record<string, NavigationTranslations> = {
   },
   gu: {
     home: "હોમ",
-    about: "ડૉ. જેમિશ એ. પટેલ વિશે",
+    about: "અમારા વિશે",
     services: "અમારી સેવાઓ",
     gallery: "ગેલેરી",
     contact: "સંપર્ક કરો",
