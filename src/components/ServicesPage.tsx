@@ -17,24 +17,9 @@ export function ServicesPage() {
 
   const serviceCategories: ServiceCategory[] = [
     {
-      title: t.services.categories.treatments,
+      title: t.services.categories.medical,
       icon: Heart,
-      services: t.services.lists.treatments
-    },
-    {
-      title: t.services.categories.facial,
-      icon: Stethoscope,
-      services: t.services.lists.facial
-    },
-    {
-      title: t.services.categories.aesthetic,
-      icon: Zap,
-      services: t.services.lists.aesthetic
-    },
-    {
-      title: t.services.categories.surgical,
-      icon: Scissors,
-      services: t.services.lists.surgical
+      services: t.services.lists.medical
     },
     {
       title: t.services.categories.hair,
@@ -45,6 +30,36 @@ export function ServicesPage() {
       title: t.services.categories.diagnostic,
       icon: Microscope,
       services: t.services.lists.diagnostic
+    },
+    {
+      title: t.services.categories.skinGlow,
+      icon: Zap,
+      services: t.services.lists.skinGlow
+    },
+    {
+      title: t.services.categories.scar,
+      icon: Scissors,
+      services: t.services.lists.scar
+    },
+    {
+      title: t.services.categories.tattoo,
+      icon: Stethoscope,
+      services: t.services.lists.tattoo
+    },
+    {
+      title: t.services.categories.laser,
+      icon: Zap,
+      services: t.services.lists.laser
+    },
+    {
+      title: t.services.categories.surgery,
+      icon: Scissors,
+      services: t.services.lists.surgery
+    },
+    {
+      title: t.services.categories.ear,
+      icon: Stethoscope,
+      services: t.services.lists.ear
     }
   ];
 

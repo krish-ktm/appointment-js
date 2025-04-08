@@ -8,62 +8,61 @@ export const servicesTranslations: Record<string, ServicesTranslations> = {
     expertCare: "Expert Care",
     viewAll: "View All Services",
     categories: {
-      treatments: "Treatments",
-      facial: "Facial Services",
-      aesthetic: "Aesthetic Services",
-      surgical: "Surgical Procedures",
-      hair: "Hair Services",
-      diagnostic: "Diagnostic Services"
+      medical: "Medical Therapy",
+      hair: "Hair Treatment",
+      diagnostic: "Diagnostic Facility",
+      skinGlow: "Skin Glow Therapy",
+      scar: "Scar Therapy",
+      tattoo: "Tattoo Removal",
+      laser: "Laser Therapy",
+      surgery: "Surgery",
+      ear: "Ear Lobe Repair"
     },
     lists: {
-      treatments: [
-        "Permanent Hair Removal",
-        "Fractional Skin Rejuvenation",
-        "Bacterial Skin Infection",
-        "Keloid And Scar",
-        "Allergy",
-        "Androgenetic Alopecia",
-        "Contact Dermatitis",
-        "Nail Disorder",
-        "Freckles",
-        "Fractional CO2 Laser Skin Resurfacing",
-        "Melasma",
-        "Alopecia Areata (Patchy Hair Loss)",
-        "Permanent Hair Removal Diode Laser",
-        "Vitiligo"
-      ],
-      facial: [
-        "Retinol Peel",
-        "Skin Care",
-        "Chemical Peel Treatment",
-        "Pigmentation",
-        "Photofacial",
-        "Facial Rejuvenation",
-        "Glycolic Peel Facial",
-        "Facial",
-        "Radiance Rejuvenating Cocoa Facial",
-        "Facial Wrinkles"
-      ],
-      aesthetic: [
-        "Line and Wrinkle Smoothing",
-        "Aesthetic Dermatology Consultation",
-        "Dark Spots",
-        "Skin hair and Nail disorder",
-        "Micro Needling"
-      ],
-      surgical: [
-        "Subcision",
-        "Skin Grafting for Vitiligo",
-        "Laser Resurfacing"
+      medical: [
+        "All types of skin problems",
+        "Nail problems",
+        "Skin problems of children",
+        "Drug reactions"
       ],
       hair: [
-        "Hair Care",
-        "Laser Hair Treatment - Face",
-        "Laser Hair Removal"
+        "All type of hair loss",
+        "Alopecia areata",
+        "Androgenetic alopecia"
       ],
       diagnostic: [
-        "Dermoscopy",
-        "Radiocautery"
+        "Dermatoscopy",
+        "Skin Biopsy",
+        "Woods lamp"
+      ],
+      skinGlow: [
+        "Medifacial",
+        "Carbon peeling",
+        "Chemical peels",
+        "Hydra facial",
+        "Laser toning",
+        "Mesotherapy"
+      ],
+      scar: [
+        "For acne scars",
+        "Accidental scar",
+        "Chicken pox scars"
+      ],
+      tattoo: [
+        "Tattoo removal"
+      ],
+      laser: [
+        "Freckles",
+        "Moles",
+        "Cysts",
+        "Corn",
+        "Skin tags"
+      ],
+      surgery: [
+        "Surgery for leukoderma (white spots)"
+      ],
+      ear: [
+        "Ear lobe repair"
       ]
     },
     cta: {
@@ -78,62 +77,61 @@ export const servicesTranslations: Record<string, ServicesTranslations> = {
     expertCare: "નિષ્ણાત સંભાળ",
     viewAll: "બધી સેવાઓ જુઓ",
     categories: {
-      treatments: "સારવાર",
-      facial: "ફેશિયલ સેવાઓ",
-      aesthetic: "એસ્થેટિક સેવાઓ",
-      surgical: "સર્જિકલ પ્રક્રિયાઓ",
-      hair: "વાળની સેવાઓ",
-      diagnostic: "નિદાન સેવાઓ"
+      medical: "મેડિકલ ટરેપી",
+      hair: "વાળ ટરેપી",
+      diagnostic: "નિદાન ફેશિકલ",
+      skinGlow: "ત્વચા ગોલ ટરેપી",
+      scar: "નિશાન ટરેપી",
+      tattoo: "ટાટો દૂર કરવા",
+      laser: "લેસર ટરેપી",
+      surgery: "સર્જિકલ",
+      ear: "શરીર વાળ વાળ વાળ"
     },
     lists: {
-      treatments: [
-        "કાયમી વાળ દૂર કરવા",
-        "ફ્રેક્શનલ સ્કિન રિજુવેનેશન",
-        "બેક્ટેરિયલ ત્વચા ચેપ",
-        "કેલોઈડ અને નિશાન",
-        "એલર્જી",
-        "એન્ડ્રોજેનેટિક એલોપેસિયા",
-        "કોન્ટેક્ટ ડર્મેટાઈટિસ",
-        "નખની વિકૃતિ",
-        "ફ્રેકલ્સ",
-        "ફ્રેક્શનલ CO2 લેસર સ્કિન રિસરફેસિંગ",
-        "મેલાસ્મા",
-        "એલોપેસિયા એરિયાટા (પેચી વાળ ખરવા)",
-        "કાયમી વાળ દૂર કરવા ડાયોડ લેસર",
-        "વિટિલિગો"
-      ],
-      facial: [
-        "રેટિનોલ પીલ",
-        "ત્વચાની સંભાળ",
-        "કેમિકલ પીલ ટ્રીટમેન્ટ",
-        "પિગમેન્ટેશન",
-        "ફોટોફેશિયલ",
-        "ફેશિયલ રિજુવેનેશન",
-        "ગ્લાયકોલિક પીલ ફેશિયલ",
-        "ફેશિયલ",
-        "રેડિયન્સ રિજુવેનેટિંગ કોકો ફેશિયલ",
-        "ફેશિયલ કરચલીઓ"
-      ],
-      aesthetic: [
-        "લાઈન અને કરચલીઓ સ્મૂધિંગ",
-        "એસ્થેટિક ડર્મેટોલોજી કન્સલ્ટેશન",
-        "ડાર્ક સ્પોટ્સ",
-        "ત્વચા વાળ અને નખની વિકૃતિ",
-        "માઈક્રો નીડલિંગ"
-      ],
-      surgical: [
-        "સબસિઝન",
-        "વિટિલિગો માટે સ્કિન ગ્રાફ્ટિંગ",
-        "લેસર રિસરફેસિંગ"
+      medical: [
+        "બધા પ્રકારના ત્વચા સમસ્યાઓ",
+        "નાલ સમસ્યાઓ",
+        "શરીર સમસ્યાઓ બાળકો",
+        "દર્દ પ્રતિક્રિયાઓ"
       ],
       hair: [
-        "વાળની સંભાળ",
-        "લેસર વાળ ટ્રીટમેન્ટ - ચહેરો",
-        "લેસર વાળ દૂર કરવા"
+        "બધા પ્રકારના વાળ ખરવા",
+        "એલોપેસિયા એરિયાટા",
+        "એન્ડ્રોજેનેટિક એલોપેસિયા"
       ],
       diagnostic: [
         "ડર્મોસ્કોપી",
-        "રેડિયોકોટરી"
+        "ત્વચા બિઓપ્સી",
+        "વૉસ્ લામ્"
+      ],
+      skinGlow: [
+        "મેડિફેશિયલ",
+        "કાર્બન પીલ",
+        "કેમિકલ પીલ",
+        "હયરા ફેશિયલ",
+        "લેસર ટોનિંગ",
+        "મેસોથેરી"
+      ],
+      scar: [
+        "એકનામાન નિશાન",
+        "અપરિયાત નિશાન",
+        "ચિકની પોક્સ નિશાન"
+      ],
+      tattoo: [
+        "ટાટો દૂર કરવા"
+      ],
+      laser: [
+        "ફ્રેકલ્સ",
+        "મોલ્સ",
+        "સિસ્ટ્સ",
+        "કોર્ન",
+        "ત્વચા ટેગ્સ"
+      ],
+      surgery: [
+        "સર્જિકલ લુકોડર્મા (સફાઈ સ્પોટ્સ)"
+      ],
+      ear: [
+        "શરીર વાળ વાળ"
       ]
     },
     cta: {

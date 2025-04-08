@@ -4,20 +4,26 @@ export interface ServicesTranslations {
   expertCare: string;
   viewAll: string;
   categories: {
-    treatments: string;
-    facial: string;
-    aesthetic: string;
-    surgical: string;
+    medical: string;
     hair: string;
     diagnostic: string;
+    skinGlow: string;
+    scar: string;
+    tattoo: string;
+    laser: string;
+    surgery: string;
+    ear: string;
   };
   lists: {
-    treatments: string[];
-    facial: string[];
-    aesthetic: string[];
-    surgical: string[];
+    medical: string[];
     hair: string[];
     diagnostic: string[];
+    skinGlow: string[];
+    scar: string[];
+    tattoo: string[];
+    laser: string[];
+    surgery: string[];
+    ear: string[];
   };
   cta: {
     title: string;
