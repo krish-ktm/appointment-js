@@ -6,12 +6,15 @@ import { Footer } from './Footer';
 import { HeroSection } from './landing/HeroSection';
 import { ServicesSection } from './landing/ServicesSection';
 import { NoticeBoard } from './landing/NoticeBoard';
-import { HowWeWork } from './landing/HowWeWork';
 import { WhyChooseUs } from './landing/WhyChooseUs';
-import { StatsSection } from './landing/StatsSection';
 import { Benefits } from './landing/Benefits';
-import { BeforeAfter } from './landing/BeforeAfter';
 import { useTranslation } from '../i18n/useTranslation';
+
+// Components temporarily removed from the landing page but kept for future use
+// These imports can be uncommented when needed again
+// import { HowWeWork } from './landing/HowWeWork';
+// import { BeforeAfter } from './landing/BeforeAfter';
+// import { StatsSection } from './landing/StatsSection'; // Our Impact section
 
 export function LandingPage() {
   const { t } = useTranslation();
@@ -47,11 +50,8 @@ export function LandingPage() {
       
       <WhyChooseUs t={t.whyChooseUs} />
       <ServicesSection t={t.services} />
-      <HowWeWork t={t.howWeWork} />
       <Benefits t={t.Benefits} />
-      <BeforeAfter t={t.BeforeAfter}/>
       <NoticeBoard notices={notices} loading={loading} t={t.noticeBoard} />
-      <StatsSection t={t.home?.stats} />
 
       <Footer />
     </div>
