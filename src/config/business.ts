@@ -41,7 +41,14 @@ const translateToGujaratiDigits = (text: string) => {
     '8': '૮',
     '9': '૯'
   };
-  return text.replace(/[0-9]/g, digit => gujaratiDigits[digit as keyof typeof gujaratiDigits]);
+  
+  // First translate the digits
+  let translatedText = text.replace(/[0-9]/g, digit => gujaratiDigits[digit as keyof typeof gujaratiDigits]);
+  
+  // Then replace AM and PM with their Gujarati equivalents
+  translatedText = translatedText.replace(/AM/g, "એએમ").replace(/PM/g, "પીએમ");
+  
+  return translatedText;
 };
 
 export const getFormattedHours = (language: 'en' | 'gu') => {
