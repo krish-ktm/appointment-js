@@ -9,6 +9,7 @@ export interface AboutTranslations {
   doctorName: string;
   doctorQualification: string;
   doctorSpecialization: string;
+  doctorRegistration: string;
   
   expertise: {
     title: string;

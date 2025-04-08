@@ -11,18 +11,19 @@ export const aboutTranslations: Record<string, AboutTranslations> = {
     specialization: "Dermatologist & Cosmetic Surgeon",
     
     doctorName: businessInfo.doctor.name,
-    doctorQualification: businessInfo.doctor.qualifications,
+    doctorQualification: "MBBS, MD (Skin-VD)",
     doctorSpecialization: businessInfo.doctor.specialization,
+    doctorRegistration: "Reg. No. G-16930",
     
     expertise: {
       title: "Areas of Expertise",
       items: [
+        "CO2 Laser Treatment",
+        "Vitiligo Surgery",
+        "Medifacial",
+        "Diode Hair Removal Therapy",
         "Medical Dermatology",
-        "Cosmetic Dermatology",
-        "Laser Treatments",
-        "Hair Restoration",
-        "Skin Cancer Screening",
-        "Advanced Skincare"
+        "Cosmetic Dermatology"
       ]
     },
     
@@ -31,12 +32,12 @@ export const aboutTranslations: Record<string, AboutTranslations> = {
       items: [
         {
           degree: "MD in Dermatology",
-          institution: "Saurashtra University",
+          institution: "M P SHAH Medical College, Jamnagar",
           year: "2008"
         },
         {
           degree: "MBBS",
-          institution: "B.J. Medical College",
+          institution: "PDU Medical College, Rajkot",
           year: "2004"
         },
         {
@@ -53,30 +54,28 @@ export const aboutTranslations: Record<string, AboutTranslations> = {
       memberships: {
         title: "Professional Memberships",
         items: [
-          "Indian Association of Dermatologists, Venereologists and Leprologists (IADVL)",
-          "Association of Cutaneous Surgeons of India (ACSI)",
           "Indian Medical Association (IMA)",
-          "Cosmetic Dermatology Society of India (CDSI)",
-          "International Society of Dermatology (ISD)"
+          "Indian Association of Dermatologists, Venereologists and Leprologists (IADVL)",
+          "Association of Cutaneous Surgeons of India (ACSI)"
         ]
       },
       achievements: {
         title: "Achievements & Recognition",
         items: [
           {
-            title: "Best Dermatologist Award",
-            description: "Recognized for excellence in dermatological care",
-            year: "2022"
+            title: "Started Private Practice",
+            description: "Started private practice in Mehsana",
+            year: "2008"
           },
           {
-            title: "Research Publication",
-            description: "Published research on advanced laser treatments in the Indian Journal of Dermatology",
-            year: "2020"
+            title: "First to Introduce CO2 Laser Treatment",
+            description: "First time introduced CO2 laser treatment, vitiligo surgery and medifacial in Mehsana",
+            year: "2008"
           },
           {
-            title: "Clinical Excellence Award",
-            description: "Awarded for outstanding patient care and treatment outcomes",
-            year: "2019"
+            title: "First to Introduce Diode Hair Removal Therapy",
+            description: "First to introduce diode hair removal therapy in Mehsana",
+            year: "2013"
           }
         ]
       }
@@ -110,18 +109,19 @@ export const aboutTranslations: Record<string, AboutTranslations> = {
     specialization: "ડર્મેટોલોજિસ્ટ અને કોસ્મેટિક સર્જન",
     
     doctorName: getFormattedDoctorInfo('gu').name,
-    doctorQualification: getFormattedDoctorInfo('gu').qualifications,
+    doctorQualification: "એમબીબીએસ, એમડી (સ્કિન-વીડી)",
     doctorSpecialization: getFormattedDoctorInfo('gu').specialization,
+    doctorRegistration: "રજી. નં. જી-૧૬૯૩૦",
     
     expertise: {
       title: "નિપુણતાના ક્ષેત્રો",
       items: [
+        "CO2 લેસર ટ્રીટમેન્ટ",
+        "વિટિલિગો સર્જરી",
+        "મેડિફેશિયલ",
+        "ડાયોડ હેર રિમુવલ થેરાપી",
         "મેડિકલ ડર્મેટોલોજી",
-        "કોસ્મેટિક ડર્મેટોલોજી",
-        "લેસર ટ્રીટમેન્ટ્સ",
-        "વાળની સારવાર",
-        "ત્વચાના કેન્સરની તપાસ",
-        "અદ્યતન સ્કિનકેર"
+        "કોસ્મેટિક ડર્મેટોલોજી"
       ]
     },
     
@@ -130,12 +130,12 @@ export const aboutTranslations: Record<string, AboutTranslations> = {
       items: [
         {
           degree: "એમડી ઇન ડર્મેટોલોજી",
-          institution: "સૌરાષ્ટ્ર યુનિવર્સિટી",
+          institution: "એમ પી શાહ મેડિકલ કોલેજ, જામનગર",
           year: "૨૦૦૮"
         },
         {
           degree: "એમબીબીએસ",
-          institution: "બી.જે. મેડિકલ કોલેજ",
+          institution: "પીડીયુ મેડિકલ કોલેજ, રાજકોટ",
           year: "૨૦૦૪"
         },
         {
@@ -152,30 +152,28 @@ export const aboutTranslations: Record<string, AboutTranslations> = {
       memberships: {
         title: "વ્યાવસાયિક સભ્યપદ",
         items: [
-          "ઈન્ડિયન એસોસિએશન ઓફ ડર્મેટોલોજિસ્ટ્સ, વેનેરોલોજિસ્ટ્સ એન્ડ લેપ્રોલોજિસ્ટ્સ (IADVL)",
-          "એસોસિએશન ઓફ ક્યુટેનિયસ સર્જન્સ ઓફ ઈન્ડિયા (ACSI)",
           "ઈન્ડિયન મેડિકલ એસોસિએશન (IMA)",
-          "કોસ્મેટિક ડર્મેટોલોજી સોસાયટી ઓફ ઈન્ડિયા (CDSI)",
-          "ઈન્ટરનેશનલ સોસાયટી ઓફ ડર્મેટોલોજી (ISD)"
+          "ઈન્ડિયન એસોસિએશન ઓફ ડર્મેટોલોજિસ્ટ્સ, વેનેરોલોજિસ્ટ્સ એન્ડ લેપ્રોલોજિસ્ટ્સ (IADVL)",
+          "એસોસિએશન ઓફ ક્યુટેનિયસ સર્જન્સ ઓફ ઈન્ડિયા (ACSI)"
         ]
       },
       achievements: {
         title: "સિદ્ધિઓ અને માન્યતા",
         items: [
           {
-            title: "શ્રેષ્ઠ ડર્મેટોલોજિસ્ટ એવોર્ડ",
-            description: "ડર્મેટોલોજિકલ સંભાળમાં શ્રેષ્ઠતા માટે માન્યતા",
-            year: "૨૦૨૨"
+            title: "ખાનગી પ્રેક્ટિસ શરૂ કરી",
+            description: "મહેસાણામાં ખાનગી પ્રેક્ટિસ શરૂ કરી",
+            year: "૨૦૦૮"
           },
           {
-            title: "રિસર્ચ પબ્લિકેશન",
-            description: "ઈન્ડિયન જર્નલ ઓફ ડર્મેટોલોજીમાં એડવાન્સ્ડ લેસર ટ્રીટમેન્ટ્સ પર સંશોધન પ્રકાશિત",
-            year: "૨૦૨૦"
+            title: "CO2 લેસર ટ્રીટમેન્ટ શરૂ કર્યું",
+            description: "મહેસાણામાં પ્રથમ વખત CO2 લેસર ટ્રીટમેન્ટ, વિટિલિગો સર્જરી અને મેડિફેશિયલ શરૂ કર્યું",
+            year: "૨૦૦૮"
           },
           {
-            title: "ક્લિનિકલ એક્સેલન્સ એવોર્ડ",
-            description: "ઉત્કૃષ્ટ દર્દી સંભાળ અને સારવાર પરિણામો માટે સન્માનિત",
-            year: "૨૦૧૯"
+            title: "ડાયોડ હેર રિમુવલ થેરાપી શરૂ કરી",
+            description: "મહેસાણામાં ડાયોડ હેર રિમુવલ થેરાપી શરૂ કરનાર પ્રથમ",
+            year: "૨૦૧૩"
           }
         ]
       }
