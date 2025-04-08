@@ -121,7 +121,7 @@ export function ContactPage() {
                     </div>
                     <div>
                       <p className="text-sm text-gray-500 font-sans">{t.contact.contactInfo.email.label}</p>
-                      <p className="font-medium text-gray-900 font-sans">{businessInfo.contact.email}</p>
+                      <p className="font-medium text-gray-900 font-sans break-all">{businessInfo.contact.email}</p>
                     </div>
                   </a>
 
