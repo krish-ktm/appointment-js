@@ -306,7 +306,6 @@ export function MRAppointment() {
         <MRAppointmentConfirmation
           appointment={appointmentDetails}
           onClose={handleClose}
-          onScheduleAnother={resetForm}
           t={t.mrAppointment}
         />
       )}

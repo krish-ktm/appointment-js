@@ -23,11 +23,10 @@ interface MRAppointmentDetails {
 interface MRAppointmentConfirmationProps {
   appointment: MRAppointmentDetails;
   onClose: () => void;
-  onScheduleAnother: () => void;
   t: MRAppointmentTranslations;
 }
 
-export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnother, t }: MRAppointmentConfirmationProps) {
+export function MRAppointmentConfirmation({ appointment, onClose, t }: MRAppointmentConfirmationProps) {
   const [downloading, setDownloading] = useState(false);
   const [customRulesText, setCustomRulesText] = useState<string | null>(null);
   
@@ -248,12 +247,6 @@ export function MRAppointmentConfirmation({ appointment, onClose, onScheduleAnot
                     <span>{t.confirmation.download}</span>
                   </>
                 )}
-              </button>
-              <button
-                onClick={onScheduleAnother}
-                className="flex-1 h-10 py-2 px-4 text-gray-700 hover:bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500/20 transition-colors text-sm font-sans"
-              >
-                {t.confirmation.scheduleAnother}
               </button>
               <button
                 onClick={onClose}
