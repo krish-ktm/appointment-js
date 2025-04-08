@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Linkedin, ArrowRight } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../i18n/useTranslation';
 
@@ -126,36 +126,24 @@ export function Footer() {
             </ul>
           </motion.div>
 
-          {/* Social Links */}
+          {/* Map Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
           >
-            <h3 className="text-lg font-semibold mb-6 text-white font-heading">{t.footer.social.title}</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { icon: Facebook, label: "Facebook", href: "#" },
-                { icon: Twitter, label: "Twitter", href: "#" },
-                { icon: Instagram, label: "Instagram", href: "#" },
-                { icon: Linkedin, label: "LinkedIn", href: "#" }
-              ].map((social, index) => {
-                const Icon = social.icon;
-                return (
-                  <motion.a
-                    key={index}
-                    href={social.href}
-                    className="flex items-center gap-3 text-white/80 hover:text-white transition-colors duration-200 group font-sans"
-                    whileHover={{ x: 4 }}
-                  >
-                    <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors">
-                      <Icon className="h-4 w-4" />
-                    </div>
-                    <span className="text-sm font-sans">{social.label}</span>
-                  </motion.a>
-                );
-              })}
+            <h3 className="text-lg font-semibold mb-6 text-white font-heading">{t.footer.map.title}</h3>
+            <div className="rounded-lg overflow-hidden h-[200px]">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3653.569965172857!2d72.38219340185242!3d23.606717556567656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDM2JzI0LjIiTiA3MsKwMjInNTUuOSJF!5e0!3m2!1sen!2sin!4v1712483240000!5m2!1sen!2sin"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
             </div>
           </motion.div>
         </div>

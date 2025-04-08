@@ -21,5 +21,8 @@ export interface FooterTranslations {
   social: {
     title: string;
   };
+  map: {
+    title: string;
+  };
   copyright: string;
 }

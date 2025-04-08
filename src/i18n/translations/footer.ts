@@ -25,6 +25,9 @@ export const footerTranslations: Record<string, FooterTranslations> = {
     social: {
       title: "Follow Us"
     },
+    map: {
+      title: "Our Location"
+    },
     copyright: `© ${new Date().getFullYear()} ${businessInfo.name}. All rights reserved.`
   },
   gu: {
@@ -49,6 +52,9 @@ export const footerTranslations: Record<string, FooterTranslations> = {
     },
     social: {
       title: "અમને ફોલો કરો"
+    },
+    map: {
+      title: "અમારું સ્થાન"
     },
     copyright: `© ${new Date().getFullYear()} શુભમ સ્કિન એન્ડ લેસર ક્લિનિક. બધા અધિકારો સુરક્ષિત.`
   }
