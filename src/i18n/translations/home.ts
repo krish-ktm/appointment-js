@@ -11,7 +11,9 @@ export const homeTranslations: Record<string, HomeTranslations> = {
       advancedTreatments: "Advanced Treatments",
       expertCare: "Expert Care",
       mrAppointmentCta: "Medical Representative Appointment",
-      mrAppointmentNote: "For pharmaceutical and medical device representatives"
+      mrAppointmentNote: "For pharmaceutical and medical device representatives",
+      viewServices: "View Our Services",
+      bookAppointment: "Book Appointment"
     },
     stats: {
       badge: "Our Impact",
@@ -36,7 +38,9 @@ export const homeTranslations: Record<string, HomeTranslations> = {
       advancedTreatments: "અદ્યતન સારવાર",
       expertCare: "નિષ્ણાત કેર",
       mrAppointmentCta: "મેડિકલ રિપ્રેઝેન્ટેટિવ એપોઈન્ટમેન્ટ",
-      mrAppointmentNote: "ફાર્માસ્યુટિકલ અને મેડિકલ ડિવાઇસ પ્રતિનિધિઓ માટે"
+      mrAppointmentNote: "ફાર્માસ્યુટિકલ અને મેડિકલ ડિવાઇસ પ્રતિનિધિઓ માટે",
+      viewServices: "અમારી સેવાઓ જુઓ",
+      bookAppointment: "એપોઈન્ટમેન્ટ બુક કરો"
     },
     stats: {
       badge: "અમારી અસર",

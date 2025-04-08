@@ -8,6 +8,8 @@ export interface HomeTranslations {
     expertCare: string;
     mrAppointmentCta: string;
     mrAppointmentNote: string;
+    viewServices: string;
+    bookAppointment: string;
   };
   stats: {
     badge: string;

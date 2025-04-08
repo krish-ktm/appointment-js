@@ -52,14 +52,14 @@ export function HeroSection({ t }: HeroSectionProps) {
                     to="/services"
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all duration-300 text-base font-medium group border border-white/30 backdrop-blur-sm font-sans"
                   >
-                    {t.viewServices || "View Our Services"}
+                    {t.viewServices}
                     <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Link>
                   <Link
                     to="/appointment"
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-white text-[#2B5C4B] rounded-xl hover:bg-white/90 transition-all duration-300 text-base font-medium shadow-lg shadow-black/10 font-sans"
                   >
-                    {t.bookAppointment || "Book Appointment"}
+                    {t.bookAppointment}
                   </Link>
                 </div>
               </motion.div>
