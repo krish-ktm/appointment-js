@@ -3,11 +3,11 @@ import { businessInfo, getFormattedDoctorInfo } from '../../config/business';
 
 export const aboutTranslations: Record<string, AboutTranslations> = {
   en: {
-    title: "About Our Clinic",
-    subtitle: "Dedicated to providing exceptional dermatological care with advanced treatments and personalized attention",
-    experience: "14+ Years Experience",
-    qualification: "MBBS, MD (Dermatology)",
-    yearsExperience: "14+ Years Experience",
+    title: "About Dr. Jemish A Patel",
+    subtitle: "Pioneering Dermatologist & Cosmetic Surgeon with 15+ years of experience in advanced skin treatments",
+    experience: "15+ Years Experience",
+    qualification: "MBBS, MD (Skin-VD)",
+    yearsExperience: "15+ Years Experience",
     specialization: "Dermatologist & Cosmetic Surgeon",
     
     doctorName: businessInfo.doctor.name,
@@ -101,11 +101,11 @@ export const aboutTranslations: Record<string, AboutTranslations> = {
     }
   },
   gu: {
-    title: "અમારી ક્લિનિક વિશે",
-    subtitle: "અદ્યતન સારવાર અને વ્યક્તિગત ધ્યાન સાથે અસાધારણ ડર્મેટોલોજિકલ સંભાળ પ્રદાન કરવા માટે સમર્પિત",
-    experience: "૧૪+ વર્ષનો અનુભવ",
-    qualification: "એમબીબીએસ, એમડી (ડર્મેટોલોજી)",
-    yearsExperience: "૧૪+ વર્ષનો અનુભવ",
+    title: "ડૉ. જેમિશ એ. પટેલ વિશે",
+    subtitle: "અદ્યતન ત્વચા સારવારમાં ૧૫+ વર્ષના અનુભવ સાથે પાયોનિયર ડર્મેટોલોજિસ્ટ અને કોસ્મેટિક સર્જન",
+    experience: "૧૫+ વર્ષનો અનુભવ",
+    qualification: "એમબીબીએસ, એમડી (સ્કિન-વીડી)",
+    yearsExperience: "૧૫+ વર્ષનો અનુભવ",
     specialization: "ડર્મેટોલોજિસ્ટ અને કોસ્મેટિક સર્જન",
     
     doctorName: getFormattedDoctorInfo('gu').name,

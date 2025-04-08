@@ -108,6 +108,9 @@ export function AboutPage() {
                   <p className="text-white/90 text-lg mb-2 font-sans">
                     {t.about.doctorQualification}
                   </p>
+                  <p className="text-white/80 font-sans mb-2">
+                    {t.about.doctorRegistration}
+                  </p>
                   <p className="text-white/80 font-sans">
                     {t.about.doctorSpecialization}
                   </p>
