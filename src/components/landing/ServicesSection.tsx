@@ -13,21 +13,27 @@ interface ServicesSectionProps {
     subtitle: string;
     viewAll: string;
     categories: {
-      treatments: string;
-      facial: string;
-      aesthetic: string;
-      surgical: string;
+      medical: string;
       hair: string;
       diagnostic: string;
+      skinGlow: string;
+      scar: string;
+      tattoo: string;
+      laser: string;
+      surgery: string;
+      ear: string;
       [key: string]: string;
     };
     lists: {
-      treatments: string[];
-      facial: string[];
-      aesthetic: string[];
-      surgical: string[];
+      medical: string[];
       hair: string[];
       diagnostic: string[];
+      skinGlow: string[];
+      scar: string[];
+      tattoo: string[];
+      laser: string[];
+      surgery: string[];
+      ear: string[];
       [key: string]: string[];
     };
   };
@@ -43,28 +49,10 @@ interface Service {
 export function ServicesSection({ t }: ServicesSectionProps) {
   const services: Service[] = [
     {
-      title: t.categories.treatments,
-      description: t.lists.treatments[0],
-      features: t.lists.treatments.slice(1, 5),
+      title: t.categories.medical,
+      description: t.lists.medical[0],
+      features: t.lists.medical.slice(1),
       image: "https://images.unsplash.com/photo-1612776572997-76cc42e058c3?q=80&w=1200"
-    },
-    {
-      title: t.categories.facial,
-      description: t.lists.facial[0],
-      features: t.lists.facial.slice(1, 5),
-      image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1200"
-    },
-    {
-      title: t.categories.aesthetic,
-      description: t.lists.aesthetic[0],
-      features: t.lists.aesthetic.slice(1, 5),
-      image: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=1200"
-    },
-    {
-      title: t.categories.surgical,
-      description: t.lists.surgical[0],
-      features: t.lists.surgical.slice(1),
-      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1200"
     },
     {
       title: t.categories.hair,
@@ -77,6 +65,42 @@ export function ServicesSection({ t }: ServicesSectionProps) {
       description: t.lists.diagnostic[0],
       features: t.lists.diagnostic.slice(1),
       image: "https://images.unsplash.com/photo-1579684288538-c76a2fab9617?q=80&w=1200"
+    },
+    {
+      title: t.categories.skinGlow,
+      description: t.lists.skinGlow[0],
+      features: t.lists.skinGlow.slice(1),
+      image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1200"
+    },
+    {
+      title: t.categories.scar,
+      description: t.lists.scar[0],
+      features: t.lists.scar.slice(1),
+      image: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=1200"
+    },
+    {
+      title: t.categories.tattoo,
+      description: t.lists.tattoo[0],
+      features: t.lists.tattoo.slice(1),
+      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1200"
+    },
+    {
+      title: t.categories.laser,
+      description: t.lists.laser[0],
+      features: t.lists.laser.slice(1),
+      image: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=1200"
+    },
+    {
+      title: t.categories.surgery,
+      description: t.lists.surgery[0],
+      features: t.lists.surgery.slice(1),
+      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1200"
+    },
+    {
+      title: t.categories.ear,
+      description: t.lists.ear[0],
+      features: t.lists.ear.slice(1),
+      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1200"
     }
   ];
 
