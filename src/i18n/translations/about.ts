@@ -4,27 +4,28 @@ import { businessInfo, getFormattedDoctorInfo, getFormattedAddress, getFormatted
 export const aboutTranslations: Record<string, AboutTranslations> = {
   en: {
     title: businessInfo.doctor.name,
-    subtitle: businessInfo.doctor.specialization,
+    subtitle: "MBBS, MD (Skin-VD)",
     experience: `${businessInfo.doctor.experience} Years of Excellence`,
-    qualification: `${businessInfo.doctor.qualifications} - ${businessInfo.doctor.university}`,
+    qualification: "MBBS, MD (Skin-VD) - Reg.No. G-16930",
     yearsExperience: `${businessInfo.doctor.experience} Years in Healthcare`,
     specialization: "Dermatology & Cosmetic Surgery",
     
     // Doctor profile section
     doctorName: businessInfo.doctor.name,
-    doctorQualification: `${businessInfo.doctor.qualifications} - ${businessInfo.doctor.university}`,
+    doctorQualification: "MBBS, MD (Skin-VD) - Reg.No. G-16930",
     doctorSpecialization: businessInfo.doctor.specialization,
     
     // Expertise section
     expertise: {
-      title: "Areas of Expertise",
+      title: "Professional Memberships & Achievements",
       items: [
-        "Advanced Skin Treatments",
-        "Hair Restoration Therapies",
-        "Laser Treatments",
-        "Cosmetic Dermatology",
-        "Surgical Dermatology",
-        "Skin Cancer Screening"
+        "Member of IMA",
+        "Member of IADVL",
+        "Member of ACSI",
+        "Pioneer in introducing CO2 Laser Treatment in Mehsana (2008)",
+        "First to introduce Vitiligo Surgery in Mehsana (2008)",
+        "First to introduce Medifacial in Mehsana (2008)",
+        "First to introduce Diode Hair Removal Therapy in Mehsana (2013)"
       ]
     },
     
@@ -33,19 +34,14 @@ export const aboutTranslations: Record<string, AboutTranslations> = {
       title: "Education & Training",
       items: [
         {
-          degree: businessInfo.doctor.qualifications,
-          institution: businessInfo.doctor.university,
-          year: "2007-2010"
-        },
-        {
           degree: "MBBS",
-          institution: "B.J. Medical College, Ahmedabad",
-          year: "2000-2006"
+          institution: "PDU Medical College, Rajkot",
+          year: "2004"
         },
         {
-          degree: "Fellowship in Cosmetic Dermatology",
-          institution: "National Skin Institute",
-          year: "2010-2011"
+          degree: "MD (Skin-VD)",
+          institution: "M P Shah Medical College, Jamnagar",
+          year: "2008"
         }
       ]
     },
@@ -78,27 +74,28 @@ export const aboutTranslations: Record<string, AboutTranslations> = {
   },
   gu: {
     title: getFormattedDoctorInfo('gu').name,
-    subtitle: getFormattedDoctorInfo('gu').specialization,
+    subtitle: "એમબીબીએસ, એમડી (સ્કિન-વીડી)",
     experience: `${getFormattedDoctorInfo('gu').experience} વર્ષની શ્રેષ્ઠતા`,
-    qualification: `${getFormattedDoctorInfo('gu').qualifications} - ${getFormattedDoctorInfo('gu').university}`,
+    qualification: "એમબીબીએસ, એમડી (સ્કિન-વીડી) - રજી. નં. જી-૧૬૯૩૦",
     yearsExperience: `હેલ્થકેરમાં ${getFormattedDoctorInfo('gu').experience} વર્ષ`,
     specialization: "ડર્મેટોલોજી અને કોસ્મેટિક સર્જરી",
     
     // Doctor profile section
     doctorName: getFormattedDoctorInfo('gu').name,
-    doctorQualification: `${getFormattedDoctorInfo('gu').qualifications} - ${getFormattedDoctorInfo('gu').university}`,
+    doctorQualification: "એમબીબીએસ, એમડી (સ્કિન-વીડી) - રજી. નં. જી-૧૬૯૩૦",
     doctorSpecialization: getFormattedDoctorInfo('gu').specialization,
     
     // Expertise section
     expertise: {
-      title: "નિપુણતાના ક્ષેત્રો",
+      title: "વ્યાવસાયિક સભ્યપદ અને સિદ્ધિઓ",
       items: [
-        "અદ્યતન ત્વચા ઉપચારો",
-        "વાળ પુનઃસ્થાપન થેરેપી",
-        "લેસર ઉપચારો",
-        "કોસ્મેટિક ડર્મેટોલોજી",
-        "સર્જિકલ ડર્મેટોલોજી",
-        "ત્વચા કેન્સર સ્ક્રીનિંગ"
+        "આઈએમએના સભ્ય",
+        "આઈએડીવીએલના સભ્ય",
+        "એસીએસઆઈના સભ્ય",
+        "મહેસાણામાં સીઓ૨ લેસર ટ્રીટમેન્ટના પ્રથમ પ્રવર્તક (૨૦૦૮)",
+        "મહેસાણામાં વિટિલિગો સર્જરીના પ્રથમ પ્રવર્તક (૨૦૦૮)",
+        "મહેસાણામાં મેડિફેશિયલના પ્રથમ પ્રવર્તક (૨૦૦૮)",
+        "મહેસાણામાં ડાયોડ હેર રિમુવલ થેરેપીના પ્રથમ પ્રવર્તક (૨૦૧૩)"
       ]
     },
     
@@ -107,19 +104,14 @@ export const aboutTranslations: Record<string, AboutTranslations> = {
       title: "શિક્ષણ અને તાલીમ",
       items: [
         {
-          degree: getFormattedDoctorInfo('gu').qualifications,
-          institution: getFormattedDoctorInfo('gu').university,
-          year: "૨૦૦૭-૨૦૧૦"
-        },
-        {
           degree: "એમબીબીએસ",
-          institution: "બી.જે. મેડિકલ કોલેજ, અમદાવાદ",
-          year: "૨૦૦૦-૨૦૦૬"
+          institution: "પીડીયુ મેડિકલ કોલેજ, રાજકોટ",
+          year: "૨૦૦૪"
         },
         {
-          degree: "કોસ્મેટિક ડર્મેટોલોજીમાં ફેલોશિપ",
-          institution: "નેશનલ સ્કિન ઈન્સ્ટિટ્યુટ",
-          year: "૨૦૧૦-૨૦૧૧"
+          degree: "એમડી (સ્કિન-વીડી)",
+          institution: "એમ પી શાહ મેડિકલ કોલેજ, જામનગર",
+          year: "૨૦૦૮"
         }
       ]
     },
