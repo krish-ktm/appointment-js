@@ -6,18 +6,15 @@ export interface AboutTranslations {
   yearsExperience: string;
   specialization: string;
   
-  // New doctor profile section
   doctorName: string;
   doctorQualification: string;
   doctorSpecialization: string;
   
-  // Expanded expertise section
   expertise: {
     title: string;
     items: string[];
   };
   
-  // Education section
   education: {
     title: string;
     items: {
@@ -26,21 +23,29 @@ export interface AboutTranslations {
       year: string;
     }[];
   };
+
+  professional: {
+    title: string;
+    subtitle: string;
+    memberships: {
+      title: string;
+      items: string[];
+    };
+    achievements: {
+      title: string;
+      items: Array<{
+        title: string;
+        description: string;
+        year?: string;
+      }>;
+    };
+  };
   
   clinicName: string;
   clinicDescription: string;
-  location: string;
-  address: string;
-  contact: string;
-  phone: string;
-  openingHours: string;
-  weekdayHours: string;
-  saturdayHours: string;
-  sundayHours: string;
   amenities: string;
   amenitiesList: string[];
   
-  // Updated CTA section
   cta: {
     title: string;
     description: string;

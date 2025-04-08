@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { ResponsiveHeader } from './headers/ResponsiveHeader';
 import { Footer } from './Footer';
-import { Award, Star, Shield, Calendar, CheckCircle2, Phone } from 'lucide-react';
+import { Award, Star, Shield, Calendar, CheckCircle2, Phone, Trophy, Medal } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 import { Link } from 'react-router-dom';
 
@@ -144,6 +144,66 @@ export function AboutPage() {
                           <p className="font-medium text-gray-900 font-heading">{item.degree}</p>
                           <p className="text-sm text-gray-600 font-sans">{item.institution}</p>
                           <p className="text-sm text-gray-500 font-sans">{item.year}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Professional Memberships & Achievements Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-16"
+          >
+            <div className="p-6 sm:p-8 bg-gradient-to-r from-[#2B5C4B] to-[#234539]">
+              <h2 className="text-xl sm:text-2xl font-bold text-white font-heading">
+                {t.about.professional.title}
+              </h2>
+              <p className="text-white/80 mt-1 font-sans">
+                {t.about.professional.subtitle}
+              </p>
+            </div>
+            
+            <div className="p-6 sm:p-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Professional Memberships */}
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4 font-heading flex items-center gap-2">
+                    <Trophy className="h-5 w-5 text-[#2B5C4B]" />
+                    {t.about.professional.memberships.title}
+                  </h3>
+                  <ul className="space-y-3">
+                    {t.about.professional.memberships.items.map((item, index) => (
+                      <li key={index} className="flex items-center gap-3">
+                        <CheckCircle2 className="h-5 w-5 text-[#2B5C4B]" />
+                        <span className="text-gray-700 font-sans">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Achievements */}
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4 font-heading flex items-center gap-2">
+                    <Medal className="h-5 w-5 text-[#2B5C4B]" />
+                    {t.about.professional.achievements.title}
+                  </h3>
+                  <ul className="space-y-4">
+                    {t.about.professional.achievements.items.map((item, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <div className="bg-[#2B5C4B]/5 p-2 rounded-lg mt-1">
+                          <Award className="h-4 w-4 text-[#2B5C4B]" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900 font-sans">{item.title}</p>
+                          <p className="text-sm text-gray-600 font-sans">{item.description}</p>
+                          {item.year && (
+                            <p className="text-sm text-gray-500 font-sans">{item.year}</p>
+                          )}
                         </div>
                       </li>
                     ))}
