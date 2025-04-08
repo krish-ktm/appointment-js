@@ -177,7 +177,7 @@ export function NoticeManager() {
           className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors gap-2"
         >
           <Plus className="h-4 w-4" />
-          Add Notice
+          Add Announcement
         </button>
       </div>
 
