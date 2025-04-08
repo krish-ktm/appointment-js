@@ -28,11 +28,31 @@ export const businessInfo = {
   }
 };
 
+const translateToGujaratiDigits = (text: string) => {
+  const gujaratiDigits = {
+    '0': '૦',
+    '1': '૧',
+    '2': '૨',
+    '3': '૩',
+    '4': '૪',
+    '5': '૫',
+    '6': '૬',
+    '7': '૭',
+    '8': '૮',
+    '9': '૯'
+  };
+  return text.replace(/[0-9]/g, digit => gujaratiDigits[digit as keyof typeof gujaratiDigits]);
+};
+
 export const getFormattedHours = (language: 'en' | 'gu') => {
   if (language === 'gu') {
+    const morning = translateToGujaratiDigits(businessInfo.hours.weekday.morning);
+    const evening = translateToGujaratiDigits(businessInfo.hours.weekday.evening);
+    const saturday = translateToGujaratiDigits(businessInfo.hours.saturday);
+    
     return {
-      weekday: `સોમવાર - શુક્રવાર: સવારે ${businessInfo.hours.weekday.morning} | સાંજે ${businessInfo.hours.weekday.evening}`,
-      saturday: `શનિવાર: સવારે ${businessInfo.hours.saturday}`,
+      weekday: `સોમવાર - શુક્રવાર: સવારે ${morning} | સાંજે ${evening}`,
+      saturday: `શનિવાર: સવારે ${saturday}`,
       sunday: `રવિવાર: ${businessInfo.hours.sunday}`
     };
   }
@@ -45,15 +65,32 @@ export const getFormattedHours = (language: 'en' | 'gu') => {
 };
 
 export const getFormattedAddress = (language: 'en' | 'gu') => {
-  return language === 'gu' 
-    ? 'બીજો માળ, અવી સ્ક્વેર, રાધનપુર સર્કલ, મહેસાણા, ગુજરાત ૩૮૪૦૦૨'
-    : businessInfo.contact.address;
+  if (language === 'gu') {
+    const address = 'બીજો માળ, અવી સ્ક્વેર, રાધનપુર સર્કલ, મહેસાણા, ગુજરાત ૩૮૪૦૦૨';
+    return translateToGujaratiDigits(address);
+  }
+  return businessInfo.contact.address;
 };
 
 export const getFormattedPhone = (language: 'en' | 'gu') => {
-  return language === 'gu'
-    ? businessInfo.contact.phone.replace(/\+91/, '+૯૧')
-    : businessInfo.contact.phone;
+  if (language === 'gu') {
+    const phone = businessInfo.contact.phone;
+    // Replace each digit with its Gujarati equivalent
+    const gujaratiDigits = {
+      '0': '૦',
+      '1': '૧',
+      '2': '૨',
+      '3': '૩',
+      '4': '૪',
+      '5': '૫',
+      '6': '૬',
+      '7': '૭',
+      '8': '૮',
+      '9': '૯'
+    };
+    return phone.replace(/[0-9]/g, digit => gujaratiDigits[digit as keyof typeof gujaratiDigits]);
+  }
+  return businessInfo.contact.phone;
 };
 
 export const getFormattedDoctorInfo = (language: 'en' | 'gu') => {
