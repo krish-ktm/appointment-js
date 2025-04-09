@@ -104,24 +104,23 @@ export function ServicesSection({ t }: ServicesSectionProps) {
   ];
 
   return (
-    <div className={`py-16 sm:py-20 bg-gradient-to-b ${background.light} will-change-transform`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className={`py-16 sm:py-20 bg-gradient-to-b ${background.light} will-change-transform relative w-screen max-w-[100vw] overflow-hidden left-[50%] right-[50%] ml-[-50vw] mr-[-50vw]`}>
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-[100vw] overflow-hidden">
         <div className="text-center mb-12 sm:mb-16">
           <h2 className={`text-2xl sm:text-4xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary} font-heading`}>
             {t.title}
           </h2>
-          <p className={`text-base sm:text-lg ${text.secondary} max-w-2xl mx-auto px-4 font-sans`}>
+          <p className={`text-base sm:text-lg ${text.secondary} max-w-2xl mx-auto font-sans`}>
             {t.subtitle}
           </p>
         </div>
 
-        <div className="relative">
+        <div className="relative mx-[-1rem] sm:mx-[-1.5rem] lg:mx-[-2rem]">
           <Swiper
             modules={[Autoplay]}
-            spaceBetween={32}
+            spaceBetween={16}
             centeredSlides={true}
             loop={true}
-            loopedSlides={services.length}
             slidesPerView="auto"
             speed={800}
             autoplay={{
@@ -132,21 +131,28 @@ export function ServicesSection({ t }: ServicesSectionProps) {
             breakpoints={{
               320: {
                 slidesPerView: "auto",
-                spaceBetween: 16,
+                spaceBetween: 12,
               },
               640: {
                 slidesPerView: "auto",
-                spaceBetween: 24,
+                spaceBetween: 16,
               },
               1024: {
+                slidesPerView: "auto",
+                spaceBetween: 24,
+              },
+              1280: {
                 slidesPerView: "auto",
                 spaceBetween: 32,
               }
             }}
-            className="!pb-8"
+            className="!pb-8 !px-4 sm:!px-6 lg:!px-8"
           >
             {[...services, ...services].map((service, index) => (
-              <SwiperSlide key={`${service.title}-${index}`} className="!w-[220px] sm:!w-[260px] md:!w-[300px] flex items-center justify-center">
+              <SwiperSlide 
+                key={`${service.title}-${index}`} 
+                className="!w-[45vw] sm:!w-[32vw] md:!w-[28vw] lg:!w-[22vw] xl:!w-[18vw] max-w-[320px] flex items-center justify-center"
+              >
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -161,18 +167,18 @@ export function ServicesSection({ t }: ServicesSectionProps) {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#1C4532]/95 via-[#1C4532]/50 to-transparent" />
                     
                     {/* Content */}
-                    <div className="absolute inset-0 p-4 sm:p-6 flex flex-col justify-end">
-                      <div className="bg-white/10 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mb-3 sm:mb-4">
-                        <div className="w-5 h-5 sm:w-6 sm:h-6 text-white">
+                    <div className="absolute inset-0 p-3 sm:p-4 md:p-5 lg:p-6 flex flex-col justify-end">
+                      <div className="bg-white/10 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-2 sm:mb-3 md:mb-4">
+                        <div className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white">
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M12 2v20M2 12h20" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         </div>
                       </div>
-                      <h3 className="text-lg sm:text-xl font-semibold text-white mb-1 sm:mb-2 font-heading">
+                      <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-white mb-1 sm:mb-2 font-heading line-clamp-1">
                         {service.title}
                       </h3>
-                      <p className="text-white/80 text-xs sm:text-sm line-clamp-2 font-sans">
+                      <p className="text-xs sm:text-sm text-white/80 line-clamp-2 font-sans">
                         {service.description}
                       </p>
                     </div>
@@ -183,7 +189,7 @@ export function ServicesSection({ t }: ServicesSectionProps) {
           </Swiper>
         </div>
 
-        <div className="text-center mt-4 sm:mt-6 px-4">
+        <div className="text-center mt-8 sm:mt-10">
           <Link
             to="/services"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#2B5C4B] text-white rounded-xl hover:bg-[#234539] transition-all duration-300 shadow-sm hover:shadow font-sans"
