@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Heart, Zap, Microscope, Scissors, Stethoscope } from 'lucide-react';
 import { background, text, gradients } from '../../theme/colors';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -46,60 +46,83 @@ interface Service {
 }
 
 export function ServicesSection({ t }: ServicesSectionProps) {
+  const getIconForService = (title: string) => {
+    const category = Object.keys(t.categories).find(key => t.categories[key as keyof typeof t.categories] === title);
+    
+    switch(category) {
+      case 'medical':
+        return Heart;
+      case 'hair':
+      case 'diagnostic':
+        return Microscope;
+      case 'skinGlow':
+      case 'laser':
+        return Zap;
+      case 'scar':
+      case 'surgery':
+        return Scissors;
+      case 'tattoo':
+      case 'ear':
+        return Stethoscope;
+      default:
+        return Heart;
+    }
+  };
+
   const services: Service[] = [
     {
       title: t.categories.medical,
       description: t.lists.medical[0],
       features: t.lists.medical.slice(1),
-      image: "https://images.unsplash.com/photo-1612776572997-76cc42e058c3?q=80&w=1200"
+      image: "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?q=80&w=1200"
     },
     {
       title: t.categories.hair,
       description: t.lists.hair[0],
       features: t.lists.hair.slice(1),
-      image: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?q=80&w=1200"
+      image: "https://images.unsplash.com/photo-1626954079673-f3febf57d7e4?q=80&w=1200"
     },
     {
       title: t.categories.diagnostic,
       description: t.lists.diagnostic[0],
       features: t.lists.diagnostic.slice(1),
-      image: "https://images.unsplash.com/photo-1579684288538-c76a2fab9617?q=80&w=1200"
+      image: "https://images.unsplash.com/photo-1581595219315-a2f6c59a8eff?q=80&w=1200"
     },
     {
       title: t.categories.skinGlow,
       description: t.lists.skinGlow[0],
       features: t.lists.skinGlow.slice(1),
-      image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1200"
+      image: "https://images.unsplash.com/photo-1611765083444-a3ce30f1c885?q=80&w=1200"
     },
     {
       title: t.categories.scar,
       description: t.lists.scar[0],
       features: t.lists.scar.slice(1),
-      image: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=1200"
+      image: "https://images.unsplash.com/photo-1606256351142-e677a336e1c0?q=80&w=1200"
     },
     {
       title: t.categories.tattoo,
       description: t.lists.tattoo[0],
       features: t.lists.tattoo.slice(1),
-      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1200"
+      image: "https://images.unsplash.com/photo-1582337832132-b1df9234f9cb?q=80&w=1200"
     },
     {
       title: t.categories.laser,
       description: t.lists.laser[0],
       features: t.lists.laser.slice(1),
-      image: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=1200"
+      image: "https://images.unsplash.com/photo-1628319295529-d2d5572890bb?q=80&w=1200"
     },
     {
       title: t.categories.surgery,
       description: t.lists.surgery[0],
       features: t.lists.surgery.slice(1),
-      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1200"
+      image: "https://images.unsplash.com/photo-1551076805-e1869033e561?q=80&w=1200"
     },
     {
       title: t.categories.ear,
       description: t.lists.ear[0],
       features: t.lists.ear.slice(1),
-      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1200"
+      image: "https://images.unsplash.com/photo-1594394489098-8c1e9f96c9d1?q=80&w=1200"
     }
   ];
 
@@ -121,6 +144,7 @@ export function ServicesSection({ t }: ServicesSectionProps) {
             spaceBetween={16}
             centeredSlides={true}
             loop={true}
+            loopAdditionalSlides={9}
             slidesPerView="auto"
             speed={800}
             autoplay={{
@@ -148,7 +172,7 @@ export function ServicesSection({ t }: ServicesSectionProps) {
             }}
             className="!pb-8 !px-4 sm:!px-6 lg:!px-8"
           >
-            {[...services, ...services].map((service, index) => (
+            {[...services, ...services, ...services].map((service, index) => (
               <SwiperSlide 
                 key={`${service.title}-${index}`} 
                 className="!w-[45vw] sm:!w-[32vw] md:!w-[28vw] lg:!w-[22vw] xl:!w-[18vw] max-w-[320px] flex items-center justify-center"
@@ -169,11 +193,10 @@ export function ServicesSection({ t }: ServicesSectionProps) {
                     {/* Content */}
                     <div className="absolute inset-0 p-3 sm:p-4 md:p-5 lg:p-6 flex flex-col justify-end">
                       <div className="bg-white/10 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-2 sm:mb-3 md:mb-4">
-                        <div className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M12 2v20M2 12h20" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </div>
+                        {(() => {
+                          const Icon = getIconForService(service.title);
+                          return <Icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />;
+                        })()}
                       </div>
                       <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-white mb-1 sm:mb-2 font-heading line-clamp-1">
                         {service.title}
