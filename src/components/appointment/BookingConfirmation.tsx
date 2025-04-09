@@ -142,9 +142,9 @@ export function BookingConfirmation({ booking, onClose, t }: BookingConfirmation
           <div className="p-4 sm:p-6 space-y-4">
             {/* Date & Time */}
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4">
+              <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4 flex items-center h-full">
                 <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
+                  <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg flex-shrink-0">
                     <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                   </div>
                   <div>
@@ -155,9 +155,9 @@ export function BookingConfirmation({ booking, onClose, t }: BookingConfirmation
                   </div>
                 </div>
               </div>
-              <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4">
+              <div className="bg-[#2B5C4B]/5 rounded-xl p-3 sm:p-4 flex items-center h-full">
                 <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg">
+                  <div className="bg-[#2B5C4B]/10 p-1.5 sm:p-2 rounded-lg flex-shrink-0">
                     <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#2B5C4B]" />
                   </div>
                   <div>
