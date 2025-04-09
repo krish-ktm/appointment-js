@@ -117,14 +117,14 @@ export function NoticeBoard({ notices, loading, t }: NoticeBoardProps) {
                         </div>
                       )}
                       
-                      <div className="p-6 md:p-8">
-                        <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-[#2B5C4B] transition-colors font-heading">
+                      <div className="p-4 md:p-8">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2 md:mb-3 group-hover:text-[#2B5C4B] transition-colors font-heading">
                           {getLocalizedContent(notice.title)}
                         </h3>
 
                         {notice.content && (
                           <div 
-                            className="prose prose-sm md:prose-base prose-green max-w-none"
+                            className="prose prose-sm md:prose-base prose-green prose-p:my-1 md:prose-p:my-2 max-w-none"
                             dangerouslySetInnerHTML={{ 
                               __html: formatMarkdown(getLocalizedContent(notice.content)) 
                             }}

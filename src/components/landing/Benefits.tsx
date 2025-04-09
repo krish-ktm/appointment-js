@@ -156,11 +156,11 @@ export function Benefits({ t }: BenefitsProps) {
               className="relative aspect-[3/4] rounded-[100px] sm:rounded-[150px] overflow-hidden border-4 sm:border-8 border-white/10"
             >
               <img
-                src="https://images.unsplash.com/photo-1595831004082-7d028af1387b?q=80&w=1974&auto=format&fit=crop"
-                alt="Dermatologist"
+                src="/our-benefits-img.png"
+                alt="Dermatology Benefits"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#2B5C4B]/50 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#2B5C4B]/15 to-transparent"></div>
             </motion.div>
           </div>
 

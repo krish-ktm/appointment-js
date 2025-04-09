@@ -103,8 +103,8 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
             >
               <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 border border-white/20">
                 <img
-                  src="https://images.unsplash.com/photo-1612776572997-76cc42e058c3?q=80&w=1200"
-                  alt="Dermatology Treatment"
+                  src="/Shubham-Skin-Clinc.png"
+                  alt="Shubham Skin Clinic"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent mix-blend-multiply" />
@@ -170,8 +170,8 @@ export function WhyChooseUs({ t }: WhyChooseUsProps) {
           >
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 border border-white/20">
               <img
-                src="https://images.unsplash.com/photo-1612776572997-76cc42e058c3?q=80&w=1200"
-                alt="Dermatology Treatment"
+                src="/Shubham-Skin-Clinc.png"
+                alt="Shubham Skin Clinic"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent mix-blend-multiply" />
