@@ -3,9 +3,8 @@ import { ArrowRight } from 'lucide-react';
 import { background, text, gradients } from '../../theme/colors';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
+import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/pagination';
 
 interface ServicesSectionProps {
   t: {
@@ -118,43 +117,42 @@ export function ServicesSection({ t }: ServicesSectionProps) {
 
         <div className="relative">
           <Swiper
-            modules={[Autoplay, Pagination]}
+            modules={[Autoplay]}
             spaceBetween={32}
             centeredSlides={true}
             loop={true}
-            breakpoints={{
-              320: {
-                slidesPerView: 1.2,
-                spaceBetween: 16,
-              },
-              640: {
-                slidesPerView: 2.2,
-                spaceBetween: 24,
-              },
-              1024: {
-                slidesPerView: 3,
-                spaceBetween: 32,
-              }
-            }}
+            loopedSlides={services.length}
+            slidesPerView="auto"
+            speed={800}
             autoplay={{
-              delay: 4000,
+              delay: 3000,
               disableOnInteraction: false,
               pauseOnMouseEnter: true
             }}
-            pagination={{
-              clickable: true,
-              bulletActiveClass: 'bg-[#2B5C4B] w-4',
-              bulletClass: 'w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300 mx-1 cursor-pointer'
+            breakpoints={{
+              320: {
+                slidesPerView: "auto",
+                spaceBetween: 16,
+              },
+              640: {
+                slidesPerView: "auto",
+                spaceBetween: 24,
+              },
+              1024: {
+                slidesPerView: "auto",
+                spaceBetween: 32,
+              }
             }}
             className="!pb-8"
           >
-            {services.map((service) => (
-              <SwiperSlide key={service.title} className="!w-[280px] sm:!w-[340px] md:!w-[400px]">
+            {[...services, ...services].map((service, index) => (
+              <SwiperSlide key={`${service.title}-${index}`} className="!w-[220px] sm:!w-[260px] md:!w-[300px] flex items-center justify-center">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
+                  className="w-full"
                 >
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden group shadow-lg">
+                  <div className="relative aspect-[2/3] rounded-2xl overflow-hidden group shadow-lg">
                     <img
                       src={service.image}
                       alt={service.title}
@@ -163,18 +161,18 @@ export function ServicesSection({ t }: ServicesSectionProps) {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#1C4532]/95 via-[#1C4532]/50 to-transparent" />
                     
                     {/* Content */}
-                    <div className="absolute inset-0 p-4 sm:p-8 flex flex-col justify-end">
-                      <div className="bg-white/10 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
-                        <div className="w-6 h-6 text-white">
+                    <div className="absolute inset-0 p-4 sm:p-6 flex flex-col justify-end">
+                      <div className="bg-white/10 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mb-3 sm:mb-4">
+                        <div className="w-5 h-5 sm:w-6 sm:h-6 text-white">
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M12 2v20M2 12h20" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         </div>
                       </div>
-                      <h3 className="text-xl sm:text-2xl font-semibold text-white mb-1 sm:mb-2 font-heading">
+                      <h3 className="text-lg sm:text-xl font-semibold text-white mb-1 sm:mb-2 font-heading">
                         {service.title}
                       </h3>
-                      <p className="text-white/80 text-sm line-clamp-2 font-sans">
+                      <p className="text-white/80 text-xs sm:text-sm line-clamp-2 font-sans">
                         {service.description}
                       </p>
                     </div>
