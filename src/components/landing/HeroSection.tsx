@@ -31,9 +31,9 @@ export function HeroSection({ t }: HeroSectionProps) {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[calc(100vh-80px)] md:min-h-[calc(100vh-160px)]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 min-h-[calc(100vh-80px)] md:min-h-[calc(100vh-160px)]">
             {/* Left Content */}
-            <div className="pt-12 md:pt-13 lg:pt-0 pb-12 md:pb-16 lg:pb-0">
+            <div className="pt-12 md:pt-13 lg:pt-0 pb-12 md:pb-16 lg:pb-0 self-center">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -66,19 +66,21 @@ export function HeroSection({ t }: HeroSectionProps) {
             </div>
 
             {/* Right Content - Image */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="relative block lg:block"
-            >
-              <img
-                src="/hero-img-1.png"
-                alt="Beautiful woman"
-                className="w-full lg:max-w-[120%] object-contain relative z-10"
-              />
-              <div className="absolute top-1/2 right-0 -translate-y-1/2 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
-            </motion.div>
+            <div className="relative flex flex-col justify-end h-full">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+                className="w-full"
+              >
+                <img
+                  src="/hero-img-1.png"
+                  alt="Beautiful woman"
+                  className="w-full lg:max-w-[120%] relative z-10"
+                />
+                <div className="absolute top-1/2 right-0 -translate-y-1/2 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>
