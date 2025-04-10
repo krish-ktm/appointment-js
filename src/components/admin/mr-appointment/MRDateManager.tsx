@@ -313,7 +313,7 @@ export function MRDateManager() {
                         className={`flex items-center justify-between p-4 rounded-lg border ${
                           isTodays
                             ? 'bg-green-50 border-green-100'
-                            : 'bg-[#2B5C4B]/20 border-[#2B5C4B]/20'
+                            : 'bg-[#2B5C4B]/5 border-[#2B5C4B]/10'
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -332,7 +332,7 @@ export function MRDateManager() {
                             <p className={`font-medium ${
                               isTodays
                                 ? 'text-green-700'
-                                : 'text-[#234539]'
+                                : 'text-[#2B5C4B]'
                             }`}>
                               {formatDate(date.date)}
                             </p>
