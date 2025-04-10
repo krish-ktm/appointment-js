@@ -16,7 +16,11 @@ export interface FooterTranslations {
     phone: string;
     email: string;
     address: string;
-    hours: string;
+    hours: {
+      weekday: string;
+      saturday: string;
+      sunday: string;
+    };
   };
   social: {
     title: string;

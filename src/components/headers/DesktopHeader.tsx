@@ -67,9 +67,12 @@ export function DesktopHeader() {
                 <Phone className="h-4 w-4 text-[#2B5C4B]" />
                 <span>{t.header.contact.phone}</span>
               </a>
-              <div className="flex items-center gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-[#2B5C4B] font-sans">
-                <Clock className="h-4 w-4 text-[#2B5C4B]" />
-                <span>{t.header.contact.hours.weekday}</span>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2 text-sm bg-gray-50/80 px-3 py-1.5 rounded-full text-[#2B5C4B] font-sans">
+                <Clock className="h-4 w-4 text-[#2B5C4B] mt-1 sm:mt-0" />
+                <div className="flex flex-col sm:flex-row sm:gap-2">
+                  <span>{t.header.contact.hours.weekday}</span>
+                  <span className="sm:border-l sm:border-[#2B5C4B]/20 sm:pl-2">{t.header.contact.hours.saturday}</span>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-4">

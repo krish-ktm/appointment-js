@@ -52,55 +52,55 @@ export function ServicesSection({ t }: ServicesSectionProps) {
       title: t.categories.medical,
       description: t.lists.medical[0],
       features: t.lists.medical.slice(1),
-      image: "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?q=80&w=1200"
+      image: "/images/Skin Treatment.png"
     },
     {
       title: t.categories.hair,
       description: t.lists.hair[0],
       features: t.lists.hair.slice(1),
-      image: "/images/hair-treatment.jpg"
+      image: "/images/Hair Problems.png"
     },
     {
       title: t.categories.diagnostic,
       description: t.lists.diagnostic[0],
       features: t.lists.diagnostic.slice(1),
-      image: "https://images.unsplash.com/photo-1581595219315-a2f6c59a8eff?q=80&w=1200"
+      image: "/images/Removal moles.png"
     },
     {
       title: t.categories.skinGlow,
       description: t.lists.skinGlow[0],
       features: t.lists.skinGlow.slice(1),
-      image: "https://images.unsplash.com/photo-1611765083444-a3ce30f1c885?q=80&w=1200"
+      image: "/images/Nail Treatment.png"
     },
     {
       title: t.categories.scar,
       description: t.lists.scar[0],
       features: t.lists.scar.slice(1),
-      image: "https://images.unsplash.com/photo-1606256351142-e677a336e1c0?q=80&w=1200"
+      image: "/images/scar theropy.png"
     },
     {
       title: t.categories.tattoo,
       description: t.lists.tattoo[0],
       features: t.lists.tattoo.slice(1),
-      image: "https://images.unsplash.com/photo-1582337832132-b1df9234f9cb?q=80&w=1200"
+      image: "/images/Tatoo Removal.png"
     },
     {
       title: t.categories.laser,
       description: t.lists.laser[0],
       features: t.lists.laser.slice(1),
-      image: "https://images.unsplash.com/photo-1628319295529-d2d5572890bb?q=80&w=1200"
+      image: "/images/Laser Hair Removal.png"
     },
     {
       title: t.categories.surgery,
       description: t.lists.surgery[0],
       features: t.lists.surgery.slice(1),
-      image: "https://images.unsplash.com/photo-1551076805-e1869033e561?q=80&w=1200"
+      image: "/images/vitiligo surgery.png"
     },
     {
       title: t.categories.ear,
       description: t.lists.ear[0],
       features: t.lists.ear.slice(1),
-      image: "https://images.unsplash.com/photo-1594394489098-8c1e9f96c9d1?q=80&w=1200"
+      image: "/images/ear-treatment.png"
     }
   ];
 

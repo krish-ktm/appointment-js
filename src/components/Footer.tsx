@@ -98,11 +98,14 @@ export function Footer() {
                 </div>
                 <span className="text-sm font-sans">{t.footer.contactInfo.address}</span>
               </li>
-              <li className="flex items-center gap-3 text-white/80 group font-sans">
-                <div className="bg-white/10 p-2 rounded-lg">
+              <li className="flex items-start gap-3 text-white/80 group font-sans">
+                <div className="bg-white/10 p-2 rounded-lg mt-0.5">
                   <Clock className="h-4 w-4" />
                 </div>
-                <span className="text-sm font-sans">{t.footer.contactInfo.hours}</span>
+                <div className="flex flex-col">
+                  <span className="text-sm font-sans">{t.footer.contactInfo.hours.weekday}</span>
+                  <span className="text-sm font-sans text-white/70 mt-1">{t.footer.contactInfo.hours.saturday}</span>
+                </div>
               </li>
             </ul>
           </motion.div>

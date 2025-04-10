@@ -20,7 +20,11 @@ export const footerTranslations: Record<string, FooterTranslations> = {
       phone: businessInfo.contact.phone,
       email: businessInfo.contact.email,
       address: businessInfo.contact.address,
-      hours: getFormattedHours('en').weekday
+      hours: {
+        weekday: getFormattedHours('en').weekday,
+        saturday: getFormattedHours('en').saturday,
+        sunday: getFormattedHours('en').sunday
+      }
     },
     social: {
       title: "Follow Us"
@@ -48,7 +52,11 @@ export const footerTranslations: Record<string, FooterTranslations> = {
       phone: getFormattedPhone('gu'),
       email: businessInfo.contact.email,
       address: getFormattedAddress('gu'),
-      hours: getFormattedHours('gu').weekday
+      hours: {
+        weekday: getFormattedHours('gu').weekday,
+        saturday: getFormattedHours('gu').saturday,
+        sunday: getFormattedHours('gu').sunday
+      }
     },
     social: {
       title: "અમને ફોલો કરો"
