@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
+import { useEffect } from 'react';
 
 interface ServicesSectionProps {
   t: {
@@ -103,9 +104,28 @@ export function ServicesSection({ t }: ServicesSectionProps) {
     }
   ];
 
+  // Override Swiper's default styles
+  useEffect(() => {
+    // Add custom style to override Swiper's default overflow constraints
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .services-swiper-override.swiper {
+        overflow: visible !important;
+      }
+      .services-swiper-override .swiper-wrapper {
+        overflow: visible !important;
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   return (
-    <div className={`py-16 sm:py-20 bg-gradient-to-b ${background.light} will-change-transform relative w-screen max-w-[100vw] overflow-hidden left-[50%] right-[50%] ml-[-50vw] mr-[-50vw]`}>
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-[100vw] overflow-hidden">
+    <div className={`py-16 sm:py-20 bg-gradient-to-b ${background.light} relative w-full overflow-hidden`}>
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="text-center mb-12 sm:mb-16">
           <h2 className={`text-2xl sm:text-4xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r ${gradients.text.primary} font-heading`}>
             {t.title}
@@ -115,7 +135,7 @@ export function ServicesSection({ t }: ServicesSectionProps) {
           </p>
         </div>
 
-        <div className="relative mx-[-1rem] sm:mx-[-1.5rem] lg:mx-[-2rem]">
+        <div className="relative mx-[-1rem] sm:mx-[-2rem] md:mx-[-3rem] lg:mx-[-4rem] xl:mx-[-5rem]">
           <Swiper
             modules={[Autoplay]}
             spaceBetween={16}
@@ -147,7 +167,7 @@ export function ServicesSection({ t }: ServicesSectionProps) {
                 spaceBetween: 32,
               }
             }}
-            className="!pb-8 !px-4 sm:!px-6 lg:!px-8"
+            className="!pb-8 !px-4 sm:!px-6 lg:!px-8 services-swiper-override"
           >
             {[...services, ...services, ...services].map((service, index) => (
               <SwiperSlide 

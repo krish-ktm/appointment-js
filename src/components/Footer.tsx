@@ -14,15 +14,15 @@ export function Footer() {
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-6 sm:pt-16 sm:pb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
           {/* About Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-2xl font-bold mb-6 bg-clip-text text-white font-heading">
+            <h3 className="text-2xl font-bold mb-4 bg-clip-text text-white font-heading">
               {t.footer.clinicName}
             </h3>
             <p className="text-white/80 leading-relaxed text-sm font-sans">
@@ -134,7 +134,7 @@ export function Footer() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}
-          className="border-t border-white/10 mt-16 pt-8 text-center"
+          className="border-t border-white/10 mt-8 pt-4 text-center"
         >
           <p className="text-white/60 text-sm font-sans">
             {t.footer.copyright} | Developed by <a href="https://ipratik.me" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">ipratik.me</a>
