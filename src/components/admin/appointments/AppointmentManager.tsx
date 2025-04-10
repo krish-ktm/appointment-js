@@ -79,7 +79,7 @@ export function AppointmentManager() {
               {date === 'today' && (
                 <button
                   onClick={loadData}
-                  className="w-full sm:w-auto inline-flex items-center justify-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-[#2B5C4B] bg-[#2B5C4B]/10 hover:bg-[#2B5C4B]/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#2B5C4B]"
                 >
                   Refresh
                 </button>

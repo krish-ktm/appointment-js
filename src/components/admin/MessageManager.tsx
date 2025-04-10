@@ -121,7 +121,7 @@ export function MessageManager() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2B5C4B]"></div>
       </div>
     );
   }
@@ -139,7 +139,7 @@ export function MessageManager() {
       <div>
         <p className="text-gray-900 break-words">{messageText}</p>
         {hasBothLanguages && (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-2 bg-blue-100 text-blue-800 mr-2">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-2 bg-[#2B5C4B]/10 text-[#2B5C4B] mr-2">
             Bilingual
           </span>
         )}
@@ -153,7 +153,7 @@ export function MessageManager() {
         <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Flash Message</h2>
         <button
           onClick={() => setShowForm(true)}
-          className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors gap-2"
+          className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-[#2B5C4B] text-white rounded-lg hover:bg-[#234539] transition-colors gap-2"
         >
           <Plus className="h-4 w-4" />
           Add Message
@@ -183,7 +183,7 @@ export function MessageManager() {
               className="bg-white rounded-xl shadow-xl w-full max-w-lg mx-auto relative flex flex-col max-h-[90vh]"
               onClick={e => e.stopPropagation()}
             >
-              <div className="sticky top-0 z-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-xl">
+              <div className="sticky top-0 z-10 bg-gradient-to-r from-[#2B5C4B] to-[#234539] rounded-t-xl">
                 <div className="p-6">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xl font-semibold text-white">
@@ -214,7 +214,7 @@ export function MessageManager() {
                         onClick={() => setActiveTab('en')}
                         className={`w-1/2 py-2 px-1 text-center border-b-2 text-sm font-medium ${
                           activeTab === 'en'
-                            ? 'border-blue-500 text-blue-600'
+                            ? 'border-[#2B5C4B] text-[#2B5C4B]'
                             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         }`}
                       >
@@ -225,7 +225,7 @@ export function MessageManager() {
                         onClick={() => setActiveTab('gu')}
                         className={`w-1/2 py-2 px-1 text-center border-b-2 text-sm font-medium ${
                           activeTab === 'gu'
-                            ? 'border-blue-500 text-blue-600'
+                            ? 'border-[#2B5C4B] text-[#2B5C4B]'
                             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         }`}
                       >
@@ -244,7 +244,7 @@ export function MessageManager() {
                         value={form.message_en}
                         onChange={(e) => setForm({ ...form, message_en: e.target.value })}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B]"
                         required
                       />
                     </div>
@@ -260,7 +260,7 @@ export function MessageManager() {
                         value={form.message_gu}
                         onChange={(e) => setForm({ ...form, message_gu: e.target.value })}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B]"
                         dir="auto"
                       />
                     </div>
@@ -272,7 +272,7 @@ export function MessageManager() {
                       id="active"
                       checked={form.active}
                       onChange={(e) => setForm({ ...form, active: e.target.checked })}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="h-4 w-4 text-[#2B5C4B] focus:ring-[#2B5C4B] border-gray-300 rounded"
                     />
                     <label htmlFor="active" className="ml-2 text-sm text-gray-700">
                       Active
@@ -294,7 +294,7 @@ export function MessageManager() {
                     </button>
                     <button
                       type="submit"
-                      className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                      className="px-4 py-2 text-sm font-medium text-white bg-[#2B5C4B] rounded-lg hover:bg-[#234539]"
                     >
                       {editingMessage ? 'Update' : 'Create'}
                     </button>
@@ -317,8 +317,8 @@ export function MessageManager() {
               <li key={message.id} className="p-4 hover:bg-gray-50">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-start gap-4 flex-1">
-                    <div className="bg-blue-50 p-2 rounded-lg flex-shrink-0">
-                      <MessageCircle className="h-5 w-5 text-blue-500" />
+                    <div className="bg-[#2B5C4B]/10 p-2 rounded-lg flex-shrink-0">
+                      <MessageCircle className="h-5 w-5 text-[#2B5C4B]" />
                     </div>
                     <div className="flex-1 min-w-0">
                       {getMessageDisplay(message)}

@@ -69,11 +69,11 @@ export function AdminDashboard() {
   const StatCard = ({ icon: Icon, label, value, onClick }: any) => (
     <div 
       onClick={onClick}
-      className={`bg-white rounded-xl p-6 border border-gray-200 hover:border-blue-200 hover:shadow-lg transition-all duration-300 ${onClick ? 'cursor-pointer' : ''}`}
+      className={`bg-white rounded-xl p-6 border border-gray-200 hover:border-[#2B5C4B]/20 hover:shadow-lg transition-all duration-300 ${onClick ? 'cursor-pointer' : ''}`}
     >
       <div className="flex items-center justify-between mb-4">
-        <div className="bg-blue-50 p-3 rounded-lg">
-          <Icon className="h-6 w-6 text-blue-600" />
+        <div className="bg-[#2B5C4B]/10 p-3 rounded-lg">
+          <Icon className="h-6 w-6 text-[#2B5C4B]" />
         </div>
         {onClick && <ArrowUpRight className="h-5 w-5 text-gray-400" />}
       </div>

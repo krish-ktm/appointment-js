@@ -235,7 +235,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
             onClick={e => e.stopPropagation()}
             ref={modalRef}
           >
-            <div className="sticky top-0 z-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-xl">
+            <div className="sticky top-0 z-10 bg-gradient-to-r from-[#2B5C4B] to-[#234539] rounded-t-xl">
               <div className="p-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xl font-semibold text-white">
@@ -260,7 +260,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
                     onClick={() => setCurrentLang('en')}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
                       currentLang === 'en'
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-[#2B5C4B] text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -272,7 +272,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
                     onClick={() => setCurrentLang('gu')}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
                       currentLang === 'gu'
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-[#2B5C4B] text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -297,7 +297,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
                         [currentLang]: e.target.value
                       }
                     }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B]"
                   />
                 </div>
 
@@ -314,7 +314,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
                         className={`text-sm px-3 py-1 rounded-md ${
                           showPreview 
                             ? 'bg-gray-200 text-gray-800' 
-                            : 'bg-blue-600 text-white'
+                            : 'bg-[#2B5C4B] text-white'
                         }`}
                       >
                         {showPreview ? 'Switch to Edit' : 'Show Preview'}
@@ -330,13 +330,13 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
                         <button
                           type="button"
                           onClick={() => setShowPreview(false)}
-                          className="text-xs text-blue-600 hover:text-blue-800"
+                          className="text-xs text-[#2B5C4B] hover:text-[#234539]"
                         >
                           Edit
                         </button>
                       </div>
                       <div 
-                        className="prose prose-blue max-w-none p-4 min-h-[200px] bg-white"
+                        className="prose prose-[#2B5C4B] max-w-none p-4 min-h-[200px] bg-white"
                         dangerouslySetInnerHTML={{ 
                           __html: formatMarkdown(form.content[currentLang]) 
                         }}
@@ -440,7 +440,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
                           <button
                             type="button"
                             onClick={() => setShowPreview(true)}
-                            className="text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 px-2 py-1 rounded flex items-center gap-1"
+                            className="text-xs bg-[#2B5C4B]/10 text-[#2B5C4B] hover:bg-[#2B5C4B]/20 px-2 py-1 rounded flex items-center gap-1"
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                               <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
@@ -464,7 +464,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
                             }
                           }))}
                           rows={8}
-                          className="w-full px-4 py-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 border-0 font-mono text-sm"
+                          className="w-full px-4 py-3 focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] border-0 font-mono text-sm"
                           placeholder="Write your content here..."
                         />
                       </div>
@@ -487,7 +487,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
                                 }));
                               }
                             }}
-                            className="text-xs text-blue-600 hover:underline"
+                            className="text-xs text-[#2B5C4B] hover:underline"
                           >
                             Add Template
                           </button>
@@ -513,7 +513,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
                   </label>
                   <div className="flex gap-4">
                     <label className="flex-1 cursor-pointer">
-                      <div className="relative px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors">
+                      <div className="relative px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-[#2B5C4B] transition-colors">
                         <input
                           type="file"
                           accept="image/*"
@@ -561,7 +561,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
                       id="active"
                       checked={form.active}
                       onChange={(e) => setForm({ ...form, active: e.target.checked })}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="h-4 w-4 text-[#2B5C4B] focus:ring-[#2B5C4B] border-gray-300 rounded"
                     />
                     <label htmlFor="active" className="ml-2 text-sm text-gray-700">
                       Active
@@ -578,7 +578,7 @@ export function NoticeForm({ editingNotice, onSubmit, onClose }: NoticeFormProps
                     </button>
                     <button
                       type="submit"
-                      className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                      className="px-4 py-2 text-sm font-medium text-white bg-[#2B5C4B] rounded-lg hover:bg-[#234539]"
                     >
                       {editingNotice ? 'Update' : 'Create'}
                     </button>

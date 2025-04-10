@@ -58,7 +58,7 @@ export function CreateUserModal({ onClose, onUserCreated }: CreateUserModalProps
           onClick={e => e.stopPropagation()}
         >
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-90"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-[#2B5C4B] to-[#234539] opacity-90"></div>
             <div className="relative px-6 py-8">
               <div className="flex items-center gap-4">
                 <div className="bg-white/10 rounded-xl p-3">
@@ -66,7 +66,7 @@ export function CreateUserModal({ onClose, onUserCreated }: CreateUserModalProps
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold text-white">Create New User</h2>
-                  <p className="text-blue-100 text-sm mt-1">Add a new user to the system</p>
+                  <p className="text-green-100 text-sm mt-1">Add a new user to the system</p>
                 </div>
               </div>
               <button
@@ -91,7 +91,7 @@ export function CreateUserModal({ onClose, onUserCreated }: CreateUserModalProps
                   <input
                     type="text"
                     required
-                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B]"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                   />
@@ -109,7 +109,7 @@ export function CreateUserModal({ onClose, onUserCreated }: CreateUserModalProps
                   <input
                     type="email"
                     required
-                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B]"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                   />
@@ -128,7 +128,7 @@ export function CreateUserModal({ onClose, onUserCreated }: CreateUserModalProps
                     type="password"
                     required
                     minLength={6}
-                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B]"
                     value={form.password}
                     onChange={(e) => setForm({ ...form, password: e.target.value })}
                   />
@@ -144,7 +144,7 @@ export function CreateUserModal({ onClose, onUserCreated }: CreateUserModalProps
                     <UserCog className="h-5 w-5 text-gray-400" />
                   </div>
                   <select
-                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 appearance-none bg-white"
+                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] appearance-none bg-white"
                     value={form.role}
                     onChange={(e) => setForm({ ...form, role: e.target.value as 'receptionist' | 'superadmin' })}
                   >
@@ -166,7 +166,7 @@ export function CreateUserModal({ onClose, onUserCreated }: CreateUserModalProps
               <button
                 type="submit"
                 disabled={loading}
-                className={`px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors ${
+                className={`px-4 py-2.5 text-sm font-medium text-white bg-[#2B5C4B] rounded-lg hover:bg-[#234539] focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/20 transition-colors ${
                   loading ? 'opacity-70 cursor-not-allowed' : ''
                 }`}
               >

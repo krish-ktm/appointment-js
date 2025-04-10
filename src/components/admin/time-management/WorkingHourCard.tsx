@@ -136,7 +136,7 @@ export function WorkingHourCard({
               disabled={isToggling}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#2B5C4B]/30 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#2B5C4B]"></div>
             <span className="ms-3 text-sm font-medium text-gray-700">
               {isToggling ? '...' : (day.is_working ? 'Working' : 'Closed')}
             </span>
@@ -183,7 +183,7 @@ export function WorkingHourCard({
                 <button
                   onClick={onSave}
                   disabled={isSaving}
-                  className={`inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors ${
+                  className={`inline-flex items-center gap-2 px-4 py-2 bg-[#2B5C4B] text-white rounded-lg hover:bg-[#234539] transition-colors ${
                     isSaving ? 'opacity-70 cursor-not-allowed' : ''
                   }`}
                 >

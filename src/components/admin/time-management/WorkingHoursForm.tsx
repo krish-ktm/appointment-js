@@ -81,7 +81,7 @@ export function WorkingHoursForm({ day, onUpdate, formErrors }: WorkingHoursForm
               }}
               className="sr-only peer"
             />
-            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#2B5C4B]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#2B5C4B]"></div>
           </label>
         </div>
         {day.morning_start && day.morning_end && (
@@ -91,14 +91,14 @@ export function WorkingHoursForm({ day, onUpdate, formErrors }: WorkingHoursForm
                 type="time"
                 value={to24HourFormat(day.morning_start)}
                 onChange={(e) => handleTimeChange('morning', 'start', e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] bg-white"
               />
               <span className="text-gray-500">to</span>
               <input
                 type="time"
                 value={to24HourFormat(day.morning_end)}
                 onChange={(e) => handleTimeChange('morning', 'end', e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] bg-white"
               />
             </div>
             <div className="mt-2 text-sm text-gray-500">
@@ -131,7 +131,7 @@ export function WorkingHoursForm({ day, onUpdate, formErrors }: WorkingHoursForm
               }}
               className="sr-only peer"
             />
-            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#2B5C4B]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#2B5C4B]"></div>
           </label>
         </div>
         {day.evening_start && day.evening_end && (
@@ -141,14 +141,14 @@ export function WorkingHoursForm({ day, onUpdate, formErrors }: WorkingHoursForm
                 type="time"
                 value={to24HourFormat(day.evening_start)}
                 onChange={(e) => handleTimeChange('evening', 'start', e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] bg-white"
               />
               <span className="text-gray-500">to</span>
               <input
                 type="time"
                 value={to24HourFormat(day.evening_end)}
                 onChange={(e) => handleTimeChange('evening', 'end', e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2B5C4B]/20 focus:border-[#2B5C4B] bg-white"
               />
             </div>
             <div className="mt-2 text-sm text-gray-500">

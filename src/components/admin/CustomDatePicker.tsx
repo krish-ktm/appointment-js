@@ -148,9 +148,9 @@ export function CustomDatePicker({
           key={`day-${index}`}
           type="button" // Prevent form submission
           className={`relative h-10 w-10 flex items-center justify-center text-sm rounded-full 
-            ${!dayDisabled && 'cursor-pointer hover:bg-blue-50 transition-colors'} 
-            ${daySelected ? 'bg-blue-600 text-white hover:bg-blue-600' : ''} 
-            ${dayInRange ? 'bg-blue-100' : ''} 
+            ${!dayDisabled && 'cursor-pointer hover:bg-[#2B5C4B]/10 transition-colors'} 
+            ${daySelected ? 'bg-[#2B5C4B] text-white hover:bg-[#2B5C4B]' : ''} 
+            ${dayInRange ? 'bg-[#2B5C4B]/20' : ''} 
             ${dayDisabled ? 'text-gray-300 cursor-not-allowed' : 'text-gray-800'} 
             ${isCurrentDay && !daySelected ? 'font-bold' : ''}`}
           onClick={() => !dayDisabled && handleDateClick(day)}

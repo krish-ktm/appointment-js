@@ -55,7 +55,7 @@ export function MRAppointmentManager() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2B5C4B]"></div>
       </div>
     );
   }
@@ -84,8 +84,8 @@ export function MRAppointmentManager() {
       <div className="px-6 py-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="bg-blue-50 p-3 rounded-lg">
-              <Calendar className="h-6 w-6 text-blue-600" />
+            <div className="bg-[#2B5C4B]/10 p-3 rounded-lg">
+              <Calendar className="h-6 w-6 text-[#2B5C4B]" />
             </div>
             <div>
               <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
@@ -96,11 +96,11 @@ export function MRAppointmentManager() {
               )}
             </div>
           </div>
-          <div className="flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-lg">
-            <Users className="h-5 w-5 text-blue-600" />
+          <div className="flex items-center gap-2 bg-[#2B5C4B]/10 px-4 py-2 rounded-lg">
+            <Users className="h-5 w-5 text-[#2B5C4B]" />
             <div>
               <p className="text-sm text-gray-600">Total Appointments</p>
-              <p className="text-2xl font-semibold text-blue-600">{appointments.length}</p>
+              <p className="text-2xl font-semibold text-[#2B5C4B]">{appointments.length}</p>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@ export function MRAppointmentManager() {
           {appointments.map((appointment) => (
             <div
               key={appointment.id}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 hover:border-blue-200 hover:shadow transition-all duration-200"
+              className="bg-white rounded-xl shadow-sm border border-gray-200 hover:border-[#2B5C4B]/20 hover:shadow transition-all duration-200"
             >
               <div className="p-5">
                 {/* ID */}

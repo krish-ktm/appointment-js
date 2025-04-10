@@ -163,7 +163,7 @@ export function NoticeManager() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2B5C4B]"></div>
       </div>
     );
   }
@@ -174,7 +174,7 @@ export function NoticeManager() {
         <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Announcements Manager</h2>
         <button
           onClick={() => setShowForm(true)}
-          className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors gap-2"
+          className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-[#2B5C4B] text-white rounded-lg hover:bg-[#234539] transition-colors gap-2"
         >
           <Plus className="h-4 w-4" />
           Add Announcement

@@ -114,7 +114,7 @@ export function ContactMessagesManager() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2B5C4B]"></div>
       </div>
     );
   }
@@ -129,7 +129,7 @@ export function ContactMessagesManager() {
             onClick={() => setFilter('all')}
             className={`px-3 py-1.5 text-sm font-medium rounded-md ${
               filter === 'all' 
-                ? 'bg-blue-100 text-blue-700' 
+                ? 'bg-[#2B5C4B]/10 text-[#2B5C4B]' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
@@ -139,7 +139,7 @@ export function ContactMessagesManager() {
             onClick={() => setFilter('unread')}
             className={`px-3 py-1.5 text-sm font-medium rounded-md ${
               filter === 'unread' 
-                ? 'bg-blue-100 text-blue-700' 
+                ? 'bg-[#2B5C4B]/10 text-[#2B5C4B]' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
@@ -149,7 +149,7 @@ export function ContactMessagesManager() {
             onClick={() => setFilter('read')}
             className={`px-3 py-1.5 text-sm font-medium rounded-md ${
               filter === 'read' 
-                ? 'bg-blue-100 text-blue-700' 
+                ? 'bg-[#2B5C4B]/10 text-[#2B5C4B]' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
@@ -197,7 +197,7 @@ export function ContactMessagesManager() {
                 {filteredMessages.map((message) => (
                   <tr 
                     key={message.id} 
-                    className={`hover:bg-gray-50 ${!message.is_read ? 'bg-blue-50/30' : ''}`}
+                    className={`hover:bg-gray-50 ${!message.is_read ? 'bg-[#2B5C4B]/5' : ''}`}
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -237,7 +237,7 @@ export function ContactMessagesManager() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => setViewingMessage(message)}
-                          className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          className="p-1.5 text-[#2B5C4B] hover:bg-[#2B5C4B]/10 rounded-lg transition-colors"
                           title="View message"
                         >
                           <Eye className="h-4 w-4" />
@@ -278,7 +278,7 @@ export function ContactMessagesManager() {
               className="bg-white rounded-xl shadow-xl w-full max-w-2xl mx-auto overflow-hidden"
               onClick={e => e.stopPropagation()}
             >
-              <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6">
+              <div className="bg-gradient-to-r from-[#2B5C4B] to-[#234539] p-6">
                 <div className="flex justify-between items-center">
                   <h3 className="text-xl font-semibold text-white">Message Details</h3>
                   <button
@@ -304,7 +304,7 @@ export function ContactMessagesManager() {
                     <h4 className="text-sm font-medium text-gray-500 mb-1">Email</h4>
                     <a 
                       href={`mailto:${viewingMessage.email}`}
-                      className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1.5"
+                      className="text-[#2B5C4B] hover:text-[#234539] hover:underline flex items-center gap-1.5"
                     >
                       {viewingMessage.email}
                       <ExternalLink className="h-3.5 w-3.5" />
@@ -314,7 +314,7 @@ export function ContactMessagesManager() {
                     <h4 className="text-sm font-medium text-gray-500 mb-1">Phone</h4>
                     <a 
                       href={`tel:${viewingMessage.phone}`}
-                      className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1.5"
+                      className="text-[#2B5C4B] hover:text-[#234539] hover:underline flex items-center gap-1.5"
                     >
                       {viewingMessage.phone}
                       <ExternalLink className="h-3.5 w-3.5" />

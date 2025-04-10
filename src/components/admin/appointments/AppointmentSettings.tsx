@@ -27,7 +27,7 @@ export function AppointmentSettings() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2B5C4B]"></div>
       </div>
     );
   }
@@ -35,8 +35,8 @@ export function AppointmentSettings() {
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-3 mb-6">
-        <div className="bg-blue-50 p-3 rounded-lg">
-          <Clock className="h-6 w-6 text-blue-600" />
+        <div className="bg-[#2B5C4B]/10 p-3 rounded-lg">
+          <Clock className="h-6 w-6 text-[#2B5C4B]" />
         </div>
         <div>
           <h2 className="text-xl font-semibold text-gray-900">Working Hours</h2>
@@ -47,8 +47,8 @@ export function AppointmentSettings() {
       <WorkingHours />
 
       <div className="flex items-center gap-3 mb-6">
-        <div className="bg-blue-50 p-3 rounded-lg">
-          <ListChecks className="h-6 w-6 text-blue-600" />
+        <div className="bg-[#2B5C4B]/10 p-3 rounded-lg">
+          <ListChecks className="h-6 w-6 text-[#2B5C4B]" />
         </div>
         <div>
           <h2 className="text-xl font-semibold text-gray-900">Appointment Rules</h2>
@@ -59,8 +59,8 @@ export function AppointmentSettings() {
       <AppointmentRules />
 
       <div className="flex items-center gap-3 mb-6">
-        <div className="bg-blue-50 p-3 rounded-lg">
-          <Image className="h-6 w-6 text-blue-600" />
+        <div className="bg-[#2B5C4B]/10 p-3 rounded-lg">
+          <Image className="h-6 w-6 text-[#2B5C4B]" />
         </div>
         <div>
           <h2 className="text-xl font-semibold text-gray-900">Image Download Rules</h2>

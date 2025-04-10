@@ -60,7 +60,7 @@ const FormInput = memo(({ label, value, onChange, type = 'text', className = '',
       type={type}
       value={value}
       onChange={onChange}
-      className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+      className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/30 focus:border-transparent transition-all duration-200"
       {...props}
     />
   </div>
@@ -74,7 +74,7 @@ const FormTextarea = memo(({ label, value, onChange, className = '', rows = 3, .
     <textarea
       value={value}
       onChange={onChange}
-      className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+      className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/30 focus:border-transparent transition-all duration-200"
       rows={rows}
       {...props}
     />
@@ -90,7 +90,7 @@ const FormCheckbox = memo(({ label, checked, onChange, className = '', ...props 
       type="checkbox"
       checked={checked}
       onChange={onChange}
-      className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+      className="h-4 w-4 text-[#2B5C4B] border-gray-300 rounded focus:ring-[#2B5C4B]/30"
       {...props}
     />
     <label className="ml-2 block text-sm text-gray-700">
@@ -340,7 +340,7 @@ export default function AppointmentRules() {
         </div>
         <button
           onClick={() => setShowAddNew(prev => !prev)}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-[#2B5C4B] text-white rounded-lg hover:bg-[#234539] transition-colors shadow-sm hover:shadow-md"
         >
           <Plus className="h-4 w-4" />
           Add Rule
@@ -352,13 +352,13 @@ export default function AppointmentRules() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-blue-50 rounded-xl border border-blue-100 p-6 shadow-sm mb-6"
+          className="bg-[#2B5C4B]/10 rounded-xl border border-[#2B5C4B]/20 p-6 shadow-sm mb-6"
         >
           <div className="flex justify-between items-start mb-4">
             <h3 className="text-lg font-semibold text-gray-900">Add New Rule</h3>
             <button
               onClick={() => setShowAddNew(false)}
-              className="p-1 hover:bg-blue-100 rounded-full"
+              className="p-1 hover:bg-[#2B5C4B]/10 rounded-full"
             >
               <X className="h-5 w-5 text-gray-500" />
             </button>
@@ -440,7 +440,7 @@ export default function AppointmentRules() {
             <div className="flex justify-end pt-2">
               <button
                 onClick={handleAddNew}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-[#2B5C4B] text-white rounded-lg hover:bg-[#234539]"
               >
                 <Save className="h-4 w-4" />
                 Save Rule
@@ -454,8 +454,8 @@ export default function AppointmentRules() {
         {rules.length === 0 && !showAddNew && (
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
             <div className="flex flex-col items-center gap-3 text-center">
-              <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
-                <BookOpen className="h-6 w-6 text-blue-600" />
+              <div className="w-12 h-12 rounded-full bg-[#2B5C4B]/10 flex items-center justify-center">
+                <BookOpen className="h-6 w-6 text-[#2B5C4B]" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">No rules yet</h3>
@@ -463,7 +463,7 @@ export default function AppointmentRules() {
               </div>
               <button
                 onClick={() => setShowAddNew(true)}
-                className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors"
+                className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#2B5C4B]/10 text-[#2B5C4B] rounded-lg hover:bg-[#2B5C4B]/20 transition-colors"
               >
                 <Plus className="h-4 w-4" />
                 Add Your First Rule
@@ -481,7 +481,7 @@ export default function AppointmentRules() {
             className={clsx(
               "bg-white rounded-xl border transition-all duration-300",
               editingId === rule.id 
-                ? "border-blue-300 shadow-md" 
+                ? "border-[#2B5C4B]/50 shadow-md" 
                 : "border-gray-200 shadow-sm hover:shadow-md"
             )}
           >
@@ -545,7 +545,7 @@ export default function AppointmentRules() {
                   </button>
                   <button
                     onClick={handleSaveEdit}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-[#2B5C4B] text-white rounded-lg hover:bg-[#234539]"
                   >
                     <Save className="h-4 w-4" />
                     Save Changes

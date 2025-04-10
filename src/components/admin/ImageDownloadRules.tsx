@@ -35,7 +35,7 @@ const FormInput = memo(({ label, value, onChange, type = 'text', className = '',
       type={type}
       value={value}
       onChange={onChange}
-      className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+      className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/30 focus:border-transparent transition-all duration-200"
       {...props}
     />
   </motion.div>
@@ -56,7 +56,7 @@ const FormTextarea = memo(({ label, value, onChange, className = '', ...props }:
     <textarea
       value={value}
       onChange={onChange}
-      className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+      className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2B5C4B]/30 focus:border-transparent transition-all duration-200"
       {...props}
     />
   </motion.div>
@@ -160,7 +160,7 @@ export default function ImageDownloadRules({ type }: ImageDownloadRulesProps) {
       >
         <div className="flex flex-col items-center gap-3">
           <motion.div 
-            className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"
+            className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2B5C4B]"
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           />
@@ -216,7 +216,7 @@ export default function ImageDownloadRules({ type }: ImageDownloadRulesProps) {
               exit={{ opacity: 0, y: -20 }}
               className={clsx(
                 "px-6 py-6 transition-all duration-300 ease-in-out transform",
-                editingId === rule.id ? "bg-blue-50" : "hover:bg-gray-50"
+                editingId === rule.id ? "bg-[#2B5C4B]/10" : "hover:bg-gray-50"
               )}
             >
               {editingId === rule.id ? (
@@ -267,7 +267,7 @@ export default function ImageDownloadRules({ type }: ImageDownloadRulesProps) {
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
                         handleEditingRuleChange('is_active', null, e.target.checked)
                       }
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded transition-all duration-200"
+                      className="h-4 w-4 text-[#2B5C4B] focus:ring-[#2B5C4B] border-gray-300 rounded transition-all duration-200"
                     />
                     <label htmlFor={`active-${rule.id}`} className="ml-2 text-sm text-gray-700">
                       Active
@@ -285,7 +285,7 @@ export default function ImageDownloadRules({ type }: ImageDownloadRulesProps) {
                     </motion.button>
                     <motion.button
                       onClick={handleSaveEdit}
-                      className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 active:bg-blue-800 transform active:scale-95 transition-all duration-200"
+                      className="px-4 py-2 text-sm font-medium text-white bg-[#2B5C4B] rounded-lg hover:bg-[#2B5C4B]/90 active:bg-[#2B5C4B]/80 transform active:scale-95 transition-all duration-200"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
@@ -319,7 +319,7 @@ export default function ImageDownloadRules({ type }: ImageDownloadRulesProps) {
                     <div className="flex items-center ml-4">
                       <motion.button
                         onClick={() => handleEdit(rule)}
-                        className="p-2 text-gray-500 hover:text-blue-600 rounded-lg hover:bg-blue-50 transform active:scale-90 transition-all duration-200"
+                        className="p-2 text-gray-500 hover:text-[#2B5C4B] rounded-lg hover:bg-[#2B5C4B]/10 transform active:scale-90 transition-all duration-200"
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         title="Edit"

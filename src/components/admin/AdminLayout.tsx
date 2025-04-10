@@ -11,7 +11,6 @@ import {
   MessageCircle, 
   Building2, 
   LogOut, 
-  ChevronDown, 
   Users, 
   Settings,
   LayoutDashboard,
@@ -194,14 +193,14 @@ export function AdminLayout() {
         <div className="flex flex-col h-full bg-white border-r border-gray-200">
           {/* Sidebar Header - Fixed at top */}
           <div className="flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200 flex-shrink-0">
-            <h1 className={`font-bold text-gray-900 transition-all duration-300 ${
+            <h1 className={`font-bold text-[#2B5C4B] transition-all duration-300 ${
               isSidebarCollapsed ? 'text-lg' : 'text-xl'
             }`}>
               {isSidebarCollapsed ? 'AP' : 'Admin Panel'}
             </h1>
             <button
               onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
-              className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-500"
+              className="p-1.5 rounded-lg hover:bg-[#2B5C4B]/5 transition-colors text-gray-500"
             >
               <ChevronRight className={`h-5 w-5 transition-transform duration-300 ${
                 isSidebarCollapsed ? 'rotate-0' : 'rotate-180'
@@ -237,13 +236,13 @@ export function AdminLayout() {
                           to={item.href}
                           className={`flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group relative overflow-hidden ${
                             active
-                              ? 'bg-blue-50 text-blue-600'
+                              ? 'bg-[#2B5C4B]/10 text-[#2B5C4B]'
                               : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                           }`}
                         >
                           <Icon className={`flex-shrink-0 transition-all duration-300 ${
                             isSidebarCollapsed ? 'h-6 w-6' : 'h-5 w-5 mr-3'
-                          } ${active ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'}`} />
+                          } ${active ? 'text-[#2B5C4B]' : 'text-gray-400 group-hover:text-gray-600'}`} />
                           <span className={`transition-all duration-300 relative z-10 ${
                             isSidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100'
                           }`}>
@@ -278,120 +277,114 @@ export function AdminLayout() {
                   <p className="text-xs text-gray-500">{currentUser?.role}</p>
                 </div>
               </div>
-              <button
+              <a
                 onClick={handleLogout}
-                className={`mt-2 flex items-center px-3 py-2 text-sm font-medium text-red-600 rounded-xl hover:bg-red-50 transition-colors w-full ${
-                  isSidebarCollapsed ? 'justify-center' : ''
-                }`}
+                className="flex items-center px-3 py-2.5 text-sm font-medium rounded-xl text-gray-600 hover:bg-red-50 hover:text-red-700 cursor-pointer"
               >
-                <LogOut className={`h-4 w-4 ${isSidebarCollapsed ? '' : 'mr-2'}`} />
-                <span className={`transition-all duration-300 ${
-                  isSidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100'
-                }`}>
-                  Logout
-                </span>
-              </button>
+                <LogOut className="flex-shrink-0 h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500" />
+                {!isSidebarCollapsed && <span>Logout</span>}
+              </a>
             </div>
           </div>
         </div>
       </div>
 
       {/* Mobile header */}
-      <div className="lg:hidden">
-        <div className="bg-white border-b border-gray-200">
-          <div className="flex items-center justify-between h-16 px-4">
-            <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
-            <div className="flex items-center">
-              <div className="relative">
-                <button
-                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500/20"
-                >
-                  <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-400 flex items-center justify-center">
-                    <span className="text-sm font-medium text-white">
-                      {currentUser?.name.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                  <ChevronDown className="ml-1 h-4 w-4 text-gray-500" />
-                </button>
-                {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-xl overflow-hidden bg-white ring-1 ring-gray-200 shadow-lg">
-                    <div className="py-1">
-                      <div className="px-4 py-2 text-sm">
-                        <p className="font-medium text-gray-900">{currentUser?.name}</p>
-                        <p className="text-gray-500">{currentUser?.role}</p>
-                      </div>
-                      <button
-                        onClick={handleLogout}
-                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  </div>
-                )}
+      <div className="fixed z-40 top-0 left-0 right-0 h-16 bg-white shadow-sm flex items-center justify-between lg:hidden border-b border-gray-200">
+        <button
+          onClick={() => setIsMobileMenuOpen(true)}
+          className="p-3 ml-2 rounded-lg hover:bg-gray-100 transition-colors"
+        >
+          <Menu className="h-6 w-6 text-gray-500" />
+        </button>
+        <h1 className="text-xl font-bold text-[#2B5C4B]">Admin Panel</h1>
+        <div className="relative mr-4">
+          <button
+            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+            className="flex items-center justify-center h-9 w-9 rounded-full bg-[#2B5C4B]/10 text-[#2B5C4B] hover:bg-[#2B5C4B]/20 transition-colors ring-2 ring-white"
+          >
+            {currentUser?.name?.charAt(0) || 'U'}
+          </button>
+          {isUserMenuOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-xl overflow-hidden z-50 border border-gray-100 animate-fadeIn">
+              <div className="px-4 py-3 border-b border-gray-100">
+                <p className="text-sm font-medium text-gray-900">{currentUser?.name}</p>
+                <p className="text-xs text-gray-500">{currentUser?.role}</p>
               </div>
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="ml-4 p-2 rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500/20"
+              <a
+                onClick={handleLogout}
+                className="flex items-center px-4 py-2.5 text-sm text-gray-600 hover:bg-red-50 hover:text-red-700 cursor-pointer"
               >
-                {isMobileMenuOpen ? (
+                <LogOut className="h-4 w-4 mr-3 text-gray-400" />
+                <span>Logout</span>
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile sidebar */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden" aria-hidden="true">
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity"></div>
+          <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-white shadow-xl transform transition duration-300 ease-in-out">
+            <div className="h-full flex flex-col overflow-hidden">
+              <div className="flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200">
+                <h1 className="font-bold text-xl text-[#2B5C4B]">Admin Panel</h1>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
+                >
                   <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
-              </button>
+                </button>
+              </div>
+              <div className="overflow-y-auto py-4 px-3 flex-1 custom-scrollbar">
+                <nav className="space-y-6">
+                  {navigationGroups.map((group) => (
+                    <div key={group.name} className="space-y-1">
+                      <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase">
+                        {group.name}
+                      </div>
+                      <div className="space-y-1">
+                        {group.items.map((item) => {
+                          const Icon = item.icon;
+                          const active = isActive(item.href);
+                          return (
+                            <Link
+                              key={item.name}
+                              to={item.href}
+                              onClick={() => setIsMobileMenuOpen(false)}
+                              className={`flex items-center px-3 py-2.5 text-sm font-medium rounded-xl ${
+                                active
+                                  ? 'bg-[#2B5C4B]/10 text-[#2B5C4B]'
+                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                              }`}
+                            >
+                              <Icon className={`h-5 w-5 mr-3 ${
+                                active ? 'text-[#2B5C4B]' : 'text-gray-400'
+                              }`} />
+                              <span>{item.name}</span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </nav>
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Mobile menu */}
-        {isMobileMenuOpen && (
-          <div className="bg-white border-t border-gray-200 max-h-[70vh] overflow-y-auto custom-scrollbar">
-            <nav className="px-4 py-3">
-              {navigationGroups.map((group) => (
-                <div key={group.name} className="mb-4">
-                  <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase">
-                    {group.name}
-                  </div>
-                  <div className="space-y-1">
-                    {group.items.map((item) => {
-                      const Icon = item.icon;
-                      const active = isActive(item.href);
-                      return (
-                        <Link
-                          key={item.name}
-                          to={item.href}
-                          className={`flex items-center px-3 py-2 text-base font-medium rounded-xl ${
-                            active
-                              ? 'bg-blue-50 text-blue-600'
-                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                          }`}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          <Icon className={`h-5 w-5 mr-3 ${
-                            active ? 'text-blue-600' : 'text-gray-400'
-                          }`} />
-                          {item.name}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </nav>
-          </div>
-        )}
-      </div>
+      )}
 
       {/* Main content */}
-      <div className={`transition-all duration-300 ${
-        isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-72'
-      }`}>
-        <main className="py-6 px-4 sm:px-6 lg:px-8">
+      <main className="lg:pl-72 transition-all duration-300 ease-in-out" style={{ 
+        ...(isSidebarCollapsed && { paddingLeft: '5rem' }) 
+      }}>
+        <div className="px-4 py-4 sm:px-6 lg:px-8 min-h-screen bg-gradient-to-b from-purple-50 to-white">
           <Outlet />
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

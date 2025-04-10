@@ -107,7 +107,7 @@ export function WorkingHours() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[200px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2B5C4B]"></div>
       </div>
     );
   }
@@ -116,8 +116,8 @@ export function WorkingHours() {
     <div className="bg-white rounded-xl shadow-sm border border-gray-200">
       <div className="p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="bg-blue-50 p-3 rounded-lg">
-            <Calendar className="h-6 w-6 text-blue-600" />
+          <div className="bg-[#2B5C4B]/10 p-3 rounded-lg">
+            <Calendar className="h-6 w-6 text-[#2B5C4B]" />
           </div>
           <div>
             <h2 className="text-xl font-semibold text-gray-900">Working Hours</h2>

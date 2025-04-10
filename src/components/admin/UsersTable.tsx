@@ -74,7 +74,7 @@ export function UsersTable({ users, onUserUpdated }: UsersTableProps) {
       <div className="mb-6">
         <button
           onClick={() => setShowCreateModal(true)}
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors gap-2 shadow-sm"
+          className="inline-flex items-center px-4 py-2 bg-[#2B5C4B] text-white rounded-lg hover:bg-[#234539] transition-colors gap-2 shadow-sm"
         >
           <UserPlus className="h-4 w-4" />
           <span>Add New User</span>
@@ -120,7 +120,7 @@ export function UsersTable({ users, onUserUpdated }: UsersTableProps) {
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         user.role === 'superadmin' 
                           ? 'bg-purple-100 text-purple-800'
-                          : 'bg-blue-100 text-blue-800'
+                          : 'bg-[#2B5C4B]/10 text-[#2B5C4B]'
                       }`}>
                         {user.role}
                       </span>

@@ -57,7 +57,7 @@ export function TimeSlotsManager({
           </div>
           <button
             onClick={() => onGenerateSlots(defaultMaxBookings)}
-            className="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors"
+            className="px-3 py-1 bg-[#2B5C4B] text-white rounded-lg text-sm hover:bg-[#234539] transition-colors"
           >
             Generate Slots
           </button>

@@ -177,7 +177,7 @@ export function MRWeekdayManager() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[200px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2B5C4B]"></div>
       </div>
     );
   }
@@ -186,8 +186,8 @@ export function MRWeekdayManager() {
     <div className="bg-white rounded-xl shadow-sm border border-gray-200">
       <div className="p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="bg-blue-50 p-3 rounded-lg">
-            <Calendar className="h-6 w-6 text-blue-600" />
+          <div className="bg-[#2B5C4B]/10 p-3 rounded-lg">
+            <Calendar className="h-6 w-6 text-[#2B5C4B]" />
           </div>
           <div>
             <h2 className="text-xl font-semibold text-gray-900">MR Working Days</h2>
@@ -214,7 +214,7 @@ export function MRWeekdayManager() {
                       onChange={(e) => handleToggleWorking(e, day)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#2B5C4B]/30 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#2B5C4B]"></div>
                     <span className="ms-3 text-sm font-medium text-gray-700">
                       {day.is_working ? 'Working' : 'Closed'}
                     </span>
@@ -262,7 +262,7 @@ export function MRWeekdayManager() {
                               <button
                                 onClick={() => handleAddTimeSlot(day)}
                                 disabled={isSaving}
-                                className="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors disabled:bg-blue-400"
+                                className="px-3 py-1 bg-[#2B5C4B] text-white rounded-lg text-sm hover:bg-[#234539] transition-colors disabled:bg-[#2B5C4B]/70"
                               >
                                 {isSaving ? 'Adding...' : 'Add Slot'}
                               </button>

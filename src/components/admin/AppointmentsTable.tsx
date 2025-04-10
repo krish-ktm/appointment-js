@@ -34,8 +34,8 @@ export function AppointmentsTable({ appointments }: AppointmentsTableProps) {
         <div className="px-6 py-5">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="bg-blue-50 p-3 rounded-lg">
-                <Calendar className="h-6 w-6 text-blue-600" />
+              <div className="bg-[#2B5C4B]/10 p-3 rounded-lg">
+                <Calendar className="h-6 w-6 text-[#2B5C4B]" />
               </div>
               <div>
                 <h2 className="text-xl font-semibold text-gray-900">
@@ -46,11 +46,11 @@ export function AppointmentsTable({ appointments }: AppointmentsTableProps) {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-lg">
-              <Clock className="h-5 w-5 text-blue-600" />
+            <div className="flex items-center gap-2 bg-[#2B5C4B]/10 px-4 py-2 rounded-lg">
+              <Clock className="h-5 w-5 text-[#2B5C4B]" />
               <div>
                 <p className="text-sm text-gray-600">Total Appointments</p>
-                <p className="text-2xl font-semibold text-blue-600">{appointments.length}</p>
+                <p className="text-2xl font-semibold text-[#2B5C4B]">{appointments.length}</p>
               </div>
             </div>
           </div>
@@ -62,14 +62,14 @@ export function AppointmentsTable({ appointments }: AppointmentsTableProps) {
         {appointments.map((appointment) => (
           <div
             key={appointment.id}
-            className="bg-white rounded-xl shadow-sm border border-gray-200 hover:border-blue-200 hover:shadow transition-all duration-200"
+            className="bg-white rounded-xl shadow-sm border border-gray-200 hover:border-[#2B5C4B]/20 hover:shadow transition-all duration-200"
           >
             <div className="p-5">
               {/* Time and ID */}
               <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-lg">
-                  <Clock className="h-4 w-4 text-blue-600" />
-                  <span className="font-medium text-blue-600">{formatTime(appointment.appointment_time)}</span>
+                <div className="flex items-center gap-2 bg-[#2B5C4B]/10 px-3 py-1.5 rounded-lg">
+                  <Clock className="h-4 w-4 text-[#2B5C4B]" />
+                  <span className="font-medium text-[#2B5C4B]">{formatTime(appointment.appointment_time)}</span>
                 </div>
                 <span className="text-sm text-gray-400">#{appointment.id.slice(-4)}</span>
               </div>

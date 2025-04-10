@@ -180,7 +180,7 @@ export function MRDateManager() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2B5C4B]"></div>
       </div>
     );
   }
@@ -192,8 +192,8 @@ export function MRDateManager() {
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="bg-blue-50 p-3 rounded-lg">
-              <Calendar className="h-6 w-6 text-blue-600" />
+            <div className="bg-[#2B5C4B]/10 p-3 rounded-lg">
+              <Calendar className="h-6 w-6 text-[#2B5C4B]" />
             </div>
             <div>
               <h2 className="text-xl font-semibold text-gray-900">MR Closure Dates</h2>
@@ -202,7 +202,7 @@ export function MRDateManager() {
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#2B5C4B] text-white rounded-lg hover:bg-[#234539] transition-colors"
           >
             <Plus className="h-4 w-4" />
             Add Date
@@ -231,7 +231,7 @@ export function MRDateManager() {
                 className="bg-white rounded-xl shadow-xl w-full max-w-lg mx-auto relative flex flex-col max-h-[90vh]"
                 onClick={e => e.stopPropagation()}
               >
-                <div className="sticky top-0 z-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-xl">
+                <div className="sticky top-0 z-10 bg-gradient-to-r from-[#2B5C4B] to-[#234539] rounded-t-xl">
                   <div className="p-6">
                     <div className="flex items-center justify-between">
                       <h3 className="text-xl font-semibold text-white">
@@ -275,7 +275,7 @@ export function MRDateManager() {
                       </button>
                       <button
                         type="submit"
-                        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                        className="px-4 py-2 text-sm font-medium text-white bg-[#2B5C4B] rounded-lg hover:bg-[#234539]"
                       >
                         {editingDate ? 'Update' : 'Add'}
                       </button>
@@ -313,26 +313,26 @@ export function MRDateManager() {
                         className={`flex items-center justify-between p-4 rounded-lg border ${
                           isTodays
                             ? 'bg-green-50 border-green-100'
-                            : 'bg-blue-50 border-blue-100'
+                            : 'bg-[#2B5C4B]/20 border-[#2B5C4B]/20'
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className={`p-2 rounded-lg ${
                             isTodays
                               ? 'bg-green-100'
-                              : 'bg-blue-100'
+                              : 'bg-[#2B5C4B]/20'
                           }`}>
                             <Calendar className={`h-5 w-5 ${
                               isTodays
                                 ? 'text-green-600'
-                                : 'text-blue-600'
+                                : 'text-[#2B5C4B]'
                             }`} />
                           </div>
                           <div>
                             <p className={`font-medium ${
                               isTodays
                                 ? 'text-green-700'
-                                : 'text-blue-700'
+                                : 'text-[#234539]'
                             }`}>
                               {formatDate(date.date)}
                             </p>
