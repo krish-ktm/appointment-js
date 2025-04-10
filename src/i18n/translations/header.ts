@@ -4,7 +4,7 @@ import { businessInfo, getFormattedHours, getFormattedAddress, getFormattedPhone
 export const headerTranslations: Record<string, HeaderTranslations> = {
   en: {
     clinicName: businessInfo.name,
-    bookNow: "Book Now",
+    bookNow: "Book Appointment",
     contact: {
       phone: businessInfo.contact.phone,
       address: businessInfo.contact.address,
@@ -22,7 +22,7 @@ export const headerTranslations: Record<string, HeaderTranslations> = {
   },
   gu: {
     clinicName: 'શુભમ સ્કિન એન્ડ લેસર ક્લિનિક',
-    bookNow: "હવે બુક કરો",
+    bookNow: "એપોઈન્ટમેન્ટ બુક કરો",
     contact: {
       phone: getFormattedPhone('gu'),
       address: getFormattedAddress('gu'),

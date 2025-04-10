@@ -6,15 +6,6 @@ import { useTranslation } from '../i18n/useTranslation';
 export function Footer() {
   const { t } = useTranslation();
 
-  const scrollToAppointmentForm = () => {
-    const element = document.querySelector('.appointment-form-section');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.location.href = '/#appointment-form';
-    }
-  };
-
   return (
     <footer className="relative bg-[#2B5C4B] text-white overflow-hidden">
       {/* Decorative Elements */}
@@ -54,27 +45,17 @@ export function Footer() {
                 { label: t.footer.quickLinks.services, to: "/services" },
                 { label: t.footer.quickLinks.gallery, to: "/gallery" },
                 { label: t.footer.quickLinks.contact, to: "/contact" },
-                { label: t.footer.quickLinks.bookAppointment, action: scrollToAppointmentForm },
+                { label: t.footer.quickLinks.bookAppointment, to: "/appointment" },
                 { label: t.footer.quickLinks.mrAppointment, to: "/mr-appointment" }
               ].map((link, index) => (
                 <li key={index}>
-                  {link.to ? (
-                    <Link
-                      to={link.to}
-                      className="text-white/80 hover:text-white transition-colors duration-200 flex items-center gap-2 group text-sm font-sans"
-                    >
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      {link.label}
-                    </Link>
-                  ) : (
-                    <button
-                      onClick={link.action}
-                      className="text-white/80 hover:text-white transition-colors duration-200 flex items-center gap-2 group text-sm font-sans"
-                    >
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      {link.label}
-                    </button>
-                  )}
+                  <Link
+                    to={link.to}
+                    className="text-white/80 hover:text-white transition-colors duration-200 flex items-center gap-2 group text-sm font-sans"
+                  >
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -156,7 +137,7 @@ export function Footer() {
           className="border-t border-white/10 mt-16 pt-8 text-center"
         >
           <p className="text-white/60 text-sm font-sans">
-            {t.footer.copyright}
+            {t.footer.copyright} | Developed by <a href="https://ipratik.me" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">ipratik.me</a>
           </p>
         </motion.div>
       </div>

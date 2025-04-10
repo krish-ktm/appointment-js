@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Heart, Zap, Microscope, Scissors, Stethoscope } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { background, text, gradients } from '../../theme/colors';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -46,29 +46,6 @@ interface Service {
 }
 
 export function ServicesSection({ t }: ServicesSectionProps) {
-  const getIconForService = (title: string) => {
-    const category = Object.keys(t.categories).find(key => t.categories[key as keyof typeof t.categories] === title);
-    
-    switch(category) {
-      case 'medical':
-        return Heart;
-      case 'hair':
-      case 'diagnostic':
-        return Microscope;
-      case 'skinGlow':
-      case 'laser':
-        return Zap;
-      case 'scar':
-      case 'surgery':
-        return Scissors;
-      case 'tattoo':
-      case 'ear':
-        return Stethoscope;
-      default:
-        return Heart;
-    }
-  };
-
   const services: Service[] = [
     {
       title: t.categories.medical,
@@ -80,7 +57,7 @@ export function ServicesSection({ t }: ServicesSectionProps) {
       title: t.categories.hair,
       description: t.lists.hair[0],
       features: t.lists.hair.slice(1),
-      image: "https://images.unsplash.com/photo-1626954079673-f3febf57d7e4?q=80&w=1200"
+      image: "/images/hair-treatment.jpg"
     },
     {
       title: t.categories.diagnostic,
@@ -192,12 +169,6 @@ export function ServicesSection({ t }: ServicesSectionProps) {
                     
                     {/* Content */}
                     <div className="absolute inset-0 p-3 sm:p-4 md:p-5 lg:p-6 flex flex-col justify-end">
-                      <div className="bg-white/10 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-2 sm:mb-3 md:mb-4">
-                        {(() => {
-                          const Icon = getIconForService(service.title);
-                          return <Icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />;
-                        })()}
-                      </div>
                       <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-white mb-1 sm:mb-2 font-heading line-clamp-1">
                         {service.title}
                       </h3>
