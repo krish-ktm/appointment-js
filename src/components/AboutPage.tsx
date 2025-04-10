@@ -94,11 +94,11 @@ export function AboutPage() {
           >
             <div className="p-6 sm:p-8 bg-gradient-to-r from-[#2B5C4B] to-[#234539]">
               <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/20">
+                <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-white/20 shadow-lg">
                   <img
-                    src="/doctor-profile.jpg"
+                    src="/doctor-img.JPG"
                     alt="Dr. Jemish A. Patel"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
                   />
                 </div>
                 <div className="text-center md:text-left">
