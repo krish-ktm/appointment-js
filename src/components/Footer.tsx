@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin, Clock, ArrowRight } from 'lucide-react';
+import { Phone, MapPin, Clock, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../i18n/useTranslation';
 
@@ -79,17 +79,6 @@ export function Footer() {
                     <Phone className="h-4 w-4" />
                   </div>
                   <span className="text-sm font-sans">{t.footer.contactInfo.phone}</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`mailto:${t.footer.contactInfo.email}`}
-                  className="flex items-center gap-3 text-white/80 hover:text-white transition-colors duration-200 group font-sans"
-                >
-                  <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors">
-                    <Mail className="h-4 w-4" />
-                  </div>
-                  <span className="text-sm font-sans">{t.footer.contactInfo.email}</span>
                 </a>
               </li>
               <li className="flex items-center gap-3 text-white/80 group font-sans">

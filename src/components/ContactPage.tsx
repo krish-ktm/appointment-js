@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { ResponsiveHeader } from './headers/ResponsiveHeader';
 import { Footer } from './Footer';
-import { Phone, Mail, MapPin, Clock, Send, Shield } from 'lucide-react';
+import { Phone, MapPin, Clock, Send, Shield } from 'lucide-react';
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { toast } from 'react-hot-toast';
@@ -109,19 +109,6 @@ export function ContactPage() {
                     <div>
                       <p className="text-sm text-gray-500 font-sans">{t.contact.contactInfo.phone.label}</p>
                       <p className="font-medium text-gray-900 font-sans">{businessInfo.contact.phone}</p>
-                    </div>
-                  </a>
-
-                  <a
-                    href={`mailto:${businessInfo.contact.email}`}
-                    className="flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors group"
-                  >
-                    <div className="bg-[#2B5C4B]/5 p-3 rounded-xl group-hover:bg-[#2B5C4B]/10 transition-colors">
-                      <Mail className="h-6 w-6 text-[#2B5C4B]" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500 font-sans">{t.contact.contactInfo.email.label}</p>
-                      <p className="font-medium text-gray-900 font-sans break-all">{businessInfo.contact.email}</p>
                     </div>
                   </a>
 
